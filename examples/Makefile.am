@@ -1,0 +1,3 @@
+AM_DEFAULT_SOURCE_EXT = .cpp
+
+noinst_PROGRAMS = 

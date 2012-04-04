@@ -1,0 +1,52 @@
+# kdevelop project files
+.kdev4/
+.kdev_include_paths
+*.kdev4
+
+# autotools generated files
+*.deps/
+*.libs/
+autom4te.cache/
+aclocal.m4
+config.guess
+config.hpp
+config.hpp.in
+config.hpp.in~
+config.log
+config.status
+config.sub
+configure
+depcomp
+INSTALL
+install-sh
+libtool
+ltmain.sh
+*Makefile
+*Makefile.in
+missing
+stamp-h1
+
+# documentation related files
+doc/Doxyfile
+doc/doxygen-stamp
+doc/html
+
+# compiler generated files
+*.la
+*.lo
+*.o
+
+# ignore files in m4/ subdir, but track the directory itself via .keep
+m4/*
+!m4/.keep
+
+# distribution packages
+*.tar.*
+
+# git-generated files
+AUTHORS
+ChangeLog
+VERSION
+
+# build related files
+build/
