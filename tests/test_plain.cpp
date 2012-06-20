@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(plain_integration_constant)
 {
 	std::size_t steps = 10;
 	hep::plain_result<double> result =
-		hep::plain<double>(1, steps, 0, integrand, 0);
+		hep::plain<double>(1, steps, integrand, 0);
 
 	BOOST_CHECK_EQUAL(result.value, 1.0);
 	BOOST_CHECK_EQUAL(result.error, 0.0);
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(plain_integration_sine)
 {
 	std::size_t steps = 1000;
 	hep::plain_result<double> result =
-		hep::plain<double>(1, steps, 0, integrand, 1);
+		hep::plain<double>(1, steps, integrand, 1);
 
 	BOOST_CHECK_CLOSE(result.value, 1.0, 100.0 / std::sqrt(steps));
 	BOOST_CHECK_CLOSE(result.value, 1.0, 100.0 * result.error);
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(plain_integration_exponential)
 {
 	std::size_t steps = 1000;
 	hep::plain_result<double> result =
-		hep::plain<double>(1, steps, 0, integrand, 2);
+		hep::plain<double>(1, steps, integrand, 2);
 	double reference = std::exp(1.0) - 1.0;
 
 	BOOST_CHECK_CLOSE(result.value, reference, 100.0 / std::sqrt(steps));
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(plain_integration_square)
 {
 	std::size_t steps = 10000;
 	hep::plain_result<double> result =
-		hep::plain<double>(1, steps, 0, integrand, 3);
+		hep::plain<double>(1, steps, integrand, 3);
 
 	BOOST_CHECK_CLOSE(result.value, 1.0 / 3.0, 100.0 / std::sqrt(steps));
 	BOOST_CHECK_CLOSE(result.value, 1.0 / 3.0, 100.0 * result.error);
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(plain_integration_square_4d)
 {
 	std::size_t steps = 10000;
 	hep::plain_result<double> result =
-		hep::plain<double>(4, steps, 0, integrand, 4);
+		hep::plain<double>(4, steps, integrand, 4);
 
 	BOOST_CHECK_CLOSE(result.value, 4.0 / 3.0, 100.0 / std::sqrt(steps));
 	BOOST_CHECK_CLOSE(result.value, 4.0 / 3.0, 100.0 * result.error);
@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(plain_integration_one_over_sqrt)
 {
 	std::size_t steps = 1000;
 	hep::plain_result<double> result =
-		hep::plain<double>(1, steps, 0, integrand, 5);
+		hep::plain<double>(1, steps, integrand, 5);
 
 	BOOST_CHECK_CLOSE(result.value, 2.0, 100.0 / std::sqrt(steps));
 	// function is not square-integrable, error is unreliable

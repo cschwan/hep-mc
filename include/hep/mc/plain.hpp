@@ -2,7 +2,7 @@
 #define HEP_MC_PLAIN_HPP
 
 /*
- * hep-ga - An Efficient Numeric Template Library for Geometric Algebra
+ * hep-mc - A Template Library for Monte Carlo Integration
  * Copyright (C) 2012  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,6 +31,16 @@ namespace hep
 template <typename T>
 struct plain_result
 {
+	/**
+	 * 
+	 */
+	plain_result(std::size_t steps, T const& sum, T const& sum_of_squares);
+
+	/**
+	 * 
+	 */
+	std::size_t steps;
+
 	/**
 	 * Expectation value of the computation. The expectation value \f$ E \f$ is
 	 * the average of the integrand \f$ f \f$ uniformly sampled at random points
@@ -73,12 +83,12 @@ struct plain_result
  */
 template <typename T, typename F, typename A, typename R = std::mt19937>
 plain_result<T> plain(
-	std::size_t dimension,
+	std::size_t dimensions,
 	std::size_t steps,
-	std::size_t seed,
 	F& function,
 	A const& auxilliary_variable,
-	R&& random_number_generator = std::mt19937()
+	std::size_t seed = 0,
+	R&& generator = std::mt19937()
 );
 
 }

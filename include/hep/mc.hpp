@@ -2,7 +2,7 @@
 #define HEP_MC_HPP
 
 /*
- * hep-ga - An Efficient Numeric Template Library for Geometric Algebra
+ * hep-mc - A Template Library for Monte Carlo Integration
  * Copyright (C) 2012  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,5 +20,14 @@
  */
 
 #include <hep/mc/plain.hpp>
+
+namespace hep
+{
+
+/**
+ * \mainpage Template Library for MC Integration
+ */
+
+}
 
 #endif
