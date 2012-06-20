@@ -1,5 +1,5 @@
-#ifndef HEP_MC_HPP
-#define HEP_MC_HPP
+#ifndef HEP_MC_VEGAS_SAMPLE_HPP
+#define HEP_MC_VEGAS_SAMPLE_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -19,16 +19,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/plain.hpp>
-#include <hep/mc/vegas.hpp>
+#include <cstddef>
+#include <vector>
 
 namespace hep
 {
 
 /**
- * \mainpage Template Library for MC Integration
+ * 
  */
+template <typename T>
+struct vegas_sample
+{
+	/**
+	 * 
+	 */
+	vegas_sample(
+		std::size_t dimensions,
+		std::size_t steps,
+		T const& random,
+		std::vector<std::vector<T>> const& grid
+	);
+
+	/**
+	 * 
+	 */
+	std::vector<T> point;
+
+	/**
+	 * 
+	 */
+	std::vector<std::size_t> bin;
+
+	/**
+	 * 
+	 */
+	T weight;
+};
 
 }
+
+#include <hep/mc/impl/vegas_sample.hpp>
 
 #endif

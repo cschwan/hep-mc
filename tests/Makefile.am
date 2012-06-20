@@ -8,7 +8,9 @@ AM_CPPFLAGS = \
 
 AM_DEFAULT_SOURCE_EXT = .cpp
 
-check_PROGRAMS = test_plain
+check_PROGRAMS = \
+	test_plain \
+	test_vegas
 
 LDADD = -lboost_unit_test_framework
 

@@ -1,5 +1,5 @@
-#ifndef HEP_MC_HPP
-#define HEP_MC_HPP
+#ifndef HEP_MC_VEGAS_HPP
+#define HEP_MC_VEGAS_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -19,16 +19,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/plain.hpp>
-#include <hep/mc/vegas.hpp>
+#include <hep/mc/vegas_result.hpp>
+
+#include <cstddef>
+#include <random>
+#include <vector>
 
 namespace hep
 {
 
 /**
- * \mainpage Template Library for MC Integration
+ * VEGAS Monte Carlo integrator. \c vegas integrates the specified \c function
+ * with the specified \c dimensions using <tt>steps.size()</tt> iterations
+ * each  having the number integrand evaluation specified in \c steps. The grid
+ * has a resolution specified with \c bins in each dimension.
  */
+template <typename T, typename F, typename A, typename R = std::mt19937>
+vegas_result<T> vegas(
+	std::size_t dimensions,
+	std::vector<std::size_t> steps,
+	std::size_t batch_size,
+	std::size_t bins,
+	F& function,
+	A const& aux_variable,
+	std::size_t seed = 0,
+	R&& generator = std::mt19937()
+);
 
 }
+
+#include <hep/mc/impl/vegas.hpp>
 
 #endif
