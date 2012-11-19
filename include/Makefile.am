@@ -1,12 +1,6 @@
 nobase_include_HEADERS = \
-	hep/mc/impl/plain.hpp \
-	hep/mc/impl/vegas.hpp \
-	hep/mc/impl/vegas_result.hpp \
-	hep/mc/impl/vegas_sample.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \
-	hep/mc/vegas_result.hpp \
-	hep/mc/vegas_sample.hpp \
 	hep/mc.hpp
 
 # create a timestamp file so we can depend on it instead of depending on every

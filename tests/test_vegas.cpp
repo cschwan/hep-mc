@@ -6,7 +6,7 @@
 #include <vector>
 
 template <typename T>
-double integrand(hep::vegas_sample<T> const& sample, std::size_t type)
+T integrand(hep::vegas_sample<T> const& sample, std::size_t type)
 {
 	std::vector<T> const& x = sample.point;
 
@@ -46,7 +46,7 @@ double integrand(hep::vegas_sample<T> const& sample, std::size_t type)
 
 BOOST_AUTO_TEST_CASE(vegas_integration_square)
 {
-	std::size_t const iterations = 2;
+	std::size_t const iterations = 3;
 	std::size_t const steps_per_iteration = 1000000;
 	std::size_t const bins = 100;
 
