@@ -3,21 +3,28 @@ AC_PREREQ([2.65])
 # check if git is available and current directory contains repository
 m4_esyscmd_s([git status])
 
-# if repository is available use git to create files which must be available
-# before AC_INIT is called:
+# if a repository is available use git to create files that are needed before
+# AC_INIT is called:
 ifelse(sysval,
 	# VERSION file, ...
 	m4_esyscmd_s([echo `git describe 2>/dev/null` | tee VERSION])
 
-	# AUTHORS file and ...
+	# AUTHORS file, ...
 	m4_esyscmd_s([git log --format='%aN <%aE>' | uniq > AUTHORS])
 
-	# ChangeLog file
-	m4_esyscmd_s(
-		[git log --date=short --format='%ad  %aN  <%aE> %n%x09* %s%n' \
-		> ChangeLog]
-	),
-	[]
+	# ChangeLog file and ...
+	m4_esyscmd_s([
+		git log --date=short \
+			--format='%ad  %aN  <%aE> %n    %w(80,0,4)%B' > ChangeLog
+	])
+
+	# NEWS file
+	m4_esyscmd_s([
+		git for-each-ref --sort='-*committerdate' --format \
+			'News for %(refname:short):%0a===============%0a%0a%(body)' \
+			refs/tags > NEWS
+	])
+	, []
 )
 
 # read version number
@@ -38,65 +45,58 @@ AC_CONFIG_MACRO_DIR([m4])
 # C++ is our language
 AC_LANG([C++])
 
+# check for C++11 conforming compiler (autoconf-archive macro)
+AX_CXX_COMPILE_STDCXX_11([noext])
+
 # point to a source file in order to let ./configure find itself
-#AC_CONFIG_SRCDIR([])
+AC_CONFIG_SRCDIR([include/hep/mc.hpp])
 
 # do not pollute command line with compiler definitions but instead write them
 # into the specified header
 AC_CONFIG_HEADERS([config.hpp])
 
-AC_ARG_ENABLE(
-	[examples],
-	AS_HELP_STRING([--enable-examples],
-		[Enable building and installation (only sources) of example programs])
-)
+AC_ARG_ENABLE([examples], AS_HELP_STRING([--enable-examples],
+	[Enable building of example programs]))
 
 AM_CONDITIONAL([HAVE_EXAMPLES], [test "x$enable_examples" = "xyes"])
 
 # add possibility to generate API documentation with Doxygen
-AC_ARG_ENABLE(
-	[doxygen],
-	AS_HELP_STRING([--enable-doxygen],
-		[Enable generation of Doxygen documentation])
-)
+AC_ARG_ENABLE([doxygen], AS_HELP_STRING([--enable-doxygen],
+	[Enable generation of Doxygen documentation]))
 
 # variable pointing to the doxygen binary
-AC_ARG_VAR([DOXYGEN], [Documentation system])
+AC_ARG_VAR([DOXYGEN], [Doxygen documentation generator])
 
 # check for the doxygen binary
 AS_IF([test "x$enable_doxygen" = "xyes"], [
 	AC_CHECK_PROGS([DOXYGEN], [doxygen])
-	AS_IF(
-		[test -z "$DOXYGEN"],
-		AC_MSG_ERROR([Doxygen not found but requested])
-	)
+	AS_IF([test -z "$DOXYGEN"],
+		AC_MSG_ERROR([Doxygen not found but requested]))
 ])
 
 # if doxygen is requested, define HAVE_DOXYGEN and configure Doxyfile.in
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
-# check for boost test framework library
-AC_SEARCH_LIBS(
-	[_ZN5boost9unit_test14unit_test_mainEPFbvEiPPc],
-	[boost_unit_test_framework],
-	[],
-	AC_MSG_WARN([
-    --------------------------------------------------
-    Did not find Boosts Unit Test Framework library.
-    You will not be able to compile and run the tests.
-    --------------------------------------------------])
-)
+# check if the user wants to test this library
+AC_ARG_ENABLE([tests], AS_HELP_STRING([--enable-tests],
+	[Enable unit tests (requires Boost Unit Test Framework)]))
 
-# check for the corresponding header
-AC_CHECK_HEADERS(
-	[boost/test/unit_test.hpp],
-	[],
-	AC_MSG_WARN([
-    --------------------------------------------------
-    Did not find Boosts Unit Test Framework header.
-    You will not be able to compile and run the tests.
-    --------------------------------------------------])
-)
+# check for header and library
+AS_IF([test "x$enable_tests" = "xyes"], [
+	# save content of LIBS variable
+	previous_libs="${LIBS}"
+
+	AC_CHECK_HEADERS([boost/test/unit_test.hpp], [],
+		AC_MSG_ERROR([header not found/usable]))
+	AC_SEARCH_LIBS([_ZN5boost9unit_test14unit_test_mainEPFbvEiPPc],
+		[boost_unit_test_framework], [], AC_MSG_ERROR([library not found]))
+
+	# restore LIBS variable - boost libs are only needed in unit tests
+	LIBS="${previous_libs}"
+])
+
+# if tests are requested, define HAVE_TESTS
+AM_CONDITIONAL([HAVE_TESTS], [test "x$enable_tests" = "xyes"])
 
 # configure Makefiles and Doxyfile
 AC_CONFIG_FILES([
