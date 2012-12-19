@@ -86,6 +86,8 @@ AS_IF([test "x$enable_tests" = "xyes"], [
 	# save content of LIBS variable
 	previous_libs="${LIBS}"
 
+	AC_CHECK_HEADERS([boost/mpl/list.hpp], [],
+		AC_MSG_ERROR([header not found/usable]))
 	AC_CHECK_HEADERS([boost/test/unit_test.hpp], [],
 		AC_MSG_ERROR([header not found/usable]))
 	AC_SEARCH_LIBS([_ZN5boost9unit_test14unit_test_mainEPFbvEiPPc],

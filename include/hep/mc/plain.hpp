@@ -28,13 +28,14 @@ namespace hep
 {
 
 /**
- * The result of a PLAIN Monte Carlo integration.
+ * The result of a PLAIN Monte Carlo integration, returned from \ref plain.
  */
 template <typename T>
 struct plain_result
 {
 	/**
-	 *
+	 * Constructor. Calculates \ref value and \ref error from the given
+	 * parameters \c steps, \c sum and \c sum_of_squares.
 	 */
 	plain_result(std::size_t steps, T const& sum, T const& sum_of_squares)
 		: steps(steps)
@@ -45,7 +46,7 @@ struct plain_result
 	}
 
 	/**
-	 *
+	 * The number of Monte Carlo steps performed for obtaining this result.
 	 */
 	std::size_t steps;
 
@@ -74,28 +75,23 @@ struct plain_result
  * PLAIN Monte Carlo integrator. \c plain integrates \c function over the
  * unit-hypercube with \c dimension dimensions using \c steps randomly chosen
  * points determined by the number generator \c random_number_generator. The
- * generator is seeded with \c seed. \c function must have the following
- * form:
+ * generator is not seeded. \c function must have the following form:
  * \code
- * T integrand(std::vector<T> const& x, A const& variable)
+ * T integrand(std::vector<T> const& x)
  * {
  *     // return value of the function at x
  * }
  * \endcode
- * where \c T and \c A are substituted with the types the \c plain function is
- * called. \c variable is set by the \c plain function to the value given by
- * \c auxilliary_variable.
+ * where \c T must be substituted with the type \c plain is called.
  *
- * The result of this function is an object of the type \c plain_result
+ * The result of this function is an object of the type \ref plain_result
  * containing both the value of the integral and an error.
  */
-template <typename T, typename F, typename A, typename R = std::mt19937>
+template <typename T, typename F, typename R = std::mt19937>
 plain_result<T> plain(
 	std::size_t dimensions,
 	std::size_t steps,
-	F& function,
-	A const& auxilliary_variable,
-	std::size_t seed = 0,
+	F function,
 	R&& generator = std::mt19937()
 ) {
 	// default-initialize sum and sum_of_squares
@@ -108,8 +104,8 @@ plain_result<T> plain(
 	// distribution [0, 1] for the random number generator
 	std::uniform_real_distribution<T> distribution;
 
-	// seed random number generator
-	generator.seed(seed);
+	// compensation variable for kahan summation
+	T compensation = T();
 
 	// iterate over samples
 	for (std::size_t i = 0; i != steps; ++i)
@@ -121,9 +117,14 @@ plain_result<T> plain(
 		}
 
 		// evaluate function at position specified in random_numbers
-		T evaluation = function(random_numbers, auxilliary_variable);
+		T const evaluation = function(random_numbers);
 
-		sum += evaluation;
+		// do kahan summation
+		T const y = evaluation - compensation;
+		T const t = sum + y;
+		compensation = (t - sum) - y;
+		sum = t;
+
 		sum_of_squares += evaluation * evaluation;
 	}
 
