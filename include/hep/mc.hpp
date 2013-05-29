@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <hep/mc/default_vegas_parallelizer.hpp>
 #include <hep/mc/plain.hpp>
 #include <hep/mc/vegas.hpp>
 

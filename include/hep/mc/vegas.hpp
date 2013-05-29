@@ -25,6 +25,8 @@
 #include <random>
 #include <vector>
 
+#include <hep/mc/default_vegas_parallelizer.hpp>
+
 namespace
 {
 
@@ -32,26 +34,26 @@ template <typename T>
 void refine_grid(
 	T alpha,
 	std::vector<T>& grid,
-	std::vector<T>& binned_sum_of_squares
+	typename std::vector<T>::iterator bin_iterator
 ) {
 	std::size_t const bins = grid.size();
 
-	// smooth the f^2 value stored for each bin
-	T previous = binned_sum_of_squares[0];
-	T current = binned_sum_of_squares[1];
-	binned_sum_of_squares[0] = T(0.5) * (previous + current);
-	T norm = binned_sum_of_squares[0];
+	// smooth the squared function values stored for each bin
+	T previous = *bin_iterator;
+	T current = *(bin_iterator + 1);
+	*bin_iterator = T(0.5) * (previous + current);
+	T norm = *bin_iterator;
 
 	for (std::size_t bin = 1; bin < bins - 1; ++bin)
 	{
 		T const sum = previous + current;
 		previous = current;
-		current = binned_sum_of_squares[bin + 1];
-		binned_sum_of_squares[bin] = (sum + current) / T(3.0);
-		norm += binned_sum_of_squares[bin];
+		current = *(bin_iterator + bin + 1);
+		*(bin_iterator + bin) = (sum + current) / T(3.0);
+		norm += *(bin_iterator + bin);
 	}
-	binned_sum_of_squares[bins - 1] = T(0.5) * (previous + current);
-	norm += binned_sum_of_squares[bins - 1];
+	*(bin_iterator + bins - 1) = T(0.5) * (previous + current);
+	norm += *(bin_iterator + bins - 1);
 
 	// if norm is zero there is nothing to do here
 	if (norm == T())
@@ -68,10 +70,10 @@ void refine_grid(
 
 	for (std::size_t bin = 0; bin < bins; ++bin)
 	{
-		if (binned_sum_of_squares[bin] > T())
+		if (*(bin_iterator + bin) > T())
 		{
-			T const r = binned_sum_of_squares[bin] * norm;
-			T impfun = std::pow((r - T(1.0)) / std::log(r), alpha);
+			T const r = *(bin_iterator + bin) * norm;
+			T const impfun = std::pow((r - T(1.0)) / std::log(r), alpha);
 			average_per_bin += impfun;
 			imp[bin] = impfun;
 		}
@@ -100,6 +102,8 @@ void refine_grid(
 	}
 
 	newgrid[bins - 1] = T(1.0);
+
+	// overwrite the old grid with the new one
 	grid = newgrid;
 }
 
@@ -149,8 +153,19 @@ struct vegas_sample
 		}
 	}
 
+	/**
+	 *
+	 */
 	std::vector<T> point;
+
+	/**
+	 * The indices that determine the bin of the sample in the grid.
+	 */
 	std::vector<std::size_t> bin;
+
+	/**
+	 *
+	 */
 	T weight;
 };
 
@@ -220,31 +235,71 @@ private:
 };
 
 /**
- * VEGAS Monte Carlo integrator. \c vegas integrates the specified \c function
- * with the specified \c dimensions using <tt>steps.size()</tt> iterations
- * each  having the number integrand evaluation specified in \c steps. The grid
- * has a resolution specified with \c bins in each dimension.
+ * An implementation of the VEGAS Monte Carlo integration algorithm using
+ * importance sampling only.
+ *
+ * \c vegas integrates \c function over the hypercube \f$ [0,1]^d \f$ with
+ * \c d given by \c dimensions. The function must take a single argument of the
+ * type \ref vegas_sample and return the function value of type \c T at the
+ * sampled point:
+ * \code
+ * double square(hep::vegas_sample const& sample)
+ * {
+ *     return sample.point[0] * sample.point[0];
+ * }
+ * \endcode
+ * The number of iterations and the samples for each iteration is specified
+ * within \c iteration_samples. The grid being used to implement importance
+ * sampling has a resolution specified by \c bins for every dimension. Note that
+ * this parameter may have a huge impact on the precision of every iteration's
+ * result. Settings this parameter too small may yield unprecise results, e.g.
+ * setting it to \c 1 makes this algorithm equivalent to the \ref plain
+ * algorithm.
+ *
+ * The parameter \c batch_size does not influence the result of \c vegas, but
+ * can be used to optimize the performance when many samples are drawn. Each
+ * iteration is divided into subiterations of where \c batch_size samples are
+ * drawn at once.
+ *
+ * With \c generator you may specify a different random number generator than
+ * the default mersenne twister.
+ *
+ * The \c parallelizer defines how this algorithm is parallelized, the default
+ * choice does not parallelize.
  */
-template <typename T, typename F, typename A, typename R = std::mt19937>
+template <
+	typename T,
+	typename F,
+	typename R = std::mt19937,
+	typename P = default_vegas_parallelizer<T>>
 vegas_result<T> vegas(
 	std::size_t dimensions,
-	std::vector<std::size_t> steps,
+	std::vector<std::size_t> iteration_samples,
 	std::size_t batch_size,
 	std::size_t bins,
-	F& function,
-	A const& aux_variable,
-	std::size_t seed = 0,
-	R&& generator = std::mt19937()
+	F function,
+	T const& alpha = T(1.5),
+	R&& generator = std::mt19937(),
+	P&& parallelizer = default_vegas_parallelizer<T>()
 ) {
 	// set parameters to one if they are zero
 	bins = (bins == 0) ? 1 : bins;
 	batch_size = (batch_size == 0) ? 1 : batch_size;
 
-	// seed random number generator
-	generator.seed(seed);
-
 	// distribution [0, 1] for the random number generator
 	std::uniform_real_distribution<T> distribution;
+
+	// get the number of processes
+	std::size_t const world_size = parallelizer.world_size();
+	// get the index of this process
+	std::size_t const rank = parallelizer.rank();
+
+	if (world_size != 1)
+	{
+		std::size_t r = 5 * rank;
+		std::seed_seq sequence{r, r + 1, r + 2, r + 3, r + 4};
+		generator.seed(sequence);
+	}
 
 	// initialize grid
 	std::vector<std::vector<T>> grid(dimensions, std::vector<T>(bins));
@@ -265,55 +320,50 @@ vegas_result<T> vegas(
 	std::vector<T> values;
 	values.reserve(batch_size);
 
-	std::vector<std::vector<T>> binned_sum_of_squares(dimensions,
-		std::vector<T>(bins));
+	// store the following variables in a single vector; this is important for
+	// fast MPI code
+	std::vector<T> data(dimensions * bins + 2);
 
-	//
-	vegas_result<T> result{steps};
+	// vector containing the binned sum of squared function values
+	std::vector<T>& grid_info = data;
+
+	T& sum = data[dimensions * bins + 0];
+	T& sum_of_squares = data[dimensions * bins + 1];
+
+	vegas_result<T> result(iteration_samples);
 
 	// loop over iterations
-	for (std::size_t i : steps)
+	for (auto i = iteration_samples.begin(); i != iteration_samples.end(); ++i)
 	{
+		std::size_t const remainder = *i % world_size;
+		std::size_t k = (*i / world_size);
+		k += (rank < remainder) ? 1 : 0;
 		std::size_t samples_done = 0;
-		std::size_t size = std::min(i - samples_done, batch_size);
 
 		// initialize to zero before each iteration
-		T sum = T();
-		T sum_of_squares = T();
-		T compensation = T();
+		std::fill(data.begin(), data.end(), T());
 
-		// reset values to zero
-		for (std::size_t j = 0; j != dimensions; ++j)
-		{
-			for (std::size_t k = 0; k != bins; ++k)
-			{
-				binned_sum_of_squares[j][k] = T();
-			}
-		}
+		T compensation = T();
 
 		do
 		{
-			// fill samples
+			std::size_t size = std::min(k - samples_done, batch_size);
+
+			// generate samples and corresponding values
 			for (std::size_t j = 0; j != size; ++j)
 			{
 				samples.push_back(vegas_sample<T>(
-					dimensions, i, distribution(generator), grid)
+					dimensions, *i, distribution(generator), grid)
 				);
-			}
-
-			// generate corresponding (weighted) function values
-			for (vegas_sample<T> const& sample : samples)
-			{
-				values.push_back(
-					function(sample, aux_variable) * sample.weight
-				);
+				T const evaluation = function(samples.back());
+				values.push_back(evaluation * samples.back().weight);
 			}
 
 			// compute sum, sum of squares, and sum of squares for each bin
 			for (std::size_t j = 0; j != size; ++j)
 			{
 				// perform kahan summation 'sum += values[j]' - this improves
-				// precision if T is single precision and 'steps' is large
+				// precision if T is single precision and many samples are added
 				T y = values[j] - compensation;
 				T t = sum + y;
 				compensation = (t - sum) - y;
@@ -321,13 +371,14 @@ vegas_result<T> vegas(
 
 				T const square = values[j] * values[j];
 
-				// no kahan summation needed
+				// no kahan summation needed, because it only affects the result
+				// indirectly via the grid recomputation
 				sum_of_squares += square;
 
 				// save sum_of_squares for each bin to later refine the grid
 				for (std::size_t k = 0; k != dimensions; ++k)
 				{
-					binned_sum_of_squares[k][samples[j].bin[k]] += square;
+					grid_info[k * bins + samples[j].bin[k]] += square;
 				}
 			}
 
@@ -336,15 +387,20 @@ vegas_result<T> vegas(
 			// clear samples
 			samples.clear();
 		}
-		while (samples_done != i);
+		while (samples_done != k);
+
+		// take 'data' from all processes, sum them elementwise into 'data'
+		// again and share the result between all processes. we thereby achieve
+		// a 'synchronized macro-parallelization'
+		parallelizer.all_reduce(data);
 
 		// add result for this iteration
-		result.add_iteration(i, sum, sum_of_squares);
+		result.add_iteration(*i, sum, sum_of_squares);
 
 		// refine grid for every dimension
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
-			refine_grid(T(1.5), grid[j], binned_sum_of_squares[j]);
+			refine_grid(alpha, grid[j], grid_info.begin() + j * bins);
 		}
 	}
 
