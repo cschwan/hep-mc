@@ -26,6 +26,8 @@
 #include <vector>
 
 #include <hep/mc/default_vegas_parallelizer.hpp>
+#include <hep/mc/mc_point.hpp>
+#include <hep/mc/mc_result.hpp>
 
 namespace
 {
@@ -113,18 +115,20 @@ namespace hep
 {
 
 template <typename T>
-struct vegas_sample
+struct vegas_point : public mc_point<T>
 {
-	vegas_sample(
+	vegas_point(
 		std::size_t dimensions,
 		std::size_t steps,
 		T const& random,
 		std::vector<std::vector<T>> const& grid
 	)
-		: point(dimensions)
+		: mc_point<T>(dimensions)
 		, bin(dimensions)
-		, weight(1.0 / steps)
 	{
+		this->point.resize(dimensions);
+		this->weight = T(1.0) / T(steps);
+
 		std::size_t const bins = grid[0].size();
 
 		for (std::size_t i = 0; i != dimensions; ++i)
@@ -143,30 +147,21 @@ struct vegas_sample
 			T const difference = grid[i][position] - grid_previous;
 
 			// TODO: explain
-			point[i] = grid_previous + (bin_position - position) * difference;
+			this->point[i] = grid_previous +
+				(bin_position - position) * difference;
 
 			// save the index of the bin in which point lies
 			bin[i] = position;
 
 			// multiply weight for each dimension
-			weight *= difference * bins;
+			this->weight *= difference * bins;
 		}
 	}
-
-	/**
-	 *
-	 */
-	std::vector<T> point;
 
 	/**
 	 * The indices that determine the bin of the sample in the grid.
 	 */
 	std::vector<std::size_t> bin;
-
-	/**
-	 *
-	 */
-	T weight;
 };
 
 /**
@@ -179,15 +174,12 @@ public:
 	/**
 	 *
 	 */
-	vegas_result(std::vector<std::size_t> const& steps)
-		: values(steps.size())
-		, errors(steps.size())
-		, steps(steps)
+	vegas_result(std::size_t iterations)
+		: results()
 		, sum_of_inv_variances()
 		, sum_of_averages()
 	{
-		values.clear();
-		errors.clear();
+		results.reserve(iterations);
 	}
 
 	/**
@@ -209,25 +201,13 @@ public:
 		sum_of_averages += inv_variance * sum;
 		T const average = variance * sum_of_averages;
 
-		values.push_back(average);
-		errors.push_back(std::sqrt(variance));
+		results.push_back(mc_result<T>(samples, average, std::sqrt(variance)));
 	}
 
 	/**
-	 * The computed approximations for the integral for each iteration.
+	 * The results for each iteration.
 	 */
-	std::vector<T> values;
-
-	/**
-	 * The errors for each iteration.
-	 */
-	std::vector<T> errors;
-
-	/**
-	 * A std::vector containing the number of steps performed by VEGAS for each
-	 * iteration.
-	 */
-	std::vector<std::size_t> steps;
+	std::vector<mc_result<T>> results;
 
 private:
 	T sum_of_inv_variances;
@@ -313,7 +293,7 @@ vegas_result<T> vegas(
 	}
 
 	// container holding samples
-	std::vector<vegas_sample<T>> samples;
+	std::vector<vegas_point<T>> samples;
 	samples.reserve(batch_size);
 
 	// container holding weighted function values
@@ -330,7 +310,7 @@ vegas_result<T> vegas(
 	T& sum = data[dimensions * bins + 0];
 	T& sum_of_squares = data[dimensions * bins + 1];
 
-	vegas_result<T> result(iteration_samples);
+	vegas_result<T> result(iteration_samples.size());
 
 	// loop over iterations
 	for (auto i = iteration_samples.begin(); i != iteration_samples.end(); ++i)
@@ -352,7 +332,7 @@ vegas_result<T> vegas(
 			// generate samples and corresponding values
 			for (std::size_t j = 0; j != size; ++j)
 			{
-				samples.push_back(vegas_sample<T>(
+				samples.push_back(vegas_point<T>(
 					dimensions, *i, distribution(generator), grid)
 				);
 				T const evaluation = function(samples.back());

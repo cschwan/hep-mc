@@ -21,61 +21,21 @@
 
 #include <cmath>
 #include <cstddef>
+#include <functional>
 #include <random>
 #include <vector>
+
+#include <hep/mc/mc_point.hpp>
+#include <hep/mc/mc_result.hpp>
 
 namespace hep
 {
 
 /**
- * The result of a PLAIN Monte Carlo integration, returned from \ref plain.
- */
-template <typename T>
-struct plain_result
-{
-	/**
-	 * Constructor. Calculates \ref value and \ref error from the given
-	 * parameters \c steps, \c sum and \c sum_of_squares.
-	 */
-	plain_result(std::size_t steps, T const& sum, T const& sum_of_squares)
-		: steps(steps)
-		, value(sum / T(steps))
-		, error(std::sqrt(sum_of_squares / (T(steps) * T(steps))
-		        - value * value / T(steps)))
-	{
-	}
-
-	/**
-	 * The number of Monte Carlo steps performed for obtaining this result.
-	 */
-	std::size_t steps;
-
-	/**
-	 * Expectation value of the computation. The expectation value \f$ E \f$ is
-	 * the average of the integrand \f$ f \f$ uniformly sampled at random points
-	 * \f$ \vec{x} \in [0,1]^d \f$:
-	 * \f[
-	 *     E = \frac{1}{N} \sum_{i = 1}^N f \left( \vec{x}_i \right)
-	 * \f]
-	 */
-	T value;
-
-	/**
-	 * Error (standard-deviation) of the expectation value. The error
-	 * \f$ \sigma \f$ is computed as:
-	 * \f[
-	 *     \sigma = \sqrt{ \frac{1}{N} \left( \frac{1}{N} \sum_{i = 1}^N f^2
-	 *     \left( \vec{x}_i \right) - E^2 \right) }
-	 * \f]
-	 */
-	T error;
-};
-
-/**
  * PLAIN Monte Carlo integrator. \c plain integrates \c function over the
- * unit-hypercube with \c dimension dimensions using \c steps randomly chosen
- * points determined by the number generator \c random_number_generator. The
- * generator is not seeded. \c function must have the following form:
+ * unit-hypercube with \c dimensions using \c steps randomly chosen points
+ * determined by the number generator \c random_number_generator. The generator
+ * is not seeded. \c function must have the following form:
  * \code
  * T integrand(std::vector<T> const& x)
  * {
@@ -88,18 +48,18 @@ struct plain_result
  * containing both the value of the integral and an error.
  */
 template <typename T, typename F, typename R = std::mt19937>
-plain_result<T> plain(
+mc_result<T> plain(
 	std::size_t dimensions,
 	std::size_t steps,
 	F function,
-	R&& generator = std::mt19937()
+	R generator = std::mt19937()
 ) {
 	// default-initialize sum and sum_of_squares
 	T sum = T();
 	T sum_of_squares = T();
 
-	// container holding random numbers
-	std::vector<T> random_numbers(dimensions);
+	mc_point<T> point(dimensions);
+	point.weight = T(1.0) / T(steps);
 
 	// distribution [0, 1] for the random number generator
 	std::uniform_real_distribution<T> distribution;
@@ -113,11 +73,11 @@ plain_result<T> plain(
 		// fill container with random numbers
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
-			random_numbers[j] = distribution(generator);
+			point.point[j] = distribution(generator);
 		}
 
 		// evaluate function at position specified in random_numbers
-		T const evaluation = function(random_numbers);
+		T const evaluation = function(std::cref(point));
 
 		// do kahan summation
 		T const y = evaluation - compensation;
@@ -128,7 +88,10 @@ plain_result<T> plain(
 		sum_of_squares += evaluation * evaluation;
 	}
 
-	return plain_result<T>(steps, sum, sum_of_squares);
+	T const value = sum / T(steps);
+
+	return mc_result<T>(steps, value, std::sqrt(sum_of_squares /
+		(T(steps) * T(steps)) - value * value / T(steps)));
 }
 
 }

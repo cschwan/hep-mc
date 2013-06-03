@@ -20,6 +20,8 @@
  */
 
 #include <hep/mc/default_vegas_parallelizer.hpp>
+#include <hep/mc/mc_point.hpp>
+#include <hep/mc/mc_result.hpp>
 #include <hep/mc/plain.hpp>
 #include <hep/mc/vegas.hpp>
 

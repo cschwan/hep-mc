@@ -1,5 +1,7 @@
 nobase_include_HEADERS = \
 	hep/mc/default_vegas_parallelizer.hpp \
+	hep/mc/mc_point.hpp \
+	hep/mc/mc_result.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc.hpp

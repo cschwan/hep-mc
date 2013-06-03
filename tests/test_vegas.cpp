@@ -16,7 +16,7 @@ public:
 	{
 	}
 
-	T operator()(hep::vegas_sample<T> const& sample) const
+	T operator()(hep::vegas_point<T> const& sample) const
 	{
 		std::vector<T> const& x = sample.point;
 
@@ -74,8 +74,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(vegas_integration_square, T, test_types)
 	);
 
 	BOOST_CHECK_CLOSE(
-		result.values.back(),
+		result.results.back().value,
 		T(1.0),
-		T(300.0) * result.errors.back()
+		T(300.0) * result.results.back().error
 	);
 }
