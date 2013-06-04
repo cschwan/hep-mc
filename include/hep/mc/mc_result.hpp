@@ -32,14 +32,25 @@ template <typename T>
 struct mc_result
 {
 	/**
-	 * Constructor. Sets \ref steps, \ref value, and \ref error.
+	 * Constructor.
 	 */
 	mc_result(std::size_t samples, T sum, T sum_of_squares)
-		: samples(samples)
-		, value(sum / T(samples))
-		, error(std::sqrt(sum_of_squares - value * value * T(samples)) /
-			T(samples))
+		: samples()
+		, value()
+		, error()
 	{
+		set(samples, sum, sum_of_squares);
+	}
+
+	/**
+	 * Recalculates the member variables.
+	 */
+	void set(std::size_t samples, T sum, T sum_of_squares)
+	{
+		this->samples = samples;
+		value = sum / T(samples);
+		error = std::sqrt(sum_of_squares - value * value * T(samples)) /
+			T(samples);
 	}
 
 	/**
