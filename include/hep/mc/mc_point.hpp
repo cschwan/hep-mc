@@ -33,9 +33,12 @@ namespace hep
 template <typename T>
 struct mc_point
 {
-	mc_point(std::size_t dimension)
-		: weight()
-		, point(dimension)
+	/**
+	 * Constructor.
+	 */
+	mc_point(std::size_t samples, std::size_t dimensions)
+		: weight(T(1.0) / T(samples))
+		, point(dimensions)
 	{
 	}
 

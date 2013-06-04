@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012  Christopher Schwan
+ * Copyright (C) 2012-2013  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/default_vegas_parallelizer.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
 #include <hep/mc/plain.hpp>

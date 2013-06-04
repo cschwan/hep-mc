@@ -20,6 +20,7 @@
  */
 
 #include <cmath>
+#include <cstddef>
 
 namespace hep
 {
@@ -33,17 +34,18 @@ struct mc_result
 	/**
 	 * Constructor. Sets \ref steps, \ref value, and \ref error.
 	 */
-	mc_result(std::size_t steps, T const& value, T const& error)
-		: steps(steps)
-		, value(value)
-		, error(error)
+	mc_result(std::size_t samples, T sum, T sum_of_squares)
+		: samples(samples)
+		, value(sum / T(samples))
+		, error(std::sqrt(sum_of_squares - value * value * T(samples)) /
+			T(samples))
 	{
 	}
 
 	/**
 	 * The number of Monte Carlo steps performed for obtaining this result.
 	 */
-	std::size_t steps;
+	std::size_t samples;
 
 	/**
 	 * Expectation value of this result. The expectation value \f$ E \f$ is the

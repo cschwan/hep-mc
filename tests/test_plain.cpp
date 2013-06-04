@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(constant, T, test_types)
 	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(0));
 
 	BOOST_CHECK_EQUAL(result.value, T(1.0));
-	BOOST_CHECK_EQUAL(result.error, T(0.0));
+	BOOST_CHECK_SMALL(result.error, T(1e-8));
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(sine, T, test_types)

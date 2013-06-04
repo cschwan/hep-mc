@@ -61,21 +61,20 @@ typedef boost::mpl::list<float, double, long double> test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(vegas_integration_square, T, test_types)
 {
-	std::size_t const iterations = 3;
-	std::size_t const steps_per_iteration = 1000000;
+	std::size_t const iterations = 10;
+	std::size_t const steps_per_iteration = 10000;
 	std::size_t const bins = 100;
 
 	auto result = hep::vegas<T>(
 		1,
 		std::vector<std::size_t>(iterations, steps_per_iteration),
-		steps_per_iteration,
-		bins,
-		integrand<T>(6)
+		integrand<T>(6),
+		bins
 	);
 
 	BOOST_CHECK_CLOSE(
-		result.results.back().value,
+		result.back().value,
 		T(1.0),
-		T(300.0) * result.results.back().error
+		T(300.0) * result.back().error
 	);
 }

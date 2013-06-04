@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012  Christopher Schwan
+ * Copyright (C) 2012-2013  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cmath>
 #include <cstddef>
-#include <functional>
 #include <random>
 #include <vector>
 
@@ -32,43 +30,31 @@ namespace hep
 {
 
 /**
- * PLAIN Monte Carlo integrator. \c plain integrates \c function over the
- * unit-hypercube with \c dimensions using \c steps randomly chosen points
- * determined by the number generator \c random_number_generator. The generator
- * is not seeded. \c function must have the following form:
- * \code
- * T integrand(std::vector<T> const& x)
- * {
- *     // return value of the function at x
- * }
- * \endcode
- * where \c T must be substituted with the type \c plain is called.
- *
- * The result of this function is an object of the type \ref plain_result
- * containing both the value of the integral and an error.
+ * PLAIN Monte Carlo integrator. This function integrates `function` over the
+ * unit-hypercube with the specified `dimensions` using `steps` randomly chosen
+ * points determined by `generator`. The generator is not seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
 mc_result<T> plain(
 	std::size_t dimensions,
-	std::size_t steps,
+	std::size_t samples,
 	F function,
-	R generator = std::mt19937()
+	R&& generator = std::mt19937()
 ) {
 	// default-initialize sum and sum_of_squares
 	T sum = T();
 	T sum_of_squares = T();
 
-	mc_point<T> point(dimensions);
-	point.weight = T(1.0) / T(steps);
-
-	// distribution [0, 1] for the random number generator
+	// generates random number in the range [0,1]
 	std::uniform_real_distribution<T> distribution;
 
 	// compensation variable for kahan summation
 	T compensation = T();
 
+	mc_point<T> point(samples, dimensions);
+
 	// iterate over samples
-	for (std::size_t i = 0; i != steps; ++i)
+	for (std::size_t i = 0; i != samples; ++i)
 	{
 		// fill container with random numbers
 		for (std::size_t j = 0; j != dimensions; ++j)
@@ -77,21 +63,19 @@ mc_result<T> plain(
 		}
 
 		// evaluate function at position specified in random_numbers
-		T const evaluation = function(std::cref(point));
+		T const value = function(static_cast <mc_point<T> const> (point));
 
-		// do kahan summation
-		T const y = evaluation - compensation;
+		// perform kahan summation 'sum += value' - this improves precision if
+		// T is single precision and many values are added
+		T const y = value - compensation;
 		T const t = sum + y;
 		compensation = (t - sum) - y;
 		sum = t;
 
-		sum_of_squares += evaluation * evaluation;
+		sum_of_squares += value * value;
 	}
 
-	T const value = sum / T(steps);
-
-	return mc_result<T>(steps, value, std::sqrt(sum_of_squares /
-		(T(steps) * T(steps)) - value * value / T(steps)));
+	return mc_result<T>(samples, sum, sum_of_squares);
 }
 
 }

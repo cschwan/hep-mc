@@ -14,6 +14,4 @@ check_PROGRAMS = \
 
 LDADD = -lboost_unit_test_framework
 
-LOG_COMPILER = BOOST_TEST_BUILD_INFO=yes BOOST_TEST_DETECT_FP_EXCEPTIONS=yes
-
 TESTS = $(check_PROGRAMS)
