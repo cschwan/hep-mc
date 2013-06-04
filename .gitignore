@@ -6,6 +6,7 @@
 # autotools generated files
 *.deps/
 *.libs/
+ar-lib
 autom4te.cache/
 aclocal.m4
 config.guess
@@ -25,6 +26,7 @@ ltmain.sh
 *Makefile.in
 missing
 stamp-h1
+test-driver
 
 # documentation related files
 doc/Doxyfile
@@ -36,9 +38,9 @@ doc/html
 *.lo
 *.o
 
-# ignore files in m4/ subdir, but track the directory itself via .keep
+# ignore files in m4/ subdir, but track autoconf-archive macros
 m4/*
-!m4/.keep
+!m4/ax_cxx_compile_stdcxx_11.m4
 
 # distribution packages
 *.tar.*
@@ -46,7 +48,8 @@ m4/*
 # git-generated files
 AUTHORS
 ChangeLog
+NEWS
 VERSION
 
 # build related files
-build/
+build*/
