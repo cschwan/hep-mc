@@ -36,9 +36,9 @@ struct mc_point
 	/**
 	 * Constructor.
 	 */
-	mc_point(std::size_t samples, std::size_t dimensions)
+	mc_point(std::size_t samples, std::vector<T>& point)
 		: weight(T(1.0) / T(samples))
-		, point(dimensions)
+		, point(point)
 	{
 	}
 
@@ -56,7 +56,7 @@ struct mc_point
 	 * the coordinates \f$ x_i \f$ so that \f$ \vec{x} = \left( x_0, x_1,
 	 * \ldots, x_{d-1} \right) \f$.
 	 */
-	std::vector<T> point;
+	std::vector<T>& point;
 };
 
 }

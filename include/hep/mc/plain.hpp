@@ -38,7 +38,7 @@ template <typename T, typename F, typename R = std::mt19937>
 mc_result<T> plain(
 	std::size_t dimensions,
 	std::size_t samples,
-	F function,
+	F&& function,
 	R&& generator = std::mt19937()
 ) {
 	// default-initialize sum and sum_of_squares
@@ -51,15 +51,17 @@ mc_result<T> plain(
 	// compensation variable for kahan summation
 	T compensation = T();
 
-	mc_point<T> point(samples, dimensions);
+	std::vector<T> random_numbers(dimensions);
 
 	// iterate over samples
 	for (std::size_t i = 0; i != samples; ++i)
 	{
+		mc_point<T> point(samples, random_numbers);
+
 		// fill container with random numbers
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
-			point.point[j] = distribution(generator);
+			random_numbers[j] = distribution(generator);
 		}
 
 		// evaluate function at position specified in random_numbers
