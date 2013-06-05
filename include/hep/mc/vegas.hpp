@@ -75,19 +75,19 @@ struct vegas_point : public mc_point<T>
 	 */
 	vegas_point(
 		std::size_t total_samples,
-		std::size_t dimensions,
-		T random_number,
+		std::vector<T> const& random_numbers,
 		std::vector<std::vector<T>> const& grid
 	)
-		: mc_point<T>(total_samples, dimensions)
-		, bin(dimensions)
+		: mc_point<T>(total_samples, grid.size())
+		, bin(grid.size())
 	{
+		std::size_t const dimensions = grid.size();
 		std::size_t const bins = grid[0].size();
 
 		for (std::size_t i = 0; i != dimensions; ++i)
 		{
 			// compute position of 'random' in bins, as a floating point number
-			T const bin_position = random_number * bins;
+			T const bin_position = random_numbers[i] * bins;
 
 			// in which bin is 'random' (integer) ?
 			std::size_t const position = bin_position;
@@ -239,15 +239,16 @@ vegas_iteration_result<T> vegas_iteration(
 	std::size_t const bins = grid[0].size();
 
 	std::vector<T> grid_refinement_data(dimensions * bins + 2);
+	std::vector<T> random_numbers(dimensions);
 
 	for (std::size_t i = 0; i != samples; ++i)
 	{
-		vegas_point<T> const point{
-			total_samples,
-			dimensions,
-			distribution(generator),
-			grid
-		};
+		for (std::size_t j = 0; j != dimensions; ++j)
+		{
+			random_numbers[j] = distribution(generator);
+		}
+
+		vegas_point<T> const point(total_samples, random_numbers, grid);
 
 		// evaluate function at the specified point and multiply with its weight
 		T const value = function(point) * point.weight;
