@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012  Christopher Schwan
+ * Copyright (C) 2012-2013  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ namespace hep
 {
 
 /**
- * The result of a Monte Carlo integration.
+ * The estimation of a Monte Carlo integration. Every Monte Carlo integrator
+ * returns one or more instances of this class.
  */
 template <typename T>
 struct mc_result
@@ -34,46 +35,26 @@ struct mc_result
 	/**
 	 * Constructor.
 	 */
-	mc_result(std::size_t samples, T sum, T sum_of_squares)
-		: samples()
-		, value()
-		, error()
+	mc_result(std::size_t calls, T sum, T sum_of_squares)
+		: calls(calls)
+		, value(sum / T(calls))
+		, error(std::sqrt(sum_of_squares - value * value * T(calls)) / T(calls))
 	{
-		set(samples, sum, sum_of_squares);
 	}
 
 	/**
-	 * Recalculates the member variables.
+	 * The number of function evaluations \f$ N \f$ performed to obtain this
+	 * result.
 	 */
-	void set(std::size_t samples, T sum, T sum_of_squares)
-	{
-		this->samples = samples;
-		value = sum / T(samples);
-		error = std::sqrt(sum_of_squares - value * value * T(samples)) /
-			T(samples);
-	}
+	std::size_t calls;
 
 	/**
-	 * The number of Monte Carlo steps performed for obtaining this result.
-	 */
-	std::size_t samples;
-
-	/**
-	 * Expectation value of this result. The expectation value \f$ E \f$ is the
-	 * average of the integrand \f$ f \f$ uniformly sampled over \f$ N \f$
-	 * random points \f$ \vec{x}_i \in [0,1]^d \f$:
-	 * \f[
-	 *     E = \frac{1}{N} \sum_{i = 1}^N f \left( \vec{x}_i \right)
-	 * \f]
+	 * Expectation value \f$ E \f$ of this result.
 	 */
 	T value;
 
 	/**
-	 * Error of the expectation value. The error \f$ S \f$ is computed as:
-	 * \f[
-	 *     S = \sqrt{ \frac{1}{N} \left( \frac{1}{N} \sum_{i = 1}^N f^2
-	 *     \left( \vec{x}_i \right) - E^2 \right) }
-	 * \f]
+	 * Error \f$ S \f$ of the expectation value.
 	 */
 	T error;
 };

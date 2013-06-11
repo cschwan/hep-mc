@@ -1,3 +1,4 @@
+BUILTIN_STL_SUPPORT    = YES
 CITE_BIB_FILES         = @srcdir@/references.bib
 ENABLE_PREPROCESSING   = YES
 EXAMPLE_PATH           = @top_srcdir@/examples
@@ -17,7 +18,7 @@ SHOW_FILES             = NO
 SHOW_NAMESPACES        = NO
 SOURCE_BROWSER         = NO
 SORT_MEMBERS_CTORS_1ST = YES
-STRIP_FROM_PATH        = @top_srcdir@/include @top_srcdir@/src
+STRIP_FROM_PATH        = @top_srcdir@/examples @top_srcdir@/include
 TAB_SIZE               = 4
 USE_MATHJAX            = YES
 QUIET                  = YES

@@ -30,14 +30,17 @@ namespace hep
 {
 
 /**
+ * \ingroup algorithms
+ *
  * PLAIN Monte Carlo integrator. This function integrates `function` over the
- * unit-hypercube with the specified `dimensions` using `steps` randomly chosen
- * points determined by `generator`. The generator is not seeded.
+ * unit-hypercube with the specified `dimensions` using `calls` function
+ * evaluations with randomly chosen points determined by `generator`. The
+ * generator is not seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
 mc_result<T> plain(
 	std::size_t dimensions,
-	std::size_t samples,
+	std::size_t calls,
 	F&& function,
 	R&& generator = std::mt19937()
 ) {
@@ -53,10 +56,10 @@ mc_result<T> plain(
 
 	std::vector<T> random_numbers(dimensions);
 
-	// iterate over samples
-	for (std::size_t i = 0; i != samples; ++i)
+	// iterate over calls
+	for (std::size_t i = 0; i != calls; ++i)
 	{
-		mc_point<T> point(samples, random_numbers);
+		mc_point<T> point(calls, random_numbers);
 
 		// fill container with random numbers
 		for (std::size_t j = 0; j != dimensions; ++j)
@@ -77,7 +80,7 @@ mc_result<T> plain(
 		sum_of_squares += value * value;
 	}
 
-	return mc_result<T>(samples, sum, sum_of_squares);
+	return mc_result<T>(calls, sum, sum_of_squares);
 }
 
 }

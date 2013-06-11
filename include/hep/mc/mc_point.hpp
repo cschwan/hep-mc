@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012  Christopher Schwan
+ * Copyright (C) 2012-2013  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ namespace hep
 
 /**
  * Instances of this class represent Monte Carlo points, i.e. a random point
- * \f$ \vec{x} \in [0,1]^d \f$ from the hypercube in \f$ d \f$ dimensions
+ * \f$ \vec{x} \in [0,1]^d \f$ in the hypercube in \f$ d \f$ dimensions
  * together with a \ref weight.
  */
 template <typename T>
@@ -36,8 +36,8 @@ struct mc_point
 	/**
 	 * Constructor.
 	 */
-	mc_point(std::size_t samples, std::vector<T>& point)
-		: weight(T(1.0) / T(samples))
+	mc_point(std::size_t calls, std::vector<T>& point)
+		: weight(T(1.0) / T(calls))
 		, point(point)
 	{
 	}
@@ -45,16 +45,14 @@ struct mc_point
 	/**
 	 * The weight \f$ w \f$ of this point. Depending on the integration
 	 * algorithm the weight might be constant over the entire hypercube (e.g.
-	 * \ref plain) or dependent of the region in which it lies (e.g.
-	 * \ref vegas).
+	 * \ref plain) or dependent on the region in which it lies (e.g. \ref
+	 * vegas).
 	 */
 	T weight;
 
 	/**
-	 * The coordinates of this point. The size of this vector determines the
-	 * dimension \f$ d \f$ of the hypercube, the entries with index \f$ i \f$
-	 * the coordinates \f$ x_i \f$ so that \f$ \vec{x} = \left( x_0, x_1,
-	 * \ldots, x_{d-1} \right) \f$.
+	 * The coordinates of this point of the hypercube. The dimension can be
+	 * obtained using `point.size()`.
 	 */
 	std::vector<T>& point;
 };
