@@ -2,9 +2,11 @@ nobase_include_HEADERS = \
 	hep/mc/mc_helper.hpp \
 	hep/mc/mc_point.hpp \
 	hep/mc/mc_result.hpp \
+	hep/mc/mpi_vegas.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \
-	hep/mc.hpp
+	hep/mc.hpp \
+	hep/mc-mpi.hpp
 
 # create a timestamp file so we can depend on it instead of depending on every
 # single header

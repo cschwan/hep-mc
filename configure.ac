@@ -60,6 +60,10 @@ AC_ARG_ENABLE([examples], AS_HELP_STRING([--enable-examples],
 
 AM_CONDITIONAL([HAVE_EXAMPLES], [test "x$enable_examples" = "xyes"])
 
+AS_IF([test "x$enable_examples" = "xyes"], [
+	LX_FIND_MPI
+])
+
 # add possibility to generate API documentation with Doxygen
 AC_ARG_ENABLE([doxygen], AS_HELP_STRING([--enable-doxygen],
 	[Enable generation of Doxygen documentation]))

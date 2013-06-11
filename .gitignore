@@ -38,9 +38,10 @@ doc/html
 *.lo
 *.o
 
-# ignore files in m4/ subdir, but track autoconf-archive macros
+# ignore files in m4/ subdir, but track custom macros
 m4/*
 !m4/ax_cxx_compile_stdcxx_11.m4
+!m4/lx_find_mpi.m4
 
 # distribution packages
 *.tar.*
