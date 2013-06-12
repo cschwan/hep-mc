@@ -79,7 +79,8 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 	// perform iterations
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
-		std::size_t const calls = (*i / world) + (rank < (*i % world) ? 1 : 0);
+		std::size_t const calls = (*i / world) +
+			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
 		auto result = vegas_iteration(calls, *i, grid, function, generator);
 
 		// add up results
@@ -91,10 +92,6 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 			MPI_SUM,
 			communicator
 		);
-
-		// extract accumulated sum and sum of squares
-		T const& sum = result.adjustment_data[dimensions * bins];
-		T const& sum_of_squares = result.adjustment_data[dimensions * bins + 1];
 
 		// calculate accumulated results
 		results.push_back(vegas_iteration_result<T>(*i, grid,

@@ -1,4 +1,5 @@
 AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CXXFLAGS = $(MPI_CXXFLAGS)
 
 AM_DEFAULT_SOURCE_EXT = .cpp
 

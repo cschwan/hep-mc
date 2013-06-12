@@ -1,4 +1,4 @@
-AC_PREREQ([2.65])
+AC_PREREQ([2.63b])
 
 # check if git is available and current directory contains repository
 m4_esyscmd_s([git status])
