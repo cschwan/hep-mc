@@ -3,6 +3,7 @@ nobase_include_HEADERS = \
 	hep/mc/mc_point.hpp \
 	hep/mc/mc_result.hpp \
 	hep/mc/mpi_datatype.hpp \
+	hep/mc/mpi_plain.hpp \
 	hep/mc/mpi_vegas.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \

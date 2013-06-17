@@ -20,6 +20,7 @@
  */
 
 #include <hep/mc/mpi_datatype.hpp>
+#include <hep/mc/mpi_plain.hpp>
 #include <hep/mc/mpi_vegas.hpp>
 
 namespace hep
