@@ -1,11 +1,11 @@
 #ifndef HEP_MC_MPI_VEGAS_HPP
 #define HEP_MC_MPI_VEGAS_HPP
 
+#include <hep/mc/mpi_datatype.hpp>
 #include <hep/mc/vegas.hpp>
 
 #include <cstddef>
 #include <random>
-#include <type_traits>
 #include <vector>
 
 #include <mpi.h>
@@ -53,17 +53,6 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 	int world = 0;
 	MPI_Comm_size(communicator, &world);
 
-	MPI_Datatype type;
-	if (std::is_same<float, T>::value) {
-		type = MPI_FLOAT;
-	} else if (std::is_same<double, T>::value) {
-		type = MPI_DOUBLE;
-	} else if (std::is_same<long double, T>::value) {
-		type = MPI_LONG_DOUBLE;
-	} else {
-		// TODO: error !?
-	}
-
 	// seed every random number generator differently
 	std::size_t r = rank * 10;
 	std::seed_seq sequence{r+0, r+1, r+2, r+3, r+4, r+5, r+6, r+7, r+8, r+9};
@@ -88,7 +77,7 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 			MPI_IN_PLACE,
 			&(result.adjustment_data[0]),
 			result.adjustment_data.size(),
-			type,
+			mpi_datatype<T>(),
 			MPI_SUM,
 			communicator
 		);
