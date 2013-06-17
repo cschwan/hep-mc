@@ -19,12 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <hep/mc/mc_point.hpp>
+#include <hep/mc/mc_result.hpp>
+
 #include <cstddef>
 #include <random>
 #include <vector>
-
-#include <hep/mc/mc_point.hpp>
-#include <hep/mc/mc_result.hpp>
 
 namespace hep
 {
@@ -36,6 +36,13 @@ namespace hep
  * unit-hypercube with the specified `dimensions` using `calls` function
  * evaluations with randomly chosen points determined by `generator`. The
  * generator is not seeded.
+ *
+ * \param dimensions The number of parameters `function` accepts.
+ * \param calls The number of function calls that are used to obtain the result.
+ * \param function The function that will be integrated over the hypercube. See
+ *        \ref integrands for further explanation.
+ * \param generator The random number generator that will be used to generate
+ *        random points from the hypercube. This generator is not seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
 mc_result<T> plain(

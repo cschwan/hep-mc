@@ -5,6 +5,8 @@
 #include <cstddef>
 #include <iostream>
 
+#include <mpi.h>
+
 double gauss(hep::mc_point<double> const& sample)
 {
 	double result = 1.0;
@@ -45,6 +47,12 @@ int main(int argc, char* argv[])
 		iterations,
 		gauss
 	);
+// 	std::vector<hep::mc_result<double>> results = { hep::mpi_plain<double>(
+// 		MPI_COMM_WORLD,
+// 		dimension,
+// 		5 * 10000000,
+// 		gauss
+// 	)};
 
 	// print numbers in scientific format
 	std::cout.setf(std::ios_base::scientific);
