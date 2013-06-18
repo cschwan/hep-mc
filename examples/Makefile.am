@@ -6,6 +6,8 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 noinst_PROGRAMS = \
 	mpi_vegas \
 	simple_vegas \
-	vegas_example
+	vegas_advanced \
+	vegas_example \
+	vegas_grid
 
 mpi_vegas_LDADD = $(MPI_CXXLDFLAGS)
