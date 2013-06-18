@@ -1,43 +1,8 @@
-AC_PREREQ([2.63b])
-
-# check if git is available and current directory contains repository
-m4_esyscmd_s([git status])
-
-# if a repository is available use git to create files that are needed before
-# AC_INIT is called:
-ifelse(sysval,
-	# VERSION file, ...
-	m4_esyscmd_s([echo `git describe 2>/dev/null` | tee VERSION])
-
-	# AUTHORS file, ...
-	m4_esyscmd_s([git log --format='%aN <%aE>' | uniq > AUTHORS])
-
-	# ChangeLog file and ...
-	m4_esyscmd_s([
-		git log --date=short \
-			--format='%ad  %aN  <%aE> %n    %w(80,0,4)%B' > ChangeLog
-	])
-
-	# NEWS file
-	m4_esyscmd_s([
-		git for-each-ref --sort='-*committerdate' --format \
-			'News for %(refname:short):%0a===============%0a%0a%(body)' \
-			refs/tags > NEWS
-	])
-	, []
-)
-
-# read version number
-define([gitversion], m4_esyscmd_s([cat VERSION]))
-
 # initialize configure
-AC_INIT([hep-mc], [gitversion])
+AC_INIT([hep-mc], [0.2.1])
 
 # initialize automake
-AM_INIT_AUTOMAKE([-Wall -Werror dist-bzip2 no-dist-gzip nostdinc 1.11])
-
-# use silent rules by default
-AM_SILENT_RULES([yes])
+AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2 no-dist-gzip nostdinc])
 
 # put aclocal macros into m4
 AC_CONFIG_MACRO_DIR([m4])

@@ -46,11 +46,5 @@ m4/*
 # distribution packages
 *.tar.*
 
-# git-generated files
-AUTHORS
-ChangeLog
-NEWS
-VERSION
-
 # build related files
 build*/
