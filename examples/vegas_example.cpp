@@ -1,55 +1,35 @@
 #include <hep/mc.hpp>
 
-#include <cmath>
+#include <cstddef>
 #include <iostream>
 #include <vector>
 
-struct monomial
+// the function that will be integrated
+double square(hep::mc_point<double> const& x)
 {
-	double exponent;
-
-	// constructor. sets the exponent
-	monomial(double exponent)
-		: exponent(exponent)
-	{
-	}
-
-	// integrand function. raises the argument to the power 'exponent'
-	double operator()(hep::mc_point<double> const& x)
-	{
-		return std::pow(x.point[0], exponent);
-	}
-};
+	return x.point[0] * x.point[0];
+}
 
 int main()
 {
-	double exponent = 2.0;
-
-	std::vector<hep::vegas_iteration_result<double>> results =
-		hep::vegas<double>(
-			1,                                 // integration in 1 dimension
-			std::vector<std::size_t>(5, 1000), // 5 iterations, 1000 calls each
-			monomial(exponent)                 // integrate a parabola
-		);
-
-	double reference_result = (1.0 / (exponent + 1.0));
-
-	// print numbers in scientific format
-	std::cout.setf(std::ios::scientific);
+	// this is what the integrator should give
+	double reference_result = 1.0 / 3.0;
 
 	// print reference result
-	std::cout << "integral of x^" << exponent << " is " << reference_result;
-	std::cout << "\n";
+	std::cout << "computing integral of x^2 from 0 to 1\n";
+	std::cout << "reference result is " << reference_result << "\n\n";
 
-	// print result of each iteration
-	std::cout << "results of each iteration:\n";
-	for (std::size_t i = 0; i != results.size(); ++i)
-	{
-		hep::vegas_iteration_result<double>& result = results[i];
+	// set the verbose vegas callback function
+	hep::vegas_callback<double>(hep::vegas_verbose_callback<double>);
 
-		std::cout << i << " (N=" << result.calls << ") : I=" << result.value;
-		std::cout << " +- " << result.error << "\n";
-	}
+	// perform 5 iteration with 1000 calls each; this function will also call
+	// vegas_verbose_callback after each iteration which in turn prints the
+	// individual iterations
+	auto results = hep::vegas<double>(
+		1,
+		std::vector<std::size_t>(50, 1000),
+		square
+	);
 
 	return 0;
 }

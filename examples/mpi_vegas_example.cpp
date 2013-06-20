@@ -34,6 +34,9 @@ int main(int argc, char* argv[])
 	int rank = 0;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+	// set the verbose vegas callback function
+	hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
+
 	// dimension of the gauss
 	std::size_t const dimension = 10;
 
@@ -47,30 +50,6 @@ int main(int argc, char* argv[])
 		iterations,
 		gauss
 	);
-// 	std::vector<hep::mc_result<double>> results = { hep::mpi_plain<double>(
-// 		MPI_COMM_WORLD,
-// 		dimension,
-// 		5 * 10000000,
-// 		gauss
-// 	)};
-
-	// print numbers in scientific format
-	std::cout.setf(std::ios_base::scientific);
-
-	// print result for iterations
-	if (rank == 0)
-	{
-		// erf is the error function - the integral of the gaussian
-		double reference_result = std::pow(std::erf(1.0), double(dimension));
-
-		std::cout << "reference result is " << reference_result << "\n";
-		std::cout << "results of each iteration:\n";
-		for (std::size_t i = 0; i != results.size(); ++i)
-		{
-			std::cout << i << " (N=" << results[i].calls << ") : I=";
-			std::cout << results[i].value << " +- " << results[i].error << "\n";
-		}
-	}
 
 	// clean up
 	MPI_Finalize();

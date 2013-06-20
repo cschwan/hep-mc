@@ -105,8 +105,8 @@ namespace hep
  */
 
 /**
- * \example simple_vegas.cpp
  * \example vegas_example.cpp
+ * \example vegas_grid.cpp
  */
 
 }

@@ -27,7 +27,7 @@ namespace hep
 {
 
 /**
- * \example mpi_vegas.cpp
+ * \example mpi_vegas_example.cpp
  */
 
 }

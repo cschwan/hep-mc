@@ -1,13 +1,11 @@
 AM_CPPFLAGS = -I$(top_srcdir)/include
-AM_CXXFLAGS = $(MPI_CXXFLAGS)
 
 AM_DEFAULT_SOURCE_EXT = .cpp
 
 noinst_PROGRAMS = \
-	mpi_vegas \
-	simple_vegas \
-	vegas_advanced \
+	mpi_vegas_example \
 	vegas_example \
 	vegas_grid
 
-mpi_vegas_LDADD = $(MPI_CXXLDFLAGS)
+mpi_vegas_example_CXXFLAGS = $(MPI_CXXFLAGS)
+mpi_vegas_example_LDADD = $(MPI_CXXLDFLAGS)
