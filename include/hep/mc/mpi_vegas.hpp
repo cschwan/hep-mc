@@ -32,15 +32,74 @@ namespace hep
 {
 
 /**
+ * The default MPI callback function. This function does nothing.
+ *
+ * \see mpi_vegas_callback
+ */
+template <typename T>
+void mpi_vegas_default_callback(
+	MPI_Comm,
+	std::vector<vegas_iteration_result<T>> const&
+) {
+}
+
+/**
+ * Callback function that prints a detailed summary about every iteration
+ * performed so far. To avoid duplicated output the function only prints to
+ * standard output if the calling process has rank zero.
+ *
+ * \see mpi_vegas_callback
+ */
+template <typename T>
+void mpi_vegas_verbose_callback(
+	MPI_Comm communicator,
+	std::vector<vegas_iteration_result<T>> const& results
+) {
+	int rank = -1;
+	MPI_Comm_rank(communicator, &rank);
+
+	if (rank == 0)
+	{
+		vegas_verbose_callback<T>(results);
+	}
+}
+
+/**
+ * Sets the vegas `callback` function and returns it. This function is called
+ * after each iteration performed by \ref mpi_vegas(). The default callback is
+ * \ref vegas_default_callback. The function can e.g. be set to \ref
+ * vegas_verbose_callback which prints after each iteration.
+ *
+ * If this function is called without any argument, no function is set.
+ */
+template <typename T>
+std::function<void(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
+mpi_vegas_callback(
+	std::function<void(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
+		callback = nullptr
+) {
+	static std::function<void(MPI_Comm,
+		std::vector<vegas_iteration_result<T>>)> object =
+		mpi_vegas_default_callback<T>;
+
+	if (callback != nullptr)
+	{
+		object = callback;
+	}
+
+	return object;
+}
+
+/**
  * \ingroup algorithms
  *
  * Implements the MPI-parallelized VEGAS algorithm. See \ref vegas() for a more
  * detailed description on the VEGAS algorithm. In contrast to the
  * single-threaded versions this function makes sure that every random number
  * generator is seeded differently so every MPI process yields an independent
- * result.
- *
- * \see The file mpi_vegas.cpp provides an example
+ * result. After each iteration the intermediate results are passed to the
+ * function set by \ref mpi_vegas_callback which can e.g. be used to print them
+ * out.
  *
  * \param communicator The MPI communicator that is used to communicate between
  *        the different MPI processes.
@@ -103,6 +162,8 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 		// calculate accumulated results
 		results.push_back(vegas_iteration_result<T>(*i, grid,
 			result.adjustment_data));
+
+		mpi_vegas_callback<T>()(communicator, results);
 
 		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
 	}

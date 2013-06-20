@@ -19,11 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <hep/mc/mc_helper.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
 
 #include <cstddef>
+#include <iostream>
 #include <random>
+#include <functional>
 #include <vector>
 
 namespace hep
@@ -303,13 +306,77 @@ std::vector<std::vector<T>> vegas_grid(std::size_t dimensions, std::size_t bins)
 }
 
 /**
+ * The default callback function. This function does nothing.
+ *
+ * \see vegas_callback
+ */
+template <typename T>
+void vegas_default_callback(
+	std::vector<vegas_iteration_result<T>> const&
+) {
+}
+
+/**
+ * Callback function that prints a detailed summary about every iteration
+ * performed so far.
+ *
+ * \see vegas_callback
+ */
+template <typename T>
+void vegas_verbose_callback(
+	std::vector<vegas_iteration_result<T>> const& results
+) {
+	std::cout << "iteration " << (results.size()-1) << " finished.\n";
+
+	// print result for this iteration
+	std::cout << "this iteration: N=" << results.back().calls;
+	std::cout << " E=" << results.back().value << " +- ";
+	std::cout << results.back().error << "\n";
+
+	// compute cumulative results
+	auto result = cumulative_result<T>(results.begin(), results.end());
+	T chi = chi_square_dof<T>(results.begin(), results.end());
+
+	// print the combined result
+	std::cout << "(cumulative)  : N=" << result.calls;
+	std::cout << " E=" << result.value << " +- " << result.error;
+	std::cout << " chi^2/dof=" << chi << "\n\n";
+}
+
+/**
+ * Sets the vegas `callback` function and returns it. This function is called
+ * after each iteration performed by \ref vegas(). The default callback is \ref
+ * vegas_default_callback. The function can e.g. be set to \ref
+ * vegas_verbose_callback which prints after each iteration.
+ *
+ * If this function is called without any argument, no function is set.
+ */
+template <typename T>
+std::function<void(std::vector<vegas_iteration_result<T>>)>
+vegas_callback(
+	std::function<void(std::vector<vegas_iteration_result<T>>)> callback
+		= nullptr
+) {
+	static std::function<void(std::vector<vegas_iteration_result<T>>)> object
+		= vegas_default_callback<T>;
+
+	if (callback != nullptr)
+	{
+		object = callback;
+	}
+
+	return object;
+}
+
+/**
  * \ingroup algorithms
  *
  * Implements the VEGAS algorithm. In particular, this function calls \ref
  * vegas_iteration for every number in `iteration_calls` determining the `calls`
  * parameter for each iteration. After each iteration the grid is adjusted using
  * \ref vegas_adjust_grid. The grid adjustment itself can be controlled by the
- * parameter `alpha`.
+ * parameter `alpha`. The intermediate results are passed to the function set by
+ * \ref vegas_callback which can e.g. be used to print them out.
  *
  * \param dimensions The number of parameters `function` accepts.
  * \param iteration_calls The number of function calls that are used to obtain
@@ -344,6 +411,8 @@ std::vector<vegas_iteration_result<T>> vegas(
 	{
 		auto const result = vegas_iteration(*i, *i, grid, function, generator);
 		results.push_back(result);
+
+		vegas_callback<T>()(results);
 
 		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
 	}
