@@ -27,9 +27,21 @@ int main()
 	// individual iterations
 	auto results = hep::vegas<double>(
 		1,
-		std::vector<std::size_t>(50, 1000),
+		std::vector<std::size_t>(5, 1000),
 		square
 	);
+
+	// results contains the estimations for each iteration. we could take the
+	// last the result from last iteration, but here we instead choose to
+	// combine the results of all iterations in a cumulative result
+	auto result = hep::cumulative_result<double>(results.begin(),
+		results.end());
+	double chi_square_dof = hep::chi_square_dof<double>(results.begin(),
+		results.end());
+
+	std::cout << "cumulative result : " << result.value;
+	std::cout << " +- " << result.error << "\n";
+	std::cout << "chi^2/dof : " << chi_square_dof << "\n";
 
 	return 0;
 }

@@ -30,26 +30,27 @@ int main(int argc, char* argv[])
 	// initialize MPI
 	MPI_Init(&argc, &argv);
 
-	// get id for this process
-	int rank = 0;
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
 	// set the verbose vegas callback function
 	hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
 
-	// dimension of the gauss
-	std::size_t const dimension = 10;
-
-	// five iterations with 10^7 calls each
-	std::vector<std::size_t> iterations(5, 10000000);
-
-	// perform the integration
+	// perform 5 iteration with 10^7 calls each; this function will also call
+	// mpi_vegas_verbose_callback after each iteration which in turn prints the
+	// individual iterations
 	auto results = hep::mpi_vegas<double>(
 		MPI_COMM_WORLD,
-		dimension,
-		iterations,
+		10,                                    // 10 dimensions
+		std::vector<std::size_t>(5, 10000000),
 		gauss
 	);
+
+	auto result = hep::cumulative_result<double>(results.begin(),
+		results.end());
+	double chi_square_dof = hep::chi_square_dof<double>(results.begin(),
+		results.end());
+
+	std::cout << "cumulative result : " << result.value << " +- " <<
+		result.error << "\n";
+	std::cout << "chi^2/dof : " << chi_square_dof << "\n";
 
 	// clean up
 	MPI_Finalize();
