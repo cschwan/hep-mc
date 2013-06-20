@@ -30,8 +30,11 @@ namespace hep
 {
 
 /**
- * \ingroup algorithms
- *
+ * \defgroup plain PLAIN Integrator
+ * @{
+ */
+
+/**
  * PLAIN Monte Carlo integrator. This function integrates `function` over the
  * unit-hypercube with the specified `dimensions` using `calls` function
  * evaluations with randomly chosen points determined by `generator`. The
@@ -89,6 +92,10 @@ mc_result<T> plain(
 
 	return mc_result<T>(calls, sum, sum_of_squares);
 }
+
+/**
+ * @}
+ */
 
 }
 

@@ -32,6 +32,11 @@ namespace hep
 {
 
 /**
+ * \addtogroup vegas
+ * @{
+ */
+
+/**
  * The default MPI callback function. This function does nothing.
  *
  * \see mpi_vegas_callback
@@ -91,8 +96,6 @@ mpi_vegas_callback(
 }
 
 /**
- * \ingroup algorithms
- *
  * Implements the MPI-parallelized VEGAS algorithm. See \ref vegas() for a more
  * detailed description on the VEGAS algorithm. In contrast to the
  * single-threaded versions this function makes sure that every random number
@@ -170,6 +173,10 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 	return results;
 }
+
+/**
+ * @}
+ */
 
 }
 

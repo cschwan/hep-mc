@@ -33,6 +33,11 @@ namespace hep
 {
 
 /**
+ * \defgroup vegas VEGAS Integrator
+ * @{
+ */
+
+/**
  * The result of a single \ref vegas_iteration.
  */
 template <typename T>
@@ -369,8 +374,6 @@ vegas_callback(
 }
 
 /**
- * \ingroup algorithms
- *
  * Implements the VEGAS algorithm. In particular, this function calls \ref
  * vegas_iteration for every number in `iteration_calls` determining the `calls`
  * parameter for each iteration. After each iteration the grid is adjusted using
@@ -419,6 +422,10 @@ std::vector<vegas_iteration_result<T>> vegas(
 
 	return results;
 }
+
+/**
+ * @}
+ */
 
 }
 

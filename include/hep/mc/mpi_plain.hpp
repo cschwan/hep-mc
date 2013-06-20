@@ -33,8 +33,11 @@ namespace hep
 {
 
 /**
- * \ingroup algorithms
- *
+ * \addtogroup plain
+ * @{
+ */
+
+/**
  * MPI-parallelized PLAIN Monte Carlo integrator. This function integrates
  * `function` over the unit-hypercube with the specified `dimensions` using
  * `calls` function evaluations at randomly chosen points determined by
@@ -119,6 +122,10 @@ mc_result<T> mpi_plain(
 
 	return mc_result<T>(calls, sum, sum_of_squares);
 }
+
+/**
+ * @}
+ */
 
 }
 

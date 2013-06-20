@@ -47,19 +47,15 @@ namespace hep
  *
  * The following example illustrates how to integrate the square-function using
  * VEGAS:
- * \include simple_vegas.cpp
- */
-
-/**
- * \defgroup algorithms Integration Algorithms
+ * \include vegas_example.cpp
  */
 
 /**
  * \defgroup integrands Integrand Functions
  *
  * Functions that are integrated by the Monte Carlo algorithms must accept a
- * single parameter of the type \ref hep::mc_point and return a value of type
- * `T`. For example, an integrand of the form
+ * single parameter of the type \ref mc_point and return a value of type `T`.
+ * For example, an integrand of the form
  * \f[
  * f(x) := x^2
  * \f]
@@ -70,7 +66,7 @@ namespace hep
  *     return x.point[0] * x.point[0];
  * }
  * \endcode
- * Some integration algorithms, e.g. \ref vegas, supply additional information
+ * Some integration algorithms, e.g. \ref vegas(), supply additional information
  * that can be accessed by capturing the argument with different type, e.g. for
  * VEGAS:
  * \code
@@ -98,7 +94,7 @@ namespace hep
  *     }
  * };
  * \endcode
- * which would be called using \ref plain by
+ * which would be called using \ref plain() by
  * \code
  * hep::mc_result<double> result = hep::plain<double>(1, 1000, integrand(2.0));
  * \endcode
