@@ -10,6 +10,7 @@ INPUT                  = @top_srcdir@/include
 INTERNAL_DOCS          = NO
 FILE_PATTERNS          = *.hpp *.cpp
 MACRO_EXPANSION        = NO
+MATHJAX_EXTENSIONS     = TeX/AMSmath
 OUTPUT_DIRECTORY       = @top_builddir@/doc
 PROJECT_NAME           = @PACKAGE_NAME@
 PROJECT_NUMBER         = @PACKAGE_VERSION@
