@@ -24,11 +24,32 @@ double gauss(hep::mc_point<double> const& sample)
 
 	return result;
 }
-
+/*
+ * You can run this program on your local computera by starting it with
+ *
+ *     mpirun -np 8 ./mpi_vegas_example
+ *
+ * Change '8' to the number of processes that this program is run in parallel
+ * with.
+ */
 int main(int argc, char* argv[])
 {
 	// initialize MPI
 	MPI_Init(&argc, &argv);
+
+	// which index has this process?
+	int rank = -1;
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+	// only print in process 0 to prevent cluttering
+	if (rank == 0)
+	{
+		// how many processes are started?
+		int size = -1;
+		MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+		std::cout << "running hep::mpi_vegas with " << size << " processes\n\n";
+	}
 
 	// set the verbose vegas callback function
 	hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
@@ -48,9 +69,12 @@ int main(int argc, char* argv[])
 	double chi_square_dof = hep::chi_square_dof<double>(results.begin(),
 		results.end());
 
-	std::cout << "cumulative result : " << result.value << " +- " <<
-		result.error << "\n";
-	std::cout << "chi^2/dof : " << chi_square_dof << "\n";
+	if (rank == 0)
+	{
+		std::cout << "cumulative result : " << result.value << " +- ";
+		std::cout << result.error << "\n";
+		std::cout << "chi^2/dof : " << chi_square_dof << "\n";
+	}
 
 	// clean up
 	MPI_Finalize();
