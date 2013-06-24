@@ -374,6 +374,39 @@ vegas_callback(
 }
 
 /**
+ * Implements the VEGAS algorithm. This function can be used to start from an
+ * already adapted grid, e.g. one by \ref vegas_iteration_result.grid obtained
+ * by a previous \ref vegas() call.
+ */
+template <typename T, typename F, typename R = std::mt19937>
+std::vector<vegas_iteration_result<T>> vegas(
+	std::vector<std::size_t> const& iteration_calls,
+	F&& function,
+	std::vector<std::vector<T>> const& start_grid,
+	T alpha = T(1.5),
+	R&& generator = std::mt19937()
+) {
+	auto grid = start_grid;
+
+	// vector holding all iteration results
+	std::vector<vegas_iteration_result<T>> results;
+	results.reserve(iteration_calls.size());
+
+	// perform iterations
+	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+	{
+		auto const result = vegas_iteration(*i, *i, grid, function, generator);
+		results.push_back(result);
+
+		vegas_callback<T>()(results);
+
+		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
+	}
+
+	return results;
+}
+
+/**
  * Implements the VEGAS algorithm. In particular, this function calls \ref
  * vegas_iteration for every number in `iteration_calls` determining the `calls`
  * parameter for each iteration. After each iteration the grid is adjusted using
@@ -402,25 +435,13 @@ std::vector<vegas_iteration_result<T>> vegas(
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
-	// create a fresh grid
-	auto grid = vegas_grid<T>(dimensions, bins);
-
-	// vector holding all iteration results
-	std::vector<vegas_iteration_result<T>> results;
-	results.reserve(iteration_calls.size());
-
-	// perform iterations
-	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
-	{
-		auto const result = vegas_iteration(*i, *i, grid, function, generator);
-		results.push_back(result);
-
-		vegas_callback<T>()(results);
-
-		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
-	}
-
-	return results;
+	return vegas(
+		iteration_calls,
+		function,
+		vegas_grid<T>(dimensions, bins),
+		alpha,
+		generator
+	);
 }
 
 /**

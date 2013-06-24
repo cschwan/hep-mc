@@ -37,12 +37,24 @@ int main()
 	// set the callback function
 	hep::vegas_callback<double>(print_grid);
 
+	// print only 3 digits
+	std::cout.precision(3);
+
 	// perform 5 iteration with 1000 calls each
 	auto results = hep::vegas<double>(
 		1,
 		std::vector<std::size_t>(5, 1000),
 		square,
-		10                                 // grid with 10 bins only
+		3                                  // 3 bins for better illustration
+	);
+
+	std::cout << "\nStarting new try using adapted grid ...\n\n";
+
+	// perform another 5 iterations with the grid from the last iteration
+	auto new_results = hep::vegas<double>(
+		std::vector<std::size_t>(5, 1000),
+		square,
+		results.back().grid                // grid from 'results' last iteration
 	);
 
 	return 0;
