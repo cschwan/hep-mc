@@ -1,5 +1,3 @@
-AUTOMAKE_OPTIONS = parallel-tests
-
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-DBOOST_TEST_NO_LIB \
@@ -11,6 +9,10 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 check_PROGRAMS = \
 	test_plain \
 	test_vegas
+
+# redundant for automake >= 1.11
+test_plain_SOURCES = test_plain.cpp
+test_vegas_SOURCES = test_vegas.cpp
 
 LDADD = -lboost_unit_test_framework
 

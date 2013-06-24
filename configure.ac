@@ -1,11 +1,18 @@
 # initialize configure
-AC_INIT([hep-mc], [0.2.1])
+AC_INIT([hep-mc], [0.2.1.9999], [https://github.com/cschwan/hep-mc/issues],
+	[hep-mc], [https://github.com/cschwan/hep-mc])
 
 # initialize automake
-AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-bzip2 no-dist-gzip nostdinc])
+AM_INIT_AUTOMAKE([foreign -Wall dist-bzip2 no-dist-gzip nostdinc])
+
+# make automake silent if possible
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # put aclocal macros into m4
 AC_CONFIG_MACRO_DIR([m4])
+
+# TODO: needed for older automake version, why?
+AC_PROG_CC
 
 # C++ is our language
 AC_LANG([C++])
@@ -20,14 +27,14 @@ AC_CONFIG_SRCDIR([include/hep/mc.hpp])
 # into the specified header
 AC_CONFIG_HEADERS([config.hpp])
 
+# enable building of examples
 AC_ARG_ENABLE([examples], AS_HELP_STRING([--enable-examples],
 	[Enable building of example programs]))
 
 AM_CONDITIONAL([HAVE_EXAMPLES], [test "x$enable_examples" = "xyes"])
 
-AS_IF([test "x$enable_examples" = "xyes"], [
-	LX_FIND_MPI
-])
+# some examples need MPI
+AS_IF([test "x$enable_examples" = "xyes"], [LX_FIND_MPI])
 
 # add possibility to generate API documentation with Doxygen
 AC_ARG_ENABLE([doxygen], AS_HELP_STRING([--enable-doxygen],

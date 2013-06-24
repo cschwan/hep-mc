@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = -I m4 --install
+ACLOCAL_AMFLAGS = -I m4
 
 # if doxygen is enabled include doc subdir
 if HAVE_DOXYGEN

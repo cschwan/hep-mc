@@ -22,23 +22,18 @@ available configuration options::
 
     ./configure --help
 
-If you want to run the test-suite, first make sure to configure with
-``--enable-tests`` and then type::
-
-    make check
-
 Missing ``./configure``
 =======================
 
 If you have obtained this repository which does not contain the files generated
 by autotools ...
 
-  - run ``autoreconf -fiv`` to generate the files which are not under revision
-    control
-  - if the last step failed, your autotools are most likely outdated. Update
-    them (autoconf and automake) and try again.
+- run ``autoreconf -fiv`` to generate the files which are not under revision
+  control
+- if the last step failed, your autotools are most likely outdated. Update
+  autoconf and automake and try again.
 
 Usage
 =====
 
-See doxygen documentation.
+See Doxygen documentation.
