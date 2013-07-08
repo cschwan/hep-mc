@@ -72,9 +72,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(sine, T, test_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(exponential, T, test_types)
 {
 	std::size_t steps = 1000;
-	hep::mc_result<double> result =
-		hep::plain<double>(1, steps, integrand<double>(2));
-	double reference = std::exp(1.0) - 1.0;
+	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(2));
+	T reference = std::exp(T(1.0)) - T(1.0);
 
 	BOOST_CHECK_CLOSE(result.value, reference, T(100.0) * result.error);
 }
@@ -82,8 +81,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(exponential, T, test_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(square, T, test_types)
 {
 	std::size_t steps = 10000;
-	hep::mc_result<double> result =
-		hep::plain<double>(1, steps, integrand<double>(3));
+	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(3));
 
 	BOOST_CHECK_CLOSE(result.value, T(1.0) / T(3.0), T(300.0) * result.error);
 }
@@ -91,8 +89,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(square, T, test_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(square_4d, T, test_types)
 {
 	std::size_t steps = 10000;
-	hep::mc_result<double> result =
-		hep::plain<double>(4, steps, integrand<double>(4));
+	hep::mc_result<T> result = hep::plain<T>(4, steps, integrand<T>(4));
 
 	BOOST_CHECK_CLOSE(result.value, T(4.0) / T(3.0), T(200.0) * result.error);
 }
@@ -100,9 +97,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(square_4d, T, test_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(one_over_sqrt, T, test_types)
 {
 	std::size_t steps = 1000;
-	hep::mc_result<double> result =
-		hep::plain<double>(1, steps, integrand<double>(5));
+	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(5));
 
-	BOOST_CHECK_CLOSE(result.value, 2.0, T(100.0) / std::sqrt(T(steps)));
+	BOOST_CHECK_CLOSE(result.value, T(2.0), T(100.0) / std::sqrt(T(steps)));
 	// function is not square-integrable, error is unreliable
 }
