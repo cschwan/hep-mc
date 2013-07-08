@@ -13,22 +13,22 @@ void print_grid(std::vector<hep::vegas_iteration_result<double>> const& results)
 {
 	std::cout << "The grid for iteration " << (results.size()-1) << ":\n";
 
-	// grid for iteration i and dimension 0 (only have one dimension here)
-	auto& grid = results.back().grid[0];
+	// grid for iteration i
+	auto& grid = results.back().grid;
 
 	// print the grid
 	double previous = 0.0;
-	for (std::size_t j = 0; j != grid.size(); ++j)
+	for (std::size_t j = 0; j != grid.bins(); ++j)
 	{
 		// width of this bin
-		double width = (grid[j] - previous);
+		double width = (grid(0, j) - previous);
 		// middle-point of the bin
 		double x = previous + width / 2.0;
 		// function value of the bin
 		double height = 1.0 / (10.0 * width);
 
 		std::cout << x << "\t" << height << "\n";
-		previous = grid[j];
+		previous = grid(0, j);
 	}
 }
 

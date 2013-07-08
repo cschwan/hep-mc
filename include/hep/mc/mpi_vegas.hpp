@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <hep/mc/linear_grid.hpp>
 #include <hep/mc/mpi_datatype.hpp>
 #include <hep/mc/vegas.hpp>
 
@@ -105,7 +106,7 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	std::vector<std::vector<T>> const& start_grid,
+	linear_grid<T> const& start_grid,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {

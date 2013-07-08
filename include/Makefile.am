@@ -1,4 +1,5 @@
 nobase_include_HEADERS = \
+	hep/mc/linear_grid.hpp \
 	hep/mc/mc_helper.hpp \
 	hep/mc/mc_point.hpp \
 	hep/mc/mc_result.hpp \

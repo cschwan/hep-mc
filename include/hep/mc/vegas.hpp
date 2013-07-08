@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <hep/mc/linear_grid.hpp>
 #include <hep/mc/mc_helper.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
@@ -48,7 +49,7 @@ struct vegas_iteration_result : public mc_result<T>
 	 */
 	vegas_iteration_result(
 		std::size_t calls,
-		std::vector<std::vector<T>> const& grid,
+		linear_grid<T> const& grid,
 		std::vector<T> const& adjustment_data
 	)
 		: mc_result<T>(
@@ -64,7 +65,7 @@ struct vegas_iteration_result : public mc_result<T>
 	/**
 	 * The grid used to obtain this result.
 	 */
-	std::vector<std::vector<T>> grid;
+	linear_grid<T> grid;
 
 	/**
 	 * The data used to adjust the `grid` for a subsequent iteration.
@@ -86,13 +87,13 @@ struct vegas_point : public mc_point<T>
 		std::size_t total_calls,
 		std::vector<T>& random_numbers,
 		std::vector<std::size_t>& bin,
-		std::vector<std::vector<T>> const& grid
+		linear_grid<T> const& grid
 	)
 		: mc_point<T>(total_calls, random_numbers)
 		, bin(bin)
 	{
-		std::size_t const dimensions = grid.size();
-		std::size_t const bins = grid[0].size();
+		std::size_t const dimensions = grid.dimensions();
+		std::size_t const bins = grid.bins();
 
 		for (std::size_t i = 0; i != dimensions; ++i)
 		{
@@ -104,10 +105,10 @@ struct vegas_point : public mc_point<T>
 
 			// compute value of grid at the previous position
 			T const grid_previous =
-				(position == 0) ? T() : grid[i][position - 1];
+				(position == 0) ? T() : grid(i, position - 1);
 
 			// compute difference of grid values at 'position'
-			T const difference = grid[i][position] - grid_previous;
+			T const difference = grid(i, position) - grid_previous;
 
 			// TODO: explain
 			this->point[i] = grid_previous +
@@ -133,15 +134,15 @@ struct vegas_point : public mc_point<T>
  * `refine_grid` from the CUBA VEGAS implementation from Thomas Hahn.
  */
 template <typename T>
-std::vector<std::vector<T>> vegas_adjust_grid(
+linear_grid<T> vegas_adjust_grid(
 	T alpha,
-	std::vector<std::vector<T>> const& grid,
+	linear_grid<T> const& grid,
 	std::vector<T> const& adjustment_data
 ) {
-	std::size_t const bins = grid[0].size();
-	std::size_t const dimensions = grid.size();
+	std::size_t const bins = grid.bins();
+	std::size_t const dimensions = grid.dimensions();
 
-	std::vector<std::vector<T>> new_grid(dimensions, std::vector<T>(bins));
+	linear_grid<T> new_grid(dimensions, bins);
 
 	for (std::size_t i = 0; i != dimensions; ++i)
 	{
@@ -204,15 +205,15 @@ std::vector<std::vector<T>> vegas_adjust_grid(
 			{
 				this_bin += imp[++bin];
 				previous = current;
-				current = grid[i][bin];
+				current = grid(i, bin);
 			}
 
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
-			new_grid[i][new_bin] = current - delta / imp[bin];
+			new_grid(i, new_bin) = current - delta / imp[bin];
 		}
 
-		new_grid[i][bins - 1] = T(1.0);
+		new_grid(i, bins - 1) = T(1.0);
 	}
 
 	return new_grid;
@@ -232,7 +233,7 @@ template <typename T, typename F, typename R>
 vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
 	std::size_t total_calls,
-	std::vector<std::vector<T>> const& grid,
+	linear_grid<T> const& grid,
 	F&& function,
 	R&& generator
 ) {
@@ -245,8 +246,8 @@ vegas_iteration_result<T> vegas_iteration(
 	// for kahan summation
 	T compensation = T();
 
-	std::size_t const dimensions = grid.size();
-	std::size_t const bins = grid[0].size();
+	std::size_t const dimensions = grid.dimensions();
+	std::size_t const bins = grid.bins();
 
 	std::vector<T> adjustment_data(dimensions * bins + 2);
 	std::vector<T> random_numbers(dimensions);
@@ -299,7 +300,7 @@ vegas_iteration_result<T> vegas_iteration(
  * plain algorithm.
  */
 template <typename T>
-std::vector<std::vector<T>> vegas_grid(std::size_t dimensions, std::size_t bins)
+linear_grid<T> vegas_grid(std::size_t dimensions, std::size_t bins)
 {
 	std::vector<T> one_dimensional_grid(bins);
 	for (std::size_t i = 0; i != bins; ++i)
@@ -382,7 +383,7 @@ template <typename T, typename F, typename R = std::mt19937>
 std::vector<vegas_iteration_result<T>> vegas(
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	std::vector<std::vector<T>> const& start_grid,
+	linear_grid<T> const& start_grid,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
