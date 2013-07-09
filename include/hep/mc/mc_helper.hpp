@@ -44,24 +44,24 @@ template <typename T, typename MCResultIterator>
 mc_result<T> cumulative_result(MCResultIterator begin, MCResultIterator end)
 {
 	std::size_t calls = 0;
-	T value = T();
-	T error = T();
+	T estimate = T();
+	T variance = T();
 
 	for (MCResultIterator i = begin; i != end; ++i)
 	{
 		T const tmp = T(1.0) / (i->error * i->error);
 		calls += i->calls;
-		error += tmp;
-		value += tmp * i->value;
+		variance += tmp;
+		estimate += tmp * i->value;
 	}
 
-	error  = T(1.0) / error;
-	value *= error;
+	variance  = T(1.0) / variance;
+	estimate *= variance;
 
 	return mc_result<T>(
 		calls,
-		T(calls) * value,
-		T(calls) * (value * value + T(calls) * error)
+		T(calls) * estimate,
+		T(calls) * (estimate * estimate + T(calls) * variance)
 	);
 }
 
