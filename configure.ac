@@ -11,9 +11,6 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 # put aclocal macros into m4
 AC_CONFIG_MACRO_DIR([m4])
 
-# TODO: needed for older automake version, why?
-AC_PROG_CC
-
 # C++ is our language
 AC_LANG([C++])
 

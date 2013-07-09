@@ -1,5 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
+EXTRA_DIST = README.rst
+
 # if doxygen is enabled include doc subdir
 if HAVE_DOXYGEN
     DOCDIR = doc
