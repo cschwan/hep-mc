@@ -3,12 +3,14 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_DEFAULT_SOURCE_EXT = .cpp
 
 noinst_PROGRAMS = \
+	helper_example \
 	read_linear_grid \
 	mpi_vegas_example \
 	vegas_example \
 	vegas_grid
 
 # redundant for automake >= 1.11
+helper_example_SOURCES = helper_example.cpp
 read_linear_grid_SOURCES = read_linear_grid.cpp
 mpi_vegas_example_SOURCES = mpi_vegas_example.cpp
 vegas_example_SOURCES = vegas_example.cpp

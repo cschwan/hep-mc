@@ -59,6 +59,18 @@ struct mc_result
 	T error;
 };
 
+/**
+ * Creates a \ref mc_result using the parameters `calls` `value` and `error`.
+ */
+template <typename T>
+mc_result<T> create_result(std::size_t calls, T value, T error)
+{
+	T sum = T(calls) * value;
+	T sum_of_squares = T(calls) * (value * value + T(calls) * error * error);
+
+	return mc_result<T>(calls, sum, sum_of_squares);
+}
+
 }
 
 #endif
