@@ -1,5 +1,5 @@
 # initialize configure
-AC_INIT([hep-mc], [0.2.1.9999], [https://github.com/cschwan/hep-mc/issues],
+AC_INIT([hep-mc], [0.2.2], [https://github.com/cschwan/hep-mc/issues],
 	[hep-mc], [https://github.com/cschwan/hep-mc])
 
 # initialize automake

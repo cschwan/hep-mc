@@ -1,5 +1,5 @@
-New in 0.2.1.9999:
-==================
+New in 0.2.2:
+=============
 
 - added two examples showing the advanced use of the VEGAS integration routine
 - added a callback mechanism for the VEGAS routines; this enables one to print
