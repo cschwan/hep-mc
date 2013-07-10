@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <hep/mc/linear_grid.hpp>
 #include <hep/mc/mc_helper.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
@@ -101,6 +102,8 @@ namespace hep
  */
 
 /**
+ * \example helper_example.cpp
+ * \example read_linear_grid.cpp
  * \example vegas_example.cpp
  * \example vegas_grid.cpp
  */
