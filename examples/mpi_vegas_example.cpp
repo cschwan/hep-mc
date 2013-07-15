@@ -7,11 +7,13 @@
 
 #include <mpi.h>
 
-double gauss(hep::mc_point<double> const& sample)
+std::vector<double> binned_gaussian(100, 0.0);
+
+double gaussian(hep::mc_point<double> const& sample)
 {
 	double result = 1.0;
 
-	// acos(-1.0) = pi - there is no pi constant in C++!!
+	// acos(-1.0) = pi - note that there is no pi constant in C++
 	double factor = 2.0 / std::sqrt(std::acos(-1.0));
 
 	// multiply a (half-)gaussian for every dimension
@@ -20,17 +22,24 @@ double gauss(hep::mc_point<double> const& sample)
 		double argument = sample.point[i];
 		result *= std::exp(-argument * argument);
 		result *= factor;
+
+		// bin the zeroth gauss
+		if (i == 0)
+		{
+			std::size_t index = sample.point[0] * binned_gaussian.size();
+			binned_gaussian[index] += result * sample.weight;
+		}
 	}
 
 	return result;
 }
+
 /*
- * You can run this program on your local computera by starting it with
+ * Start this program on your local box with:
  *
  *     mpirun -np 8 ./mpi_vegas_example
  *
- * Change '8' to the number of processes that this program is run in parallel
- * with.
+ * Change '8' to the number of processes this program should use.
  */
 int main(int argc, char* argv[])
 {
@@ -54,14 +63,31 @@ int main(int argc, char* argv[])
 	// set the verbose vegas callback function
 	hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
 
-	// perform 5 iteration with 10^7 calls each; this function will also call
-	// mpi_vegas_verbose_callback after each iteration which in turn prints the
-	// individual iterations
+	// perform 5 iteration with 10^7 calls each; the integrand is a ten
+	// dimensional gaussian
+	std::size_t iterations = 5;
+	std::size_t calls = 10000000;
+	std::size_t dimensions = 10;
+
+	// perform the integration; this function will also call the callback
+	// function (see above) after each iteration which in turn prints the
+	// individual iteration results
 	auto results = hep::mpi_vegas<double>(
 		MPI_COMM_WORLD,
-		10,                                    // 10 dimensions
-		std::vector<std::size_t>(5, 10000000),
-		gauss
+		dimensions,
+		std::vector<std::size_t>(iterations, calls),
+		gaussian
+	);
+
+	// take binned_gauss of every process, add entries separately and write back
+	// into binned_gauss
+	MPI_Allreduce(
+		MPI_IN_PLACE,
+		&(binned_gaussian[0]),
+		binned_gaussian.size(),
+		MPI_DOUBLE,
+		MPI_SUM,
+		MPI_COMM_WORLD
 	);
 
 	auto result = hep::cumulative_result<double>(results.begin(),
@@ -73,7 +99,34 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "cumulative result : " << result.value << " +- ";
 		std::cout << result.error << "\n";
-		std::cout << "chi^2/dof : " << chi_square_dof << "\n";
+		std::cout << "chi^2/dof : " << chi_square_dof << "\n\n";
+
+		std::cout << "# binned gaussian:\n";
+		for (auto i = binned_gaussian.begin(); i != binned_gaussian.end(); ++i)
+		{
+			double average_function_value = *i;
+
+			// average over the iterations
+			average_function_value /= iterations;
+
+			// the binned gaussian is the integral over the bin - the average
+			// is obtained by dividing through the bin length or muplying by the
+			// number of bins
+			average_function_value *= binned_gaussian.size();
+
+			// print result
+			std::cout << average_function_value << "\n";
+		}
+
+		/* - run the program
+		 * - save the program's output (after `# binned gaussian`) into a file
+		 *   called 'data'
+		 * - start gnuplot and type
+		 *
+		 *     plot 'data' using ($0/100.0):1, 2.0*exp(-x*x)/sqrt(pi)
+		 *
+		 *   to verify the result.
+		 */
 	}
 
 	// clean up
