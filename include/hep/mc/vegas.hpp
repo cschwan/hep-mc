@@ -26,6 +26,7 @@
 
 #include <cstddef>
 #include <iostream>
+#include <limits>
 #include <random>
 #include <functional>
 #include <vector>
@@ -237,9 +238,6 @@ vegas_iteration_result<T> vegas_iteration(
 	F&& function,
 	R&& generator
 ) {
-	// generates random number in the range [0,1]
-	std::uniform_real_distribution<T> distribution;
-
 	T average = T();
 	T averaged_squares = T();
 
@@ -257,7 +255,8 @@ vegas_iteration_result<T> vegas_iteration(
 	{
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
-			random_numbers[j] = distribution(generator);
+			random_numbers[j] = std::generate_canonical<T,
+				std::numeric_limits<T>::digits>(generator);
 		}
 
 		vegas_point<T> const point(total_calls, random_numbers, bin, grid);

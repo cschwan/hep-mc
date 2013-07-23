@@ -23,6 +23,7 @@
 #include <hep/mc/mc_result.hpp>
 
 #include <cstddef>
+#include <limits>
 #include <random>
 #include <vector>
 
@@ -58,9 +59,6 @@ mc_result<T> plain(
 	T sum = T();
 	T sum_of_squares = T();
 
-	// generates random number in the range [0,1]
-	std::uniform_real_distribution<T> distribution;
-
 	// compensation variable for kahan summation
 	T compensation = T();
 
@@ -74,7 +72,8 @@ mc_result<T> plain(
 		// fill container with random numbers
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
-			random_numbers[j] = distribution(generator);
+			random_numbers[j] = std::generate_canonical<T,
+				std::numeric_limits<T>::digits>(generator);
 		}
 
 		// evaluate function at position specified in random_numbers
