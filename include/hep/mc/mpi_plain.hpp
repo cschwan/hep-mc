@@ -21,6 +21,7 @@
 
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
+#include <hep/mc/mpi_helper.hpp>
 #include <hep/mc/mpi_datatype.hpp>
 
 #include <cstddef>
@@ -66,10 +67,14 @@ mc_result<T> mpi_plain(
 	int world = 0;
 	MPI_Comm_size(communicator, &world);
 
-	// seed every random number generator differently
-	std::size_t r = rank * 10;
-	std::seed_seq sequence{r+0, r+1, r+2, r+3, r+4, r+5, r+6, r+7, r+8, r+9};
-	generator.seed(sequence);
+	if (!mpi_single_generator())
+	{
+		// seed every random number generator differently
+		std::size_t const r = rank * 10;
+		std::seed_seq sequence{r + 0, r + 1, r + 2, r + 3, r + 4,
+			r + 5, r + 6, r + 7, r + 8, r + 9};
+		generator.seed(sequence);
+	}
 
 	// default-initialize sum and sum_of_squares
 	T  buffer[2]      = { T(), T() };
@@ -84,6 +89,12 @@ mc_result<T> mpi_plain(
 	// the number of function calls for each MPI process
 	std::size_t const sub_calls = (calls / world) +
 		(static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
+
+	if (mpi_single_generator())
+	{
+		mpi_advance_generator_before<T>(
+			dimensions, calls, rank, world, generator);
+	}
 
 	// iterate over calls
 	for (std::size_t i = 0; i != sub_calls; ++i)
@@ -108,6 +119,13 @@ mc_result<T> mpi_plain(
 		sum = t;
 
 		sum_of_squares += value * value;
+	}
+
+	if (mpi_single_generator())
+	{
+		mpi_advance_generator_after<T>(
+			dimensions, calls, sub_calls, rank, world, generator
+		);
 	}
 
 	MPI_Allreduce(

@@ -21,6 +21,7 @@
 
 #include <hep/mc/linear_grid.hpp>
 #include <hep/mc/mpi_datatype.hpp>
+#include <hep/mc/mpi_helper.hpp>
 #include <hep/mc/vegas.hpp>
 
 #include <cstddef>
@@ -115,10 +116,14 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 	int world = 0;
 	MPI_Comm_size(communicator, &world);
 
-	// seed every random number generator differently
-	std::size_t r = rank * 10;
-	std::seed_seq sequence{r+0, r+1, r+2, r+3, r+4, r+5, r+6, r+7, r+8, r+9};
-	generator.seed(sequence);
+	if (!mpi_single_generator())
+	{
+		// seed every random number generator differently
+		std::size_t const r = rank * 10;
+		std::seed_seq sequence{r + 0, r + 1, r + 2, r + 3, r + 4,
+			r + 5, r + 6, r + 7, r + 8, r + 9};
+		generator.seed(sequence);
+	}
 
 	// create a fresh grid
 	auto grid = start_grid;
@@ -130,9 +135,21 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 	// perform iterations
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
+		if (mpi_single_generator())
+		{
+			mpi_advance_generator_before<T>(
+				grid.dimensions(), *i, rank, world, generator);
+		}
+
 		std::size_t const calls = (*i / world) +
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
 		auto result = vegas_iteration(calls, *i, grid, function, generator);
+
+		if (mpi_single_generator())
+		{
+			mpi_advance_generator_after<T>(
+				grid.dimensions(), *i, calls, rank, world, generator);
+		}
 
 		// add up results
 		MPI_Allreduce(
