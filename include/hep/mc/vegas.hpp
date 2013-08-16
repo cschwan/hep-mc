@@ -336,16 +336,19 @@ void vegas_verbose_callback(
 	// print result for this iteration
 	std::cout << "this iteration: N=" << results.back().calls;
 	std::cout << " E=" << results.back().value << " +- ";
-	std::cout << results.back().error << "\n";
+	std::cout << results.back().error << " (";
+	std::cout << (T(100.0) * results.back().error / results.back().value);
+	std::cout << "%)\n";
 
 	// compute cumulative results
-	auto result = cumulative_result<T>(results.begin(), results.end());
-	T chi = chi_square_dof<T>(results.begin(), results.end());
+	auto const result = cumulative_result<T>(results.begin(), results.end());
+	T const chi = chi_square_dof<T>(results.begin(), results.end());
 
 	// print the combined result
-	std::cout << "(cumulative)  : N=" << result.calls;
+	std::cout << "all iterations: N=" << result.calls;
 	std::cout << " E=" << result.value << " +- " << result.error;
-	std::cout << " chi^2/dof=" << chi << "\n\n";
+	std::cout << " (" << (T(100.0) * result.error / result.value);
+	std::cout << "%) chi^2/dof=" << chi << "\n\n";
 }
 
 /**
