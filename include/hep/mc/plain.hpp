@@ -27,6 +27,57 @@
 #include <random>
 #include <vector>
 
+namespace
+{
+
+template <typename T, typename F, typename R>
+hep::mc_result<T> plain_iteration(
+	std::size_t dimensions,
+	std::size_t total_calls,
+	std::size_t calls,
+	F&& function,
+	R&& generator
+) {
+	// default-initialize sum and sum_of_squares
+	T sum = T();
+	T sum_of_squares = T();
+
+	// compensation variable for kahan summation
+	T compensation = T();
+
+	// storage for random numbers
+	std::vector<T> random_numbers(dimensions);
+
+	// iterate over calls
+	for (std::size_t i = 0; i != calls; ++i)
+	{
+		hep::mc_point<T> point(total_calls, random_numbers);
+
+		// fill container with random numbers
+		for (std::size_t j = 0; j != dimensions; ++j)
+		{
+			random_numbers[j] = std::generate_canonical<T,
+				std::numeric_limits<T>::digits>(generator);
+		}
+
+		// evaluate function at position specified in random_numbers
+		T const value = function(static_cast <hep::mc_point<T> const> (point));
+
+		// perform kahan summation 'sum += value' - this improves precision if
+		// T is single precision and many values are added
+		T const y = value - compensation;
+		T const t = sum + y;
+		compensation = (t - sum) - y;
+		sum = t;
+
+		sum_of_squares += value * value;
+	}
+
+	return hep::mc_result<T>(total_calls, sum, sum_of_squares);
+}
+
+}
+
 namespace hep
 {
 
@@ -48,6 +99,7 @@ namespace hep
  * \param generator The random number generator that will be used to generate
  *        random points from the hypercube. This generator is not seeded.
  */
+
 template <typename T, typename F, typename R = std::mt19937>
 mc_result<T> plain(
 	std::size_t dimensions,
@@ -55,41 +107,7 @@ mc_result<T> plain(
 	F&& function,
 	R&& generator = std::mt19937()
 ) {
-	// default-initialize sum and sum_of_squares
-	T sum = T();
-	T sum_of_squares = T();
-
-	// compensation variable for kahan summation
-	T compensation = T();
-
-	std::vector<T> random_numbers(dimensions);
-
-	// iterate over calls
-	for (std::size_t i = 0; i != calls; ++i)
-	{
-		mc_point<T> point(calls, random_numbers);
-
-		// fill container with random numbers
-		for (std::size_t j = 0; j != dimensions; ++j)
-		{
-			random_numbers[j] = std::generate_canonical<T,
-				std::numeric_limits<T>::digits>(generator);
-		}
-
-		// evaluate function at position specified in random_numbers
-		T const value = function(static_cast <mc_point<T> const> (point));
-
-		// perform kahan summation 'sum += value' - this improves precision if
-		// T is single precision and many values are added
-		T const y = value - compensation;
-		T const t = sum + y;
-		compensation = (t - sum) - y;
-		sum = t;
-
-		sum_of_squares += value * value;
-	}
-
-	return mc_result<T>(calls, sum, sum_of_squares);
+	return plain_iteration<T>(dimensions, calls, calls, function, generator);
 }
 
 /**

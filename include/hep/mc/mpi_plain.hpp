@@ -23,6 +23,7 @@
 #include <hep/mc/mc_result.hpp>
 #include <hep/mc/mpi_helper.hpp>
 #include <hep/mc/mpi_datatype.hpp>
+#include <hep/mc/plain.hpp>
 
 #include <cstddef>
 #include <limits>
@@ -81,9 +82,6 @@ mc_result<T> mpi_plain(
 	T& sum            = buffer[0];
 	T& sum_of_squares = buffer[1];
 
-	// compensation variable for kahan summation
-	T compensation = T();
-
 	std::vector<T> random_numbers(dimensions);
 
 	// the number of function calls for each MPI process
@@ -96,30 +94,12 @@ mc_result<T> mpi_plain(
 			dimensions, calls, rank, world, generator);
 	}
 
-	// iterate over calls
-	for (std::size_t i = 0; i != sub_calls; ++i)
-	{
-		mc_point<T> point(calls, random_numbers);
+	auto result = plain_iteration<T>(
+		dimensions, calls, sub_calls, function, generator);
 
-		// fill container with random numbers
-		for (std::size_t j = 0; j != dimensions; ++j)
-		{
-			random_numbers[j] = std::generate_canonical<T,
-				std::numeric_limits<T>::digits>(generator);
-		}
-
-		// evaluate function at position specified in random_numbers
-		T const value = function(static_cast <mc_point<T> const> (point));
-
-		// perform kahan summation 'sum += value' - this improves precision if
-		// T is single precision and many values are added
-		T const y = value - compensation;
-		T const t = sum + y;
-		compensation = (t - sum) - y;
-		sum = t;
-
-		sum_of_squares += value * value;
-	}
+	sum = result.value * T(result.calls);
+	sum_of_squares = T(result.calls) * (result.value * result.value + T(calls) *
+		result.error * result.error);
 
 	if (mpi_single_generator())
 	{

@@ -1,5 +1,8 @@
 #include <hep/mc.hpp>
 
+#include <iostream>
+#include <vector>
+
 int main()
 {
 	// vector containing the results of five iterations
