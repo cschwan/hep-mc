@@ -316,9 +316,10 @@ linear_grid<T> vegas_grid(std::size_t dimensions, std::size_t bins)
  * \see vegas_callback
  */
 template <typename T>
-void vegas_default_callback(
+bool vegas_default_callback(
 	std::vector<vegas_iteration_result<T>> const&
 ) {
+	return true;
 }
 
 /**
@@ -328,7 +329,7 @@ void vegas_default_callback(
  * \see vegas_callback
  */
 template <typename T>
-void vegas_verbose_callback(
+bool vegas_verbose_callback(
 	std::vector<vegas_iteration_result<T>> const& results
 ) {
 	std::cout << "iteration " << (results.size()-1) << " finished.\n";
@@ -349,23 +350,27 @@ void vegas_verbose_callback(
 	std::cout << " E=" << result.value << " +- " << result.error;
 	std::cout << " (" << (T(100.0) * result.error / result.value);
 	std::cout << "%) chi^2/dof=" << chi << "\n\n";
+
+	return true;
 }
 
 /**
  * Sets the vegas `callback` function and returns it. This function is called
  * after each iteration performed by \ref vegas(). The default callback is \ref
  * vegas_default_callback. The function can e.g. be set to \ref
- * vegas_verbose_callback which prints after each iteration.
+ * vegas_verbose_callback which prints after each iteration. If the callback
+ * function returns `false` the integration is stopped.
  *
- * If this function is called without any argument, no function is set.
+ * If this function is called without any argument, the previous function is
+ * retained.
  */
 template <typename T>
-std::function<void(std::vector<vegas_iteration_result<T>>)>
+std::function<bool(std::vector<vegas_iteration_result<T>>)>
 vegas_callback(
-	std::function<void(std::vector<vegas_iteration_result<T>>)> callback
+	std::function<bool(std::vector<vegas_iteration_result<T>>)> callback
 		= nullptr
 ) {
-	static std::function<void(std::vector<vegas_iteration_result<T>>)> object
+	static std::function<bool(std::vector<vegas_iteration_result<T>>)> object
 		= vegas_default_callback<T>;
 
 	if (callback != nullptr)
@@ -401,7 +406,10 @@ std::vector<vegas_iteration_result<T>> vegas(
 		auto const result = vegas_iteration(*i, *i, grid, function, generator);
 		results.push_back(result);
 
-		vegas_callback<T>()(results);
+		if (!vegas_callback<T>()(results))
+		{
+			break;
+		}
 
 		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
 	}
@@ -415,7 +423,9 @@ std::vector<vegas_iteration_result<T>> vegas(
  * parameter for each iteration. After each iteration the grid is adjusted using
  * \ref vegas_adjust_grid. The grid adjustment itself can be controlled by the
  * parameter `alpha`. The intermediate results are passed to the function set by
- * \ref vegas_callback which can e.g. be used to print them out.
+ * \ref vegas_callback which can e.g. be used to print them out. The callback
+ * function is able to stop the integration if it returns `false`. In this case
+ * less iterations are performed than requested.
  *
  * \param dimensions The number of parameters `function` accepts.
  * \param iteration_calls The number of function calls that are used to obtain

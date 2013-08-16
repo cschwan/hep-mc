@@ -44,10 +44,11 @@ namespace hep
  * \see mpi_vegas_callback
  */
 template <typename T>
-void mpi_vegas_default_callback(
+bool mpi_vegas_default_callback(
 	MPI_Comm,
 	std::vector<vegas_iteration_result<T>> const&
 ) {
+	return true;
 }
 
 /**
@@ -58,7 +59,7 @@ void mpi_vegas_default_callback(
  * \see mpi_vegas_callback
  */
 template <typename T>
-void mpi_vegas_verbose_callback(
+bool mpi_vegas_verbose_callback(
 	MPI_Comm communicator,
 	std::vector<vegas_iteration_result<T>> const& results
 ) {
@@ -69,23 +70,26 @@ void mpi_vegas_verbose_callback(
 	{
 		vegas_verbose_callback<T>(results);
 	}
+
+	return true;
 }
 
 /**
  * Sets the vegas `callback` function and returns it. This function is called
  * after each iteration performed by \ref mpi_vegas(). The default callback is
  * \ref vegas_default_callback. The function can e.g. be set to \ref
- * vegas_verbose_callback which prints after each iteration.
+ * vegas_verbose_callback which prints after each iteration. If the callback
+ * function returns `false` the integration is stopped.
  *
  * If this function is called without any argument, no function is set.
  */
 template <typename T>
-std::function<void(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
+std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
 mpi_vegas_callback(
-	std::function<void(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
+	std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
 		callback = nullptr
 ) {
-	static std::function<void(MPI_Comm,
+	static std::function<bool(MPI_Comm,
 		std::vector<vegas_iteration_result<T>>)> object =
 		mpi_vegas_default_callback<T>;
 
@@ -165,7 +169,10 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
 		results.push_back(vegas_iteration_result<T>(*i, grid,
 			result.adjustment_data));
 
-		mpi_vegas_callback<T>()(communicator, results);
+		if (!mpi_vegas_callback<T>()(communicator, results))
+		{
+			break;
+		}
 
 		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
 	}
@@ -180,7 +187,8 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
  * generator is seeded differently so every MPI process yields an independent
  * result. After each iteration the intermediate results are passed to the
  * function set by \ref mpi_vegas_callback which can e.g. be used to print them
- * out.
+ * out. The callback function is able to stop the integration if it returns 
+ * `false`. In this case less iterations are performed than requested.
  *
  * \param communicator The MPI communicator that is used to communicate between
  *        the different MPI processes.

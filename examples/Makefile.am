@@ -7,7 +7,8 @@ noinst_PROGRAMS = \
 	read_linear_grid \
 	mpi_vegas_example \
 	vegas_example \
-	vegas_grid
+	vegas_grid \
+	vegas_stop_after_precision
 
 # redundant for automake >= 1.11
 helper_example_SOURCES = helper_example.cpp
@@ -15,6 +16,7 @@ read_linear_grid_SOURCES = read_linear_grid.cpp
 mpi_vegas_example_SOURCES = mpi_vegas_example.cpp
 vegas_example_SOURCES = vegas_example.cpp
 vegas_grid_SOURCES = vegas_grid.cpp
+vegas_stop_after_precision_SOURCES = vegas_stop_after_precision.cpp
 
 mpi_vegas_example_CXXFLAGS = $(MPI_CXXFLAGS)
 mpi_vegas_example_LDADD = $(MPI_CXXLDFLAGS)

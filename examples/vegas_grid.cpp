@@ -9,7 +9,7 @@ double square(hep::mc_point<double> const& x)
 	return x.point[0] * x.point[0];
 }
 
-void print_grid(std::vector<hep::vegas_iteration_result<double>> const& results)
+bool print_grid(std::vector<hep::vegas_iteration_result<double>> const& results)
 {
 	std::cout << "The grid for iteration " << (results.size()-1) << ":\n";
 
@@ -30,6 +30,8 @@ void print_grid(std::vector<hep::vegas_iteration_result<double>> const& results)
 		std::cout << x << "\t" << height << "\n";
 		previous = grid(0, j);
 	}
+
+	return true;
 }
 
 int main()
