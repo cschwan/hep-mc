@@ -287,7 +287,7 @@ vegas_iteration_result<T> vegas_iteration(
 	// save 'sum' and 'sum_of_squares' by rescaling the variables
 	adjustment_data[dimensions * bins + 0] = average * T(total_calls);
 	adjustment_data[dimensions * bins + 1] =
-		averaged_squares * T(total_calls * total_calls);
+		averaged_squares * T(total_calls) * T(total_calls);
 
 	return vegas_iteration_result<T>(calls, grid, adjustment_data);
 }
