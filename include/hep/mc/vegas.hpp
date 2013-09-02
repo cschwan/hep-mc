@@ -349,7 +349,7 @@ bool vegas_verbose_callback(
 	// print the combined result
 	std::cout << "all iterations: N=" << result.calls;
 	std::cout << " E=" << result.value << " +- " << result.error;
-	std::cout << " (" << (T(100.0) * result.error / result.value);
+	std::cout << " (" << (T(100.0) * result.error / std::abs(result.value));
 	std::cout << "%) chi^2/dof=" << chi << "\n\n";
 
 	return true;
