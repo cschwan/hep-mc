@@ -338,7 +338,8 @@ bool vegas_verbose_callback(
 	std::cout << "this iteration: N=" << results.back().calls;
 	std::cout << " E=" << results.back().value << " +- ";
 	std::cout << results.back().error << " (";
-	std::cout << (T(100.0) * results.back().error / results.back().value);
+	std::cout << (T(100.0) * results.back().error /
+		std::abs(results.back().value));
 	std::cout << "%)\n";
 
 	// compute cumulative results

@@ -15,7 +15,7 @@ namespace hep
  *     p(x) = p(x_1) p(x_2) \cdots p(x_d)
  * \f]
  * that grows linearly with the number of `dimensions` \f$ d \f$. Every function
- * \f$ p(x_i) \f$ is piecewise-constant function using `bins` subdivitions.
+ * \f$ p(x_i) \f$ is piecewise-constant function using `bins` subdivisions.
  */
 template <typename T>
 class linear_grid
