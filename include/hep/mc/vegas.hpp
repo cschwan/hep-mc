@@ -352,6 +352,8 @@ bool vegas_verbose_callback(
 	std::cout << " (" << (T(100.0) * result.error / std::abs(result.value));
 	std::cout << "%) chi^2/dof=" << chi << "\n\n";
 
+	std::cout.flush();
+
 	return true;
 }
 
