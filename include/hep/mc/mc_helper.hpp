@@ -41,8 +41,10 @@ namespace hep
  * \f}
  */
 template <typename T, typename MCResultIterator>
-mc_result<T> cumulative_result(MCResultIterator begin, MCResultIterator end)
-{
+inline mc_result<T> cumulative_result(
+	MCResultIterator begin,
+	MCResultIterator end
+) {
 	std::size_t calls = 0;
 	T estimate = T();
 	T variance = T();
@@ -75,7 +77,7 @@ mc_result<T> cumulative_result(MCResultIterator begin, MCResultIterator end)
  * \f]
  */
 template <typename T, typename MCResultIterator>
-T chi_square_dof(MCResultIterator begin, MCResultIterator end)
+inline T chi_square_dof(MCResultIterator begin, MCResultIterator end)
 {
 	mc_result<T> const result = cumulative_result<T>(begin, end);
 	T sum = T();

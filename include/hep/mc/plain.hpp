@@ -31,7 +31,7 @@ namespace
 {
 
 template <typename T, typename F, typename R>
-hep::mc_result<T> plain_iteration(
+inline hep::mc_result<T> plain_iteration(
 	std::size_t dimensions,
 	std::size_t total_calls,
 	std::size_t calls,
@@ -101,7 +101,7 @@ namespace hep
  */
 
 template <typename T, typename F, typename R = std::mt19937>
-mc_result<T> plain(
+inline mc_result<T> plain(
 	std::size_t dimensions,
 	std::size_t calls,
 	F&& function,

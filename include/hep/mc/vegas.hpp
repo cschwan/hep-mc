@@ -135,7 +135,7 @@ struct vegas_point : public mc_point<T>
  * `refine_grid` from the CUBA VEGAS implementation from Thomas Hahn.
  */
 template <typename T>
-linear_grid<T> vegas_adjust_grid(
+inline linear_grid<T> vegas_adjust_grid(
 	T alpha,
 	linear_grid<T> const& grid,
 	std::vector<T> const& adjustment_data
@@ -231,7 +231,7 @@ linear_grid<T> vegas_adjust_grid(
  * this case `total_calls` is the sum of all of function evaluations used.
  */
 template <typename T, typename F, typename R>
-vegas_iteration_result<T> vegas_iteration(
+inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
 	std::size_t total_calls,
 	linear_grid<T> const& grid,
@@ -299,7 +299,7 @@ vegas_iteration_result<T> vegas_iteration(
  * plain algorithm.
  */
 template <typename T>
-linear_grid<T> vegas_grid(std::size_t dimensions, std::size_t bins)
+inline linear_grid<T> vegas_grid(std::size_t dimensions, std::size_t bins)
 {
 	std::vector<T> one_dimensional_grid(bins);
 	for (std::size_t i = 0; i != bins; ++i)
@@ -316,7 +316,7 @@ linear_grid<T> vegas_grid(std::size_t dimensions, std::size_t bins)
  * \see vegas_callback
  */
 template <typename T>
-bool vegas_default_callback(
+inline bool vegas_default_callback(
 	std::vector<vegas_iteration_result<T>> const&
 ) {
 	return true;
@@ -329,7 +329,7 @@ bool vegas_default_callback(
  * \see vegas_callback
  */
 template <typename T>
-bool vegas_verbose_callback(
+inline bool vegas_verbose_callback(
 	std::vector<vegas_iteration_result<T>> const& results
 ) {
 	std::cout << "iteration " << (results.size()-1) << " finished.\n";
@@ -368,7 +368,7 @@ bool vegas_verbose_callback(
  * retained.
  */
 template <typename T>
-std::function<bool(std::vector<vegas_iteration_result<T>>)>
+inline std::function<bool(std::vector<vegas_iteration_result<T>>)>
 vegas_callback(
 	std::function<bool(std::vector<vegas_iteration_result<T>>)> callback
 		= nullptr
@@ -390,7 +390,7 @@ vegas_callback(
  * by a previous \ref vegas() call.
  */
 template <typename T, typename F, typename R = std::mt19937>
-std::vector<vegas_iteration_result<T>> vegas(
+inline std::vector<vegas_iteration_result<T>> vegas(
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
 	linear_grid<T> const& start_grid,
@@ -443,7 +443,7 @@ std::vector<vegas_iteration_result<T>> vegas(
  *        random points from the hypercube. This generator is not seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
-std::vector<vegas_iteration_result<T>> vegas(
+inline std::vector<vegas_iteration_result<T>> vegas(
 	std::size_t dimensions,
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,

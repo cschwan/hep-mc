@@ -44,7 +44,7 @@ namespace hep
  * \see mpi_vegas_callback
  */
 template <typename T>
-bool mpi_vegas_default_callback(
+inline bool mpi_vegas_default_callback(
 	MPI_Comm,
 	std::vector<vegas_iteration_result<T>> const&
 ) {
@@ -59,7 +59,7 @@ bool mpi_vegas_default_callback(
  * \see mpi_vegas_callback
  */
 template <typename T>
-bool mpi_vegas_verbose_callback(
+inline bool mpi_vegas_verbose_callback(
 	MPI_Comm communicator,
 	std::vector<vegas_iteration_result<T>> const& results
 ) {
@@ -84,7 +84,7 @@ bool mpi_vegas_verbose_callback(
  * If this function is called without any argument, no function is set.
  */
 template <typename T>
-std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
+inline std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
 mpi_vegas_callback(
 	std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
 		callback = nullptr
@@ -107,7 +107,7 @@ mpi_vegas_callback(
  * vegas_iteration_result.grid obtained by a previous \ref vegas() call.
  */
 template <typename T, typename F, typename R = std::mt19937>
-std::vector<vegas_iteration_result<T>> mpi_vegas(
+inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
@@ -205,7 +205,7 @@ std::vector<vegas_iteration_result<T>> mpi_vegas(
  *        random points from the hypercube. This generator is properly seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
-std::vector<vegas_iteration_result<T>> mpi_vegas(
+inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	std::size_t dimensions,
 	std::vector<std::size_t> const& iteration_calls,

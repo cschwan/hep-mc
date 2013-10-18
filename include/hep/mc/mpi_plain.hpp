@@ -56,7 +56,7 @@ namespace hep
  *        random points from the hypercube. This generator is not seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
-mc_result<T> mpi_plain(
+inline mc_result<T> mpi_plain(
 	MPI_Comm communicator,
 	std::size_t dimensions,
 	std::size_t calls,

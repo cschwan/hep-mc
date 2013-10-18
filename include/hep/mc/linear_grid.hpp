@@ -78,7 +78,7 @@ private:
  * Output operator for \ref linear_grid.
  */
 template <typename CharT, typename Traits, typename T>
-std::basic_ostream<CharT, Traits>& operator<<(
+inline std::basic_ostream<CharT, Traits>& operator<<(
 	std::basic_ostream<CharT, Traits>& ostream,
 	linear_grid<T> const& grid
 ) {
@@ -105,7 +105,7 @@ std::basic_ostream<CharT, Traits>& operator<<(
  * calling this function.
  */
 template <typename CharT, typename Traits, typename T>
-std::basic_istream<CharT, Traits>& operator>>(
+inline std::basic_istream<CharT, Traits>& operator>>(
 	std::basic_istream<CharT, Traits>& istream,
 	linear_grid<T>& grid
 ) {
