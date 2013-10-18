@@ -75,7 +75,7 @@ struct vegas_iteration_result : public mc_result<T>
 };
 
 /**
- * A point from the hypercube with an additional information in which bin(s) the
+ * A point from the hypercube with the additional information in which bins the
  * point lies.
  */
 template <typename T>
@@ -98,25 +98,26 @@ struct vegas_point : public mc_point<T>
 
 		for (std::size_t i = 0; i != dimensions; ++i)
 		{
-			// compute position of 'random' in bins, as a floating point number
-			T const bin_position = random_numbers[i] * bins;
+			// in every dimension the grid has 'bins' number of bins, the random
+			// number determines a random bin (integer part) in the grid and the
+			// exact position inside the bin (remainder)
+			T const position = random_numbers[i] * bins;
 
-			// in which bin is 'random' (integer) ?
-			std::size_t const position = bin_position;
+			// the index of the selected bin
+			std::size_t const index = position;
 
-			// compute value of grid at the previous position
-			T const grid_previous =
-				(position == 0) ? T() : grid(i, position - 1);
+			// save the index for later
+			bin[i] = index;
 
-			// compute difference of grid values at 'position'
-			T const difference = grid(i, position) - grid_previous;
+			// compute the value of the previous bin
+			T const previous_bin = (index == 0) ? T() : grid(i, index - 1);
 
-			// TODO: explain
-			this->point[i] = grid_previous +
-				(bin_position - position) * difference;
+			// compute the difference of both both bins
+			T const difference = grid(i, index) - previous_bin;
 
-			// save the index of the bin in which point lies
-			bin[i] = position;
+			// this rescales the random number to conform to the importance
+			// represented by the grid
+			this->point[i] = previous_bin + (position - index) * difference;
 
 			// multiply weight for each dimension
 			this->weight *= difference * bins;
@@ -124,7 +125,7 @@ struct vegas_point : public mc_point<T>
 	}
 
 	/**
-	 * The indices that determine the bin(s) of the sample in the grid.
+	 * The indices that determine the bins of the point in the grid.
 	 */
 	std::vector<std::size_t>& bin;
 };

@@ -187,7 +187,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
  * generator is seeded differently so every MPI process yields an independent
  * result. After each iteration the intermediate results are passed to the
  * function set by \ref mpi_vegas_callback which can e.g. be used to print them
- * out. The callback function is able to stop the integration if it returns 
+ * out. The callback function is able to stop the integration if it returns
  * `false`. In this case less iterations are performed than requested.
  *
  * \param communicator The MPI communicator that is used to communicate between

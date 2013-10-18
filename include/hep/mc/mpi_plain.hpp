@@ -26,7 +26,6 @@
 #include <hep/mc/plain.hpp>
 
 #include <cstddef>
-#include <limits>
 #include <random>
 #include <vector>
 
