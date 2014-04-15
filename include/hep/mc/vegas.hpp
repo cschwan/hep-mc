@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2013  Christopher Schwan
+ * Copyright (C) 2012-2014  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,8 @@
 namespace hep
 {
 
-/**
- * \defgroup vegas VEGAS Integrator
- * @{
- */
+/// \addtogroup vegas
+/// @{
 
 /**
  * The result of a single \ref vegas_iteration.
@@ -461,9 +459,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	);
 }
 
-/**
- * @}
- */
+/// @}
 
 }
 

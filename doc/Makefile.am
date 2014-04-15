@@ -1,4 +1,13 @@
-html.tar: Doxyfile references.bib $(top_builddir)/include/stamp-headers
+dox = \
+	examples.dox \
+	integrands.dox \
+	mainpage.dox \
+	mc_helper.dox \
+	mpi_helper.dox \
+	plain.dox \
+	vegas.dox
+
+html.tar: $(dox) Doxyfile references.bib $(top_builddir)/include/stamp-headers
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile
 	$(AM_V_at)tar cf html.tar html/
 
@@ -18,5 +27,5 @@ uninstall-local:
 	    fi \
 	done
 
-EXTRA_DIST = references.bib
+EXTRA_DIST = $(dox) references.bib
 CLEANFILES = html.tar

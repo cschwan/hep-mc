@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013  Christopher Schwan
+ * Copyright (C) 2013-2014  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,8 @@
 namespace hep
 {
 
-/**
- * \defgroup mc_helper Monte Carlo Helper Functions
- * @{
- */
+/// \addtogroup mc_helper
+/// @{
 
 /**
  * Computes a cumulative result using a range of results pointed to by `begin`
@@ -93,9 +91,7 @@ inline T chi_square_dof(MCResultIterator begin, MCResultIterator end)
 	return sum / T(n - 1);
 }
 
-/**
- * @}
- */
+/// @}
 
 }
 

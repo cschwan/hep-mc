@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013  Christopher Schwan
+ * Copyright (C) 2013-2014  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,8 @@
 namespace hep
 {
 
-/**
- * \addtogroup plain
- * @{
- */
+/// \addtogroup plain
+/// @{
 
 /**
  * MPI-parallelized PLAIN Monte Carlo integrator. This function integrates
@@ -119,9 +117,7 @@ inline mc_result<T> mpi_plain(
 	return mc_result<T>(calls, sum, sum_of_squares);
 }
 
-/**
- * @}
- */
+/// @}
 
 }
 

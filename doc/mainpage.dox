@@ -1,0 +1,23 @@
+/**
+
+\mainpage Template Library for MC Integration
+
+Description
+===========
+
+`hep-mc` is a C++11 template library providing Monte Carlo integration
+algorithms, currently only PLAIN and VEGAS.
+
+The design of library loosely follows the style that is used in the C++
+standard library.
+
+See the README file on how to install this library.
+
+Example
+=======
+
+The following example illustrates how to integrate the square-function using
+VEGAS:
+\include vegas_example.cpp
+
+*/

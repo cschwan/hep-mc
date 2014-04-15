@@ -86,10 +86,8 @@ inline void mpi_advance_generator_after(
 namespace hep
 {
 
-/**
- * \defgroup mpi_helper MPI Helper Functions
- * @{
- */
+/// \addtogroup mpi_helper
+/// @{
 
 /**
  * This function returns true if the MPI functions should use a single random
@@ -118,9 +116,7 @@ inline void mpi_single_generator(bool enabled)
 	mpi_single_generator() = enabled;
 }
 
-/**
- * @}
- */
+/// @}
 
 }
 

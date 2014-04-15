@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013  Christopher Schwan
+ * Copyright (C) 2013-2014  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,14 +23,5 @@
 #include <hep/mc/mpi_helper.hpp>
 #include <hep/mc/mpi_plain.hpp>
 #include <hep/mc/mpi_vegas.hpp>
-
-namespace hep
-{
-
-/**
- * \example mpi_vegas_example.cpp
- */
-
-}
 
 #endif
