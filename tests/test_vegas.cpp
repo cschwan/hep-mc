@@ -1,7 +1,7 @@
-#include <hep/mc/vegas.hpp>
+#define CATCH_CONFIG_MAIN
+#include <catch.hpp>
 
-#include <boost/mpl/list.hpp>
-#include <boost/test/unit_test.hpp>
+#include <hep/mc/vegas.hpp>
 
 #include <cmath>
 #include <cstddef>
@@ -57,9 +57,9 @@ private:
 	std::size_t type;
 };
 
-typedef boost::mpl::list<float, double, long double> test_types;
+typedef double T;
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(vegas_integration_square, T, test_types)
+TEST_CASE("Test VEGAS with square function", "[vegas]")
 {
 	std::size_t const iterations = 10;
 	std::size_t const steps_per_iteration = 10000;
@@ -72,9 +72,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(vegas_integration_square, T, test_types)
 		bins
 	);
 
-	BOOST_CHECK_CLOSE(
-		result.back().value,
-		T(1.0),
-		T(300.0) * result.back().error
-	);
+	REQUIRE( result.back().value <= T(1.0) + T(3.0) * result.back().error );
+	REQUIRE( result.back().value >= T(1.0) - T(3.0) * result.back().error );
 }

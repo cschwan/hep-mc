@@ -51,24 +51,7 @@ AS_IF([test "x$enable_doxygen" = "xyes"], [
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
 # check if the user wants to test this library
-AC_ARG_ENABLE([tests], AS_HELP_STRING([--enable-tests],
-	[Enable unit tests (requires Boost Unit Test Framework)]))
-
-# check for header and library
-AS_IF([test "x$enable_tests" = "xyes"], [
-	# save content of LIBS variable
-	previous_libs="${LIBS}"
-
-	AC_CHECK_HEADERS([boost/mpl/list.hpp], [],
-		AC_MSG_ERROR([header not found/usable]))
-	AC_CHECK_HEADERS([boost/test/unit_test.hpp], [],
-		AC_MSG_ERROR([header not found/usable]))
-	AC_SEARCH_LIBS([_ZN5boost9unit_test14unit_test_mainEPFbvEiPPc],
-		[boost_unit_test_framework], [], AC_MSG_ERROR([library not found]))
-
-	# restore LIBS variable - boost libs are only needed in unit tests
-	LIBS="${previous_libs}"
-])
+AC_ARG_ENABLE([tests], AS_HELP_STRING([--enable-tests], [Enable unit tests]))
 
 # if tests are requested, define HAVE_TESTS
 AM_CONDITIONAL([HAVE_TESTS], [test "x$enable_tests" = "xyes"])

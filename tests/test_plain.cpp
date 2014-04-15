@@ -1,7 +1,7 @@
-#include <hep/mc/plain.hpp>
+#define CATCH_CONFIG_MAIN
+#include <catch.hpp>
 
-#include <boost/mpl/list.hpp>
-#include <boost/test/unit_test.hpp>
+#include <hep/mc/plain.hpp>
 
 #include <cmath>
 #include <cstddef>
@@ -50,55 +50,62 @@ private:
 	std::size_t type;
 };
 
-typedef boost::mpl::list<float, double, long double> test_types;
+typedef double T;
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(constant, T, test_types)
+TEST_CASE("Test PLAIN with constant function", "[plain]")
 {
 	std::size_t steps = 10;
 	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(0));
 
-	BOOST_CHECK_EQUAL(result.value, T(1.0));
-	BOOST_CHECK_SMALL(result.error, T(1e-8));
+	CHECK( result.value == T(1.0) );
+	CHECK( result.error == T(0.0) );
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(sine, T, test_types)
+TEST_CASE("Test PLAIN with sine function", "[plain]")
 {
 	std::size_t steps = 1000;
 	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(1));
 
-	BOOST_CHECK_CLOSE(result.value, T(1.0), T(100.0) * result.error);
+	CHECK( result.value <= T(1.0) + result.error );
+	CHECK( result.value >= T(1.0) - result.error );
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(exponential, T, test_types)
+TEST_CASE("Test PLAIN with exponential function", "[plain]")
 {
 	std::size_t steps = 1000;
 	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(2));
 	T reference = std::exp(T(1.0)) - T(1.0);
 
-	BOOST_CHECK_CLOSE(result.value, reference, T(100.0) * result.error);
+	CHECK( result.value <= reference + result.error );
+	CHECK( result.value >= reference - result.error );
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(square, T, test_types)
+TEST_CASE("Test PLAIN with square function", "[plain]")
 {
 	std::size_t steps = 10000;
 	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(3));
+	T reference = T(1.0) / T(3.0);
 
-	BOOST_CHECK_CLOSE(result.value, T(1.0) / T(3.0), T(300.0) * result.error);
+	CHECK( result.value <= reference + result.error );
+	CHECK( result.value >= reference - result.error );
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(square_4d, T, test_types)
+TEST_CASE("Test PLAIN with 4D-square function", "[plain]")
 {
 	std::size_t steps = 10000;
 	hep::mc_result<T> result = hep::plain<T>(4, steps, integrand<T>(4));
+	T reference = T(4.0) / T(3.0);
 
-	BOOST_CHECK_CLOSE(result.value, T(4.0) / T(3.0), T(200.0) * result.error);
+	CHECK( result.value <= reference + T(2.0) * result.error );
+	CHECK( result.value >= reference - T(2.0) * result.error );
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(one_over_sqrt, T, test_types)
+TEST_CASE("Test PLAIN with reverse square-root function", "[plain]")
 {
 	std::size_t steps = 1000;
 	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(5));
+	T reference = T(2.0);
 
-	BOOST_CHECK_CLOSE(result.value, T(2.0), T(100.0) / std::sqrt(T(steps)));
-	// function is not square-integrable, error is unreliable
+	CHECK( result.value <= reference + T(2e-2) );
+	CHECK( result.value >= reference - T(2e-2) );
 }
