@@ -1,5 +1,12 @@
-dox = \
+docpkg = $(PACKAGE_TARNAME)-doc-$(PACKAGE_VERSION).tar
+
+CLEANFILES = $(docpkg)
+
+EXTRA_DIST = \
+	DoxygenLayout.xml \
 	examples.dox \
+	extra.css \
+	footer.html \
 	integrands.dox \
 	mainpage.dox \
 	mc_helper.dox \
@@ -7,25 +14,22 @@ dox = \
 	plain.dox \
 	vegas.dox
 
-html.tar: $(dox) Doxyfile references.bib $(top_builddir)/include/stamp-headers
+$(docpkg): Doxyfile $(EXTRA_DIST) $(top_builddir)/include/stamp-headers
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile
-	$(AM_V_at)tar cf html.tar html/
+	$(AM_V_at)tar cf $(docpkg) html/
 
-all-local: html.tar
+all-local: $(docpkg)
 
 mostlyclean-local:
 	rm -rf html/
 
 install-data-local:
 	$(MKDIR_P) "$(DESTDIR)$(docdir)"
-	tar xf html.tar -C "$(DESTDIR)$(docdir)"
+	tar xf $(docpkg) -C "$(DESTDIR)$(docdir)"
 
 uninstall-local:
-	for i in `tar tf html.tar`; do \
+	for i in `tar tf $(docpkg)`; do \
 	    if [ -f "$(DESTDIR)$(docdir)"/$$i ]; then \
 	        rm "$(DESTDIR)$(docdir)"/$$i; \
 	    fi \
 	done
-
-EXTRA_DIST = $(dox) references.bib
-CLEANFILES = html.tar

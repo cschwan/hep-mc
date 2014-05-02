@@ -28,10 +28,9 @@ namespace hep
 /// @{
 
 /**
- * Computes a cumulative result using a range of results pointed to by `begin`
- * and `end`. If \f$ E_i, S_i, N_i \f$ are the estimate, error and number of
- * calls of each iteration in the range defined by [begin, end) then the
- * cumulative result is computed as:
+ * Computes a cumulative result using a range of results pointed to by `begin` and `end`. If \f$
+ * E_i, S_i, N_i \f$ are the estimate, error and number of calls of each iteration in the range
+ * defined by [begin, end) then the cumulative result is computed as:
  * \f{align}{
  * E &= S^2 \sum_i \frac{E_i}{S_i^2} \\
  * S &= \left( \sum_i \frac{1}{S_i^2} \right)^{-\frac{1}{2}} \\
@@ -66,9 +65,9 @@ inline mc_result<T> cumulative_result(
 }
 
 /**
- * Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using
- * the results pointed to by the range [begin, end). The cumulative value
- * \f$ E \f$ is obtained by calling \ref cumulative_result():
+ * Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using the results pointed
+ * to by the range [begin, end). The cumulative value \f$ E \f$ is obtained by calling \ref
+ * cumulative_result():
  * \f[
  * \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left( E_i -
  * E \right)^2}{S_i^2}

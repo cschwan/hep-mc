@@ -24,7 +24,6 @@
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
 #include <hep/mc/plain.hpp>
-#include <hep/mc/thread_vegas.hpp>
 #include <hep/mc/vegas.hpp>
 
 #endif

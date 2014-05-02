@@ -90,13 +90,12 @@ namespace hep
 /// @{
 
 /**
- * This function returns true if the MPI functions should use a single random
- * number generator. If this is the case the generator of each process discards
- * an approriate amount of random numbers to ascertain independent numbers are
- * used. This make sure the result is independent of the number of processes.
- * However, since each process consumes as many random numbers as calls are made
- * in total, this may slow down the integration if the integrand evaluates too
- * fast. In this case a faster random number generator can be used.
+ * This function returns true if the MPI functions should use a single random number generator. If
+ * this is the case the generator of each process discards an approriate amount of random numbers to
+ * ascertain independent numbers are used. This make sure the result is independent of the number of
+ * processes. However, since each process consumes as many random numbers as calls are made in
+ * total, this may slow down the integration if the integrand evaluates too fast. In this case a
+ * faster random number generator can be used.
  */
 inline bool& mpi_single_generator()
 {
@@ -106,8 +105,8 @@ inline bool& mpi_single_generator()
 }
 
 /**
- * If `enabled` is true, the MPI function's results are independent of the
- * number of processes used to integrate.
+ * If `enabled` is true, the MPI function's results are independent of the number of processes used
+ * to integrate.
  *
  * \see mpi_single_generator
  */

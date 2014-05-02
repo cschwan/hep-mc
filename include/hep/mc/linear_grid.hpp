@@ -27,62 +27,51 @@ namespace hep
 {
 
 /**
- * A grid approximating a function. This grid is called linear because it uses
- * a factorizing function
+ * A grid approximating a function. This grid is called linear because it uses a factorizing
+ * function
  * \f[
  *     p(x) = p(x_1) p(x_2) \cdots p(x_d)
  * \f]
- * that grows linearly with the number of `dimensions` \f$ d \f$. Every function
- * \f$ p(x_i) \f$ is piecewise-constant function using `bins` subdivisions.
+ * that grows linearly with the number of `dimensions` \f$ d \f$. Every function \f$ p(x_i) \f$ is
+ * piecewise-constant function using `bins` subdivisions.
  */
 template <typename T>
 class linear_grid
 {
 public:
 	/**
-	 * Constructs a linear grid with `dimensions` times `bins` entries. The
-	 * entries are set to zero.
+	 * Constructs a linear grid with `dimensions` times `bins` entries. The entries are set to zero.
 	 */
 	linear_grid(std::size_t dimensions, std::size_t bins)
 		: x(dimensions, std::vector<T>(bins))
 	{
 	}
 
-	/**
-	 * Constructs a linear grid from a two-dimensional vector.
-	 */
+	/// Constructs a linear grid from a two-dimensional vector.
 	linear_grid(std::vector<std::vector<T>> const& grid)
 		: x(grid)
 	{
 	}
 
-	/**
-	 * Read operator for the elements of this grid.
-	 */
+	/// Read operator for the elements of this grid.
 	T operator()(std::size_t dimension, std::size_t bin) const
 	{
 		return x[dimension][bin];
 	}
 
-	/**
-	 * Read/write operator for the elements of this grid.
-	 */
+	/// Read/write operator for the elements of this grid.
 	T& operator()(std::size_t dimension, std::size_t bin)
 	{
 		return x[dimension][bin];
 	}
 
-	/**
-	 * The subdivisions of every dimension of this grid.
-	 */
+	/// The subdivisions of every dimension of this grid.
 	std::size_t bins() const
 	{
 		return x[0].size();
 	}
 
-	/**
-	 * The number of dimensions of the function this grid appromates.
-	 */
+	/// The number of dimensions of the function this grid approximates.
 	std::size_t dimensions() const
 	{
 		return x.size();
@@ -92,9 +81,7 @@ private:
 	std::vector<std::vector<T>> x;
 };
 
-/**
- * Output operator for \ref linear_grid.
- */
+/// Output operator for \ref linear_grid.
 template <typename CharT, typename Traits, typename T>
 inline std::basic_ostream<CharT, Traits>& operator<<(
 	std::basic_ostream<CharT, Traits>& ostream,
@@ -118,9 +105,8 @@ inline std::basic_ostream<CharT, Traits>& operator<<(
 }
 
 /**
- * Input operator for \ref linear_grid. Note that the linear_grid ist not
- * resized and therefore must have the correct `dimensions` and `bins` before
- * calling this function.
+ * Input operator for \ref linear_grid. Note that the linear_grid ist not resized and therefore must
+ * have the correct `dimensions` and `bins` before calling this function.
  */
 template <typename CharT, typename Traits, typename T>
 inline std::basic_istream<CharT, Traits>& operator>>(

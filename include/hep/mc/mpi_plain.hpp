@@ -38,19 +38,18 @@ namespace hep
 /// @{
 
 /**
- * MPI-parallelized PLAIN Monte Carlo integrator. This function integrates
- * `function` over the unit-hypercube with the specified `dimensions` using
- * `calls` function evaluations at randomly chosen points determined by
- * `generator`. The generator is not seeded.
+ * MPI-parallelized PLAIN Monte Carlo integrator. This function integrates `function` over the
+ * unit-hypercube with the specified `dimensions` using `calls` function evaluations at randomly
+ * chosen points determined by `generator`. The generator is not seeded.
  *
- * \param communicator The MPI communicator that is used to communicate between
- *        the different MPI processes.
+ * \param communicator The MPI communicator that is used to communicate between the different MPI
+ *        processes.
  * \param dimensions The number of parameters `function` accepts.
  * \param calls The number of function calls that are used to obtain the result.
- * \param function The function that will be integrated over the hypercube. See
- *        \ref integrands for further explanation.
- * \param generator The random number generator that will be used to generate
- *        random points from the hypercube. This generator is not seeded.
+ * \param function The function that will be integrated over the hypercube. See \ref integrands for
+ *        further explanation.
+ * \param generator The random number generator that will be used to generate random points from the
+ *        hypercube. This generator is properly seeded.
  */
 template <typename T, typename F, typename R = std::mt19937>
 inline mc_result<T> mpi_plain(

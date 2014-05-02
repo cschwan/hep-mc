@@ -26,15 +26,13 @@ namespace hep
 {
 
 /**
- * The estimation of a Monte Carlo integration. Every Monte Carlo integrator
- * returns one or more instances of this class.
+ * The estimation of a Monte Carlo integration. Every Monte Carlo integrator returns one or more
+ * instances of this class.
  */
 template <typename T>
 struct mc_result
 {
-	/**
-	 * Constructor.
-	 */
+	/// Constructor.
 	mc_result(std::size_t calls, T sum, T sum_of_squares)
 		: calls(calls)
 		, value(sum / T(calls))
@@ -42,26 +40,17 @@ struct mc_result
 	{
 	}
 
-	/**
-	 * The number of function evaluations \f$ N \f$ performed to obtain this
-	 * result.
-	 */
+	/// The number of function evaluations \f$ N \f$ performed to obtain this result.
 	std::size_t calls;
 
-	/**
-	 * Expectation value \f$ E \f$ of this result.
-	 */
+	/// Expectation value \f$ E \f$ of this result.
 	T value;
 
-	/**
-	 * Error \f$ S \f$ of the expectation value.
-	 */
+	/// Error \f$ S \f$ of the expectation value.
 	T error;
 };
 
-/**
- * Creates a \ref mc_result using the parameters `calls` `value` and `error`.
- */
+/// Creates a \ref mc_result using the parameters `calls` `value` and `error`.
 template <typename T>
 inline mc_result<T> create_result(std::size_t calls, T value, T error)
 {
