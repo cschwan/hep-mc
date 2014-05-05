@@ -1,6 +1,7 @@
 New in 0.2.2.9999:
 ==================
 
+- add more unit tests, use Google Test as testing framework
 - improved the MPI VEGAS example
 - added new ``hep::mpi_single_generator`` function that adds the possibility to
   use the same random numbers for MPI and non-MPI routines. This makes

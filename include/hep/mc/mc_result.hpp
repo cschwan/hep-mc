@@ -32,11 +32,11 @@ namespace hep
 template <typename T>
 struct mc_result
 {
-	/// Constructor.
+	/// Constructor. If `calls` is set to zero, both `value` and `error` are also set to zero.
 	mc_result(std::size_t calls, T sum, T sum_of_squares)
 		: calls(calls)
-		, value(sum / T(calls))
-		, error(std::sqrt(sum_of_squares - value * value * T(calls)) / T(calls))
+		, value(calls == 0 ? T() : sum / T(calls))
+		, error(calls == 0 ? T() : std::sqrt(sum_of_squares - value * value * T(calls)) / T(calls))
 	{
 	}
 

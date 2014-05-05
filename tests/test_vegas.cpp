@@ -1,5 +1,4 @@
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
 #include <hep/mc/vegas.hpp>
 
@@ -57,10 +56,14 @@ private:
 	std::size_t type;
 };
 
-typedef double T;
+typedef testing::Types<float, double, long double> MyT;
+template <typename T> class Vegas : public testing::Test { };
+TYPED_TEST_CASE(Vegas, MyT);
 
-TEST_CASE("Test VEGAS with square function", "[vegas]")
+TYPED_TEST(Vegas, IntegrateSquareFunction)
 {
+	typedef TypeParam T;
+
 	std::size_t const iterations = 10;
 	std::size_t const steps_per_iteration = 10000;
 	std::size_t const bins = 100;
@@ -72,6 +75,6 @@ TEST_CASE("Test VEGAS with square function", "[vegas]")
 		bins
 	);
 
-	REQUIRE( result.back().value <= T(1.0) + T(3.0) * result.back().error );
-	REQUIRE( result.back().value >= T(1.0) - T(3.0) * result.back().error );
+	// check if the result is within 3-sigma range
+	ASSERT_NEAR( T(1.0) , result.back().value , T(3.0) * result.back().error );
 }

@@ -21,6 +21,9 @@
 
 #include <hep/mc/mc_result.hpp>
 
+#include <iterator>
+#include <limits>
+
 namespace hep
 {
 
@@ -72,6 +75,8 @@ inline mc_result<T> cumulative_result(
  * \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left( E_i -
  * E \right)^2}{S_i^2}
  * \f]
+ * If the range [begin, end) is empty, the result is zero and if it contains one element the result
+ * is infinity.
  */
 template <typename T, typename MCResultIterator>
 inline T chi_square_dof(MCResultIterator begin, MCResultIterator end)
@@ -79,6 +84,11 @@ inline T chi_square_dof(MCResultIterator begin, MCResultIterator end)
 	mc_result<T> const result = cumulative_result<T>(begin, end);
 	T sum = T();
 	std::size_t n = 0;
+
+	if (std::distance(begin, end) == 1)
+	{
+		return std::numeric_limits<T>::infinity();
+	}
 
 	for (MCResultIterator i = begin; i != end; ++i)
 	{

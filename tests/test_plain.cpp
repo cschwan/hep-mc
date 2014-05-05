@@ -1,5 +1,4 @@
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
 #include <hep/mc/plain.hpp>
 
@@ -50,62 +49,62 @@ private:
 	std::size_t type;
 };
 
-typedef double T;
+typedef testing::Types<float, double, long double> MyT;
+template <typename T> class Plain : public testing::Test { };
+TYPED_TEST_CASE(Plain, MyT);
 
-TEST_CASE("Test PLAIN with constant function", "[plain]")
+TYPED_TEST(Plain, IntegrateConstantFunction)
 {
-	std::size_t steps = 10;
-	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(0));
+	typedef TypeParam T;
 
-	CHECK( result.value == T(1.0) );
-	CHECK( result.error == T(0.0) );
+	hep::mc_result<T> result = hep::plain<T>(1, 10, integrand<T>(0));
+
+	ASSERT_EQ( T(1.0) , result.value );
+	ASSERT_EQ( T()    , result.error );
 }
 
-TEST_CASE("Test PLAIN with sine function", "[plain]")
+TYPED_TEST(Plain, IntegrateSineFunction)
 {
-	std::size_t steps = 1000;
-	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(1));
+	typedef TypeParam T;
 
-	CHECK( result.value <= T(1.0) + result.error );
-	CHECK( result.value >= T(1.0) - result.error );
+	hep::mc_result<T> result = hep::plain<T>(1, 1000, integrand<T>(1));
+
+	ASSERT_NEAR( T(1.0) , result.value , result.error );
 }
 
-TEST_CASE("Test PLAIN with exponential function", "[plain]")
+TYPED_TEST(Plain, IntegrateExponentialFunction)
 {
-	std::size_t steps = 1000;
-	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(2));
-	T reference = std::exp(T(1.0)) - T(1.0);
+	typedef TypeParam T;
 
-	CHECK( result.value <= reference + result.error );
-	CHECK( result.value >= reference - result.error );
+	hep::mc_result<T> result = hep::plain<T>(1, 1000, integrand<T>(2));
+
+	ASSERT_NEAR( std::exp(T(1.0)) - T(1.0) , result.value , result.error );
 }
 
-TEST_CASE("Test PLAIN with square function", "[plain]")
+TYPED_TEST(Plain, IntegrateSquareFunction)
 {
-	std::size_t steps = 10000;
-	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(3));
-	T reference = T(1.0) / T(3.0);
+	typedef TypeParam T;
 
-	CHECK( result.value <= reference + result.error );
-	CHECK( result.value >= reference - result.error );
+	hep::mc_result<T> result = hep::plain<T>(1, 10000, integrand<T>(3));
+
+	ASSERT_NEAR( T(1.0) / T(3.0) , result.value , result.error );
 }
 
-TEST_CASE("Test PLAIN with 4D-square function", "[plain]")
+TYPED_TEST(Plain, Integrate4DSquareFunction)
 {
-	std::size_t steps = 10000;
-	hep::mc_result<T> result = hep::plain<T>(4, steps, integrand<T>(4));
-	T reference = T(4.0) / T(3.0);
+	typedef TypeParam T;
 
-	CHECK( result.value <= reference + T(2.0) * result.error );
-	CHECK( result.value >= reference - T(2.0) * result.error );
+	hep::mc_result<T> result = hep::plain<T>(4, 10000, integrand<T>(4));
+
+	ASSERT_NEAR( T(4.0) / T(3.0), result.value , T(2.0) * result.error );
 }
 
-TEST_CASE("Test PLAIN with reverse square-root function", "[plain]")
+TYPED_TEST(Plain, IntegrateReverseSqureRootFunction)
 {
-	std::size_t steps = 1000;
-	hep::mc_result<T> result = hep::plain<T>(1, steps, integrand<T>(5));
-	T reference = T(2.0);
+	typedef TypeParam T;
 
-	CHECK( result.value <= reference + T(2e-2) );
-	CHECK( result.value >= reference - T(2e-2) );
+	hep::mc_result<T> result = hep::plain<T>(1, 10000, integrand<T>(5));
+
+	// not square-integrable therefore error is not a meaningful quantity
+	ASSERT_NEAR( T(2.0) , result.value , T(1e-2) );
 }

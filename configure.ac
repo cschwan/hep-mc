@@ -52,8 +52,13 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
 # check if the user wants to test this library
 AC_ARG_ENABLE([tests], AS_HELP_STRING([--enable-tests], [Enable unit tests]))
+AS_IF([test "x$enable_tests" = "xyes"], [
+	# fix -Wextra-portability warning
+	m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
-# if tests are requested, define HAVE_TESTS
+	# initialize libtool
+	LT_INIT
+])
 AM_CONDITIONAL([HAVE_TESTS], [test "x$enable_tests" = "xyes"])
 
 # configure Makefiles and Doxyfile
