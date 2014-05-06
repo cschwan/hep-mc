@@ -25,6 +25,9 @@
 namespace hep
 {
 
+/// @addtogroup results
+/// @{
+
 /**
  * The estimation of a Monte Carlo integration. Every Monte Carlo integrator returns one or more
  * instances of this class.
@@ -50,7 +53,7 @@ struct mc_result
 	T error;
 };
 
-/// Creates a \ref mc_result using the parameters `calls` `value` and `error`.
+/// Creates a \ref mc_result using the parameters `calls`, `value` and `error`.
 template <typename T>
 inline mc_result<T> create_result(std::size_t calls, T value, T error)
 {

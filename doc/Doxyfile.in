@@ -1,3 +1,4 @@
+AUTOLINK_SUPPORT       = NO
 BUILTIN_STL_SUPPORT    = YES
 CITE_BIB_FILES         = @srcdir@/references.bib
 ENABLE_PREPROCESSING   = YES

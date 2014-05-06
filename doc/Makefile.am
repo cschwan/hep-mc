@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	mc_helper.dox \
 	mpi_helper.dox \
 	plain.dox \
+	results.dox \
 	vegas.dox
 
 $(docpkg): Doxyfile $(EXTRA_DIST) $(top_builddir)/include/stamp-headers

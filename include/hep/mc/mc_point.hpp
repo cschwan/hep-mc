@@ -25,14 +25,20 @@
 namespace hep
 {
 
+/// \addtogroup integrands
+/// @{
+
 /**
- * Instances of this class represent Monte Carlo points, i.e. a random point \f$ \vec{x} \in [0,1]^d
- * \f$ in the hypercube in \f$ d \f$ dimensions together with a \ref weight.
+ * A random point \f$ \vec{x} \in [0,1]^d \f$ in the \f$ d \f$-dimensional hypercube with an
+ * associated weight.
  */
 template <typename T>
 struct mc_point
 {
-	/// Constructor.
+	/**
+	 * Constructor. The weight is computed using the inverse of `calls`, `point` determines the
+	 * location of this point in the hypercube of dimension `point.size()`.
+	 */
 	mc_point(std::size_t calls, std::vector<T>& point)
 		: weight(T(1.0) / T(calls))
 		, point(point)
@@ -52,6 +58,8 @@ struct mc_point
 	 */
 	std::vector<T>& point;
 };
+
+/// @}
 
 }
 
