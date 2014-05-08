@@ -1,51 +1,11 @@
-# kdevelop project files
-.kdev4/
-.kdev_include_paths
-*.kdev4
-
-# autotools generated files
-*.deps/
-*.libs/
-ar-lib
-autom4te.cache/
 aclocal.m4
-compile
-config.guess
-config.hpp
+autom4te.cache/
+build-aux/
 config.hpp.in
 config.hpp.in~
-config.log
-config.status
-config.sub
 configure
-depcomp
-INSTALL
-install-sh
-libtool
-ltmain.sh
-*Makefile
-*Makefile.in
-missing
-stamp-h1
-test-driver
-
-# documentation related files
-doc/Doxyfile
-doc/doxygen-stamp
-doc/html
-
-# compiler generated files
-*.la
-*.lo
-*.o
-
-# ignore files in m4/ subdir, but track custom macros
 m4/*
 !m4/ax_cxx_compile_stdcxx_11.m4
 !m4/lx_find_mpi.m4
-
-# distribution packages
-*.tar.*
-
-# build related files
-build*/
+*Makefile
+*Makefile.in
