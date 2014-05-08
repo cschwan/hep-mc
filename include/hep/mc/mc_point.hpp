@@ -39,7 +39,7 @@ struct mc_point
 	 * Constructor. The weight is computed using the inverse of `calls`, `point` determines the
 	 * location of this point in the hypercube of dimension `point.size()`.
 	 */
-	mc_point(std::size_t calls, std::vector<T>& point)
+	mc_point(std::size_t calls, std::vector<T> const& point)
 		: weight(T(1.0) / T(calls))
 		, point(point)
 	{
@@ -56,7 +56,7 @@ struct mc_point
 	 * The coordinates of this point of the hypercube. The dimension can be obtained using
 	 * `point.size()`.
 	 */
-	std::vector<T>& point;
+	std::vector<T> const& point;
 };
 
 /// @}

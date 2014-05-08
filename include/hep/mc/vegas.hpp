@@ -101,7 +101,7 @@ struct vegas_point : public mc_point<T>
 			T const difference = grid(i, index) - previous_bin;
 
 			// this rescales the random number to conform to the importance represented by the grid
-			this->point[i] = previous_bin + (position - index) * difference;
+			random_numbers[i] = previous_bin + (position - index) * difference;
 
 			// multiply weight for each dimension
 			this->weight *= difference * bins;
@@ -158,8 +158,6 @@ inline linear_grid<T> vegas_adjust_grid(
 			continue;
 		}
 
-		norm = T(1.0) / norm;
-
 		// compute the importance function for each bin
 		T average_per_bin = T();
 
@@ -169,7 +167,7 @@ inline linear_grid<T> vegas_adjust_grid(
 		{
 			if (smoothed[bin] > T())
 			{
-				T const r = smoothed[bin] * norm;
+				T const r = smoothed[bin] / norm;
 				T const impfun = std::pow((r - T(1.0)) / std::log(r), alpha);
 				average_per_bin += impfun;
 				imp[bin] = impfun;
