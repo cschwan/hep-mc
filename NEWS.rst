@@ -1,6 +1,8 @@
 New in 0.2.2.9999:
 ==================
 
+- renamed linear_grid to piecewise_constant_pdf and moved code from VEGAS into
+  this class
 - add more unit tests, use Google Test as testing framework
 - improved the MPI VEGAS example
 - added new ``hep::mpi_single_generator`` function that adds the possibility to

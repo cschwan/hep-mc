@@ -1,5 +1,4 @@
 nobase_include_HEADERS = \
-	hep/mc/linear_grid.hpp \
 	hep/mc/mc_helper.hpp \
 	hep/mc/mc_point.hpp \
 	hep/mc/mc_result.hpp \
@@ -7,6 +6,7 @@ nobase_include_HEADERS = \
 	hep/mc/mpi_helper.hpp \
 	hep/mc/mpi_plain.hpp \
 	hep/mc/mpi_vegas.hpp \
+	hep/mc/piecewise_constant_pdf.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc.hpp \

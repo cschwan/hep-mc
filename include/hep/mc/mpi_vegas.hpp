@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/linear_grid.hpp>
+#include <hep/mc/piecewise_constant_pdf.hpp>
 #include <hep/mc/mpi_datatype.hpp>
 #include <hep/mc/mpi_helper.hpp>
 #include <hep/mc/vegas.hpp>
@@ -107,7 +107,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	linear_grid<T> const& start_grid,
+	piecewise_constant_pdf<T> const& start_grid,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
@@ -212,7 +212,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 		communicator,
 		iteration_calls,
 		function,
-		vegas_grid<T>(dimensions, bins),
+		piecewise_constant_pdf<T>(dimensions, bins),
 		alpha,
 		generator
 	);

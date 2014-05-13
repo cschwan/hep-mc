@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/linear_grid.hpp>
 #include <hep/mc/mc_helper.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
+#include <hep/mc/piecewise_constant_pdf.hpp>
 
 #include <cstddef>
 #include <iostream>
@@ -44,7 +44,7 @@ struct vegas_iteration_result : public mc_result<T>
 	/// Constructor.
 	vegas_iteration_result(
 		std::size_t calls,
-		linear_grid<T> const& grid,
+		piecewise_constant_pdf<T> const& grid,
 		std::vector<T> const& adjustment_data
 	)
 		: mc_result<T>(
@@ -58,7 +58,7 @@ struct vegas_iteration_result : public mc_result<T>
 	}
 
 	/// The grid used to obtain this result.
-	linear_grid<T> grid;
+	piecewise_constant_pdf<T> grid;
 
 	/// The data used to adjust the `grid` for a subsequent iteration.
 	std::vector<T> adjustment_data;
@@ -73,39 +73,12 @@ struct vegas_point : public mc_point<T>
 		std::size_t total_calls,
 		std::vector<T>& random_numbers,
 		std::vector<std::size_t>& bin,
-		linear_grid<T> const& grid
+		piecewise_constant_pdf<T> const& grid
 	)
 		: mc_point<T>(total_calls, random_numbers)
 		, bin(bin)
 	{
-		std::size_t const dimensions = grid.dimensions();
-		std::size_t const bins       = grid.bins();
-
-		for (std::size_t i = 0; i != dimensions; ++i)
-		{
-			// in every dimension the grid has 'bins' number of bins, the random number determines a
-			// random bin (integer part) in the grid and the exact position inside the bin
-			// (remainder)
-			T const position = random_numbers[i] * bins;
-
-			// the index of the selected bin
-			std::size_t const index = position;
-
-			// save the index for later
-			bin[i] = index;
-
-			// compute the value of the previous bin
-			T const previous_bin = (index == 0) ? T() : grid(i, index - 1);
-
-			// compute the difference of both bins
-			T const difference = grid(i, index) - previous_bin;
-
-			// this rescales the random number to conform to the importance represented by the grid
-			random_numbers[i] = previous_bin + (position - index) * difference;
-
-			// multiply weight for each dimension
-			this->weight *= difference * bins;
-		}
+		this->weight *= grid.icdf(random_numbers, bin);
 	}
 
 	/// The indices that determine the bins of the point in the grid.
@@ -118,15 +91,15 @@ struct vegas_point : public mc_point<T>
  * implementation from Thomas Hahn.
  */
 template <typename T>
-inline linear_grid<T> vegas_adjust_grid(
+inline piecewise_constant_pdf<T> vegas_adjust_grid(
 	T alpha,
-	linear_grid<T> const& grid,
+	piecewise_constant_pdf<T> const& grid,
 	std::vector<T> const& adjustment_data
 ) {
 	std::size_t const dimensions = grid.dimensions();
 	std::size_t const bins       = grid.bins();
 
-	linear_grid<T> new_grid(dimensions, bins);
+	piecewise_constant_pdf<T> new_grid(dimensions, bins);
 
 	for (std::size_t i = 0; i != dimensions; ++i)
 	{
@@ -215,7 +188,7 @@ template <typename T, typename F, typename R>
 inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
 	std::size_t total_calls,
-	linear_grid<T> const& grid,
+	piecewise_constant_pdf<T> const& grid,
 	F&& function,
 	R&& generator
 ) {
@@ -270,23 +243,6 @@ inline vegas_iteration_result<T> vegas_iteration(
 	adjustment_data[dimensions * bins + 1] = averaged_squares * T(total_calls) * T(total_calls);
 
 	return vegas_iteration_result<T>(calls, grid, adjustment_data);
-}
-
-/**
- * Creates an equally-spaced VEGAS grid with the specified number of `bins` for a function with
- * `dimensions` parameters. Using this grid together with \ref vegas_iteration is equivalent to an
- * integration performed by the \ref plain algorithm.
- */
-template <typename T>
-inline linear_grid<T> vegas_grid(std::size_t dimensions, std::size_t bins)
-{
-	std::vector<T> one_dimensional_grid(bins);
-	for (std::size_t i = 0; i != bins; ++i)
-	{
-		one_dimensional_grid[i] = T(1 + i) / T(bins);
-	}
-
-	return std::vector<std::vector<T>>(dimensions, one_dimensional_grid);
 }
 
 /**
@@ -368,7 +324,7 @@ template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	linear_grid<T> const& start_grid,
+	piecewise_constant_pdf<T> const& start_grid,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
@@ -427,7 +383,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	return vegas(
 		iteration_calls,
 		function,
-		vegas_grid<T>(dimensions, bins),
+		piecewise_constant_pdf<T>(dimensions, bins),
 		alpha,
 		generator
 	);

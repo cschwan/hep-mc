@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/linear_grid.hpp>
 #include <hep/mc/mc_helper.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
+#include <hep/mc/piecewise_constant_pdf.hpp>
 #include <hep/mc/plain.hpp>
 #include <hep/mc/vegas.hpp>
 
