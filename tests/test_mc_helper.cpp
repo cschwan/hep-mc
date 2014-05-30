@@ -16,9 +16,9 @@ TYPED_TEST(McHelper, CumulativeResultWithZero)
 	auto result = hep::cumulative_result<T>(zero_results.begin(), zero_results.end());
 
 	// assert that results are reasonable even if there is no real input
-	ASSERT_EQ( 0U  , result.calls );
-	ASSERT_EQ( T() , result.value );
-	ASSERT_EQ( T() , result.error );
+	EXPECT_EQ( 0U  , result.calls );
+	EXPECT_EQ( T() , result.value );
+	EXPECT_EQ( T() , result.error );
 }
 
 TYPED_TEST(McHelper, CumulativeResultWithOne)
@@ -30,9 +30,9 @@ TYPED_TEST(McHelper, CumulativeResultWithOne)
 	};
 	auto result = hep::cumulative_result<T>(one_result.begin(), one_result.end());
 
-	ASSERT_EQ( one_result.front().calls , result.calls );
-	ASSERT_NEAR( one_result.front().value , result.value , T(1e-10) );
-	ASSERT_NEAR( one_result.front().error , result.error , T(1e-10) );
+	EXPECT_EQ( one_result.front().calls , result.calls );
+	EXPECT_NEAR( one_result.front().value , result.value , T(1e-10) );
+	EXPECT_NEAR( one_result.front().error , result.error , T(1e-10) );
 }
 
 TYPED_TEST(McHelper, CumulativeResultWithTwo)
@@ -47,11 +47,11 @@ TYPED_TEST(McHelper, CumulativeResultWithTwo)
 	auto result = hep::cumulative_result<T>(two_results.begin(), two_results.end());
 
 	// should give two times the calls
-	ASSERT_EQ( 2 * two_results.front().calls , result.calls );
+	EXPECT_EQ( 2 * two_results.front().calls , result.calls );
 	// the same result and
-	ASSERT_NEAR( two_results.front().value , result.value , T(1e-10) );
+	EXPECT_NEAR( two_results.front().value , result.value , T(1e-10) );
 	// an error reduces by 1/sqrt(2)
-	ASSERT_NEAR( two_results.front().error / std::sqrt(T(2.0)) , result.error , T(1e-10) );
+	EXPECT_NEAR( two_results.front().error / std::sqrt(T(2.0)) , result.error , T(1e-10) );
 }
 
 TYPED_TEST(McHelper, ChiSquareDofWithZero)
@@ -61,7 +61,7 @@ TYPED_TEST(McHelper, ChiSquareDofWithZero)
 	std::vector<hep::mc_result<T>> zero_results;
 	T result = hep::chi_square_dof<T>(zero_results.begin(), zero_results.end());
 
-	ASSERT_NEAR( T() , result , T(1e-10) );
+	EXPECT_NEAR( T() , result , T(1e-10) );
 }
 
 TYPED_TEST(McHelper, ChiSquareDofWithOne)
@@ -73,7 +73,7 @@ TYPED_TEST(McHelper, ChiSquareDofWithOne)
 	};
 	T result = hep::chi_square_dof<T>(one_result.begin(), one_result.end());
 
-	ASSERT_EQ( std::numeric_limits<T>::infinity() , result );
+	EXPECT_EQ( std::numeric_limits<T>::infinity() , result );
 }
 
 TYPED_TEST(McHelper, ChiSquareDofWithTwo)
@@ -87,5 +87,5 @@ TYPED_TEST(McHelper, ChiSquareDofWithTwo)
 	};
 	T result = hep::chi_square_dof<T>(two_results.begin(), two_results.end());
 
-	ASSERT_NEAR( T() , result , T(1e-10) );
+	EXPECT_NEAR( T() , result , T(1e-10) );
 }

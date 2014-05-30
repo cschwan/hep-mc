@@ -59,8 +59,8 @@ TYPED_TEST(Plain, IntegrateConstantFunction)
 
 	hep::mc_result<T> result = hep::plain<T>(1, 10, integrand<T>(0));
 
-	ASSERT_EQ( T(1.0) , result.value );
-	ASSERT_EQ( T()    , result.error );
+	EXPECT_EQ( T(1.0) , result.value );
+	EXPECT_EQ( T()    , result.error );
 }
 
 TYPED_TEST(Plain, IntegrateSineFunction)
@@ -69,7 +69,7 @@ TYPED_TEST(Plain, IntegrateSineFunction)
 
 	hep::mc_result<T> result = hep::plain<T>(1, 1000, integrand<T>(1));
 
-	ASSERT_NEAR( T(1.0) , result.value , result.error );
+	EXPECT_NEAR( T(1.0) , result.value , result.error );
 }
 
 TYPED_TEST(Plain, IntegrateExponentialFunction)
@@ -78,7 +78,7 @@ TYPED_TEST(Plain, IntegrateExponentialFunction)
 
 	hep::mc_result<T> result = hep::plain<T>(1, 1000, integrand<T>(2));
 
-	ASSERT_NEAR( std::exp(T(1.0)) - T(1.0) , result.value , result.error );
+	EXPECT_NEAR( std::exp(T(1.0)) - T(1.0) , result.value , result.error );
 }
 
 TYPED_TEST(Plain, IntegrateSquareFunction)
@@ -87,7 +87,7 @@ TYPED_TEST(Plain, IntegrateSquareFunction)
 
 	hep::mc_result<T> result = hep::plain<T>(1, 10000, integrand<T>(3));
 
-	ASSERT_NEAR( T(1.0) / T(3.0) , result.value , result.error );
+	EXPECT_NEAR( T(1.0) / T(3.0) , result.value , result.error );
 }
 
 TYPED_TEST(Plain, Integrate4DSquareFunction)
@@ -96,7 +96,7 @@ TYPED_TEST(Plain, Integrate4DSquareFunction)
 
 	hep::mc_result<T> result = hep::plain<T>(4, 10000, integrand<T>(4));
 
-	ASSERT_NEAR( T(4.0) / T(3.0), result.value , T(2.0) * result.error );
+	EXPECT_NEAR( T(4.0) / T(3.0), result.value , T(2.0) * result.error );
 }
 
 TYPED_TEST(Plain, IntegrateReverseSqureRootFunction)
@@ -106,5 +106,5 @@ TYPED_TEST(Plain, IntegrateReverseSqureRootFunction)
 	hep::mc_result<T> result = hep::plain<T>(1, 10000, integrand<T>(5));
 
 	// not square-integrable therefore error is not a meaningful quantity
-	ASSERT_NEAR( T(2.0) , result.value , T(1e-2) );
+	EXPECT_NEAR( T(2.0) , result.value , T(1e-2) );
 }

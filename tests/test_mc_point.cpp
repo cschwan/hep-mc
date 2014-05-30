@@ -15,9 +15,9 @@ TYPED_TEST(McPoint, ConstructorAndMemberVariables)
 	std::vector<T> point = { T(0.1), T(0.9), T(0.133), T(0.4) };
 	hep::mc_point<T> result(1000, point);
 
-	ASSERT_NEAR( T(0.001) , result.weight   , T(1e-10) );
-	ASSERT_NEAR( T(0.1)   , result.point[0] , T(1e-10) );
-	ASSERT_NEAR( T(0.9)   , result.point[1] , T(1e-10) );
-	ASSERT_NEAR( T(0.133) , result.point[2] , T(1e-10) );
-	ASSERT_NEAR( T(0.4)   , result.point[3] , T(1e-10) );
+	EXPECT_NEAR( T(0.001) , result.weight   , T(1e-10) );
+	EXPECT_NEAR( T(0.1)   , result.point[0] , T(1e-10) );
+	EXPECT_NEAR( T(0.9)   , result.point[1] , T(1e-10) );
+	EXPECT_NEAR( T(0.133) , result.point[2] , T(1e-10) );
+	EXPECT_NEAR( T(0.4)   , result.point[3] , T(1e-10) );
 }

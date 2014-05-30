@@ -76,5 +76,5 @@ TYPED_TEST(Vegas, IntegrateSquareFunction)
 	);
 
 	// check if the result is within 3-sigma range
-	ASSERT_NEAR( T(1.0) , result.back().value , T(3.0) * result.back().error );
+	EXPECT_NEAR( T(1.0) , result.back().value , T(3.0) * result.back().error );
 }
