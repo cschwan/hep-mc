@@ -167,8 +167,6 @@ inline piecewise_constant_pdf<T> vegas_adjust_grid(
 			T const delta = (current - previous) * this_bin;
 			new_grid(i, new_bin) = current - delta / imp[bin];
 		}
-
-		new_grid(i, bins - 1) = T(1.0);
 	}
 
 	return new_grid;

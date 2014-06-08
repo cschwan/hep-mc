@@ -46,12 +46,12 @@ public:
 	 * uniformly.
 	 */
 	piecewise_constant_pdf(std::size_t dimensions, std::size_t bins)
-		: x(dimensions, std::vector<T>(bins))
+		: x(dimensions, std::vector<T>(bins + 1))
 	{
-		std::vector<T> one_dimensional_grid(bins);
-		for (std::size_t i = 0; i != bins; ++i)
+		std::vector<T> one_dimensional_grid(bins + 1);
+		for (std::size_t i = 0; i != bins + 1; ++i)
 		{
-			one_dimensional_grid[i] = T(1 + i) / T(bins);
+			one_dimensional_grid[i] = T(i) / T(bins);
 		}
 
 		for (std::size_t i = 0; i != dimensions; ++i)
@@ -63,19 +63,19 @@ public:
 	/// Returns the right boundary of `bin` for `dimension`.
 	T operator()(std::size_t dimension, std::size_t bin) const
 	{
-		return x[dimension][bin];
+		return x[dimension][bin + 1];
 	}
 
 	/// Returns the right boundary of `bin` for `dimension`.
 	T& operator()(std::size_t dimension, std::size_t bin)
 	{
-		return x[dimension][bin];
+		return x[dimension][bin + 1];
 	}
 
 	/// The number of bins for each dimension.
 	std::size_t bins() const
 	{
-		return x[0].size();
+		return x[0].size() - 1;
 	}
 
 	/// The number of dimension of this PDF.
@@ -86,37 +86,35 @@ public:
 
 	/**
 	 * Applies the inverse cumulative distribution function to `random_numbers` and updates it with
-	 * the new numbers. The bin indices are written into `bin`. The number returned  by this
-	 * function is the corresponding weight.
+	 * the new numbers. The bin indices are written into `bin`. The number returned by this
+	 * function is the corresponding weight; a weight of one means that this pdf is a uniform one.
 	 */
 	T icdf(std::vector<T>& random_numbers, std::vector<std::size_t>& bin) const
 	{
 		T weight = T(1.0);
 
-		for (std::size_t i = 0; i != x.size(); ++i)
+		for (std::size_t i = 0; i != dimensions(); ++i)
 		{
-			// in every dimension the grid has 'bins' number of bins, the random number determines a
-			// random bin (integer part) in the grid and the exact position inside the bin
-			// (remainder)
-			T const position = random_numbers[i] * x[0].size();
+			T const position = random_numbers[i] * bins();
 
-			// the index of the selected bin
+			// randomly select a bin index (integer part) ...
 			std::size_t const index = position;
+
+			// and the position inside this bin (0 -> left boundary, 1 -> right boundary)
+			T const position_inside_bin = position - index;
 
 			// save the index for later
 			bin[i] = index;
 
-			// compute the value of the previous bin
-			T const previous_bin = (index == 0) ? T() : x[i][index - 1];
+			// determine the left bin boundary and its size
+			T const bin_left = x[i][index];
+			T const bin_size = x[i][index + 1] - bin_left;
 
-			// compute the difference of both bins
-			T const difference = x[i][index] - previous_bin;
-
-			// this rescales the random number to conform to the importance represented by the grid
-			random_numbers[i] = previous_bin + (position - index) * difference;
+			// apply the one-dimensional linear inverse CDF
+			random_numbers[i] = bin_left + position_inside_bin * bin_size;
 
 			// multiply weight for each dimension
-			weight *= difference * x[0].size();
+			weight *= bin_size * bins();
 		}
 
 		return weight;
