@@ -24,11 +24,12 @@
 #include <hep/mc/mc_result.hpp>
 #include <hep/mc/piecewise_constant_pdf.hpp>
 
+#include <cmath>
 #include <cstddef>
 #include <iostream>
+#include <functional>
 #include <limits>
 #include <random>
-#include <functional>
 #include <vector>
 
 namespace hep
@@ -152,20 +153,20 @@ inline piecewise_constant_pdf<T> vegas_adjust_grid(
 		current = T();
 		T this_bin = T();
 
-		int bin = -1;
+		std::size_t bin = 0;
 
 		for (std::size_t new_bin = 0; new_bin != bins - 1; ++new_bin)
 		{
-			while (this_bin < average_per_bin)
+			for (; this_bin < average_per_bin; ++bin)
 			{
-				this_bin += imp[++bin];
+				this_bin += imp[bin];
 				previous = current;
 				current = grid(i, bin);
 			}
 
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
-			new_grid(i, new_bin) = current - delta / imp[bin];
+			new_grid(i, new_bin) = current - delta / imp[bin - 1];
 		}
 	}
 
@@ -216,8 +217,8 @@ inline vegas_iteration_result<T> vegas_iteration(
 		// evaluate function at the specified point and multiply with its weight
 		T const value = function(point) * point.weight;
 
-		// perform kahan summation 'sum += value' - this improves precision if
-		// T is single precision and many values are added
+		// perform kahan summation 'sum += value' - this improves precision if T is single precision
+		// and many values are added
 		T const y = value - compensation;
 		T const t = average + y;
 		compensation = (t - average) - y;
@@ -225,8 +226,8 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		T const square = value * value;
 
-		// no kahan summation needed, because it only affects the result
-		// indirectly via the grid recomputation
+		// no kahan summation needed, because it only affects the result indirectly via the grid
+		// recomputation
 		averaged_squares += square;
 
 		// save square for each bin in order to adjust the grid later
@@ -267,21 +268,17 @@ inline bool vegas_verbose_callback(
 	std::cout << "iteration " << (results.size()-1) << " finished.\n";
 
 	// print result for this iteration
-	std::cout << "this iteration: N=" << results.back().calls;
-	std::cout << " E=" << results.back().value << " +- ";
-	std::cout << results.back().error << " (";
-	std::cout << (T(100.0) * results.back().error /
-		std::abs(results.back().value));
-	std::cout << "%)\n";
+	std::cout << "this iteration: N=" << results.back().calls << " E=" << results.back().value;
+	std::cout << " +- " << results.back().error << " (";
+	std::cout << (T(100.0) * results.back().error / std::abs(results.back().value)) << "%)\n";
 
 	// compute cumulative results
 	auto const result = cumulative_result<T>(results.begin(), results.end());
 	T const chi = chi_square_dof<T>(results.begin(), results.end());
 
 	// print the combined result
-	std::cout << "all iterations: N=" << result.calls;
-	std::cout << " E=" << result.value << " +- " << result.error;
-	std::cout << " (" << (T(100.0) * result.error / std::abs(result.value));
+	std::cout << "all iterations: N=" << result.calls << " E=" << result.value << " +- ";
+	std::cout << result.error << " (" << (T(100.0) * result.error / std::abs(result.value));
 	std::cout << "%) chi^2/dof=" << chi << "\n\n";
 
 	std::cout.flush();
