@@ -16,8 +16,7 @@ int main()
 	double reference_result = 1.0 / 3.0;
 
 	// print reference result
-	std::cout << "computing integral of x^2 from 0 to 1\n";
-	std::cout << "reference result is " << reference_result << "\n\n";
+	std::cout << "computing integral of x^2 from 0 to 1 which is " << reference_result << "\n\n";
 
 	// set the verbose vegas callback function
 	hep::vegas_callback<double>(hep::vegas_verbose_callback<double>);
@@ -33,14 +32,11 @@ int main()
 	// results contains the estimations for each iteration. we could take the result from last
 	// iteration, but here we instead choose to combine the results of all iterations but the first
 	// one in a cumulative result
-	auto result = hep::cumulative_result<double>(results.begin() + 1,
-		results.end());
-	double chi_square_dof = hep::chi_square_dof<double>(results.begin() + 1,
-		results.end());
+	auto result = hep::cumulative_result<double>(results.begin() + 1, results.end());
+	double chi_square_dof = hep::chi_square_dof<double>(results.begin() + 1, results.end());
 
-	std::cout << "cumulative result (without first iteration):\n";
-	std::cout << "N=" << result.calls << " I=" << result.value << " +- ";
-	std::cout << result.error << " chi^2/dof=" << chi_square_dof << "\n";
+	std::cout << "cumulative result (without first iteration):\nN=" << result.calls << " I=";
+	std::cout << result.value << " +- " << result.error << " chi^2/dof=" << chi_square_dof << "\n";
 
 	return 0;
 }

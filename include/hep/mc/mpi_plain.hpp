@@ -68,8 +68,7 @@ inline mc_result<T> mpi_plain(
 	{
 		// seed every random number generator differently
 		std::size_t const r = rank * 10;
-		std::seed_seq sequence{r + 0, r + 1, r + 2, r + 3, r + 4,
-			r + 5, r + 6, r + 7, r + 8, r + 9};
+		std::seed_seq sequence{r+0, r+1, r+2, r+3, r+4, r+5, r+6, r+7, r+8, r+9};
 		generator.seed(sequence);
 	}
 
@@ -86,12 +85,10 @@ inline mc_result<T> mpi_plain(
 
 	if (mpi_single_generator())
 	{
-		mpi_advance_generator_before<T>(
-			dimensions, calls, rank, world, generator);
+		mpi_advance_generator_before<T>(dimensions, calls, rank, world, generator);
 	}
 
-	auto result = plain_iteration<T>(
-		dimensions, calls, sub_calls, function, generator);
+	auto result = plain_iteration<T>(dimensions, calls, sub_calls, function, generator);
 
 	sum = result.value * T(result.calls);
 	sum_of_squares = T(result.calls) * (result.value * result.value + T(calls) *
@@ -99,9 +96,7 @@ inline mc_result<T> mpi_plain(
 
 	if (mpi_single_generator())
 	{
-		mpi_advance_generator_after<T>(
-			dimensions, calls, sub_calls, rank, world, generator
-		);
+		mpi_advance_generator_after<T>(dimensions, calls, sub_calls, rank, world, generator);
 	}
 
 	MPI_Allreduce(

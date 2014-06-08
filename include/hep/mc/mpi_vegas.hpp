@@ -120,8 +120,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	{
 		// seed every random number generator differently
 		std::size_t const r = rank * 10;
-		std::seed_seq sequence{r + 0, r + 1, r + 2, r + 3, r + 4,
-			r + 5, r + 6, r + 7, r + 8, r + 9};
+		std::seed_seq sequence{r+0, r+1, r+2, r+3, r+4, r+5, r+6, r+7, r+8, r+9};
 		generator.seed(sequence);
 	}
 
@@ -137,8 +136,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	{
 		if (mpi_single_generator())
 		{
-			mpi_advance_generator_before<T>(
-				grid.dimensions(), *i, rank, world, generator);
+			mpi_advance_generator_before<T>(grid.dimensions(), *i, rank, world, generator);
 		}
 
 		std::size_t const calls = (*i / world) +
@@ -147,8 +145,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 		if (mpi_single_generator())
 		{
-			mpi_advance_generator_after<T>(
-				grid.dimensions(), *i, calls, rank, world, generator);
+			mpi_advance_generator_after<T>(grid.dimensions(), *i, calls, rank, world, generator);
 		}
 
 		// add up results
@@ -162,8 +159,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 		);
 
 		// calculate accumulated results
-		results.push_back(vegas_iteration_result<T>(*i, grid,
-			result.adjustment_data));
+		results.push_back(vegas_iteration_result<T>(*i, grid, result.adjustment_data));
 
 		if (!mpi_vegas_callback<T>()(communicator, results))
 		{
