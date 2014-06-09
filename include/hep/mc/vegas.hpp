@@ -119,7 +119,7 @@ inline piecewise_constant_pdf<T> vegas_adjust_grid(
 		{
 			T const sum = previous + current;
 			previous = current;
-			current = smoothed[bin];
+			current = smoothed[bin + 1];
 			smoothed[bin] = (sum + current) / T(3.0);
 			norm += smoothed[bin];
 		}
