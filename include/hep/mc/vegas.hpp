@@ -101,30 +101,29 @@ inline piecewise_constant_pdf<T> vegas_adjust_grid(
 	std::size_t const bins       = grid.bins();
 
 	piecewise_constant_pdf<T> new_grid(dimensions, bins);
+	std::vector<T> tmp(bins);
 
 	for (std::size_t i = 0; i != dimensions; ++i)
 	{
-		std::vector<T> smoothed(
-			adjustment_data.begin() + (i+0) * bins,
-			adjustment_data.begin() + (i+1) * bins
-		);
+		// load the binned sum of squares into 'tmp'
+		tmp.assign(adjustment_data.begin() + (i+0) * bins, adjustment_data.begin() + (i+1) * bins);
 
-		// smooth the entries stored in grid for dimension i
-		T previous = smoothed[0];
-		T current = smoothed[1];
-		smoothed[0] = T(0.5) * (previous + current);
-		T norm = smoothed[0];
+		// smooth the entries by averaging over the neighbor(s)
+		T previous = tmp[0];
+		T current = tmp[1];
+		tmp[0] = T(0.5) * (previous + current);
+		T norm = tmp[0];
 
-		for (std::size_t bin = 1; bin < bins - 1; ++bin)
+		for (std::size_t bin = 1; bin != bins - 1; ++bin)
 		{
 			T const sum = previous + current;
 			previous = current;
-			current = smoothed[bin + 1];
-			smoothed[bin] = (sum + current) / T(3.0);
-			norm += smoothed[bin];
+			current = tmp[bin + 1];
+			tmp[bin] = (sum + current) / T(3.0);
+			norm += tmp[bin];
 		}
-		smoothed[bins - 1] = T(0.5) * (previous + current);
-		norm += smoothed[bins - 1];
+		tmp.back() = T(0.5) * (previous + current);
+		norm += tmp.back();
 
 		// if norm is zero there is nothing to do here
 		if (norm == T())
@@ -132,41 +131,38 @@ inline piecewise_constant_pdf<T> vegas_adjust_grid(
 			continue;
 		}
 
-		// compute the importance function for each bin
+		// compute the importance function for each bin and overwrite it into 'tmp'
 		T average_per_bin = T();
 
-		std::vector<T> imp(bins);
-
-		for (std::size_t bin = 0; bin < bins; ++bin)
+		for (std::size_t bin = 0; bin != bins; ++bin)
 		{
-			if (smoothed[bin] > T())
+			if (tmp[bin] != T())
 			{
-				T const r = smoothed[bin] / norm;
+				T const r = tmp[bin] / norm;
 				T const impfun = std::pow((r - T(1.0)) / std::log(r), alpha);
 				average_per_bin += impfun;
-				imp[bin] = impfun;
+				tmp[bin] = impfun;
 			}
 		}
 		average_per_bin /= bins;
 
-		// redefine the size of each bin
-		current = T();
 		T this_bin = T();
-
 		std::size_t bin = 0;
 
+		// redefine the size of each bin
 		for (std::size_t new_bin = 0; new_bin != bins - 1; ++new_bin)
 		{
 			for (; this_bin < average_per_bin; ++bin)
 			{
-				this_bin += imp[bin];
-				previous = current;
-				current = grid(i, bin);
+				this_bin += tmp[bin];
 			}
 
+			T const previous = (bin != 1) ? grid(i, bin - 2) : T();
+			T const current = grid(i, bin - 1);
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
-			new_grid(i, new_bin) = current - delta / imp[bin - 1];
+
+			new_grid(i, new_bin) = current - delta / tmp[bin - 1];
 		}
 	}
 
