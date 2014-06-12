@@ -9,6 +9,7 @@ nobase_include_HEADERS = \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc/vegas_pdf.hpp \
+	hep/mc/vegas_point.hpp \
 	hep/mc.hpp \
 	hep/mc-mpi.hpp
 

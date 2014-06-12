@@ -23,6 +23,7 @@
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
 #include <hep/mc/vegas_pdf.hpp>
+#include <hep/mc/vegas_point.hpp>
 
 #include <cmath>
 #include <cstddef>
@@ -63,27 +64,6 @@ struct vegas_iteration_result : public mc_result<T>
 
 	/// The data used to adjust the `grid` for a subsequent iteration.
 	std::vector<T> adjustment_data;
-};
-
-/// A point from the hypercube with the additional information in which bins the point lies.
-template <typename T>
-struct vegas_point : public mc_point<T>
-{
-	/// Constructor.
-	vegas_point(
-		std::size_t total_calls,
-		std::vector<T>& random_numbers,
-		std::vector<std::size_t>& bin,
-		piecewise_constant_pdf<T> const& grid
-	)
-		: mc_point<T>(total_calls, random_numbers)
-		, bin(bin)
-	{
-		this->weight *= grid.icdf(random_numbers, bin);
-	}
-
-	/// The indices that determine the bins of the point in the grid.
-	std::vector<std::size_t> const& bin;
 };
 
 /**

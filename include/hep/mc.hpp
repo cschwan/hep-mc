@@ -25,5 +25,6 @@
 #include <hep/mc/plain.hpp>
 #include <hep/mc/vegas.hpp>
 #include <hep/mc/vegas_pdf.hpp>
+#include <hep/mc/vegas_point.hpp>
 
 #endif
