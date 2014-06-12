@@ -6,9 +6,9 @@ nobase_include_HEADERS = \
 	hep/mc/mpi_helper.hpp \
 	hep/mc/mpi_plain.hpp \
 	hep/mc/mpi_vegas.hpp \
-	hep/mc/piecewise_constant_pdf.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/vegas.hpp \
+	hep/mc/vegas_pdf.hpp \
 	hep/mc.hpp \
 	hep/mc-mpi.hpp
 

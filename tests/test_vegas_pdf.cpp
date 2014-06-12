@@ -1,20 +1,20 @@
 #include <gtest/gtest.h>
 
-#include <hep/mc/piecewise_constant_pdf.hpp>
+#include <hep/mc/vegas_pdf.hpp>
 
 #include <cstddef>
 #include <sstream>
 #include <vector>
 
 typedef testing::Types<float, double, long double> MyT;
-template <typename T> class PiecewiseConstantPdf : public testing::Test { };
-TYPED_TEST_CASE(PiecewiseConstantPdf, MyT);
+template <typename T> class VegasPdf : public testing::Test { };
+TYPED_TEST_CASE(VegasPdf, MyT);
 
-TYPED_TEST(PiecewiseConstantPdf, ConstructorAndMembers)
+TYPED_TEST(VegasPdf, ConstructorAndMembers)
 {
 	typedef TypeParam T;
 
-	hep::piecewise_constant_pdf<T> pdf(2, 4);
+	hep::vegas_pdf<T> pdf(2, 4);
 
 	EXPECT_EQ( 4U , pdf.bins() );
 	EXPECT_EQ( 2U , pdf.dimensions() );
@@ -29,11 +29,11 @@ TYPED_TEST(PiecewiseConstantPdf, ConstructorAndMembers)
 	EXPECT_EQ( T(1.00) , pdf(1, 3) );
 }
 
-TYPED_TEST(PiecewiseConstantPdf, SetAndGetAndCopyConstructor)
+TYPED_TEST(VegasPdf, SetAndGetAndCopyConstructor)
 {
 	typedef TypeParam T;
 
-	hep::piecewise_constant_pdf<T> pdf1(2, 3);
+	hep::vegas_pdf<T> pdf1(2, 3);
 
 	pdf1(0, 0) = T(0.0);
 	pdf1(0, 1) = T(0.1);
@@ -49,7 +49,7 @@ TYPED_TEST(PiecewiseConstantPdf, SetAndGetAndCopyConstructor)
 	EXPECT_EQ( T(0.4) , pdf1(1, 1) );
 	EXPECT_EQ( T(0.5) , pdf1(1, 2) );
 
-	hep::piecewise_constant_pdf<T> pdf2(pdf1);
+	hep::vegas_pdf<T> pdf2(pdf1);
 
 	EXPECT_EQ( T(0.0) , pdf2(0, 0) );
 	EXPECT_EQ( T(0.1) , pdf2(0, 1) );
@@ -59,7 +59,7 @@ TYPED_TEST(PiecewiseConstantPdf, SetAndGetAndCopyConstructor)
 	EXPECT_EQ( T(0.5) , pdf2(1, 2) );
 }
 
-TYPED_TEST(PiecewiseConstantPdf, InverseCumulativeDistributionFunction)
+TYPED_TEST(VegasPdf, InverseCumulativeDistributionFunction)
 {
 	typedef TypeParam T;
 
@@ -67,7 +67,7 @@ TYPED_TEST(PiecewiseConstantPdf, InverseCumulativeDistributionFunction)
 	std::vector<std::size_t> bin(1);
 
 	// check a uniform pdf
-	hep::piecewise_constant_pdf<T> pdf(1, 5);
+	hep::vegas_pdf<T> pdf(1, 5);
 
 	for (std::size_t i = 0; i != 99; ++i)
 	{
@@ -124,11 +124,11 @@ TYPED_TEST(PiecewiseConstantPdf, InverseCumulativeDistributionFunction)
 	}
 }
 
-TYPED_TEST(PiecewiseConstantPdf, StreamOperators)
+TYPED_TEST(VegasPdf, StreamOperators)
 {
 	typedef TypeParam T;
 
-	hep::piecewise_constant_pdf<T> pdf1(2, 3);
+	hep::vegas_pdf<T> pdf1(2, 3);
 
 	pdf1(0, 0) = T(0.0);
 	pdf1(0, 1) = T(0.1);
@@ -140,7 +140,7 @@ TYPED_TEST(PiecewiseConstantPdf, StreamOperators)
 	std::stringstream iostream;
 
 	iostream << pdf1;
-	hep::piecewise_constant_pdf<T> pdf2(2, 3);
+	hep::vegas_pdf<T> pdf2(2, 3);
 	iostream >> pdf2;
 
 	EXPECT_NEAR( T(0.0) , pdf2(0, 0) , T(1e-10) );

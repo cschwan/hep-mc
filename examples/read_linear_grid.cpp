@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 		std::ifstream input(argv[1]);
 
 		// we need to know the dimensions and bins beforehand!
-		hep::piecewise_constant_pdf<double> grid(2, 5);
+		hep::vegas_pdf<double> grid(2, 5);
 
 		// read grid itself
 		input >> grid;

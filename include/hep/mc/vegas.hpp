@@ -22,7 +22,7 @@
 #include <hep/mc/mc_helper.hpp>
 #include <hep/mc/mc_point.hpp>
 #include <hep/mc/mc_result.hpp>
-#include <hep/mc/piecewise_constant_pdf.hpp>
+#include <hep/mc/vegas_pdf.hpp>
 
 #include <cmath>
 #include <cstddef>
@@ -45,7 +45,7 @@ struct vegas_iteration_result : public mc_result<T>
 	/// Constructor.
 	vegas_iteration_result(
 		std::size_t calls,
-		piecewise_constant_pdf<T> const& grid,
+		vegas_pdf<T> const& grid,
 		std::vector<T> const& adjustment_data
 	)
 		: mc_result<T>(
@@ -58,8 +58,8 @@ struct vegas_iteration_result : public mc_result<T>
 	{
 	}
 
-	/// The grid used to obtain this result.
-	piecewise_constant_pdf<T> grid;
+	/// The pdf used to obtain this result.
+	vegas_pdf<T> grid;
 
 	/// The data used to adjust the `grid` for a subsequent iteration.
 	std::vector<T> adjustment_data;
@@ -92,15 +92,15 @@ struct vegas_point : public mc_point<T>
  * implementation from Thomas Hahn.
  */
 template <typename T>
-inline piecewise_constant_pdf<T> vegas_adjust_grid(
+inline vegas_pdf<T> vegas_adjust_grid(
 	T alpha,
-	piecewise_constant_pdf<T> const& grid,
+	vegas_pdf<T> const& pdf,
 	std::vector<T> const& adjustment_data
 ) {
-	std::size_t const dimensions = grid.dimensions();
-	std::size_t const bins       = grid.bins();
+	std::size_t const dimensions = pdf.dimensions();
+	std::size_t const bins       = pdf.bins();
 
-	piecewise_constant_pdf<T> new_grid(dimensions, bins);
+	vegas_pdf<T> new_grid(dimensions, bins);
 	std::vector<T> tmp(bins);
 
 	for (std::size_t i = 0; i != dimensions; ++i)
@@ -157,8 +157,8 @@ inline piecewise_constant_pdf<T> vegas_adjust_grid(
 				this_bin += tmp[bin];
 			}
 
-			T const previous = (bin != 1) ? grid(i, bin - 2) : T();
-			T const current = grid(i, bin - 1);
+			T const previous = (bin != 1) ? pdf(i, bin - 2) : T();
+			T const current = pdf(i, bin - 1);
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
 
@@ -183,7 +183,7 @@ template <typename T, typename F, typename R>
 inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
 	std::size_t total_calls,
-	piecewise_constant_pdf<T> const& grid,
+	vegas_pdf<T> const& grid,
 	F&& function,
 	R&& generator
 ) {
@@ -315,7 +315,7 @@ template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	piecewise_constant_pdf<T> const& start_grid,
+	vegas_pdf<T> const& start_grid,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
@@ -374,7 +374,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	return vegas(
 		iteration_calls,
 		function,
-		piecewise_constant_pdf<T>(dimensions, bins),
+		vegas_pdf<T>(dimensions, bins),
 		alpha,
 		generator
 	);

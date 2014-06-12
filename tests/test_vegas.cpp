@@ -65,7 +65,7 @@ TYPED_TEST(Vegas, CompareWithCubaData)
 	typedef TypeParam T;
 
 	// uniform distribution
-	hep::piecewise_constant_pdf<T> old_grid(1, 128);
+	hep::vegas_pdf<T> old_grid(1, 128);
 
 	std::vector<T> adjustment_data(128 + 2);
 	for (std::size_t i = 0; i != 128; ++i)

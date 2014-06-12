@@ -1,5 +1,5 @@
-#ifndef HEP_MC_PIECEWISE_CONSTANT_PDF_HPP
-#define HEP_MC_PIECEWISE_CONSTANT_PDF_HPP
+#ifndef HEP_MC_VEGAS_PDF_HPP
+#define HEP_MC_VEGAS_PDF_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -28,8 +28,8 @@ namespace hep
 
 /**
  * A class for generating random numbers according to a piecewise constant probability distribution
- * function. The PDF can generate random numbers for any dimension by using a separable pdf, i.e.
- * for \f$ n \f$-dimensions the PDF looks like
+ * function with varying bin widths. The PDF generates random numbers for any dimension by using
+ * a separable pdf, i.e. for \f$ n \f$-dimensions the PDF is
  * \f[
  *     p \left( x_1, x_2, \ldots, x_n \right) = \prod_{i=1}^n p_i \left( x_i \right)
  * \f]
@@ -37,15 +37,15 @@ namespace hep
  * The value of the PDF is determined by the inverse size of the bins.
  */
 template <typename T>
-class piecewise_constant_pdf
+class vegas_pdf
 {
 public:
 	/**
 	 * Constructor. Constructs a piecewise constant PDF with the given `dimensions`, each dimension
-	 * subdivided by given number of `bins`. The newly constructed PDF generates random numbers
-	 * uniformly.
+	 * subdivided by given number of `bins`. Each bin has the same size and therefore this PDF
+	 * generates random numbers uniformly.
 	 */
-	piecewise_constant_pdf(std::size_t dimensions, std::size_t bins)
+	vegas_pdf(std::size_t dimensions, std::size_t bins)
 		: x(dimensions, std::vector<T>(bins + 1))
 	{
 		std::vector<T> one_dimensional_grid(bins + 1);
@@ -124,11 +124,11 @@ private:
 	std::vector<std::vector<T>> x;
 };
 
-/// Output operator for \ref piecewise_constant_pdf.
+/// Output operator for \ref vegas_pdf.
 template <typename CharT, typename Traits, typename T>
 inline std::basic_ostream<CharT, Traits>& operator<<(
 	std::basic_ostream<CharT, Traits>& out,
-	piecewise_constant_pdf<T> const& pdf
+	vegas_pdf<T> const& pdf
 ) {
 	for (std::size_t i = 0; i != pdf.dimensions(); ++i)
 	{
@@ -148,13 +148,13 @@ inline std::basic_ostream<CharT, Traits>& operator<<(
 }
 
 /**
- * Input operator for \ref piecewise_constant_pdf. Note that the PDF ist not resized and therefore
- * must have the correct `dimensions` and `bins` before calling this function.
+ * Input operator for \ref vegas_pdf. Note that the PDF is not resized and therefore must have
+ * correct `dimensions` and `bins` before calling this function.
  */
 template <typename CharT, typename Traits, typename T>
 inline std::basic_istream<CharT, Traits>& operator>>(
 	std::basic_istream<CharT, Traits>& in,
-	piecewise_constant_pdf<T>& pdf
+	vegas_pdf<T>& pdf
 ) {
 	for (std::size_t i = 0; i != pdf.dimensions(); ++i)
 	{
