@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <hep/mc/vegas.hpp>
+#include "hep/mc/vegas.hpp"
 
 #include <cmath>
 #include <cstddef>

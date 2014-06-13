@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/vegas_pdf.hpp>
-#include <hep/mc/mpi_datatype.hpp>
-#include <hep/mc/mpi_helper.hpp>
-#include <hep/mc/vegas.hpp>
+#include "hep/mc/vegas_pdf.hpp"
+#include "hep/mc/mpi_datatype.hpp"
+#include "hep/mc/mpi_helper.hpp"
+#include "hep/mc/vegas.hpp"
 
 #include <cstddef>
 #include <random>

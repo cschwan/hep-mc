@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <hep/mc/mc_result.hpp>
+#include "hep/mc/mc_result.hpp"
 
 typedef testing::Types<float, double, long double> MyT;
 template <typename T> class McResult : public testing::Test { };

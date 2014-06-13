@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <hep/mc/vegas_pdf.hpp>
+#include "hep/mc/vegas_pdf.hpp"
 
 #include <cstddef>
 #include <sstream>

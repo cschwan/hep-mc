@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <hep/mc/plain.hpp>
+#include "hep/mc/plain.hpp"
 
 #include <cmath>
 #include <cstddef>

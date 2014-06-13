@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/mpi_datatype.hpp>
-#include <hep/mc/mpi_helper.hpp>
-#include <hep/mc/mpi_plain.hpp>
-#include <hep/mc/mpi_vegas.hpp>
+#include "hep/mc/mpi_datatype.hpp"
+#include "hep/mc/mpi_helper.hpp"
+#include "hep/mc/mpi_plain.hpp"
+#include "hep/mc/mpi_vegas.hpp"
 
 #endif

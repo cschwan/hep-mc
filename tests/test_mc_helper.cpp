@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <hep/mc/mc_helper.hpp>
+#include "hep/mc/mc_helper.hpp"
 
 #include <limits>
 

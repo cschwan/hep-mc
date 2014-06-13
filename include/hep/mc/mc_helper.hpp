@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <hep/mc/mc_result.hpp>
+#include "hep/mc/mc_result.hpp"
 
 #include <iterator>
 #include <limits>
