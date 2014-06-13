@@ -1,6 +1,11 @@
 New in 0.2.2.9999:
 ==================
 
+- support for MPI can now be enabled with ``--enable-mpi`` independently from
+  the examples. If MPI is enabled, the MPI examples are built if examples are
+  activated and the MPI tests are checked if tests are activated. The MPI
+  headers are installed in any case because MPI must be explicity requested by
+  including ``hep/mc-mpi.hpp``
 - renamed ``hep::linear_grid`` to ``hep::vegas_pdf`` and moved code from VEGAS
   into this class
 - add more unit tests, use Google Test as testing framework

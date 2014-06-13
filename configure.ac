@@ -27,11 +27,16 @@ AC_CONFIG_SRCDIR([include/hep/mc.hpp])
 # into the specified header
 AC_CONFIG_HEADERS([config.hpp])
 
+# MPI
+AX_MPI_FLAGS_INIT
+AC_ARG_ENABLE([mpi], AS_HELP_STRING([--enable-mpi], [Enable use of the Message Passing Interface]))
+AM_CONDITIONAL([HAVE_MPI], [test "x$enable_mpi" = "xyes"])
+AS_IF([test "x$enable_mpi" = "xyes"], [AX_MPI_FLAGS])
+
 # EXAMPLES
 AC_ARG_ENABLE([examples], AS_HELP_STRING([--enable-examples],
 	[Enable building of example programs]))
 AM_CONDITIONAL([HAVE_EXAMPLES], [test "x$enable_examples" = "xyes"])
-AS_IF([test "x$enable_examples" = "xyes"], [LX_FIND_MPI])
 
 # DOXYGEN
 AC_ARG_ENABLE([doxygen], AS_HELP_STRING([--enable-doxygen],

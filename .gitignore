@@ -6,6 +6,6 @@ config.hpp.in~
 configure
 m4/*
 !m4/ax_cxx_compile_stdcxx_11.m4
-!m4/lx_find_mpi.m4
+!m4/ax_mpi_flags.m4
 *Makefile
 *Makefile.in
