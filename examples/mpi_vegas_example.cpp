@@ -90,8 +90,8 @@ int main(int argc, char* argv[])
 		MPI_COMM_WORLD
 	);
 
-	auto result = hep::cumulative_result<double>(results.begin(), results.end());
-	double chi_square_dof = hep::chi_square_dof<double>(results.begin(), results.end());
+	auto result = hep::cumulative_result(results.begin(), results.end());
+	double chi_square_dof = hep::chi_square_dof(results.begin(), results.end());
 
 	if (rank == 0)
 	{

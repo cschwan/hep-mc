@@ -24,6 +24,14 @@
 #include <iterator>
 #include <limits>
 
+namespace
+{
+
+template <typename Iterator>
+using get_T = typename std::iterator_traits<Iterator>::value_type::numeric_type;
+
+}
+
 namespace hep
 {
 
@@ -40,16 +48,16 @@ namespace hep
  * N &= \sum_i N_i
  * \f}
  */
-template <typename T, typename MCResultIterator>
-inline mc_result<T> cumulative_result(
-	MCResultIterator begin,
-	MCResultIterator end
-) {
+template <typename Iterator>
+inline mc_result<get_T<Iterator>> cumulative_result(Iterator begin, Iterator end)
+{
+	typedef get_T<Iterator> T;
+
 	std::size_t calls = 0;
 	T estimate = T();
 	T variance = T();
 
-	for (MCResultIterator i = begin; i != end; ++i)
+	for (Iterator i = begin; i != end; ++i)
 	{
 		T const tmp = T(1.0) / (i->error * i->error);
 		calls += i->calls;
@@ -78,10 +86,12 @@ inline mc_result<T> cumulative_result(
  * If the range [begin, end) is empty, the result is zero and if it contains one element the result
  * is infinity.
  */
-template <typename T, typename MCResultIterator>
-inline T chi_square_dof(MCResultIterator begin, MCResultIterator end)
+template <typename Iterator>
+inline get_T<Iterator> chi_square_dof(Iterator begin, Iterator end)
 {
-	mc_result<T> const result = cumulative_result<T>(begin, end);
+	typedef get_T<Iterator> T;
+
+	mc_result<T> const result = cumulative_result(begin, end);
 	T sum = T();
 	std::size_t n = 0;
 
@@ -90,7 +100,7 @@ inline T chi_square_dof(MCResultIterator begin, MCResultIterator end)
 		return std::numeric_limits<T>::infinity();
 	}
 
-	for (MCResultIterator i = begin; i != end; ++i)
+	for (Iterator i = begin; i != end; ++i)
 	{
 		T const tmp = i->value - result.value;
 		sum += tmp * tmp / (i->error * i->error);

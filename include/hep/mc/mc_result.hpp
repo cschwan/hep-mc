@@ -43,6 +43,9 @@ struct mc_result
 	{
 	}
 
+	/// The numeric type used for member variables.
+	typedef T numeric_type;
+
 	/// The number of function evaluations \f$ N \f$ performed to obtain this result.
 	std::size_t calls;
 

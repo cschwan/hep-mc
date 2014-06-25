@@ -13,7 +13,7 @@ TYPED_TEST(McHelper, CumulativeResultWithZero)
 	typedef TypeParam T;
 
 	std::vector<hep::mc_result<T>> zero_results;
-	auto result = hep::cumulative_result<T>(zero_results.begin(), zero_results.end());
+	auto result = hep::cumulative_result(zero_results.begin(), zero_results.end());
 
 	// assert that results are reasonable even if there is no real input
 	EXPECT_EQ( 0U  , result.calls );
@@ -28,7 +28,7 @@ TYPED_TEST(McHelper, CumulativeResultWithOne)
 	std::vector<hep::mc_result<T>> one_result = {
 		hep::mc_result<T>(1000, T(10.0), T(20.0))
 	};
-	auto result = hep::cumulative_result<T>(one_result.begin(), one_result.end());
+	auto result = hep::cumulative_result(one_result.begin(), one_result.end());
 
 	EXPECT_EQ( one_result.front().calls , result.calls );
 	EXPECT_NEAR( one_result.front().value , result.value , T(1e-10) );
@@ -44,7 +44,7 @@ TYPED_TEST(McHelper, CumulativeResultWithTwo)
 		hep::mc_result<T>(100, T(100.0), T(200.0)),
 		hep::mc_result<T>(100, T(100.0), T(200.0))
 	};
-	auto result = hep::cumulative_result<T>(two_results.begin(), two_results.end());
+	auto result = hep::cumulative_result(two_results.begin(), two_results.end());
 
 	// should give two times the calls
 	EXPECT_EQ( 2 * two_results.front().calls , result.calls );
@@ -59,7 +59,7 @@ TYPED_TEST(McHelper, ChiSquareDofWithZero)
 	typedef TypeParam T;
 
 	std::vector<hep::mc_result<T>> zero_results;
-	T result = hep::chi_square_dof<T>(zero_results.begin(), zero_results.end());
+	T result = hep::chi_square_dof(zero_results.begin(), zero_results.end());
 
 	EXPECT_NEAR( T() , result , T(1e-10) );
 }
@@ -71,7 +71,7 @@ TYPED_TEST(McHelper, ChiSquareDofWithOne)
 	std::vector<hep::mc_result<T>> one_result = {
 		hep::mc_result<T>(1000, T(10.0), T(20.0))
 	};
-	T result = hep::chi_square_dof<T>(one_result.begin(), one_result.end());
+	T result = hep::chi_square_dof(one_result.begin(), one_result.end());
 
 	EXPECT_EQ( std::numeric_limits<T>::infinity() , result );
 }
@@ -85,7 +85,7 @@ TYPED_TEST(McHelper, ChiSquareDofWithTwo)
 		hep::mc_result<T>(100, T(100.0), T(200.0)),
 		hep::mc_result<T>(100, T(100.0), T(200.0))
 	};
-	T result = hep::chi_square_dof<T>(two_results.begin(), two_results.end());
+	T result = hep::chi_square_dof(two_results.begin(), two_results.end());
 
 	EXPECT_NEAR( T() , result , T(1e-10) );
 }

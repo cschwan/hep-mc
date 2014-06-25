@@ -1,6 +1,9 @@
 New in 0.2.2.9999:
 ==================
 
+- changed interfaces ``hep::cumulative_result`` and ``hep::chi_square_dof``
+  which no longer need to be called with the numeric type; the type is
+  automatically determined by the iterators
 - support for MPI can now be enabled with ``--enable-mpi`` independently from
   the examples. If MPI is enabled, the MPI examples are built if examples are
   activated and the MPI tests are checked if tests are activated. The MPI
