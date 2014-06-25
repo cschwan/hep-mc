@@ -38,8 +38,8 @@ struct mc_result
 	/// Constructor. If `calls` is set to zero, both `value` and `error` are also set to zero.
 	mc_result(std::size_t calls, T sum, T sum_of_squares)
 		: calls(calls)
-		, value(calls == 0 ? T() : sum / T(calls))
-		, error(calls == 0 ? T() : std::sqrt(sum_of_squares - value * value * T(calls)) / T(calls))
+		, value(calls < 1 ? T() : sum / T(calls))
+		, error(calls < 1 ? T() : std::sqrt((sum_of_squares / calls - value * value) / T(calls - 1)))
 	{
 	}
 
@@ -58,7 +58,7 @@ template <typename T>
 inline mc_result<T> create_result(std::size_t calls, T value, T error)
 {
 	T sum = T(calls) * value;
-	T sum_of_squares = T(calls) * (value * value + T(calls) * error * error);
+	T sum_of_squares = T(calls) * (value * value + T(calls - 1) * error * error);
 
 	return mc_result<T>(calls, sum, sum_of_squares);
 }

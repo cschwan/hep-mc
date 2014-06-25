@@ -63,7 +63,7 @@ inline mc_result<T> cumulative_result(
 	return mc_result<T>(
 		calls,
 		T(calls) * estimate,
-		T(calls) * (estimate * estimate + T(calls) * variance)
+		T(calls) * (estimate * estimate + T(calls - 1) * variance)
 	);
 }
 
