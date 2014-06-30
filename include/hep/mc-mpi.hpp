@@ -23,5 +23,6 @@
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_plain.hpp"
 #include "hep/mc/mpi_vegas.hpp"
+#include "hep/mc/mpi_vegas_callback.hpp"
 
 #endif

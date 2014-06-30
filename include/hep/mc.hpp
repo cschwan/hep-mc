@@ -24,6 +24,7 @@
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/vegas.hpp"
+#include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"

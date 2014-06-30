@@ -22,14 +22,13 @@
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
+#include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
 
 #include <cmath>
 #include <cstddef>
-#include <iostream>
-#include <functional>
 #include <limits>
 #include <random>
 #include <vector>
@@ -192,69 +191,6 @@ inline vegas_iteration_result<T> vegas_iteration(
 	adjustment_data[dimensions * bins + 1] = averaged_squares * T(total_calls) * T(total_calls);
 
 	return vegas_iteration_result<T>(calls, grid, adjustment_data);
-}
-
-/**
- * The default callback function. This function does nothing.
- *
- * \see vegas_callback
- */
-template <typename T>
-inline bool vegas_default_callback(std::vector<vegas_iteration_result<T>> const&)
-{
-	return true;
-}
-
-/**
- * Callback function that prints a detailed summary about every iteration performed so far.
- *
- * \see vegas_callback
- */
-template <typename T>
-inline bool vegas_verbose_callback(std::vector<vegas_iteration_result<T>> const& results)
-{
-	std::cout << "iteration " << (results.size()-1) << " finished.\n";
-
-	// print result for this iteration
-	std::cout << "this iteration: N=" << results.back().calls << " E=" << results.back().value;
-	std::cout << " +- " << results.back().error << " (";
-	std::cout << (T(100.0) * results.back().error / std::abs(results.back().value)) << "%)\n";
-
-	// compute cumulative results
-	auto const result = cumulative_result(results.begin(), results.end());
-	T const chi = chi_square_dof(results.begin(), results.end());
-
-	// print the combined result
-	std::cout << "all iterations: N=" << result.calls << " E=" << result.value << " +- ";
-	std::cout << result.error << " (" << (T(100.0) * result.error / std::abs(result.value));
-	std::cout << "%) chi^2/dof=" << chi << "\n\n";
-
-	std::cout.flush();
-
-	return true;
-}
-
-/**
- * Sets the vegas `callback` function and returns it. This function is called after each iteration
- * performed by \ref vegas(). The default callback is \ref vegas_default_callback. The function can
- * e.g. be set to \ref vegas_verbose_callback which prints after each iteration. If the callback
- * function returns `false` the integration is stopped.
- *
- * If this function is called without any argument, the previous function is retained.
- */
-template <typename T>
-inline std::function<bool(std::vector<vegas_iteration_result<T>>)>
-vegas_callback(std::function<bool(std::vector<vegas_iteration_result<T>>)> callback = nullptr)
-{
-	static std::function<bool(std::vector<vegas_iteration_result<T>>)> object
-		= vegas_default_callback<T>;
-
-	if (callback != nullptr)
-	{
-		object = callback;
-	}
-
-	return object;
 }
 
 /**

@@ -22,6 +22,7 @@
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/mpi_datatype.hpp"
 #include "hep/mc/mpi_helper.hpp"
+#include "hep/mc/mpi_vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas.hpp"
 
@@ -36,67 +37,6 @@ namespace hep
 
 /// \addtogroup vegas
 /// @{
-
-/**
- * The default MPI callback function. This function does nothing.
- *
- * \see mpi_vegas_callback
- */
-template <typename T>
-inline bool mpi_vegas_default_callback(
-	MPI_Comm,
-	std::vector<vegas_iteration_result<T>> const&
-) {
-	return true;
-}
-
-/**
- * Callback function that prints a detailed summary about every iteration performed so far. To avoid
- * duplicated output the function only prints from process with rank zero.
- *
- * \see mpi_vegas_callback
- */
-template <typename T>
-inline bool mpi_vegas_verbose_callback(
-	MPI_Comm communicator,
-	std::vector<vegas_iteration_result<T>> const& results
-) {
-	int rank = -1;
-	MPI_Comm_rank(communicator, &rank);
-
-	if (rank == 0)
-	{
-		vegas_verbose_callback<T>(results);
-	}
-
-	return true;
-}
-
-/**
- * Sets the vegas `callback` function and returns it. This function is called after each iteration
- * performed by \ref mpi_vegas(). The default callback is \ref mpi_vegas_default_callback. The
- * function can e.g. be set to \ref mpi_vegas_verbose_callback which prints after each iteration. If
- * the callback function returns `false` the integration is stopped.
- *
- * If this function is called without any argument, no function is set.
- */
-template <typename T>
-inline std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
-mpi_vegas_callback(
-	std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>
-		callback = nullptr
-) {
-	static std::function<bool(MPI_Comm,
-		std::vector<vegas_iteration_result<T>>)> object =
-		mpi_vegas_default_callback<T>;
-
-	if (callback != nullptr)
-	{
-		object = callback;
-	}
-
-	return object;
-}
 
 /**
  * Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an
