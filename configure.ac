@@ -17,6 +17,10 @@ AC_CONFIG_MACRO_DIR([m4])
 # C++ is our language
 AC_LANG([C++])
 
+# unit tests need convenience libraries
+AM_PROG_AR
+AC_PROG_RANLIB
+
 # check for C++11 conforming compiler (autoconf-archive macro)
 AX_CXX_COMPILE_STDCXX_11([noext])
 
@@ -49,13 +53,6 @@ AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
 # UNIT TESTS
 AC_ARG_ENABLE([tests], AS_HELP_STRING([--enable-tests], [Enable unit tests]))
-AS_IF([test "x$enable_tests" = "xyes"], [
-	# fix -Wextra-portability warning
-	m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
-
-	# initialize libtool
-	LT_INIT
-])
 AM_CONDITIONAL([HAVE_TESTS], [test "x$enable_tests" = "xyes"])
 
 # configure Makefiles and Doxyfile
