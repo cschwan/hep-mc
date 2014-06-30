@@ -14,7 +14,7 @@ bool print_grid(std::vector<hep::vegas_iteration_result<double>> const& results)
 	std::cout << "The grid for iteration " << (results.size()-1) << ":\n";
 
 	// grid for iteration i
-	auto& grid = results.back().grid;
+	auto& grid = results.back().pdf;
 
 	// print the grid
 	double previous = 0.0;
@@ -56,7 +56,7 @@ int main()
 	auto new_results = hep::vegas<double>(
 		std::vector<std::size_t>(5, 1000),
 		square,
-		results.back().grid                // grid from 'results' last iteration
+		results.back().pdf                 // grid from 'results' last iteration
 	);
 
 	return 0;

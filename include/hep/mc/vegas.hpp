@@ -22,6 +22,7 @@
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
+#include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
 
@@ -38,33 +39,6 @@ namespace hep
 
 /// \addtogroup vegas
 /// @{
-
-/// The result of a single \ref vegas_iteration.
-template <typename T>
-struct vegas_iteration_result : public mc_result<T>
-{
-	/// Constructor.
-	vegas_iteration_result(
-		std::size_t calls,
-		vegas_pdf<T> const& grid,
-		std::vector<T> const& adjustment_data
-	)
-		: mc_result<T>(
-			calls,
-			adjustment_data[adjustment_data.size() - 2],
-			adjustment_data[adjustment_data.size() - 1]
-		 )
-		, grid(grid)
-		, adjustment_data(adjustment_data)
-	{
-	}
-
-	/// The pdf used to obtain this result.
-	vegas_pdf<T> grid;
-
-	/// The data used to adjust the `grid` for a subsequent iteration.
-	std::vector<T> adjustment_data;
-};
 
 /**
  * Adjust the `grid` using `adjustment_data`. The process can be controlled by the parameter
@@ -284,8 +258,8 @@ vegas_callback(std::function<bool(std::vector<vegas_iteration_result<T>>)> callb
 }
 
 /**
- * Implements the VEGAS algorithm. This function can be used to start from an already adapted grid,
- * e.g. one by \ref vegas_iteration_result.grid obtained by a previous \ref vegas() call.
+ * Implements the VEGAS algorithm. This function can be used to start from an already adapted pdf,
+ * e.g. one by \ref vegas_iteration_result.pdf obtained by a previous \ref vegas() call.
  */
 template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(

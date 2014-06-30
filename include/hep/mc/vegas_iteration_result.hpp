@@ -1,9 +1,9 @@
-#ifndef HEP_MC_HPP
-#define HEP_MC_HPP
+#ifndef HEP_MC_VEGAS_ITERATION_RESULT_HPP
+#define HEP_MC_VEGAS_ITERATION_RESULT_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2014  Christopher Schwan
+ * Copyright (C) 2014  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/mc_helper.hpp"
-#include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
-#include "hep/mc/plain.hpp"
-#include "hep/mc/vegas.hpp"
-#include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
-#include "hep/mc/vegas_point.hpp"
+
+#include <cstddef>
+#include <vector>
+
+namespace hep
+{
+
+/// \addtogroup vegas
+/// @{
+
+/// The result of a single \ref vegas_iteration.
+template <typename T>
+struct vegas_iteration_result : public mc_result<T>
+{
+	/// Constructor.
+	vegas_iteration_result(
+		std::size_t calls,
+		vegas_pdf<T> const& pdf,
+		std::vector<T> const& adjustment_data
+	)
+		: mc_result<T>(calls, *(adjustment_data.end() - 2), *(adjustment_data.end() - 1))
+		, pdf(pdf)
+		, adjustment_data(adjustment_data)
+	{
+	}
+
+	/// The pdf used to obtain this result.
+	vegas_pdf<T> pdf;
+
+	/// The data used to adjust the `pdf` for a subsequent iteration.
+	std::vector<T> adjustment_data;
+};
+
+/// @}
+
+}
 
 #endif

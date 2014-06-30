@@ -22,6 +22,7 @@
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/mpi_datatype.hpp"
 #include "hep/mc/mpi_helper.hpp"
+#include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas.hpp"
 
 #include <cstddef>
@@ -99,7 +100,7 @@ mpi_vegas_callback(
 
 /**
  * Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an
- * already adapted grid, e.g. one by \ref vegas_iteration_result.grid obtained by a previous \ref
+ * already adapted grid, e.g. one by \ref vegas_iteration_result.pdf obtained by a previous \ref
  * vegas() call.
  */
 template <typename T, typename F, typename R = std::mt19937>
