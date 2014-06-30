@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	mc_helper.dox \
 	mpi_helper.dox \
 	plain.dox \
+	references.bib \
 	results.dox \
 	vegas.dox
 

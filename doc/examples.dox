@@ -5,5 +5,6 @@
 \example read_linear_grid.cpp
 \example vegas_example.cpp
 \example vegas_grid.cpp
+\example vegas_stop_after_precision.cpp
 
 */

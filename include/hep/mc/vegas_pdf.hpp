@@ -26,6 +26,9 @@
 namespace hep
 {
 
+/// \addtogroup vegas
+/// @{
+
 /**
  * A class for generating random numbers according to a piecewise constant probability distribution
  * function with varying bin widths. The PDF generates random numbers for any dimension by using
@@ -166,6 +169,8 @@ inline std::basic_istream<CharT, Traits>& operator>>(
 
 	return in;
 }
+
+/// @}
 
 }
 

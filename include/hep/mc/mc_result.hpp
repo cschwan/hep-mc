@@ -66,6 +66,8 @@ inline mc_result<T> create_result(std::size_t calls, T value, T error)
 	return mc_result<T>(calls, sum, sum_of_squares);
 }
 
+/// @}
+
 }
 
 #endif

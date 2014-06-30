@@ -77,8 +77,6 @@ inline mc_result<T> mpi_plain(
 	T& sum            = buffer[0];
 	T& sum_of_squares = buffer[1];
 
-	std::vector<T> random_numbers(dimensions);
-
 	// the number of function calls for each MPI process
 	std::size_t const sub_calls = (calls / world) +
 		(static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);

@@ -17,7 +17,7 @@ New in 0.2.2.9999:
   use the same random numbers for MPI and non-MPI routines. This makes
   ``hep::mpi_vegas`` return the same numerical result as ``hep::vegas``
 - fixed integer overflow bug on 32-bit architectures that caused VEGAS' grid
-  adaption to fails when the number of calls surpassed 2^16
+  adjustment to fail when the number of calls surpassed 2^16
 - modified VEGAS callback functions to return a boolean variable signaling to
   stop all remaining iterations
 - modified the verbose callback function to print the error in percentage

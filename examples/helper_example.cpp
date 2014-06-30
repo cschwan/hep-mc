@@ -18,8 +18,8 @@ int main()
 	for (std::size_t i = 0; i != results.size(); ++i)
 	{
 		// combine results from iterations [0, i]
-		auto result = hep::cumulative_result(results.begin(), results.begin()+(i+1));
-		auto chi_square_dof = hep::chi_square_dof(results.begin(), results.begin()+(i+1));
+		auto result = hep::cumulative_result(results.begin(), results.begin() + (i+1));
+		auto chi_square_dof = hep::chi_square_dof(results.begin(), results.begin() + (i+1));
 
 		std::cout << i << ": E=" << result.value << " +- " << result.error;
 		std::cout << " chi^2/dof=" << chi_square_dof << "\n";

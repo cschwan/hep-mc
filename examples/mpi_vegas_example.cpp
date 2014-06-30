@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iostream>
+#include <vector>
 
 #include <mpi.h>
 

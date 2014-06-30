@@ -226,9 +226,8 @@ inline vegas_iteration_result<T> vegas_iteration(
  * \see vegas_callback
  */
 template <typename T>
-inline bool vegas_default_callback(
-	std::vector<vegas_iteration_result<T>> const&
-) {
+inline bool vegas_default_callback(std::vector<vegas_iteration_result<T>> const&)
+{
 	return true;
 }
 
@@ -238,9 +237,8 @@ inline bool vegas_default_callback(
  * \see vegas_callback
  */
 template <typename T>
-inline bool vegas_verbose_callback(
-	std::vector<vegas_iteration_result<T>> const& results
-) {
+inline bool vegas_verbose_callback(std::vector<vegas_iteration_result<T>> const& results)
+{
 	std::cout << "iteration " << (results.size()-1) << " finished.\n";
 
 	// print result for this iteration
@@ -272,10 +270,8 @@ inline bool vegas_verbose_callback(
  */
 template <typename T>
 inline std::function<bool(std::vector<vegas_iteration_result<T>>)>
-vegas_callback(
-	std::function<bool(std::vector<vegas_iteration_result<T>>)> callback
-		= nullptr
-) {
+vegas_callback(std::function<bool(std::vector<vegas_iteration_result<T>>)> callback = nullptr)
+{
 	static std::function<bool(std::vector<vegas_iteration_result<T>>)> object
 		= vegas_default_callback<T>;
 

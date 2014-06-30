@@ -3,6 +3,7 @@
 #include "hep/mc/mc_helper.hpp"
 
 #include <limits>
+#include <vector>
 
 typedef testing::Types<float, double, long double> MyT;
 template <typename T> class McHelper : public testing::Test { };

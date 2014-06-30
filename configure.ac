@@ -23,8 +23,7 @@ AX_CXX_COMPILE_STDCXX_11([noext])
 # point to a source file in order to let ./configure find itself
 AC_CONFIG_SRCDIR([include/hep/mc.hpp])
 
-# do not pollute command line with compiler definitions but instead write them
-# into the specified header
+# don't pollute the command line with compiler defs, write them into the specified header
 AC_CONFIG_HEADERS([config.hpp])
 
 # MPI
@@ -43,7 +42,7 @@ AC_ARG_ENABLE([doxygen], AS_HELP_STRING([--enable-doxygen],
 	[Enable generation of Doxygen documentation]))
 AC_ARG_VAR([DOXYGEN], [Doxygen documentation generator])
 AS_IF([test "x$enable_doxygen" = "xyes"], [
-	AC_CHECK_PROGS([DOXYGEN], [doxygen])
+	AC_PATH_PROGS([DOXYGEN], [doxygen])
 	AS_IF([test -z "$DOXYGEN"], AC_MSG_ERROR([Doxygen not found but requested]))
 ])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])

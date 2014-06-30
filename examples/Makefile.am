@@ -21,7 +21,6 @@ if HAVE_MPI
 noinst_PROGRAMS += \
 	mpi_vegas_example
 
-
 mpi_vegas_example_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
 mpi_vegas_example_LDADD = $(MPI_LIBS)
 mpi_vegas_example_LDFLAGS = $(MPI_LDFLAGS)
