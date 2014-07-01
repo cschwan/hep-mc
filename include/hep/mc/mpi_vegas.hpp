@@ -48,7 +48,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	vegas_pdf<T> const& start_grid,
+	vegas_pdf<T> const& start_pdf,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
@@ -66,7 +66,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	}
 
 	// create a fresh grid
-	auto grid = start_grid;
+	auto pdf = start_pdf;
 
 	// vector holding all iteration results
 	std::vector<vegas_iteration_result<T>> results;
@@ -77,16 +77,16 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	{
 		if (mpi_single_generator())
 		{
-			mpi_advance_generator_before<T>(grid.dimensions(), *i, rank, world, generator);
+			mpi_advance_generator_before<T>(pdf.dimensions(), *i, rank, world, generator);
 		}
 
 		std::size_t const calls = (*i / world) +
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
-		auto result = vegas_iteration(calls, *i, grid, function, generator);
+		auto result = vegas_iteration(calls, *i, pdf, function, generator);
 
 		if (mpi_single_generator())
 		{
-			mpi_advance_generator_after<T>(grid.dimensions(), *i, calls, rank, world, generator);
+			mpi_advance_generator_after<T>(pdf.dimensions(), *i, calls, rank, world, generator);
 		}
 
 		// add up results
@@ -100,14 +100,14 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 		);
 
 		// calculate accumulated results
-		results.push_back(vegas_iteration_result<T>(*i, grid, result.adjustment_data));
+		results.push_back(vegas_iteration_result<T>(*i, pdf, result.adjustment_data));
 
 		if (!mpi_vegas_callback<T>()(communicator, results))
 		{
 			break;
 		}
 
-		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
+		pdf = vegas_refine_pdf(alpha, pdf, result.adjustment_data);
 	}
 
 	return results;

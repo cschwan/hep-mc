@@ -40,26 +40,24 @@ namespace hep
 /// @{
 
 /**
- * Adjust the `grid` using `adjustment_data`. The process can be controlled by the parameter
- * `alpha`. This function's code is based on the function `refine_grid` from the CUBA VEGAS
- * implementation from Thomas Hahn.
+ * Refines the `pdf` using `data`, which must be the binned square-function values, and returns the
+ * new pdf. The process can be controlled by the parameter `alpha` which is documented in the Vegas
+ * publication \cite Vegas1 \cite Vegas2. This function's code is derived from Thomas Hahn's
+ * `refine_grid` from the CUBA VEGAS implementation \cite Cuba.
  */
 template <typename T>
-inline vegas_pdf<T> vegas_adjust_grid(
-	T alpha,
-	vegas_pdf<T> const& pdf,
-	std::vector<T> const& adjustment_data
-) {
+inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vector<T> const& data)
+{
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
 
-	vegas_pdf<T> new_grid(dimensions, bins);
+	vegas_pdf<T> new_pdf(dimensions, bins);
 	std::vector<T> tmp(bins);
 
 	for (std::size_t i = 0; i != dimensions; ++i)
 	{
 		// load the binned sum of squares into 'tmp'
-		tmp.assign(adjustment_data.begin() + (i+0) * bins, adjustment_data.begin() + (i+1) * bins);
+		tmp.assign(data.begin() + (i+0) * bins, data.begin() + (i+1) * bins);
 
 		// smooth the entries by averaging over the neighbor(s)
 		T previous = tmp[0];
@@ -115,11 +113,11 @@ inline vegas_pdf<T> vegas_adjust_grid(
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
 
-			new_grid(i, new_bin) = current - delta / tmp[bin - 1];
+			new_pdf(i, new_bin) = current - delta / tmp[bin - 1];
 		}
 	}
 
-	return new_grid;
+	return new_pdf;
 }
 
 /**
@@ -201,11 +199,11 @@ template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	vegas_pdf<T> const& start_grid,
+	vegas_pdf<T> const& start_pdf,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
-	auto grid = start_grid;
+	auto pdf = start_pdf;
 
 	// vector holding all iteration results
 	std::vector<vegas_iteration_result<T>> results;
@@ -214,7 +212,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	// perform iterations
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
-		auto const result = vegas_iteration(*i, *i, grid, function, generator);
+		auto const result = vegas_iteration(*i, *i, pdf, function, generator);
 		results.push_back(result);
 
 		if (!vegas_callback<T>()(results))
@@ -222,7 +220,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 			break;
 		}
 
-		grid = vegas_adjust_grid(alpha, grid, result.adjustment_data);
+		pdf = vegas_refine_pdf(alpha, pdf, result.adjustment_data);
 	}
 
 	return results;
@@ -231,7 +229,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 /**
  * Implements the VEGAS algorithm. In particular, this function calls \ref vegas_iteration for every
  * number in `iteration_calls` determining the `calls` parameter for each iteration. After each
- * iteration the grid is adjusted using \ref vegas_adjust_grid. The grid adjustment itself can be
+ * iteration the pdf is adjusted using \ref vegas_refine_pdf. The pdf refinement itself can be
  * controlled by the parameter `alpha`. The intermediate results are passed to the function set by
  * \ref vegas_callback which can e.g. be used to print them out. The callback function is able to
  * stop the integration if it returns `false`. In this case less iterations are performed than
