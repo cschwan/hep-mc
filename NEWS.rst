@@ -1,6 +1,8 @@
 New in 0.2.2.9999:
 ==================
 
+- added new global configuration function ``hep::vegas_cuba_refinement()``
+  that can be used to modify pdf refinement to use CUBA's method
 - removed ``--enable-tests`` configure switch. All external dependecies are
   gone and running ``make check`` is sufficient now to run tests
 - changed interfaces ``hep::cumulative_result`` and ``hep::chi_square_dof``

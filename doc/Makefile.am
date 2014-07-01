@@ -7,6 +7,7 @@ EXTRA_DIST = \
 	examples.dox \
 	extra.css \
 	footer.html \
+	global_configuration.dox \
 	integrands.dox \
 	mainpage.dox \
 	mc_helper.dox \

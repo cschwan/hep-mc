@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/global_configuration.hpp"
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
@@ -99,6 +100,7 @@ inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vect
 
 		T this_bin = T();
 		std::size_t bin = 0;
+		T new_current = T();
 
 		// redefine the size of each bin
 		for (std::size_t new_bin = 0; new_bin != bins - 1; ++new_bin)
@@ -113,7 +115,17 @@ inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vect
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
 
-			new_pdf(i, new_bin) = current - delta / tmp[bin - 1];
+			if (vegas_cuba_refinement())
+			{
+				T const average_importance = T(0.5) * (tmp[bin - 1] + tmp[bin != 1 ? bin - 2 : 0]);
+				new_current = std::fmax(new_current, current - delta / average_importance);
+			}
+			else
+			{
+				new_current = current - delta / tmp[bin - 1];
+			}
+
+			new_pdf(i, new_bin) = new_current;
 		}
 	}
 
