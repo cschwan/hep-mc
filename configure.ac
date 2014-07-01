@@ -51,10 +51,6 @@ AS_IF([test "x$enable_doxygen" = "xyes"], [
 ])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
-# UNIT TESTS
-AC_ARG_ENABLE([tests], AS_HELP_STRING([--enable-tests], [Enable unit tests]))
-AM_CONDITIONAL([HAVE_TESTS], [test "x$enable_tests" = "xyes"])
-
 # configure Makefiles and Doxyfile
 AC_CONFIG_FILES([
 	Makefile

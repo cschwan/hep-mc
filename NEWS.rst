@@ -1,6 +1,8 @@
 New in 0.2.2.9999:
 ==================
 
+- removed ``--enable-tests`` configure switch. All external dependecies are
+  gone and running ``make check`` is sufficient now to run tests
 - changed interfaces ``hep::cumulative_result`` and ``hep::chi_square_dof``
   which no longer need to be called with the numeric type; the type is
   automatically determined by the iterators

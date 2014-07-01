@@ -12,9 +12,4 @@ if HAVE_EXAMPLES
     EXAMPLESDIR = examples
 endif
 
-# if tests are enabled include tests subdir
-if HAVE_TESTS
-    TESTSDIR = tests
-endif
-
-SUBDIRS = include $(DOCDIR) $(EXAMPLESDIR) $(TESTSDIR)
+SUBDIRS = include $(DOCDIR) $(EXAMPLESDIR) tests

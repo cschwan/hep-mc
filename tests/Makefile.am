@@ -3,7 +3,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(srcdir) -DGTEST_HAS_PTHREAD=0
 AM_DEFAULT_SOURCE_EXT = .cpp
 
 # convenience libraries for the google unit test framework
-noinst_LIBRARIES = libgtest.a libgtest_main.a
+check_LIBRARIES = libgtest.a libgtest_main.a
 libgtest_a_SOURCES = gtest/gtest.h gtest-all.cpp
 libgtest_main_a_SOURCES = gtest/gtest.h gtest_main.cpp
 
@@ -27,7 +27,7 @@ LDADD = libgtest.a libgtest_main.a
 
 if HAVE_MPI
 
-noinst_LIBRARIES += libgtest_mpi_main.a
+check_LIBRARIES += libgtest_mpi_main.a
 libgtest_mpi_main_a_SOURCES = gtest/gtest.h gtest_mpi_main.cpp
 libgtest_mpi_main_a_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
 
