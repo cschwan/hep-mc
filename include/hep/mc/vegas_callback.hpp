@@ -61,8 +61,8 @@ inline bool vegas_verbose_callback(std::vector<vegas_iteration_result<T>> const&
 	std::cout << (T(100.0) * results.back().error / std::abs(results.back().value)) << "%)\n";
 
 	// compute cumulative results
-	auto const result = cumulative_result(results.begin(), results.end());
-	T const chi = chi_square_dof(results.begin(), results.end());
+	auto const result = cumulative_result0(results.begin(), results.end());
+	T const chi = chi_square_dof0(results.begin(), results.end());
 
 	// print the combined result
 	std::cout << "all iterations: N=" << result.calls << " E=" << result.value << " +- ";

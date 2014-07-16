@@ -1,6 +1,11 @@
 New in 0.2.2.9999:
 ==================
 
+- changed function names of ``hep::cumulative_result`` and
+  ``hep::chi_square_dof`` to the same names with a ``0`` and ``1`` at the end
+  of their names; ``0`` uses the same algorithm as before, ``1`` weighs all
+  results equally. The function ``hep::cumulative_result`` remains but requires
+  an additional argument
 - added new global configuration function ``hep::vegas_cuba_refinement()``
   that can be used to modify pdf refinement to use CUBA's method
 - removed ``--enable-tests`` configure switch. All external dependecies are

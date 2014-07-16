@@ -32,8 +32,8 @@ int main()
 	// results contains the estimations for each iteration. we could take the result from last
 	// iteration, but here we instead choose to combine the results of all iterations but the first
 	// one in a cumulative result
-	auto result = hep::cumulative_result(results.begin() + 1, results.end());
-	double chi_square_dof = hep::chi_square_dof(results.begin() + 1, results.end());
+	auto result = hep::cumulative_result0(results.begin() + 1, results.end());
+	double chi_square_dof = hep::chi_square_dof0(results.begin() + 1, results.end());
 
 	std::cout << "cumulative result (without first iteration):\nN=" << result.calls << " I=";
 	std::cout << result.value << " +- " << result.error << " chi^2/dof=" << chi_square_dof << "\n";

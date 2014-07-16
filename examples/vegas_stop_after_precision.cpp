@@ -21,7 +21,7 @@ struct stop_after_precision
 	{
 		hep::vegas_verbose_callback<double>(r);
 
-		auto const result = hep::cumulative_result(r.begin(), r.end());
+		auto const result = hep::cumulative_result0(r.begin(), r.end());
 
 		if (result.error < abs_error)
 		{
