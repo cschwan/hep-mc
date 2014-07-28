@@ -23,7 +23,6 @@
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/mpi_helper.hpp"
-#include "hep/mc/mpi_datatype.hpp"
 #include "hep/mc/plain.hpp"
 
 #include <cstddef>

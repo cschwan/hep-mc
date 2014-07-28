@@ -11,7 +11,6 @@ EXTRA_DIST = \
 	integrands.dox \
 	mainpage.dox \
 	mc_helper.dox \
-	mpi_helper.dox \
 	plain.dox \
 	references.bib \
 	results.dox \

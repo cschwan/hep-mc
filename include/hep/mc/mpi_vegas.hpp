@@ -21,7 +21,6 @@
 
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/global_configuration.hpp"
-#include "hep/mc/mpi_datatype.hpp"
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"

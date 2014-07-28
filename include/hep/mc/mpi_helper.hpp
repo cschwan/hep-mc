@@ -24,6 +24,8 @@
 #include <cstddef>
 #include <limits>
 
+#include <mpi.h>
+
 namespace
 {
 
@@ -79,6 +81,27 @@ inline void mpi_advance_generator_after(
 		(total_calls - before - calls) : 0;
 
 	generator.discard(after * usage);
+}
+
+template <typename T>
+MPI_Datatype mpi_datatype();
+
+template <>
+inline MPI_Datatype mpi_datatype<float>()
+{
+	return MPI_FLOAT;
+}
+
+template <>
+inline MPI_Datatype mpi_datatype<double>()
+{
+	return MPI_DOUBLE;
+}
+
+template <>
+inline MPI_Datatype mpi_datatype<long double>()
+{
+	return MPI_LONG_DOUBLE;
 }
 
 }
