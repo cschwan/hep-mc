@@ -29,7 +29,7 @@
 namespace hep
 {
 
-/// \addtogroup vegas
+/// \addtogroup vegas_pdf_group
 /// @{
 
 /**

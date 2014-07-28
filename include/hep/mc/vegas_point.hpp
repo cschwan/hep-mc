@@ -28,18 +28,21 @@
 namespace hep
 {
 
-/// \addtogroup vegas
+/// \addtogroup integrands
 /// @{
 
-/// A point within the unit-hypercube with the additional information in which bins the point lies.
+/**
+ * A point \f$ \vec{x} \in U \f$ within the unit-hypercube \f$ U = [0,1]^d \f$ with the additional
+ * information in which bin(s) of a \ref vegas_pdf the point lies.
+ */
 template <typename T>
 struct vegas_point : public mc_point<T>
 {
 	/**
-	 * Constructor. Creates a new point the unit-hypercube using the probability distribution
+	 * Creates a new point in the unit-hypercube \f$ U \f$ using the probability distribution
 	 * function `pdf` and the random numbers in `random_numbers` for a Monte Carlo iteration with
-	 * sample size specified with `total_calls`. For each dimension the point falls into a bin with
-	 * indices given by `bin`.
+	 * sample size specified by `total_calls`. For each dimension the point falls into a bin whose
+	 * index is written `bin`.
 	 */
 	vegas_point(
 		std::size_t total_calls,

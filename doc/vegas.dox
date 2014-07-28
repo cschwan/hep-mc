@@ -1,5 +1,17 @@
 /**
 
-\defgroup vegas VEGAS Integrator
+\defgroup vegas_group VEGAS Integrator
+
+\brief The VEGAS Monte Carlo integration algorithm
+
+The VEGAS Monte Carlo integration algorithm divides the integration into several sub-integrations,
+called iterations, and uses the results to automatically construct a PDF that is then used to do
+importance sampling in order to reduce the error, e.g. compared to \ref plain.
+
+The VEGAS algorithm is available in two forms:
+
+- \ref vegas, the single process interface and
+- \ref mpi_vegas which uses the Message Passing Interface (MPI) to distribute the calculation among
+  parallel running processes.
 
 */

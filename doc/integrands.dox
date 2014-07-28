@@ -2,23 +2,19 @@
 
 \defgroup integrands Integrand Functions
 
-\brief The form of integrands that can be integrated by the `hep-mc` library.
+\brief How integrand functions are written
 
-Functions that are integrated by the Monte Carlo algorithms must accept a single parameter of the
-type \ref hep::mc_point and return a value of type `T`. For example, an integrand of the form
-\f[
-f(x) := x^2
-\f]
-for double precision numbers would look like:
+Functions that can be integrated by the Monte Carlo algorithms must accept a single parameter of the
+type \ref mc_point and return a value of type `T`. For example, an integrand of the form \f$
+f(x) := x^2 \f$ implemented with double precision numbers would like:
 \code
 double square(hep::mc_point<double> const& x)
 {
     return x.point[0] * x.point[0];
 }
 \endcode
-Some integration algorithms, e.g. the \ref vegas, supply additional information that can be accessed
-by capturing the argument with a different type, e.g. for VEGAS by `hep::vegas_point` instead of
-`hep::mc_point`:
+Some integration algorithms, e.g. \ref vegas, supply additional information that can be accessed by
+capturing the argument with a different type, e.g. for VEGAS by \ref vegas_point :
 \code
 double square(hep::vegas_point<double> const& x)
 {
@@ -44,7 +40,7 @@ struct integrand
     }
 };
 \endcode
-which would be called using the \ref plain by
+which would be called using \ref plain by
 \code
 hep::mc_result<double> result = hep::plain<double>(1, 1000, integrand(2.0));
 \endcode

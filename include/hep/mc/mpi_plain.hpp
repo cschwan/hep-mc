@@ -34,7 +34,7 @@
 namespace hep
 {
 
-/// \addtogroup plain
+/// \addtogroup plain_group
 /// @{
 
 /**

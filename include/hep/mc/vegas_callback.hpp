@@ -36,7 +36,7 @@ namespace hep
 /**
  * The default callback function. This function does nothing and always returns `true`.
  *
- * \see vegas_callback
+ * \see \ref vegas_callback
  */
 template <typename T>
 inline bool vegas_default_callback(std::vector<vegas_iteration_result<T>> const&)
@@ -48,7 +48,7 @@ inline bool vegas_default_callback(std::vector<vegas_iteration_result<T>> const&
  * Callback function that prints a detailed summary about every iteration performed so far. This
  * function always returns `true`.
  *
- * \see vegas_callback
+ * \see \ref vegas_callback
  */
 template <typename T>
 inline bool vegas_verbose_callback(std::vector<vegas_iteration_result<T>> const& results)

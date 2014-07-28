@@ -28,7 +28,7 @@
 namespace hep
 {
 
-/// \addtogroup vegas
+/// \addtogroup results
 /// @{
 
 /// The result of a single \ref vegas_iteration.

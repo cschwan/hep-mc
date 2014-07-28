@@ -35,13 +35,13 @@
 namespace hep
 {
 
-/// \addtogroup vegas
+/// \addtogroup vegas_group
 /// @{
 
 /**
  * Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an
  * already adapted grid, e.g. one by \ref vegas_iteration_result.pdf obtained by a previous \ref
- * vegas() call.
+ * vegas call.
  */
 template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> mpi_vegas(
@@ -114,7 +114,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 }
 
 /**
- * Implements the MPI-parallelized VEGAS algorithm. See \ref vegas() for a more detailed description
+ * Implements the MPI-parallelized VEGAS algorithm. See \ref vegas for a more detailed description
  * on the VEGAS algorithm. In contrast to the single-threaded versions this function makes sure that
  * every random number generator is seeded differently so every MPI process yields an independent
  * result. After each iteration the intermediate results are passed to the function set by \ref

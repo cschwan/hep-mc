@@ -16,5 +16,32 @@ Example
 The following example illustrates how to integrate the square-function using
 VEGAS:
 \include vegas_example.cpp
+This program will produce the following output:
+\verbatim
+computing integral of x^2 from 0 to 1 which is 0.333333
+
+iteration 0 finished.
+this iteration: N=1000 E=0.33691 +- 0.00966589 (2.86898%)
+all iterations: N=1000 E=0.33691 +- 0.00966589 (2.86898%) chi^2/dof=inf
+
+iteration 1 finished.
+this iteration: N=1000 E=0.336297 +- 0.00381044 (1.13306%)
+all iterations: N=2000 E=0.33638 +- 0.00354493 (1.05385%) chi^2/dof=0.00347637
+
+iteration 2 finished.
+this iteration: N=1000 E=0.332836 +- 0.00176979 (0.531731%)
+all iterations: N=3000 E=0.333543 +- 0.00158343 (0.47473%) chi^2/dof=0.401838
+
+iteration 3 finished.
+this iteration: N=1000 E=0.332933 +- 0.00132342 (0.397504%)
+all iterations: N=4000 E=0.333184 +- 0.00101545 (0.304772%) chi^2/dof=0.296971
+
+iteration 4 finished.
+this iteration: N=1000 E=0.333122 +- 0.000828935 (0.248838%)
+all iterations: N=5000 E=0.333147 +- 0.000642145 (0.192751%) chi^2/dof=0.22328
+
+cumulative result (without first iteration):
+N=4000 I=0.33313 +- 0.000643567 chi^2/dof=0.246959
+\endverbatim
 
 */

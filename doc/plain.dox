@@ -1,5 +1,17 @@
 /**
 
-\defgroup plain PLAIN Integrator
+\defgroup plain_group PLAIN Integrator
+
+\brief The PLAIN Monte Carlo integration algorithm
+
+The PLAIN Monte Carlo integration algorithm is the most simple integration that simply generates
+random numbers \f$ \vec{x}_i \in [0,1]^d \f$ in the \f$ d \f$-dimensional hypercube \f$ [0,1]^d \f$
+and averages the integrand evaluated at these points.
+
+The algorithm is available in two forms:
+
+- \ref plain, the single process interface and
+- \ref mpi_plain which uses the Message Passing Interface (MPI) to distribute the calculation among
+  parallel running processes.
 
 */

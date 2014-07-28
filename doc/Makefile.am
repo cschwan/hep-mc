@@ -10,12 +10,12 @@ EXTRA_DIST = \
 	global_configuration.dox \
 	integrands.dox \
 	mainpage.dox \
-	mc_helper.dox \
 	plain.dox \
 	references.bib \
 	results.dox \
 	vegas.dox \
-	vegas_callback.dox
+	vegas_callback.dox \
+	vegas_pdf.dox
 
 $(docpkg): Doxyfile $(EXTRA_DIST) $(top_builddir)/include/stamp-headers
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile

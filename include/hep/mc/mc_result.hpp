@@ -25,7 +25,7 @@
 namespace hep
 {
 
-/// @addtogroup results
+/// \addtogroup results
 /// @{
 
 /**

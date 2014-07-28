@@ -2,29 +2,30 @@
 
 \defgroup vegas_callback_group VEGAS Callback Functions
 
-The VEGAS iteration callback functions.
+\brief Obtaining the results for each VEGAS iteration as soon as they are available
 
 VEGAS is an iterative algorithm, i.e. it produces intermediate results after each completed
 iteration. One usually wants to monitor these, e.g. to ensure results are converging. The callback
 mechanism lets the user do exactly this, by setting an appropriate callback function via
 \ref vegas_callback. This function is then called after each completed iteration.
 
-The function must accept a vector of \ref vegas_iteration_result that contains the iteration results
-so far. Furthermore it must return a boolean signaling if the VEGAS algorithm should proceed with
-the remaining iterations, i.e. if `false` is returned, VEGAS will stop and discard the remaining
-iterations. The MPI version of the callback must accept the MPI communicator as first argument in
-addition.
+The function must accept a vector of \ref vegas_iteration_result that will contain the results of
+every iteration performed so far. Using these results the function must decide if VEGAS should
+proceed with the remaining iterations (in that case the function returns `true`) or if VEGAS should
+stop and discard the remaining iterations (return `false`). In addition to the iteration results the
+MPI version of the callback must accept the MPI communicator as its first argument.
 
 This library comes with two predefined callback functions,
 
-  - \ref vegas_default_callback that is set by default and does nothing,
-  - \ref vegas_verbose_callback that prints both the result of recently completed iteration as well
-    as a cumulative result of all iterations and the corresponding chi-square,
+  - \ref vegas_default_callback that is set by default and does nothing and
+  - \ref vegas_verbose_callback that prints both the result of the recently completed iteration and
+    cumulative result (using \ref cumulative_result0) of all iterations and the corresponding
+    chi-square per degree of freedom (using \ref chi_square_dof0)
 
 for the \ref vegas functions, and the corresponding functions for their MPI counterpart,
 \ref mpi_vegas_default_callback and \ref mpi_vegas_verbose_callback.
 
-An example on how to use the reurn value to stop after a certain precision is reached is contained
-in \ref vegas_stop_after_precision.cpp.
+An example on how to use the return value to stop after a certain precision is reached is shown in
+\ref vegas_stop_after_precision.cpp.
 
 */

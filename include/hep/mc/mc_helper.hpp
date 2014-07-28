@@ -35,7 +35,7 @@ using get_T = typename std::iterator_traits<Iterator>::value_type::numeric_type;
 namespace hep
 {
 
-/// \addtogroup mc_helper
+/// \addtogroup results
 /// @{
 
 /**

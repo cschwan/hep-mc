@@ -81,7 +81,7 @@ inline hep::mc_result<T> plain_iteration(
 namespace hep
 {
 
-/// \addtogroup plain
+/// \addtogroup plain_group
 /// @{
 
 /**
