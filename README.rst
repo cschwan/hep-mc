@@ -58,6 +58,12 @@ A complete list of configuration options is available by typing::
 
     ./configure --help
 
+Documentation
+=============
+
+Documentation is available online at http://cschwan.github.io/hep-mc or can be
+generated from sources with Doxygen (see Installation_).
+
 Usage
 =====
 
