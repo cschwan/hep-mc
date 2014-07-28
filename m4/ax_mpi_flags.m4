@@ -1,12 +1,6 @@
-AC_DEFUN([AX_MPI_FLAGS_INIT], [
-    AC_LANG_CASE([C++],
-                 [AC_ARG_VAR(MPICXX, [MPI C++ compiler command])
-                  AC_PATH_PROGS(MPICXX, [mpicxx mpiCC mpic++ mpig++ mpiicpc mpipgCC mpixlC])])
-])
-
 AC_DEFUN([AX_MPI_FLAGS], [
     AC_LANG_CASE([C++], [
-        _AX_MPI_FLAGS_GET_AND_CHECK(MPICXX, [AC_LANG_PROGRAM([[@%:@include <mpi.h>]],
+        _AX_MPI_FLAGS_GET_AND_CHECK([$1], [AC_LANG_PROGRAM([[@%:@include <mpi.h>]],
             [[int r, s; MPI_Comm_rank(MPI_COMM_WORLD, &r); MPI_Comm_size(MPI_COMM_WORLD, &s);]])])
     ])
 ])

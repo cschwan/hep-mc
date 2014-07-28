@@ -31,10 +31,13 @@ AC_CONFIG_SRCDIR([include/hep/mc.hpp])
 AC_CONFIG_HEADERS([config.hpp])
 
 # MPI
-AX_MPI_FLAGS_INIT
+AC_ARG_VAR(MPICXX, [MPI C++ compiler command])
 AC_ARG_ENABLE([mpi], AS_HELP_STRING([--enable-mpi], [Enable use of the Message Passing Interface]))
 AM_CONDITIONAL([HAVE_MPI], [test "x$enable_mpi" = "xyes"])
-AS_IF([test "x$enable_mpi" = "xyes"], [AX_MPI_FLAGS])
+AS_IF([test "x$enable_mpi" = "xyes"], [
+	AC_PATH_PROGS([MPICXX], [mpicxx mpiCC mpic++ mpig++ mpiicpc mpipgCC mpixlC])
+	AX_MPI_FLAGS([MPICXX])
+])
 
 # EXAMPLES
 AC_ARG_ENABLE([examples], AS_HELP_STRING([--enable-examples],
