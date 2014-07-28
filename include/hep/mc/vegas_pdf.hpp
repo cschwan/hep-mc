@@ -19,6 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/global_configuration.hpp"
+
+#include <cmath>
 #include <cstddef>
 #include <iosfwd>
 #include <vector>
@@ -126,6 +129,98 @@ public:
 private:
 	std::vector<std::vector<T>> x;
 };
+
+/**
+ * Refines the `pdf` using `data`, which must be the binned square-function values, and returns the
+ * new pdf. The process can be controlled by the parameter `alpha` which is documented in the Vegas
+ * publication \cite Vegas1 \cite Vegas2. This function's code is derived from Thomas Hahn's
+ * `refine_grid` from the CUBA VEGAS implementation \cite Cuba.
+ */
+template <typename T>
+inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vector<T> const& data)
+{
+	std::size_t const dimensions = pdf.dimensions();
+	std::size_t const bins       = pdf.bins();
+
+	vegas_pdf<T> new_pdf(dimensions, bins);
+	std::vector<T> tmp(bins);
+
+	for (std::size_t i = 0; i != dimensions; ++i)
+	{
+		// load the binned sum of squares into 'tmp'
+		tmp.assign(data.begin() + (i+0) * bins, data.begin() + (i+1) * bins);
+
+		// smooth the entries by averaging over the neighbor(s)
+		T previous = tmp[0];
+		T current = tmp[1];
+		tmp[0] = T(0.5) * (previous + current);
+		T norm = tmp[0];
+
+		for (std::size_t bin = 1; bin != bins - 1; ++bin)
+		{
+			T const sum = previous + current;
+			previous = current;
+			current = tmp[bin + 1];
+			tmp[bin] = (sum + current) / T(3.0);
+			norm += tmp[bin];
+		}
+		tmp.back() = T(0.5) * (previous + current);
+		norm += tmp.back();
+
+		// if norm is zero there is nothing to do here
+		if (norm == T())
+		{
+			continue;
+		}
+
+		// compute the importance function for each bin and overwrite it into 'tmp'
+		T average_per_bin = T();
+
+		for (std::size_t bin = 0; bin != bins; ++bin)
+		{
+			if (tmp[bin] != T())
+			{
+				T const r = tmp[bin] / norm;
+				T const impfun = std::pow((r - T(1.0)) / std::log(r), alpha);
+				average_per_bin += impfun;
+				tmp[bin] = impfun;
+			}
+		}
+		average_per_bin /= bins;
+
+		T this_bin = T();
+		std::size_t bin = 0;
+		T new_current = T();
+
+		// redefine the size of each bin
+		for (std::size_t new_bin = 0; new_bin != bins - 1; ++new_bin)
+		{
+			for (; this_bin < average_per_bin; ++bin)
+			{
+				this_bin += tmp[bin];
+			}
+
+			T const previous = (bin != 1) ? pdf(i, bin - 2) : T();
+			T const current = pdf(i, bin - 1);
+			this_bin -= average_per_bin;
+			T const delta = (current - previous) * this_bin;
+
+			if (vegas_cuba_refinement())
+			{
+				T const average_importance = T(0.5) * (tmp[bin - 1] + tmp[bin != 1 ? bin - 2 : 0]);
+				new_current = std::fmax(new_current, current - delta / average_importance);
+			}
+			else
+			{
+				new_current = current - delta / tmp[bin - 1];
+			}
+
+			new_pdf(i, new_bin) = new_current;
+		}
+	}
+
+	return new_pdf;
+}
 
 /// Output operator for \ref vegas_pdf.
 template <typename CharT, typename Traits, typename T>
