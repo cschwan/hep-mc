@@ -222,12 +222,12 @@ inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vect
 	return new_pdf;
 }
 
-/// Output operator for \ref vegas_pdf.
-template <typename CharT, typename Traits, typename T>
-inline std::basic_ostream<CharT, Traits>& operator<<(
-	std::basic_ostream<CharT, Traits>& out,
-	vegas_pdf<T> const& pdf
-) {
+/**
+ * Output operator for \ref vegas_pdf.
+ */
+template <typename T>
+inline std::ostream& operator<<(std::ostream& out, vegas_pdf<T> const& pdf)
+{
 	for (std::size_t i = 0; i != pdf.dimensions(); ++i)
 	{
 		for (std::size_t j = 0; j < pdf.bins() - 1; ++j)
@@ -249,11 +249,9 @@ inline std::basic_ostream<CharT, Traits>& operator<<(
  * Input operator for \ref vegas_pdf. Note that the PDF is not resized and therefore must have
  * correct `dimensions` and `bins` before calling this function.
  */
-template <typename CharT, typename Traits, typename T>
-inline std::basic_istream<CharT, Traits>& operator>>(
-	std::basic_istream<CharT, Traits>& in,
-	vegas_pdf<T>& pdf
-) {
+template <typename T>
+inline std::istream& operator>>(std::istream& in, vegas_pdf<T>& pdf)
+{
 	for (std::size_t i = 0; i != pdf.dimensions(); ++i)
 	{
 		for (std::size_t j = 0; j != pdf.bins(); ++j)
