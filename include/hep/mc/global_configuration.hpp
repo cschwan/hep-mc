@@ -1,9 +1,9 @@
-#ifndef HEP_MC_GLOBAL_CONFIGURATION
-#define HEP_MC_GLOBAL_CONFIGURATION
+#ifndef HEP_MC_GLOBAL_CONFIGURATION_HPP
+#define HEP_MC_GLOBAL_CONFIGURATION_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013  Christopher Schwan
+ * Copyright (C) 2014  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

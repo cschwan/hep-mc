@@ -18,7 +18,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_LANG([C++])
 
 # unit tests need convenience libraries
-AM_PROG_AR
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_RANLIB
 
 # check for C++11 conforming compiler (autoconf-archive macro)
