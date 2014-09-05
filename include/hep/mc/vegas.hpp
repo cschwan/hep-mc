@@ -51,7 +51,7 @@ template <typename T, typename F, typename R>
 inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
 	std::size_t total_calls,
-	vegas_pdf<T> const& grid,
+	vegas_pdf<T> const& pdf,
 	F&& function,
 	R&& generator
 ) {
@@ -61,8 +61,8 @@ inline vegas_iteration_result<T> vegas_iteration(
 	// for kahan summation
 	T compensation = T();
 
-	std::size_t const dimensions = grid.dimensions();
-	std::size_t const bins = grid.bins();
+	std::size_t const dimensions = pdf.dimensions();
+	std::size_t const bins = pdf.bins();
 
 	std::vector<T> adjustment_data(dimensions * bins + 2);
 	std::vector<T> random_numbers(dimensions);
@@ -76,7 +76,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 				std::numeric_limits<T>::digits>(generator);
 		}
 
-		vegas_point<T> const point(total_calls, random_numbers, bin, grid);
+		vegas_point<T> const point(total_calls, random_numbers, bin, pdf);
 
 		// evaluate function at the specified point and multiply with its weight
 		T const value = function(point) * point.weight;
@@ -90,11 +90,10 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		T const square = value * value;
 
-		// no kahan summation needed, because it only affects the result indirectly via the grid
-		// recomputation
+		// no kahan summation needed, because it affects the result only indirectly via the pdf
 		averaged_squares += square;
 
-		// save square for each bin in order to adjust the grid later
+		// save square for each bin in order to refine the pdf later
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
 			adjustment_data[j * bins + point.bin[j]] += square;
@@ -105,7 +104,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 	adjustment_data[dimensions * bins + 0] = average          * T(total_calls);
 	adjustment_data[dimensions * bins + 1] = averaged_squares * T(total_calls) * T(total_calls);
 
-	return vegas_iteration_result<T>(calls, grid, adjustment_data);
+	return vegas_iteration_result<T>(calls, pdf, adjustment_data);
 }
 
 /**
@@ -142,7 +141,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 			break;
 		}
 
-		pdf = vegas_refine_pdf(alpha, pdf, result.adjustment_data);
+		pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data);
 	}
 
 	return results;

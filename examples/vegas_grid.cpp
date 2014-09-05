@@ -18,17 +18,17 @@ bool print_grid(std::vector<hep::vegas_iteration_result<double>> const& results)
 
 	// print the grid
 	double previous = 0.0;
-	for (std::size_t j = 0; j != grid.bins(); ++j)
+	for (std::size_t j = 1; j != grid.bins(); ++j)
 	{
 		// width of this bin
-		double width = (grid(0, j) - previous);
+		double width = (grid.bin_left(0, j) - previous);
 		// middle-point of the bin
 		double x = previous + width / 2.0;
 		// function value of the bin
 		double height = 1.0 / (10.0 * width);
 
 		std::cout << x << "\t" << height << "\n";
-		previous = grid(0, j);
+		previous = grid.bin_left(0, j);
 	}
 
 	return true;

@@ -53,7 +53,7 @@ struct vegas_point : public mc_point<T>
 		: mc_point<T>(total_calls, random_numbers)
 		, bin(bin)
 	{
-		this->weight *= pdf.icdf(random_numbers, bin);
+		this->weight *= vegas_icdf(pdf, random_numbers, bin);
 	}
 
 	/// The indices that determine the bins of the point in the binned pdf.

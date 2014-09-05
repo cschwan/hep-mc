@@ -21,9 +21,11 @@
 
 #include "hep/mc/global_configuration.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <iosfwd>
+#include <iostream>
 #include <vector>
 
 namespace hep
@@ -40,7 +42,12 @@ namespace hep
  *     p \left( x_1, x_2, \ldots, x_n \right) = \prod_{i=1}^n p_i \left( x_i \right)
  * \f]
  * with \f$ n \f$ different piecewise constant one-dimensional PDFs \f$ p_i \left( x_i \right) \f$.
- * The value of the PDF is determined by the inverse size of the bins.
+ * The value of the PDF is determined by the inverse size of the bins. The bin boundaries \f$ x_i
+ * \f$ can be accessed by the member function \ref bin_left and set by \ref set_bin_left. The
+ * boundaries need to satisfy the consistency condition
+ * \f[
+ *     0 = x_0 < x_1 < \ldots < x_{n-1} < x_n = 1
+ * \f]
  */
 template <typename T>
 class vegas_pdf
@@ -48,96 +55,110 @@ class vegas_pdf
 public:
 	/**
 	 * Constructor. Constructs a piecewise constant PDF with the given `dimensions`, each dimension
-	 * subdivided by given number of `bins`. Each bin has the same size and therefore this PDF
-	 * generates random numbers uniformly.
+	 * subdivided by given number of `bins`. Initialy each bin has the same size and therefore this
+	 * PDF generates uniformly distributed random numbers.
 	 */
 	vegas_pdf(std::size_t dimensions, std::size_t bins)
-		: x(dimensions, std::vector<T>(bins + 1))
+		: x(dimensions * (bins + 1))
+		, bins_(bins)
+		, dimensions_(dimensions)
 	{
-		std::vector<T> one_dimensional_grid(bins + 1);
 		for (std::size_t i = 0; i != bins + 1; ++i)
 		{
-			one_dimensional_grid[i] = T(i) / T(bins);
+			x[i] = T(i) / T(bins);
 		}
 
-		for (std::size_t i = 0; i != dimensions; ++i)
+		for (std::size_t i = 1; i != dimensions; ++i)
 		{
-			x[i] = one_dimensional_grid;
+			std::copy(x.begin(), x.begin() + (bins + 1), x.begin() + i * (bins + 1));
 		}
 	}
 
-	/// Returns the right boundary of `bin` for `dimension`.
-	T operator()(std::size_t dimension, std::size_t bin) const
+	// Returns the left bin boundary of `bin` in `dimension`.
+	T bin_left(std::size_t dimension, std::size_t bin) const
 	{
-		return x[dimension][bin + 1];
+		return x[dimension * (bins_ + 1) + bin];
 	}
 
-	/// Returns the right boundary of `bin` for `dimension`.
-	T& operator()(std::size_t dimension, std::size_t bin)
+	/**
+	 * Places the new left boundary of `bin` in `dimension` at `left`. Note that this function does
+	 * not try to maintain an internally consistent state, i.e. if you use this function make sure
+	 * the first entry is zero, the last one and all entries in between are strictly increasing.
+	 */
+	void set_bin_left(std::size_t dimension, std::size_t bin, T left)
 	{
-		return x[dimension][bin + 1];
+		x[dimension * (bins_ + 1) + bin] = left;
 	}
 
 	/// The number of bins for each dimension.
 	std::size_t bins() const
 	{
-		return x[0].size() - 1;
+		return bins_;
 	}
 
-	/// The number of dimension of this PDF.
+	/// The number of dimensions of this PDF.
 	std::size_t dimensions() const
 	{
-		return x.size();
-	}
-
-	/**
-	 * Applies the inverse cumulative distribution function to `random_numbers` and updates it with
-	 * the new numbers. The bin indices are written into `bin`. The number returned by this
-	 * function is the corresponding weight; a weight of one means that this pdf is a uniform one.
-	 */
-	T icdf(std::vector<T>& random_numbers, std::vector<std::size_t>& bin) const
-	{
-		T weight = T(1.0);
-
-		for (std::size_t i = 0; i != dimensions(); ++i)
-		{
-			T const position = random_numbers[i] * bins();
-
-			// randomly select a bin index (integer part) ...
-			std::size_t const index = position;
-
-			// and the position inside this bin (0 -> left boundary, 1 -> right boundary)
-			T const position_inside_bin = position - index;
-
-			// save the index for later
-			bin[i] = index;
-
-			// determine the left bin boundary and its size
-			T const bin_left = x[i][index];
-			T const bin_size = x[i][index + 1] - bin_left;
-
-			// apply the one-dimensional linear inverse CDF
-			random_numbers[i] = bin_left + position_inside_bin * bin_size;
-
-			// multiply weight for each dimension
-			weight *= bin_size * bins();
-		}
-
-		return weight;
+		return dimensions_;
 	}
 
 private:
-	std::vector<std::vector<T>> x;
+	std::vector<T> x;
+	std::size_t bins_;
+	std::size_t dimensions_;
 };
+
+/**
+ * Applies the inverse cumulative distribution function to `random_numbers` and updates it with the
+ * new numbers. The bin indices are written into `bin`. The number returned by this function is the
+ * corresponding weight; a weight of one means that this pdf is a uniform one.
+ */
+template <typename T>
+inline T vegas_icdf(
+	vegas_pdf<T> const& pdf,
+	std::vector<T>& random_numbers,
+	std::vector<std::size_t>& bin
+) {
+	T weight = T(1.0);
+
+	std::size_t const dimensions = pdf.dimensions();
+	std::size_t const bins       = pdf.bins();
+
+	for (std::size_t i = 0; i != dimensions; ++i)
+	{
+		T const position = random_numbers[i] * bins;
+
+		// randomly select a bin index (integer part) ...
+		std::size_t const index = position;
+
+		// and the position inside this bin (0 -> left boundary, 1 -> right boundary)
+		T const position_inside_bin = position - index;
+
+		// save the index for later
+		bin[i] = index;
+
+		// determine the left bin boundary and its size
+		T const left = pdf.bin_left(i, index);
+		T const size = pdf.bin_left(i, index + 1) - left;
+
+		// apply the one-dimensional linear inverse CDF
+		random_numbers[i] = left + position_inside_bin * size;
+
+		// multiply weight for each dimension
+		weight *= size * bins;
+	}
+
+	return weight;
+}
 
 /**
  * Refines the `pdf` using `data`, which must be the binned square-function values, and returns the
  * new pdf. The process can be controlled by the parameter `alpha` which is documented in the Vegas
- * publication \cite Vegas1 \cite Vegas2. This function's code is derived from Thomas Hahn's
- * `refine_grid` from the CUBA VEGAS implementation \cite Cuba.
+ * publication \cite Vegas1 \cite Vegas2 . This function's code is derived from Thomas Hahn's
+ * `refine_grid` from the CUBA \cite Cuba VEGAS implementation.
  */
 template <typename T>
-inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vector<T> const& data)
+inline vegas_pdf<T> vegas_refine_pdf(vegas_pdf<T> const& pdf, T alpha, std::vector<T> const& data)
 {
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
@@ -190,32 +211,34 @@ inline vegas_pdf<T> vegas_refine_pdf(T alpha, vegas_pdf<T> const& pdf, std::vect
 
 		T this_bin = T();
 		std::size_t bin = 0;
-		T new_current = T();
 
 		// redefine the size of each bin
-		for (std::size_t new_bin = 0; new_bin != bins - 1; ++new_bin)
+		for (std::size_t new_bin = 1; new_bin != bins; ++new_bin)
 		{
 			for (; this_bin < average_per_bin; ++bin)
 			{
 				this_bin += tmp[bin];
 			}
 
-			T const previous = (bin != 1) ? pdf(i, bin - 2) : T();
-			T const current = pdf(i, bin - 1);
+			T const previous = pdf.bin_left(i, bin - 1);
+			T const current  = pdf.bin_left(i, bin);
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
 
+			T new_left;
+
 			if (vegas_cuba_refinement())
 			{
-				T const average_importance = T(0.5) * (tmp[bin - 1] + tmp[bin != 1 ? bin - 2 : 0]);
-				new_current = std::fmax(new_current, current - delta / average_importance);
+				std::size_t const bin_minus_two = bin != 1 ? bin - 2 : 0;
+				T const average_importance = T(0.5) * (tmp[bin - 1] + tmp[bin_minus_two]);
+				new_left = std::fmax(new_left, current - delta / average_importance);
 			}
 			else
 			{
-				new_current = current - delta / tmp[bin - 1];
+				new_left = current - delta / tmp[bin - 1];
 			}
 
-			new_pdf(i, new_bin) = new_current;
+			new_pdf.set_bin_left(i, new_bin, new_left);
 		}
 	}
 
@@ -230,11 +253,11 @@ inline std::ostream& operator<<(std::ostream& out, vegas_pdf<T> const& pdf)
 {
 	for (std::size_t i = 0; i != pdf.dimensions(); ++i)
 	{
-		for (std::size_t j = 0; j < pdf.bins() - 1; ++j)
+		for (std::size_t j = 0; j != pdf.bins(); ++j)
 		{
-			out << pdf(i, j) << " ";
+			out << pdf.bin_left(i, j) << " ";
 		}
-		out << pdf(i, pdf.bins() - 1);
+		out << pdf.bin_left(i, pdf.bins());
 
 		if (i < pdf.dimensions() - 1)
 		{
@@ -254,9 +277,11 @@ inline std::istream& operator>>(std::istream& in, vegas_pdf<T>& pdf)
 {
 	for (std::size_t i = 0; i != pdf.dimensions(); ++i)
 	{
-		for (std::size_t j = 0; j != pdf.bins(); ++j)
+		for (std::size_t j = 0; j != pdf.bins() + 1; ++j)
 		{
-			in >> pdf(i, j);
+			T tmp;
+			in >> tmp;
+			pdf.set_bin_left(i, j, tmp);
 		}
 	}
 

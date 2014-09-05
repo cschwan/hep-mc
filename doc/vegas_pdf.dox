@@ -4,5 +4,13 @@
 
 \brief Functions and Classes that implement that VEGAS grid
 
+Functions and classes that allow to use and manipulate probability distribution functions (PDFs) as
+described in the VEGAS publication.
+
+The class \ref vegas_pdf implements the separable PDF using a piecewise constant function, where the
+pieces are called bins whose boundaries are stored. The PDF can be manipulated by
+\ref vegas_refine_pdf. The weight and the corresponding random number is computed by
+\ref vegas_icdf. PDFs can be read and written using the stream operators, see the example
+\ref vegas_grid.cpp.
 
 */

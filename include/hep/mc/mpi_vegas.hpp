@@ -107,7 +107,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 			break;
 		}
 
-		pdf = vegas_refine_pdf(alpha, pdf, result.adjustment_data);
+		pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data);
 	}
 
 	return results;

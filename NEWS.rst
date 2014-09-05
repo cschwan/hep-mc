@@ -1,6 +1,8 @@
 New in 0.2.2.9999:
 ==================
 
+- changed ``hep::vegas_pdf`` interface to use more descriptive member function
+  names and moved the member function ``icdf`` outside the class
 - revamped documentation
 - changed function names of ``hep::cumulative_result`` and
   ``hep::chi_square_dof`` to the same names with a ``0`` and ``1`` at the end
