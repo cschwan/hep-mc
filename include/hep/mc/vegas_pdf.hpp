@@ -22,7 +22,6 @@
 #include "hep/mc/global_configuration.hpp"
 
 #include <algorithm>
-#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <iosfwd>
@@ -127,9 +126,12 @@ inline T vegas_icdf(
 
 	for (std::size_t i = 0; i != dimensions; ++i)
 	{
-		// this is not neccesarily true on all implementations of the C++ standard library, see
+		// avoid bug in common C++ standard libraries, see
 		// stackoverflow.com/questions/25668600/is-1-0-a-valid-output-from-stdgenerate-canonical
-		assert( (random_numbers[i] >= T()) && (random_numbers[i] < T(1.0)) );
+		if (random_numbers[i] == T(1.0))
+		{
+			random_numbers[i] = std::nexttoward(random_numbers[i], T());
+		}
 
 		T const position = random_numbers[i] * bins;
 

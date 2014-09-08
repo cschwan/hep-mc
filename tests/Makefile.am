@@ -13,6 +13,7 @@ check_PROGRAMS = \
 	test_mc_result \
 	test_plain \
 	test_vegas \
+	test_vegas_icdf_bug \
 	test_vegas_pdf
 
 # redundant for automake >= 1.11
@@ -21,6 +22,7 @@ test_mc_point_SOURCES = test_mc_point.cpp
 test_mc_result_SOURCES = test_mc_result.cpp
 test_plain_SOURCES = test_plain.cpp
 test_vegas_SOURCES = test_vegas.cpp
+test_vegas_icdf_bug_SOURCES = test_vegas_icdf_bug.cpp
 test_vegas_pdf_SOURCES = test_vegas_pdf.cpp
 
 LDADD = libgtest.a libgtest_main.a
