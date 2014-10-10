@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_vegas_callback.hpp"
@@ -77,7 +78,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	{
 		if (mpi_single_generator())
 		{
-			mpi_advance_generator_before<T>(pdf.dimensions(), *i, rank, world, generator);
+			advance_generator_before<T>(pdf.dimensions(), *i, rank, world, generator);
 		}
 
 		std::size_t const calls = (*i / world) +
@@ -86,7 +87,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 		if (mpi_single_generator())
 		{
-			mpi_advance_generator_after<T>(pdf.dimensions(), *i, calls, rank, world, generator);
+			advance_generator_after<T>(pdf.dimensions(), *i, calls, rank, world, generator);
 		}
 
 		// add up results

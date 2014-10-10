@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
@@ -83,7 +84,7 @@ inline mc_result<T> mpi_plain(
 
 	if (mpi_single_generator())
 	{
-		mpi_advance_generator_before<T>(dimensions, calls, rank, world, generator);
+		advance_generator_before<T>(dimensions, calls, rank, world, generator);
 	}
 
 	auto result = plain_iteration<T>(dimensions, calls, sub_calls, function, generator);
@@ -94,7 +95,7 @@ inline mc_result<T> mpi_plain(
 
 	if (mpi_single_generator())
 	{
-		mpi_advance_generator_after<T>(dimensions, calls, sub_calls, rank, world, generator);
+		advance_generator_after<T>(dimensions, calls, sub_calls, rank, world, generator);
 	}
 
 	MPI_Allreduce(
