@@ -61,9 +61,6 @@ int main(int argc, char* argv[])
 		std::cout << "running hep::mpi_vegas with " << size << " processes\n\n";
 	}
 
-	// use a single generator: slower, but makes the result independent of the number of processes
-	hep::mpi_single_generator(true);
-
 	// set the verbose vegas callback function
 	hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
 

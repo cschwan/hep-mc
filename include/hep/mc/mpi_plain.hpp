@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2014  Christopher Schwan
+ * Copyright (C) 2013-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,14 +65,6 @@ inline mc_result<T> mpi_plain(
 	int world = 0;
 	MPI_Comm_size(communicator, &world);
 
-	if (!mpi_single_generator())
-	{
-		// seed every random number generator differently
-		std::size_t const r = rank * 10;
-		std::seed_seq sequence{r+0, r+1, r+2, r+3, r+4, r+5, r+6, r+7, r+8, r+9};
-		generator.seed(sequence);
-	}
-
 	// default-initialize sum and sum_of_squares
 	T  buffer[2]      = { T(), T() };
 	T& sum            = buffer[0];
@@ -82,30 +74,19 @@ inline mc_result<T> mpi_plain(
 	std::size_t const sub_calls = (calls / world) +
 		(static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
 
-	if (mpi_single_generator())
-	{
-		advance_generator_before<T>(dimensions, calls, rank, world, generator);
-	}
+	std::size_t const usage = dimensions * random_number_usage<T, R>();
+
+	generator.discard(usage * discard_before(calls, rank, world));
 
 	auto result = plain_iteration<T>(dimensions, calls, sub_calls, function, generator);
+
+	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
 	sum = result.value * T(result.calls);
 	sum_of_squares = T(result.calls) * (result.value * result.value + T(calls) *
 		result.error * result.error);
 
-	if (mpi_single_generator())
-	{
-		advance_generator_after<T>(dimensions, calls, sub_calls, rank, world, generator);
-	}
-
-	MPI_Allreduce(
-		MPI_IN_PLACE,
-		&buffer,
-		2,
-		mpi_datatype<T>(),
-		MPI_SUM,
-		communicator
-	);
+	MPI_Allreduce(MPI_IN_PLACE, &buffer, 2, mpi_datatype<T>(), MPI_SUM, communicator);
 
 	return mc_result<T>(calls, sum, sum_of_squares);
 }

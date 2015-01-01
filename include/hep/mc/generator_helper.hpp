@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014  Christopher Schwan
+ * Copyright (C) 2014-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,40 +45,28 @@ inline std::size_t random_number_usage()
 	return k;
 }
 
-template <typename T, typename R>
-inline void advance_generator_before(
-	std::size_t dimensions,
+inline std::size_t discard_before(
 	std::size_t total_calls,
 	std::size_t rank,
-	std::size_t world,
-	R& generator
+	std::size_t world
 ) {
-	std::size_t const usage = random_number_usage<T, R>() * dimensions;
-
 	std::size_t const before = (total_calls / world) * rank +
 		(((total_calls % world) < rank) ? total_calls % world : rank);
 
-	generator.discard(before * usage);
+	return before;
 }
 
-template <typename T, typename R>
-inline void advance_generator_after(
-	std::size_t dimensions,
+inline std::size_t discard_after(
 	std::size_t total_calls,
 	std::size_t calls,
 	std::size_t rank,
-	std::size_t world,
-	R& generator
+	std::size_t world
 ) {
-	std::size_t const usage = random_number_usage<T, R>() * dimensions;
 
-	std::size_t const before = (total_calls / world) * rank +
-		(((total_calls % world) < rank) ? total_calls % world : rank);
+	std::size_t const before = discard_before(total_calls, rank, world);
+	std::size_t const after = ((before + calls) < total_calls) ? (total_calls - before - calls) : 0;
 
-	std::size_t const after = ((before + calls) < total_calls) ?
-		(total_calls - before - calls) : 0;
-
-	generator.discard(after * usage);
+	return after;
 }
 
 }

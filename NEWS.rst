@@ -1,6 +1,8 @@
 New in 0.2.2.9999:
 ==================
 
+- removal of the ``hep::mpi_single_generator`` function. This is now on by
+  default - the integration results are independent of the number of processes
 - temporary fix for single-precision floating point numbers that are ``1.0f``
   and therefore outside of the half-open interval [0,1)
 - changed ``hep::vegas_pdf`` interface to use more descriptive member function
