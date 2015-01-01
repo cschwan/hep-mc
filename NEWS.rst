@@ -1,6 +1,8 @@
 New in 0.2.2.9999:
 ==================
 
+- temporary fix for single-precision floating point numbers that are ``1.0f``
+  and therefore outside of the half-open interval [0,1)
 - changed ``hep::vegas_pdf`` interface to use more descriptive member function
   names and moved the member function ``icdf`` outside the class
 - revamped documentation
