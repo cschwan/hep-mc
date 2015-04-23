@@ -232,7 +232,7 @@ inline vegas_pdf<T> vegas_refine_pdf(vegas_pdf<T> const& pdf, T alpha, std::vect
 			this_bin -= average_per_bin;
 			T const delta = (current - previous) * this_bin;
 
-			T new_left;
+			T new_left = T();
 
 			if (vegas_cuba_refinement())
 			{

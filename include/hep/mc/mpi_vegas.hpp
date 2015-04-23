@@ -90,7 +90,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 		);
 
 		// calculate accumulated results
-		results.push_back(vegas_iteration_result<T>(*i, pdf, result.adjustment_data));
+		results.emplace_back(*i, pdf, result.adjustment_data);
 
 		if (!mpi_vegas_callback<T>()(communicator, results))
 		{
@@ -138,7 +138,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	return mpi_vegas(
 		communicator,
 		iteration_calls,
-		function,
+		std::forward<F>(function),
 		vegas_pdf<T>(dimensions, bins),
 		alpha,
 		std::forward<R>(generator)

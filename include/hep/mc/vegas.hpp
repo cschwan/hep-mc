@@ -63,7 +63,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 	T compensation = T();
 
 	std::size_t const dimensions = pdf.dimensions();
-	std::size_t const bins = pdf.bins();
+	std::size_t const bins       = pdf.bins();
 
 	std::vector<T> adjustment_data(dimensions * bins + 2);
 	std::vector<T> random_numbers(dimensions);
@@ -166,7 +166,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 ) {
 	return vegas(
 		iteration_calls,
-		function,
+		std::forward<F>(function),
 		vegas_pdf<T>(dimensions, bins),
 		alpha,
 		std::forward<R>(generator)

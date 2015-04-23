@@ -79,7 +79,7 @@ TYPED_TEST(McHelper, CumulativeResult0WithTwo)
 	// the same result and
 	EXPECT_NEAR( two_results.front().value , result.value , T(1e-10) );
 	// an error reduces by 1/sqrt(2)
-	EXPECT_NEAR( two_results.front().error / std::sqrt(T(2.0)) , result.error , T(1e-10) );
+	EXPECT_NEAR( two_results.front().error / std::sqrt(T(2.0)) , result.error , T(1e-9) );
 }
 
 TYPED_TEST(McHelper, CumulativeResult1WithTwo)

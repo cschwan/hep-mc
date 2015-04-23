@@ -51,8 +51,6 @@ inline hep::mc_result<T> plain_iteration(
 	// iterate over calls
 	for (std::size_t i = 0; i != calls; ++i)
 	{
-		hep::mc_point<T> point(total_calls, random_numbers);
-
 		// fill container with random numbers
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
@@ -61,8 +59,7 @@ inline hep::mc_result<T> plain_iteration(
 		}
 
 		// evaluate function at position specified in random_numbers
-		T const value = function(static_cast <hep::mc_point<T> const> (point));
-
+		T const value = function(hep::mc_point<T>(total_calls, random_numbers)); 
 		// perform kahan summation 'sum += value' - this improves precision if T is e.g. single
 		// precision and many values are added
 		T const y = value - compensation;
