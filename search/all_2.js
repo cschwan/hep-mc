@@ -1,6 +1,8 @@
 var searchData=
 [
   ['calls',['calls',['../structhep_1_1mc__result.html#acf2205e809627d8ba2e5d0dadf89356c',1,'hep::mc_result']]],
+  ['channel',['channel',['../structhep_1_1multi__channel__point.html#a7e432e9fbaccd97d37cfac4bb6730ec0',1,'hep::multi_channel_point']]],
+  ['channel_5fweights',['channel_weights',['../structhep_1_1multi__channel__result.html#abdfcf4d320cb1661af7b7ade6ab56833',1,'hep::multi_channel_result']]],
   ['chi_5fsquare_5fdof',['chi_square_dof',['../group__results.html#ga276c092765419532ec50f68090626863',1,'hep']]],
   ['chi_5fsquare_5fdof0',['chi_square_dof0',['../group__results.html#ga44db028bc67ef05171614a560b0fd400',1,'hep']]],
   ['chi_5fsquare_5fdof1',['chi_square_dof1',['../group__results.html#ga87a09322bfe0ab6ae8b2768bcc6bad71',1,'hep']]],

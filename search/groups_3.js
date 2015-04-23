@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['results',['Results',['../group__results.html',1,'']]]
+  ['plain_20integrator',['PLAIN Integrator',['../group__plain__group.html',1,'']]]
 ];
