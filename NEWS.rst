@@ -1,6 +1,7 @@
-New in 0.3.0.9999:
-==================
+New in 0.3.1:
+=============
 
+- fixed compilation error
 - added new multi channel integrator
 
 New in 0.3:
