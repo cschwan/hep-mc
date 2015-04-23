@@ -2,7 +2,7 @@
 AC_PREREQ([2.58])
 
 # initialize configure
-AC_INIT([hep-mc], [0.2.2.9999], [https://github.com/cschwan/hep-mc/issues],
+AC_INIT([hep-mc], [0.3], [https://github.com/cschwan/hep-mc/issues],
 	[hep-mc], [https://github.com/cschwan/hep-mc])
 
 # put autotools files into a separate directory
@@ -22,12 +22,12 @@ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_RANLIB
 
 # check for C++11 conforming compiler (autoconf-archive macro)
-AX_CXX_COMPILE_STDCXX_11([noext])
+AX_CXX_COMPILE_STDCXX_11([], [mandatory])
 
 # point to a source file in order to let ./configure find itself
 AC_CONFIG_SRCDIR([include/hep/mc.hpp])
 
-# don't pollute the command line with compiler defs, write them into the specified header
+# don't pollute the command line with compiler defs, write them into a header that we dont need
 AC_CONFIG_HEADERS([config.hpp])
 
 # MPI

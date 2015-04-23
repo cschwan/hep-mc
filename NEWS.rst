@@ -1,5 +1,5 @@
-New in 0.2.2.9999:
-==================
+New in 0.3:
+===========
 
 - removal of the ``hep::mpi_single_generator`` function. This is now on by
   default - the integration results are independent of the number of processes
