@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2014  Christopher Schwan
+ * Copyright (C) 2012-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <limits>
 #include <random>
+#include <utility>
 #include <vector>
 
 namespace hep
@@ -168,7 +169,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 		function,
 		vegas_pdf<T>(dimensions, bins),
 		alpha,
-		generator
+		std::forward<R>(generator)
 	);
 }
 

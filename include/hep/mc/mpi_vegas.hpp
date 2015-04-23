@@ -29,6 +29,7 @@
 
 #include <cstddef>
 #include <random>
+#include <utility>
 #include <vector>
 
 #include <mpi.h>
@@ -140,7 +141,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 		function,
 		vegas_pdf<T>(dimensions, bins),
 		alpha,
-		generator
+		std::forward<R>(generator)
 	);
 }
 
