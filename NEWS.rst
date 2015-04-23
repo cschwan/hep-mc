@@ -1,3 +1,8 @@
+New in 0.3.0.9999:
+==================
+
+- added new multi channel integrator
+
 New in 0.3:
 ===========
 

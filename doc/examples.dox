@@ -1,6 +1,7 @@
 /**
 
 \example helper_example.cpp
+\example multi_channel_example.cpp
 \example mpi_vegas_example.cpp
 \example read_linear_grid.cpp
 \example vegas_example.cpp

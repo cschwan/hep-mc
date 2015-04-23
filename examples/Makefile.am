@@ -4,6 +4,7 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 
 noinst_PROGRAMS = \
 	helper_example \
+	multi_channel_example \
 	read_linear_grid \
 	vegas_example \
 	vegas_grid \
@@ -11,6 +12,7 @@ noinst_PROGRAMS = \
 
 # redundant for automake >= 1.11
 helper_example_SOURCES = helper_example.cpp
+multi_channel_example_SOURCES = multi_channel_example.cpp
 read_linear_grid_SOURCES = read_linear_grid.cpp
 vegas_example_SOURCES = vegas_example.cpp
 vegas_grid_SOURCES = vegas_grid.cpp
