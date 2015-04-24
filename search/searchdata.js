@@ -3,10 +3,10 @@ var indexSectionsWithContent =
   0: "abcdeghimnoprstvw",
   1: "mv",
   2: "h",
-  3: "bcdmopstv",
+  3: "bcdmopsv",
   4: "abcepvw",
   5: "mnv",
-  6: "gimprv",
+  6: "giprv",
   7: "bt"
 };
 

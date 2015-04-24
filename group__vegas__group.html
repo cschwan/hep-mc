@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">hep-mc
-   &#160;<span id="projectnumber">0.3.1.9999</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
   </td>
  </tr>
@@ -105,12 +105,6 @@ Functions</h2></td></tr>
 <tr class="memitem:gaa572c7de231d01911488524c2a998b93"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename R  = std::mt19937&gt; </td></tr>
 <tr class="memitem:gaa572c7de231d01911488524c2a998b93"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_iteration_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#gaa572c7de231d01911488524c2a998b93">hep::mpi_vegas</a> (MPI_Comm communicator, std::size_t dimensions, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, F &amp;&amp;function, std::size_t bins=128, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
 <tr class="separator:gaa572c7de231d01911488524c2a998b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga47a97a2de3fb79d19ad7f531aff103bb"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga47a97a2de3fb79d19ad7f531aff103bb"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_iteration_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga47a97a2de3fb79d19ad7f531aff103bb">hep::thread_vegas</a> (std::size_t thread_count, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, F &amp;&amp;function, vegas_pdf&lt; T &gt; const &amp;start_pdf, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga47a97a2de3fb79d19ad7f531aff103bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2f61e46122f97009e96b74a2e95fe22a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga2f61e46122f97009e96b74a2e95fe22a"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_iteration_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga2f61e46122f97009e96b74a2e95fe22a">hep::thread_vegas</a> (std::size_t thread_count, std::size_t dimensions, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, F &amp;&amp;function, std::size_t bins=128, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga2f61e46122f97009e96b74a2e95fe22a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga459f67a873c851bd83b8533d5f40bb27"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename R &gt; </td></tr>
 <tr class="memitem:ga459f67a873c851bd83b8533d5f40bb27"><td class="memTemplItemLeft" align="right" valign="top">vegas_iteration_result&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga459f67a873c851bd83b8533d5f40bb27">hep::vegas_iteration</a> (std::size_t calls, std::size_t total_calls, vegas_pdf&lt; T &gt; const &amp;pdf, F &amp;&amp;function, R &amp;&amp;generator)</td></tr>
 <tr class="separator:ga459f67a873c851bd83b8533d5f40bb27"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,132 +253,6 @@ template&lt;typename T , typename F , typename R  = std::mt19937&gt; </div>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="ga47a97a2de3fb79d19ad7f531aff103bb"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename F , typename R  = std::mt19937&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;vegas_iteration_result&lt;T&gt; &gt; hep::thread_vegas </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>thread_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::size_t &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>iteration_calls</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">F &amp;&amp;&#160;</td>
-          <td class="paramname"><em>function</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classhep_1_1vegas__pdf.html">vegas_pdf</a>&lt; T &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>start_pdf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>T(1.5)</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">R &amp;&amp;&#160;</td>
-          <td class="paramname"><em>generator</em> = <code>std::mt19937()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ga2f61e46122f97009e96b74a2e95fe22a"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , typename F , typename R  = std::mt19937&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;vegas_iteration_result&lt;T&gt; &gt; hep::thread_vegas </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>thread_count</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>dimensions</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; std::size_t &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>iteration_calls</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">F &amp;&amp;&#160;</td>
-          <td class="paramname"><em>function</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>bins</em> = <code>128</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>T(1.5)</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">R &amp;&amp;&#160;</td>
-          <td class="paramname"><em>generator</em> = <code>std::mt19937()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
