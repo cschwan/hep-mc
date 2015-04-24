@@ -1,17 +1,7 @@
-New in 0.3.1.9999:
-==================
-
-
-
-New in 0.3.1:
-=============
-
-- fixed compilation error
-- added new multi channel integrator
-
 New in 0.3:
 ===========
 
+- fixed compilation error
 - removal of the ``hep::mpi_single_generator`` function. This is now on by
   default - the integration results are independent of the number of processes
 - temporary fix for single-precision floating point numbers that are ``1.0f``

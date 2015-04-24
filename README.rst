@@ -2,13 +2,8 @@ Project Description
 ===================
 
 ``hep-mc`` is a C++11 template library providing Monte Carlo integration
-routines, currently
-
-- a PLAIN integrator,
-- VEGAS, which uses adaptive importance sampling, and
-- a multi channel integrator.
-
-In addition, this library comes with MPI-parallelized routines.
+algorithms, currently only PLAIN and VEGAS. In addition, this library comes with
+MPI-parallelized routines.
 
 The aim of this project is to provide functions and classes that are:
 

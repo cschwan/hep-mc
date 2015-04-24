@@ -11,7 +11,6 @@ EXTRA_DIST = \
 	global_configuration.dox \
 	integrands.dox \
 	mainpage.dox \
-	multi_channel.dox \
 	plain.dox \
 	references.bib \
 	results.dox \
