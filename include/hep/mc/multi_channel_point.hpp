@@ -1,9 +1,9 @@
-#ifndef HEP_MC_HPP
-#define HEP_MC_HPP
+#ifndef HEP_MC_MULTI_CHANNEL_POINT_HPP
+#define HEP_MC_MULTI_CHANNEL_POINT_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2014  Christopher Schwan
+ * Copyright (C) 2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/global_configuration.hpp"
-#include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"
-#include "hep/mc/mc_result.hpp"
-#include "hep/mc/multi_channel.hpp"
-#include "hep/mc/multi_channel_point.hpp"
-#include "hep/mc/multi_channel_result.hpp"
-#include "hep/mc/plain.hpp"
-#include "hep/mc/vegas.hpp"
-#include "hep/mc/vegas_callback.hpp"
-#include "hep/mc/vegas_iteration_result.hpp"
-#include "hep/mc/vegas_pdf.hpp"
-#include "hep/mc/vegas_point.hpp"
+
+#include <cstddef>
+#include <vector>
+
+namespace hep
+{
+
+/// \addtogroup integrands
+/// @{
+
+/// Point in the unit-hypercube for multi-channel Monte Carlo integration.
+template <typename T>
+struct multi_channel_point : public mc_point<T>
+{
+	/// Constructor.
+	multi_channel_point(
+		std::size_t calls,
+		std::vector<T> const& point,
+		std::size_t channel,
+		T total_density
+	)
+		: mc_point<T>(calls, point)
+		, channel(channel)
+	{
+		this->weight /= total_density;
+	}
+
+	/// The selected channel for this point.
+	std::size_t channel;
+};
+
+/// @}
+
+}
 
 #endif

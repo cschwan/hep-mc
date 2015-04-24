@@ -4,6 +4,7 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 
 noinst_PROGRAMS = \
 	helper_example \
+	multi_channel_example \
 	vegas_example \
 	vegas_read_pdf \
 	vegas_write_pdf \
@@ -11,6 +12,7 @@ noinst_PROGRAMS = \
 
 # redundant for automake >= 1.11
 helper_example_SOURCES = helper_example.cpp
+multi_channel_example_SOURCES = multi_channel_example.cpp
 vegas_example_SOURCES = vegas_example.cpp
 vegas_read_pdf_SOURCES = vegas_read_pdf.cpp
 vegas_write_pdf_SOURCES = vegas_write_pdf.cpp
