@@ -41,13 +41,16 @@ namespace hep
 /// following signature:
 /// \code
 /// void my_density_functions(
+///     std::size_t channel,
 ///     std::vector<T> const& point,
 ///     std::vector<T>& channel_densities
 /// );
 /// \endcode
-/// The variable `point` is the randomly selected point in the unit-hypercube 
-/// and `channel_densities` is/ vector where the result of the densities for 
-/// this point must be stored.
+/// The variable `point` gives the uniformly generated point in the
+/// unit-hypercube, `channel` is the number of the channel that was reandomly
+/// selected and  for the selected `channel`, and `channel_densities` is the
+/// vector where the result of the densities for this combination of `point` and
+/// `channel` must be stored.
 template <typename T, typename F, typename D, typename R>
 inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
@@ -86,7 +89,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 		std::size_t const channel = channel_selector(generator);
 
 		// compute the densities for `random_numbers` for every channel
-		densities(static_cast <std::vector<T> const> (random_numbers), 
+		densities(channel, static_cast <std::vector<T> const> (random_numbers),
 			channel_densities);
 
 		T total_density = T();
@@ -110,8 +113,12 @@ inline multi_channel_result<T> multi_channel_iteration(
 
 		sum_of_squares += square;
 
-		adjustment_data[channel] += channel_densities[channel] * square /
-			total_density;
+		// these are the values W that are used to update the alphas
+		for (std::size_t j = 0; j != channels; ++j)
+		{
+			adjustment_data[j] += channel_densities[j] * square /
+				total_density;
+		}
 	}
 
 	sum *= T(calls);

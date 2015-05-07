@@ -19,6 +19,7 @@ int main()
 	};
 
 	auto const densities = [](
+		std::size_t,
 		std::vector<T> const& random_numbers,
 		std::vector<T>& channel_densities
 	) {
