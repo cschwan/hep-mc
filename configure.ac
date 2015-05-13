@@ -2,7 +2,7 @@
 AC_PREREQ([2.58])
 
 # initialize configure
-AC_INIT([hep-mc], [0.3], [https://github.com/cschwan/hep-mc/issues],
+AC_INIT([hep-mc], [0.3.1], [https://github.com/cschwan/hep-mc/issues],
 	[hep-mc], [https://github.com/cschwan/hep-mc])
 
 # put autotools files into a separate directory
