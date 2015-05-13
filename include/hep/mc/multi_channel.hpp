@@ -69,6 +69,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t const channels = channel_weights.size();
 
 	std::vector<T> random_numbers(dimensions);
+	std::vector<T> coordinates(dimensions);
 	std::vector<T> channel_densities(channels);
 	std::vector<T> adjustment_data(channels);
 
@@ -90,7 +91,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 
 		// compute the densities for `random_numbers` for every channel
 		densities(channel, static_cast <std::vector<T> const> (random_numbers),
-			channel_densities);
+			coordinates, channel_densities);
 
 		T total_density = T();
 		for (std::size_t j = 0; j != channels; ++j)
@@ -98,8 +99,8 @@ inline multi_channel_result<T> multi_channel_iteration(
 			total_density += channel_weights[j] * channel_densities[j];
 		}
 
-		multi_channel_point<T> const point(calls, random_numbers, channel,
-			total_density);
+		multi_channel_point<T> const point(calls, random_numbers, coordinates,
+			channel, total_density);
 
 		T const value = function(point) * point.weight;
 

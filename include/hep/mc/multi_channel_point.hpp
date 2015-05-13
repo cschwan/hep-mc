@@ -38,17 +38,22 @@ struct multi_channel_point : public mc_point<T>
 	multi_channel_point(
 		std::size_t calls,
 		std::vector<T> const& point,
+		std::vector<T> const& coordinates,
 		std::size_t channel,
 		T total_density
 	)
 		: mc_point<T>(calls, point)
 		, channel(channel)
+		, coordinates(coordinates)
 	{
 		this->weight /= total_density;
 	}
 
 	/// The selected channel for this point.
 	std::size_t channel;
+
+	/// The point in the hypercube transformed by the current \ref channel.
+	std::vector<T> const& coordinates;
 };
 
 /// @}
