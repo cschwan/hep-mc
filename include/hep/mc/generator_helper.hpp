@@ -64,7 +64,8 @@ inline std::size_t discard_after(
 ) {
 
 	std::size_t const before = discard_before(total_calls, rank, world);
-	std::size_t const after = ((before + calls) < total_calls) ? (total_calls - before - calls) : 0;
+	std::size_t const after = ((before + calls) < total_calls) ?
+		(total_calls - before - calls) : 0;
 
 	return after;
 }

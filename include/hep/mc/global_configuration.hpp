@@ -25,11 +25,9 @@ namespace hep
 /// \addtogroup global_configuration
 /// @{
 
-/**
- * Returns `true` if the VEGAS routines should use the grid refinement method of CUBA \cite Cuba for
- * integrands with sharp edges. If the return value is `false` the original method is used. Default
- * is `false`.
- */
+/// Returns `true` if the VEGAS routines should use the grid refinement method
+/// of CUBA \cite Cuba for integrands with sharp edges. If the return value is
+/// `false` the original method is used. Default is `false`.
 inline bool& vegas_cuba_refinement()
 {
 	static bool use_cuba_refinement = false;
@@ -37,11 +35,9 @@ inline bool& vegas_cuba_refinement()
 	return use_cuba_refinement;
 }
 
-/**
- * If `enabled` is `true` the VEGAS routines use CUBA's grid refinement method.
- *
- * \see \ref vegas_cuba_refinement
- */
+/// If `enabled` is `true` the VEGAS routines use CUBA's grid refinement method.
+///
+/// \see \ref vegas_cuba_refinement
 inline void vegas_cuba_refinement(bool enabled)
 {
 	vegas_cuba_refinement() = enabled;

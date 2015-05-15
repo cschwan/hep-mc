@@ -40,11 +40,9 @@ namespace hep
 /// \addtogroup vegas_group
 /// @{
 
-/**
- * Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an
- * already adapted grid, e.g. one by \ref vegas_iteration_result.pdf obtained by a previous \ref
- * vegas call.
- */
+/// Implements the MPI-parallelized VEGAS algorithm. This function can be used
+/// to start from an already adapted grid, e.g. one by
+/// \ref vegas_iteration_result.pdf obtained by a previous \ref vegas call.
 template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
@@ -103,28 +101,29 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	return results;
 }
 
-/**
- * Implements the MPI-parallelized VEGAS algorithm. See \ref vegas for a more detailed description
- * on the VEGAS algorithm. In contrast to the single-threaded versions this function makes sure that
- * every random number generator is seeded differently so every MPI process yields an independent
- * result. After each iteration the intermediate results are passed to the function set by \ref
- * mpi_vegas_callback which can e.g. be used to print them out. The callback function is able to
- * stop the integration if it returns `false`. In this case less iterations are performed than
- * requested.
- *
- * \param communicator The MPI communicator that is used to communicate between the different MPI
- *        processes.
- * \param dimensions The number of parameters `function` accepts.
- * \param iteration_calls The number of function calls that are used to obtain a result for each
- *        iteration. `iteration_calls.size()` determines the number of iterations.
- * \param function The function that will be integrated over the hypercube. See \ref integrands for
- *        further explanation.
- * \param bins The number of bins that the grid will contain for each dimension.
- * \param alpha The \f$ \alpha \f$ parameter of VEGAS. This parameter is usually set between `1` and
- *        `2`.
- * \param generator The random number generator that will be used to generate random points from the
- * hypercube. This generator is properly seeded.
- */
+/// Implements the MPI-parallelized VEGAS algorithm. See \ref vegas for a more
+/// detailed description on the VEGAS algorithm. In contrast to the
+/// single-threaded versions this function makes sure that every random number
+/// generator is seeded differently so every MPI process yields an independent
+/// result. After each iteration the intermediate results are passed to the
+/// function set by \ref mpi_vegas_callback which can e.g. be used to print them
+/// out. The callback function is able to stop the integration if it returns
+/// `false`. In this case less iterations are performed than requested.
+///
+/// \param communicator The MPI communicator that is used to communicate between
+///        the different MPI processes.
+/// \param dimensions The number of parameters `function` accepts.
+/// \param iteration_calls The number of function calls that are used to obtain
+///        a result for each iteration. `iteration_calls.size()` determines the
+///        number of iterations.
+/// \param function The function that will be integrated over the hypercube. See
+///        \ref integrands for further explanation.
+/// \param bins The number of bins that the grid will contain for each
+///        dimension.
+/// \param alpha The \f$ \alpha \f$ parameter of VEGAS. This parameter is
+///        usually set between `1` and `2`.
+/// \param generator The random number generator that will be used to generate
+///        random points from the hypercube. This generator is properly seeded.
 template <typename T, typename F, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,

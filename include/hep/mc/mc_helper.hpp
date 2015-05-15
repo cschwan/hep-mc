@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2014  Christopher Schwan
+ * Copyright (C) 2013-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,19 +39,20 @@ namespace hep
 /// @{
 
 /**
- * Computes a cumulative result using a range of results pointed to by `begin` and `end`. If \f$
- * E_i, S_i, N_i \f$ are the estimate, error and number of calls of each iteration in the range
- * defined by [`begin`, `end`) and \f$ M \f$ the number of results, then the cumulative result is
- * computed as:
+ * Computes a cumulative result using a range of results pointed to by `begin`
+ * and `end`. If \f$ E_i, S_i, N_i \f$ are the estimate, error and number of
+ * calls of each iteration in the range defined by [`begin`, `end`) and \f$ M
+ * \f$ the number of results, then the cumulative result is computed as:
  * \f{align}{
- * E &= S^2 \sum_{i=1}^M \frac{E_i}{S_i^2} \\
- * S &= \left( \sum_{i=1}^M \frac{1}{S_i^2} \right)^{-\frac{1}{2}} \\
- * N &= \sum_{i=1}^M N_i
+ *     E &= S^2 \sum_{i=1}^M \frac{E_i}{S_i^2} \\
+ *     S &= \left( \sum_{i=1}^M \frac{1}{S_i^2} \right)^{-\frac{1}{2}} \\
+ *     N &= \sum_{i=1}^M N_i
  * \f}
  */
 template <typename Iterator>
-inline mc_result<get_T<Iterator>> cumulative_result0(Iterator begin, Iterator end)
-{
+inline mc_result<get_T<Iterator>> cumulative_result0(
+	Iterator begin, Iterator end
+) {
 	typedef get_T<Iterator> T;
 
 	std::size_t calls = 0;
@@ -77,22 +78,23 @@ inline mc_result<get_T<Iterator>> cumulative_result0(Iterator begin, Iterator en
 }
 
 /**
- * Computes a cumulative result using a range of results pointed to by `begin` and `end`. If \f$
- * E_i, S_i, N_i \f$ are the estimate, error and number of calls of each iteration in the range
- * defined by [`begin`, `end`) and \f$ M \f$ the number of results, then the cumulative result is
- * computed as:
+ * Computes a cumulative result using a range of results pointed to by `begin`
+ * and `end`. If \f$ E_i, S_i, N_i \f$ are the estimate, error and number of
+ * calls of each iteration in the range defined by [`begin`, `end`) and \f$ M
+ * \f$ the number of results, then the cumulative result is computed as:
  * \f{align}{
- * E &= \frac{1}{M} \sum_{i=1}^M E_i \\
- * S &= \left( \frac{1}{M} \frac{1}{M-1} \sum_{i=1}^M \left( E_i - E \right)^2
- *      \right)^{-\frac{1}{2}} \\
- * N &= \sum_{i=1}^M N_i
+ *     E &= \frac{1}{M} \sum_{i=1}^M E_i \\
+ *     S &= \left( \frac{1}{M} \frac{1}{M-1} \sum_{i=1}^M \left( E_i - E
+ *          \right)^2 \right)^{-\frac{1}{2}} \\
+ *     N &= \sum_{i=1}^M N_i
  * \f}
- * Note that this function weighs the result of every iteration equally, independent from the sample
- * size \f$ N_i \f$.
+ * Note that this function weighs the result of every iteration equally,
+ * independent from the sample size \f$ N_i \f$.
  */
 template <typename Iterator>
-inline mc_result<get_T<Iterator>> cumulative_result1(Iterator begin, Iterator end)
-{
+inline mc_result<get_T<Iterator>> cumulative_result1(
+	Iterator begin, Iterator end
+) {
 	typedef get_T<Iterator> T;
 
 	std::size_t const m = std::distance(begin, end);
@@ -124,19 +126,22 @@ inline mc_result<get_T<Iterator>> cumulative_result1(Iterator begin, Iterator en
 	return create_result(calls, value, error);
 }
 
-/**
- * Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using the results \f$ (E_i,
- * S_i) \f$ pointed to by the range [`begin`, `end`). The cumulative value \f$ E \f$ is given by
- * the parameter `result`. The \f$ \chi^2 \f$ is then computed as:
- * \f[
- * \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left( E_i - E \right)^2}{S_i^2}
- * \f]
- * If the range [`begin`, `end`) is empty, the result is zero. If it contains one element the result
- * is infinity.
- */
+/// Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using
+/// the results \f$ (E_i, S_i) \f$ pointed to by the range [`begin`, `end`). The
+/// cumulative value \f$ E \f$ is given by the parameter `result`. The \f$
+/// \chi^2 \f$ is then computed as:
+/// \f[
+///     \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left(
+///     E_i - E \right)^2}{S_i^2}
+/// \f]
+/// If the range [`begin`, `end`) is empty, the result is zero. If it contains
+/// one element the result is infinity.
 template <typename Iterator, typename T>
-inline T chi_square_dof(Iterator begin, Iterator end, mc_result<T> const& result)
-{
+inline T chi_square_dof(
+	Iterator begin,
+	Iterator end,
+	mc_result<T> const& result
+) {
 	T sum = T();
 	std::size_t n = 0;
 
@@ -155,20 +160,16 @@ inline T chi_square_dof(Iterator begin, Iterator end, mc_result<T> const& result
 	return sum / T(n - 1);
 }
 
-/**
- * Wrapper function for \ref chi_square_dof with parameter `result` computed by
- * \ref cumulative_result0.
- */
+/// Wrapper function for \ref chi_square_dof with parameter `result` computed by
+/// \ref cumulative_result0.
 template <typename Iterator>
 inline get_T<Iterator> chi_square_dof0(Iterator begin, Iterator end)
 {
 	return chi_square_dof(begin, end, cumulative_result0(begin, end));
 }
 
-/**
- * Wrapper function for \ref chi_square_dof with parameter `result` computed by
- * \ref cumulative_result1.
- */
+/// Wrapper function for \ref chi_square_dof with parameter `result` computed by
+/// \ref cumulative_result1.
 template <typename Iterator>
 inline get_T<Iterator> chi_square_dof1(Iterator begin, Iterator end)
 {

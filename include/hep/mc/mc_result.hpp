@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2014  Christopher Schwan
+ * Copyright (C) 2012-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,25 +28,26 @@ namespace hep
 /// \addtogroup results
 /// @{
 
-/**
- * The estimation of a Monte Carlo integration. Every Monte Carlo integrator returns one or more
- * instances of this class.
- */
+/// The estimation of a Monte Carlo integration. Every Monte Carlo integrator
+/// returns one or more instances of this class.
 template <typename T>
 struct mc_result
 {
-	/// Constructor. If `calls` is set to zero, both `value` and `error` are also set to zero.
+	/// Constructor. If `calls` is set to zero, both `value` and `error` are
+	/// also set to zero.
 	mc_result(std::size_t calls, T sum, T sum_of_squares)
 		: calls(calls)
 		, value(calls < 1 ? T() : sum / T(calls))
-		, error(calls < 1 ? T() : std::sqrt((sum_of_squares / calls - value * value) / T(calls - 1)))
+		, error(calls < 1 ? T() : std::sqrt((sum_of_squares /
+			calls - value * value) / T(calls - 1)))
 	{
 	}
 
 	/// The numeric type used for member variables.
 	typedef T numeric_type;
 
-	/// The number of function evaluations \f$ N \f$ performed to obtain this result.
+	/// The number of function evaluations \f$ N \f$ performed to obtain this
+	/// result.
 	std::size_t calls;
 
 	/// Expectation value \f$ E \f$ of this result.
@@ -61,7 +62,8 @@ template <typename T>
 inline mc_result<T> create_result(std::size_t calls, T value, T error)
 {
 	T sum = T(calls) * value;
-	T sum_of_squares = T(calls) * (value * value + T(calls - 1) * error * error);
+	T sum_of_squares = T(calls) * (value * value +
+		T(calls - 1) * error * error);
 
 	return mc_result<T>(calls, sum, sum_of_squares);
 }

@@ -25,8 +25,8 @@ struct stop_after_precision
 
 		if (result.error < abs_error)
 		{
-			std::cout << "Absolute error " << result.error << " smaller than the limit ";
-			std::cout << abs_error << "\n";
+			std::cout << "Absolute error " << result.error
+				<< " smaller than the limit " << abs_error << "\n";
 			return false;
 		}
 

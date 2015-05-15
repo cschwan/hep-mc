@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2014  Christopher Schwan
+ * Copyright (C) 2012-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,8 +60,9 @@ inline hep::mc_result<T> plain_iteration(
 
 		// evaluate function at position specified in random_numbers
 		T const value = function(hep::mc_point<T>(total_calls, random_numbers)); 
-		// perform kahan summation 'sum += value' - this improves precision if T is e.g. single
-		// precision and many values are added
+
+		// perform kahan summation 'sum += value' - this improves precision if T
+		// is e.g. single precision and many values are added
 		T const y = value - compensation;
 		T const t = sum + y;
 		compensation = (t - sum) - y;
@@ -81,19 +82,18 @@ namespace hep
 /// \addtogroup plain_group
 /// @{
 
-/**
- * PLAIN Monte Carlo integrator. This function integrates `function` over the unit-hypercube with
- * the specified `dimensions` using `calls` function evaluations with randomly chosen points
- * determined by `generator`. The generator is not seeded.
- *
- * \param dimensions The number of parameters `function` accepts.
- * \param calls The number of function calls that are used to obtain the result.
- * \param function The function that will be integrated over the hypercube. See \ref integrands for
- *        further explanation.
- * \param generator The random number generator that will be used to generate random points from the
- *        hypercube. This generator is not seeded.
- */
+/// PLAIN Monte Carlo integrator. This function integrates `function` over the
+/// unit-hypercube with the specified `dimensions` using `calls` function
+/// evaluations with randomly chosen points determined by `generator`. The
+/// generator is not seeded.
 
+/// \param dimensions The number of parameters `function` accepts.
+/// \param calls The number of function calls that are used to obtain the
+///        result.
+/// \param function The function that will be integrated over the hypercube. See
+///        \ref integrands for further explanation.
+/// \param generator The random number generator that will be used to generate
+///        random points from the hypercube. This generator is not seeded.
 template <typename T, typename F, typename R = std::mt19937>
 inline mc_result<T> plain(
 	std::size_t dimensions,

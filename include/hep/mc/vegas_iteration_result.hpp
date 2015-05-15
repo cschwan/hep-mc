@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014  Christopher Schwan
+ * Copyright (C) 2014-2015  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ struct vegas_iteration_result : public mc_result<T>
 		vegas_pdf<T> const& pdf,
 		std::vector<T> const& adjustment_data
 	)
-		: mc_result<T>(calls, *(adjustment_data.end() - 2), *(adjustment_data.end() - 1))
+		: mc_result<T>(calls, *(adjustment_data.end() - 2),
+			*(adjustment_data.end() - 1))
 		, pdf(pdf)
 		, adjustment_data(adjustment_data)
 	{

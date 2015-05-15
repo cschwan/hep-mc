@@ -64,13 +64,15 @@ int main(int argc, char* argv[])
 	// set the verbose vegas callback function
 	hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
 
-	// perform 5 iteration with 10^7 calls each; the integrand is a ten dimensional gaussian
+	// perform 5 iteration with 10^7 calls each; the integrand is a ten
+	// dimensional gaussian
 	std::size_t iterations = 5;
 	std::size_t calls = 10000000;
 	std::size_t dimensions = 10;
 
-	// perform the integration; this function will also call the callback function (see above) after
-	// each iteration which in turn prints the individual iteration results
+	// perform the integration; this function will also call the callback
+	// function (see above) after each iteration which in turn prints the
+	// individual iteration results
 	auto results = hep::mpi_vegas<double>(
 		MPI_COMM_WORLD,
 		dimensions,
@@ -78,7 +80,8 @@ int main(int argc, char* argv[])
 		gaussian
 	);
 
-	// take binned_gaussian of every process, add entries separately and write back into it
+	// take binned_gaussian of every process, add entries separately and write
+	// back into it
 	MPI_Allreduce(
 		MPI_IN_PLACE,
 		&(binned_gaussian[0]),
@@ -89,7 +92,8 @@ int main(int argc, char* argv[])
 	);
 
 	auto result = hep::cumulative_result0(results.begin(), results.end());
-	double chi_square_dof = hep::chi_square_dof0(results.begin(), results.end());
+	double chi_square_dof = hep::chi_square_dof0(results.begin(),
+		results.end());
 
 	if (rank == 0)
 	{
@@ -105,8 +109,9 @@ int main(int argc, char* argv[])
 			// average over the iterations
 			average_function_value /= iterations;
 
-			// the binned gaussian is the integral over the bin - the average is obtained by
-			// dividing through the bin length or muplying by the number of bins
+			// the binned gaussian is the integral over the bin - the average is
+			// obtained by dividing through the bin length or muplying by the
+			// number of bins
 			average_function_value *= binned_gaussian.size();
 
 			// print result

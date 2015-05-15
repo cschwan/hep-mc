@@ -85,7 +85,6 @@ template <typename T>
 using vegas_callback_type =
 	std::function<bool(std::vector<vegas_iteration_result<T>>)>;
 
-///
 /// Sets the vegas `callback` function and returns it. This function is called
 /// after each iteration performed by \ref vegas. The default callback is
 /// \ref vegas_default_callback. The function can e.g. be set to
