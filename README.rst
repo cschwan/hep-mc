@@ -1,9 +1,15 @@
 Project Description
 ===================
 
-``hep-mc`` is a C++11 template library providing Monte Carlo integration
-algorithms, currently only PLAIN and VEGAS. In addition, this library comes with
-MPI-parallelized routines.
+``hep-mc`` is a C++11 template library for Monte Carlo integration. The
+following integrators are implemented:
+
+- PLAIN,
+- VEGAS, and
+- a Multi Channel integrator with adaptive weight optimization as described in
+  Ref. [1]_.
+
+In addition, some integrators are available for parallel integration using MPI.
 
 The aim of this project is to provide functions and classes that are:
 
@@ -69,6 +75,15 @@ notice that the configure script is missing. Then run::
     autoreconf -fiv
 
 inside the project's top-level directory. This will generate the missing files.
+
+References
+==========
+
+.. [1] R. Kleiss, R. Pittau. "Weight optimization in multichannel Monte Carlo".
+       In: Comp. Phys. Commun. 83 (1994), pp. 141-146. DOI:
+       `10.1016/0010-4655(94)90043-4
+       <http://dx.doi.org/10.1016/0010-4655(94)90043-4>`_. arXiv:
+       `hep-ph/9405257 <http://arxiv.org/abs/hep-ph/9405257>`_.
 
 .. _releases page: http://github.com/cschwan/hep-mc/releases
 .. _include directory: http://github.com/cschwan/hep-mc/tree/master/include
