@@ -19,61 +19,16 @@ The aim of this project is to provide functions and classes that are:
   choose between a variety of standard generators or to write a custom one and
   use it with the integration routines.
 
-Furthermore, for VEGAS
-
-- one can specify the sample size for each iteration separately; afterwards
-- one can selectively include/exclude each iteration's result in a cumulative
-  estimate,
-- it is possible to set the bin count to study its effect on the precision for
-  complicated integrands, for example. In other VEGAS implementations the bin
-  count is set to a fixed number, e.g. 50 in `GSL`_ and 128 in `CUBA`_.
-
-Installation
-============
-
-If you downloaded the sources with ``git`` or as a ZIP-archive you first have to
-generate the autotools files. Run::
-
-    autoreconf -fiv
-
-inside the project's directory. This will generate the missing files, e.g. the
-configure script and makefiles. Alternatively, you can download a pre-built
-tarball from the `releases page <http://github.com/cschwan/hep-mc/releases>`_.
-
-To install it, use the usual sequence of commands for autotools-based projects,
-for example::
-
-    ./configure --prefix=/usr/local
-    make
-    make install
-
-The ``prefix`` specifies the directory in which the library will be installed
-to. Make sure your compiler will find this directory.
-
-In addition you may pass the ``--enable-doxygen`` option to ``./configure`` to
-build the HTML documentation. For this to work you will need a recent version of
-the `Doxygen`_ program.
-
-A complete list of configuration options is available by typing::
-
-    ./configure --help
-
-Documentation
-=============
-
-Documentation is available online at http://cschwan.github.io/hep-mc or can be
-generated from sources with Doxygen (see Installation_).
-
 Usage
 =====
 
 Since this library uses features from the new C++11 standard, you have to enable
-these with your compiler. For GCC and clang this can be done by passing an
-additional parameter to the compiler, e.g.
+these with your compiler. For the GCC and clang compilers this can be done by
+passing an additional parameter to the compiler, e.g.::
 
     g++ -std=c++0x my_program.cpp
 
-Since this project is based on templates, the inclusion of the main header,
+Since this project is based on templates, the inclusion of the main header,::
 
     #include <hep/mc.hpp>
 
@@ -81,7 +36,40 @@ is sufficient to use it and you do not need to link against a library. To see
 the library in action take a look the example programs in the
 `examples directory`_.
 
-.. _GSL: http://www.gnu.org/software/gsl/
-.. _CUBA: http://www.feynarts.de/cuba/
-.. _Doxygen: http://www.doxygen.org/
+Documentation and Examples
+==========================
+
+Documentation is available online at http://cschwan.github.io/hep-mc or can be
+generated from sources (see Installation_). The examples can be viewed from
+within the documentation.
+
+Installation
+============
+
+The easiest way to use this library is to just download it from the `releases
+page`_ and point your compiler to the `include directory`_ - there is no library
+that needs to be compiled.
+
+If you want to automatically compile the example programs, generate the
+documentation, and/or install the headers you can also use the usual sequence
+for autotools-based projects, i.e.::
+
+    ./configure --prefix=/usr/local
+    make
+    make install
+
+which installs the headers into ``/usr/local/include``. To generate the
+documentation pass ``--enable-doxygen`` to ``./configure``. Example programs are
+compiled when you add ``--enable-examples``. For more options type ``./configure
+--help``.
+
+When you got the sources with ``git`` or downloaded them as a ZIP file, you will
+notice that the configure script is missing. Then run::
+
+    autoreconf -fiv
+
+inside the project's top-level directory. This will generate the missing files.
+
+.. _releases page: http://github.com/cschwan/hep-mc/releases
+.. _include directory: http://github.com/cschwan/hep-mc/tree/master/include 
 .. _examples directory: http://github.com/cschwan/hep-mc/tree/master/examples
