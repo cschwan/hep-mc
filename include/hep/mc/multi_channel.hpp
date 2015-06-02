@@ -40,17 +40,21 @@ namespace hep
 /// generator and the given `densities`. This must be a function with the
 /// following signature:
 /// \code
-/// void my_density_functions(
+/// bool my_density_functions(
 ///     std::size_t channel,
-///     std::vector<T> const& point,
+///     std::vector<T> const& random_numbers,
+///     std::vector<T>& coordinates,
 ///     std::vector<T>& channel_densities
 /// );
 /// \endcode
 /// The variable `point` gives the uniformly generated point in the
-/// unit-hypercube, `channel` is the number of the channel that was reandomly
-/// selected and  for the selected `channel`, and `channel_densities` is the
-/// vector where the result of the densities for this combination of `point` and
-/// `channel` must be stored.
+/// unit-hypercube, `channel` is the number of the channel that was randomly
+/// selected and `coordinates` must contain the mapped point for the selected
+/// channel. For each channel, `channel_densities` must contain the probability
+/// density for the generated `coordinates`. If this function returns `true` it
+/// signals that `function` would return zero for the specified `coordinates`.
+/// In that case `function` will not be called and `channel_densities` will not
+/// be read out. This improves performance if many channels are used.
 template <typename T, typename F, typename D, typename R>
 inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
@@ -90,8 +94,14 @@ inline multi_channel_result<T> multi_channel_iteration(
 		std::size_t const channel = channel_selector(generator);
 
 		// compute the densities for `random_numbers` for every channel
-		densities(channel, static_cast <std::vector<T> const> (random_numbers),
-			coordinates, channel_densities);
+		bool zero = densities(channel, static_cast <std::vector<T> const>
+			(random_numbers), coordinates, channel_densities);
+
+		if (zero)
+		{
+			// function would return zero
+			continue;
+		}
 
 		T total_density = T();
 		for (std::size_t j = 0; j != channels; ++j)

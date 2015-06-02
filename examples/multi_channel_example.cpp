@@ -53,6 +53,8 @@ int main()
 		case 1:
 			channel_densities[0] = g0;
 		}
+
+		return false;
 	};
 
 	auto const results = hep::multi_channel<double>(
