@@ -50,14 +50,17 @@ namespace hep
 /// The variable `point` gives the uniformly generated point in the
 /// unit-hypercube, `channel` is the number of the channel that was randomly
 /// selected and `coordinates` must contain the mapped point for the selected
-/// channel. For each channel, `channel_densities` must contain the probability
-/// density for the generated `coordinates`. If this function returns `true` it
-/// signals that `function` would return zero for the specified `coordinates`.
-/// In that case `function` will not be called and `channel_densities` will not
-/// be read out. This improves performance if many channels are used.
+/// channel. Note that the size of `coordinates` is determined by the parameter
+/// `map_dimensions`. For each channel, `channel_densities` must contain the
+/// probability density for the generated `coordinates`. If this function
+/// returns `true` it signals that `function` would return zero for the
+/// specified `coordinates`. In that case `function` will not be called and
+/// `channel_densities` will not be read out. This improves performance if many
+/// channels are used.
 template <typename T, typename F, typename D, typename R>
 inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
+	std::size_t map_dimensions,
 	std::size_t calls,
 	F&& function,
 	std::vector<T> const& channel_weights,
@@ -73,7 +76,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t const channels = channel_weights.size();
 
 	std::vector<T> random_numbers(dimensions);
-	std::vector<T> coordinates(dimensions);
+	std::vector<T> coordinates(map_dimensions);
 	std::vector<T> channel_densities(channels);
 	std::vector<T> adjustment_data(channels);
 
@@ -170,6 +173,7 @@ inline std::vector<T> multi_channel_refine_weights(
 template <typename T, typename F, typename D, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> multi_channel(
 	std::size_t dimensions,
+	std::size_t map_dimensions,
 	std::vector<std::size_t> iteration_calls,
 	F&& function,
 	std::size_t channels,
@@ -184,8 +188,8 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 
 	for (std::size_t const calls : iteration_calls)
 	{
-		auto const result = multi_channel_iteration(dimensions, calls, function,
-			weights, densities, generator);
+		auto const result = multi_channel_iteration(dimensions, map_dimensions,
+			calls, function, weights, densities, generator);
 		results.push_back(result);
 
 		weights = multi_channel_refine_weights(weights, result.adjustment_data);

@@ -59,6 +59,7 @@ int main()
 
 	auto const results = hep::multi_channel<double>(
 		1,
+		1,
 		std::vector<std::size_t>(10, 1000),
 		function,
 		2,
