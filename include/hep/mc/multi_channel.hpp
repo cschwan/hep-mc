@@ -94,7 +94,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 		std::size_t const channel = channel_selector(generator);
 
 		// compute the densities for `random_numbers` for every channel
-		bool zero = densities(channel, static_cast <std::vector<T> const>
+		bool zero = densities(channel, static_cast <std::vector<T> const&>
 			(random_numbers), coordinates, channel_densities);
 
 		if (zero)
