@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 
@@ -191,6 +192,11 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 		auto const result = multi_channel_iteration(dimensions, map_dimensions,
 			calls, function, weights, densities, generator);
 		results.push_back(result);
+
+		if (!multi_channel_callback<T>()(results))
+		{
+			break;
+		}
 
 		weights = multi_channel_refine_weights(weights, result.adjustment_data);
 	}
