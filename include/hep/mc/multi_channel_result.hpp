@@ -37,12 +37,11 @@ struct multi_channel_result : public mc_result<T>
 	/// Constructor.
 	multi_channel_result(
 		std::size_t calls,
-		T sum,
-		T sum_of_squares,
 		std::vector<T> const& adjustment_data,
 		std::vector<T> const& channel_weights
 	)
-		: mc_result<T>(calls, sum, sum_of_squares)
+		: mc_result<T>(calls, *(adjustment_data.end() - 2),
+			*(adjustment_data.end() - 1))
 		, adjustment_data(adjustment_data)
 		, channel_weights(channel_weights)
 	{

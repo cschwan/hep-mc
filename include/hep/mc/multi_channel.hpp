@@ -63,13 +63,14 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
 	std::size_t map_dimensions,
 	std::size_t calls,
+	std::size_t total_calls,
 	F&& function,
 	std::vector<T> const& channel_weights,
 	D&& densities,
 	R&& generator
 ) {
-	T sum = T();
-	T sum_of_squares = T();
+	T average = T();
+	T averaged_squares = T();
 
 	// for kahan summation
 	T compensation = T();
@@ -79,7 +80,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::vector<T> random_numbers(dimensions);
 	std::vector<T> coordinates(map_dimensions);
 	std::vector<T> channel_densities(channels);
-	std::vector<T> adjustment_data(channels);
+	std::vector<T> adjustment_data(channels + 2);
 
 	// distribution that randomly selects a channel
 	std::discrete_distribution<std::size_t> channel_selector(
@@ -113,20 +114,20 @@ inline multi_channel_result<T> multi_channel_iteration(
 			total_density += channel_weights[j] * channel_densities[j];
 		}
 
-		multi_channel_point<T> const point(calls, random_numbers, coordinates,
-			channel, total_density);
+		multi_channel_point<T> const point(total_calls, random_numbers,
+			coordinates, channel, total_density);
 
 		T const value = function(point) * point.weight;
 
 		// perform kahan summation
 		T const y = value - compensation;
-		T const t = sum + y;
-		compensation = (t - sum) - y;
-		sum = t;
+		T const t = average + y;
+		compensation = (t - average) - y;
+		average = t;
 
 		T const square = value * value;
 
-		sum_of_squares += square;
+		averaged_squares += square;
 
 		// these are the values W that are used to update the alphas
 		for (std::size_t j = 0; j != channels; ++j)
@@ -136,11 +137,11 @@ inline multi_channel_result<T> multi_channel_iteration(
 		}
 	}
 
-	sum *= T(calls);
-	sum_of_squares *= T(calls) * T(calls);
+	adjustment_data[channels + 0] = average * T(total_calls);
+	adjustment_data[channels + 1] = averaged_squares * T(total_calls)
+		* T(total_calls);
 
-	return multi_channel_result<T>(calls, sum, sum_of_squares, adjustment_data,
-		channel_weights);
+	return multi_channel_result<T>(calls, adjustment_data, channel_weights);
 }
 
 /// Uses `adjustment_data` to from a previous call of
@@ -189,8 +190,17 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 
 	for (std::size_t const calls : iteration_calls)
 	{
-		auto const result = multi_channel_iteration(dimensions, map_dimensions,
-			calls, function, weights, densities, generator);
+		auto const result = multi_channel_iteration(
+			dimensions,
+			map_dimensions,
+			calls,
+			calls,
+			function,
+			weights,
+			densities,
+			generator
+		);
+
 		results.push_back(result);
 
 		if (!multi_channel_callback<T>()(results))
