@@ -30,7 +30,7 @@
 namespace hep
 {
 
-/// \addtogroup multi_channel_callback_group
+/// \addtogroup callbacks
 /// @{
 
 /// The default callback function. This function does nothing and always returns

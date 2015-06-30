@@ -30,6 +30,13 @@
 namespace hep
 {
 
+/// \addtogroup callbacks
+/// @{
+
+/// The default callback function. This function does nothing and always returns
+/// `true`. It is the MPI equivalent of \ref multi_channel_default_callback.
+///
+/// \see mpi_multi_channel_callback
 template <typename T>
 inline bool mpi_multi_channel_default_callback(
 	MPI_Comm,
@@ -38,6 +45,12 @@ inline bool mpi_multi_channel_default_callback(
 	return true;
 }
 
+/// Callback function that prints a detailed summary about every iteration
+/// performed so far. This function always returns `true`. It is the equivalent
+/// of \ref multi_channel_verbose_callback and only writes an output if it was
+/// called from rank zero to avoid duplicated output.
+///
+/// \see multi_channel_callback
 template <typename T>
 inline bool mpi_multi_channel_verbose_callback(
 	MPI_Comm communicator,
@@ -54,10 +67,20 @@ inline bool mpi_multi_channel_verbose_callback(
 	return true;
 }
 
+/// The type of callback function that can be set by the user with
+/// \ref mpi_multi_channel_callback.
 template <typename T>
 using mpi_multi_channel_callback_type =
 	std::function<bool(MPI_Comm, std::vector<multi_channel_result<T>>)>;
 
+/// Sets the multi channel `callback` function and returns it. This function is
+/// called after each iteration performed by \ref mpi_vegas. The default
+/// callback is \ref mpi_multi_channel_default_callback which does nothing. The
+/// callback function can e.g. be set to \ref mpi_multi_channel_verbose_callback
+/// which prints detailed results after each iteration.
+///
+/// If this function is called without any argument, the current callback
+/// function is returned.
 template <typename T>
 inline mpi_multi_channel_callback_type<T> mpi_multi_channel_callback(
 	mpi_multi_channel_callback_type<T> callback = nullptr
@@ -72,6 +95,8 @@ inline mpi_multi_channel_callback_type<T> mpi_multi_channel_callback(
 
 	return object;
 }
+
+/// @}
 
 }
 

@@ -34,7 +34,8 @@ namespace hep
 template <typename T>
 struct multi_channel_result : public mc_result<T>
 {
-	/// Constructor.
+	/// Constructor. The parameter `adjustment_data` must contain two additional
+	/// values, being the sum of the sum of squares of the integration.
 	multi_channel_result(
 		std::size_t calls,
 		std::vector<T> const& adjustment_data,

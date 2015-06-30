@@ -3,6 +3,7 @@ docpkg = $(PACKAGE_TARNAME)-doc-$(PACKAGE_VERSION).tar
 CLEANFILES = $(docpkg)
 
 EXTRA_DIST = \
+	callbacks.dox \
 	Doxyfile \
 	DoxygenLayout.xml \
 	examples.dox \
@@ -16,7 +17,6 @@ EXTRA_DIST = \
 	references.bib \
 	results.dox \
 	vegas.dox \
-	vegas_callback.dox \
 	vegas_pdf.dox
 
 $(docpkg): $(EXTRA_DIST) $(top_builddir)/include/stamp-headers

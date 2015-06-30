@@ -30,7 +30,7 @@
 namespace hep
 {
 
-/// \addtogroup vegas_callback_group
+/// \addtogroup callbacks
 /// @{
 
 /// The default callback function. This function does nothing and always returns
