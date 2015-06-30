@@ -10,6 +10,8 @@ nobase_include_HEADERS = \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \
 	hep/mc/mpi_helper.hpp \
+	hep/mc/mpi_multi_channel.hpp \
+	hep/mc/mpi_multi_channel_callback.hpp \
 	hep/mc/mpi_plain.hpp \
 	hep/mc/mpi_vegas.hpp \
 	hep/mc/mpi_vegas_callback.hpp \

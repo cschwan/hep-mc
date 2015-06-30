@@ -1,12 +1,24 @@
+#ifndef USE_MPI
 #include "hep/mc.hpp"
+#else
+#include "hep/mc-mpi.hpp"
+#include <mpi.h>
+#endif
 
 #include <cmath>
 #include <cstddef>
 #include <iostream>
 #include <vector>
 
-int main()
+int main(int argc, char* argv[])
 {
+#ifdef USE_MPI
+	MPI_Init(&argc, &argv);
+#else
+	// suppress warning about parameters being unused
+	if (argv[argc]) {}
+#endif
+
 	constexpr double s0 = -10.0;
 	constexpr double s1 = +10.0;
 
@@ -57,7 +69,12 @@ int main()
 		return false;
 	};
 
+#ifndef USE_MPI
 	auto const results = hep::multi_channel<double>(
+#else
+	auto const results = hep::mpi_multi_channel<double>(
+		MPI_COMM_WORLD,
+#endif
 		1,
 		1,
 		std::vector<std::size_t>(10, 1000),
@@ -65,6 +82,14 @@ int main()
 		2,
 		densities
 	);
+
+#ifdef USE_MPI
+	int rank = 0;
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+	if (rank == 0)
+	{
+#endif
 
 	for (auto const result : results)
 	{
@@ -78,6 +103,12 @@ int main()
 
 		std::cout << "\n";
 	}
+
+#ifdef USE_MPI
+	}
+
+	MPI_Finalize();
+#endif
 
 	return 0;
 }

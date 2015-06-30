@@ -21,6 +21,8 @@
 
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/mpi_helper.hpp"
+#include "hep/mc/mpi_multi_channel.hpp"
+#include "hep/mc/mpi_multi_channel_callback.hpp"
 #include "hep/mc/mpi_plain.hpp"
 #include "hep/mc/mpi_vegas.hpp"
 #include "hep/mc/mpi_vegas_callback.hpp"
