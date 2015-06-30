@@ -27,6 +27,7 @@
 
 #include <cstddef>
 #include <random>
+#include <utility>
 #include <vector>
 
 #include <mpi.h>
@@ -44,9 +45,9 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	MPI_Comm communicator,
 	std::size_t dimensions,
 	std::size_t map_dimensions,
-	std::vector<std::size_t> iteration_calls,
+	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
-	std::size_t channels,
+	std::vector<T> const& channel_weights,
 	D&& densities,
 	R&& generator = std::mt19937()
 ) {
@@ -55,7 +56,7 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	int world = 0;
 	MPI_Comm_size(communicator, &world);
 
-	std::vector<T> weights(channels, T(1.0) / T(channels));
+	auto weights = channel_weights;
 
 	std::vector<multi_channel_result<T>> results;
 	results.reserve(iteration_calls.size());
@@ -106,6 +107,33 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 
 	return results;
 }
+
+/// Implements the MPI-parallelized adaptive multi channel algorithm. See
+/// \ref multi_channel for a detailed description.
+template <typename T, typename F, typename D, typename R = std::mt19937>
+inline std::vector<multi_channel_result<T>> mpi_multi_channel(
+	MPI_Comm communicator,
+	std::size_t dimensions,
+	std::size_t map_dimensions,
+	std::vector<std::size_t> const& iteration_calls,
+	F&& function,
+	std::size_t channels,
+	D&& densities,
+	R&& generator = std::mt19937()
+) {
+	return mpi_multi_channel(
+		communicator,
+		dimensions,
+		map_dimensions,
+		iteration_calls,
+		std::forward<F>(function),
+		std::vector<T>(channels, T(1.0) / T(channels)),
+		std::forward<D>(densities),
+		std::forward<R>(generator)
+	);
+}
+
+/// @}
 
 }
 
