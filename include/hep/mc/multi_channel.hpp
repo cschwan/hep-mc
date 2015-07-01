@@ -36,6 +36,32 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
+/// Uses `adjustment_data` to from a previous call of
+/// \ref multi_channel_iteration to refine `weights`. The procedure is the one
+/// suggested in Ref. \cite WeightOptimization .
+template <typename T>
+inline std::vector<T> multi_channel_refine_weights(
+	std::vector<T> const& weights,
+	std::vector<T> const& adjustment_data
+) {
+	std::vector<T> new_weights(weights.size());
+
+	T sum_of_new_weights = T();
+
+	for (std::size_t i = 0; i != new_weights.size(); ++i)
+	{
+		new_weights[i] = weights[i] * std::sqrt(adjustment_data[i]);
+		sum_of_new_weights += new_weights[i];
+	}
+
+	for (std::size_t i = 0; i != new_weights.size(); ++i)
+	{
+		new_weights[i] /= sum_of_new_weights;
+	}
+
+	return new_weights;
+}
+
 /// Multi-channel integrator. Integrates `function` over the unit-hypercube with
 /// the specified number of dimensions using `calls` number of function calls.
 /// The integration is performed using random numbers from the specified
@@ -143,31 +169,6 @@ inline multi_channel_result<T> multi_channel_iteration(
 		* T(total_calls);
 
 	return multi_channel_result<T>(calls, adjustment_data, channel_weights);
-}
-
-/// Uses `adjustment_data` to from a previous call of
-/// \ref multi_channel_iteration to refine `weights`.
-template <typename T>
-inline std::vector<T> multi_channel_refine_weights(
-	std::vector<T> const& weights,
-	std::vector<T> const& adjustment_data
-) {
-	std::vector<T> new_weights(weights.size());
-
-	T sum_of_new_weights = T();
-
-	for (std::size_t i = 0; i != new_weights.size(); ++i)
-	{
-		new_weights[i] = weights[i] * std::sqrt(adjustment_data[i]);
-		sum_of_new_weights += new_weights[i];
-	}
-
-	for (std::size_t i = 0; i != new_weights.size(); ++i)
-	{
-		new_weights[i] /= sum_of_new_weights;
-	}
-
-	return new_weights;
 }
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling

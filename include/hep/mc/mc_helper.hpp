@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/mc_result.hpp"
+#include "hep/mc/multi_channel_result.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -172,6 +173,35 @@ template <typename Iterator>
 inline get_T<Iterator> chi_square_dof1(Iterator begin, Iterator end)
 {
 	return chi_square_dof(begin, end, cumulative_result1(begin, end));
+}
+
+/// Returns the maximum difference \f$ D \f$ defined in Ref.
+/// \cite WeightOptimization as
+/// \f[
+///     D = \max_{i,j} | W_i ( \alpha ) - W_j ( \alpha ) |
+/// \f]
+/// with \f$ W_i ( \alpha ) \f$ being stored in `adjustment_data` of of the
+/// given `result`.
+template <typename T>
+inline T multi_channel_max_difference(multi_channel_result<T> const& result)
+{
+	T max = T();
+
+	for (std::size_t i = 0; i != result.adjustment_data.size() - 2; ++i)
+	{
+		for (std::size_t j = i + 1; j != result.adjustment_data.size() - 2; ++j)
+		{
+			T const difference = std::fabs(result.adjustment_data[i] -
+				result.adjustment_data[j]);
+
+			if (max < difference)
+			{
+				max = difference;
+			}
+		}
+	}
+
+	return max;
 }
 
 /// @}

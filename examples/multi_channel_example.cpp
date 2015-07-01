@@ -69,6 +69,9 @@ int main(int argc, char* argv[])
 		return false;
 	};
 
+	hep::multi_channel_callback<double>(
+		hep::multi_channel_verbose_callback<double>);
+
 #ifndef USE_MPI
 	auto const results = hep::multi_channel<double>(
 #else

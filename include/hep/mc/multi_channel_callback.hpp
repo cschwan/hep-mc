@@ -54,25 +54,27 @@ inline bool multi_channel_verbose_callback(
 ) {
 	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
-	T const relative_error_percent = (T(100.0) * results.back().error /
-		std::fabs(results.back().value));
+	T const relative_error_percent = (T(100.0) * results.back().error() /
+		std::fabs(results.back().value()));
+
+	T const max_difference = multi_channel_max_difference(results.back());
 
 	// print result for this iteration
-	std::cout << "this iteration: N=" << results.back().calls << " E="
-		<< results.back().value << " +- " << results.back().error << " ("
-		<< relative_error_percent << "%)\n";
+	std::cout << "this iteration: N=" << results.back().calls() << " E="
+		<< results.back().value() << " +- " << results.back().error() << " ("
+		<< relative_error_percent << "%) D=" << max_difference << "\n";
 
 	// compute cumulative results
 	auto const result = cumulative_result0(results.begin(), results.end());
 	T const chi = chi_square_dof0(results.begin(), results.end());
 
-	T const relative_error_percent_all = (T(100.0) * result.error /
-		std::fabs(result.value));
+	T const relative_error_percent_all = (T(100.0) * result.error() /
+		std::fabs(result.value()));
 
 	// print the combined result
-	std::cout << "all iterations: N=" << result.calls << " E=" << result.value
-		<< " +- " << result.error << " (" << relative_error_percent_all
-		<< "%) chi^2/dof=" << chi << "\n\n";
+	std::cout << "all iterations: N=" << result.calls() << " E="
+		<< result.value() << " +- " << result.error() << " ("
+		<< relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
 
 	std::cout.flush();
 
