@@ -2,6 +2,12 @@ New in 0.3.2:
 =============
 
 - added multi channel MC integrator with example
+- added multi channel MC integrator with example
+- added a new MC helper function ``hep::multi_channel_max_difference`` that
+  calculates the maximum difference for adaptive optimization in multi channel
+  MC
+- added callbacks for multi channel MC analogous to the case for VEGAS
+- added MPI parallelized routines for multi channel MC
 
 New in 0.3.1:
 =============
