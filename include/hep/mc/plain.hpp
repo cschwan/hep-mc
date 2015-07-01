@@ -59,7 +59,7 @@ inline hep::mc_result<T> plain_iteration(
 		}
 
 		// evaluate function at position specified in random_numbers
-		T const value = function(hep::mc_point<T>(total_calls, random_numbers)); 
+		T const value = function(hep::mc_point<T>(total_calls, random_numbers));
 
 		// perform kahan summation 'sum += value' - this improves precision if T
 		// is e.g. single precision and many values are added

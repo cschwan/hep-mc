@@ -49,7 +49,7 @@ inline bool mpi_vegas_default_callback(
 /// performed so far. This function always returns `true`. It is the equivalent
 /// of \ref vegas_verbose_callback and only writes an output if it was called
 /// from rank zero to avoid duplicated output.
-/// 
+///
 /// \see vegas_callback
 template <typename T>
 inline bool mpi_vegas_verbose_callback(
