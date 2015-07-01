@@ -21,6 +21,8 @@
 
 #include "hep/mc/mc_result.hpp"
 
+#include <cmath>
+#include <cstddef>
 #include <iterator>
 #include <limits>
 

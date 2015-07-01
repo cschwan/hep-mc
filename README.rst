@@ -71,5 +71,5 @@ notice that the configure script is missing. Then run::
 inside the project's top-level directory. This will generate the missing files.
 
 .. _releases page: http://github.com/cschwan/hep-mc/releases
-.. _include directory: http://github.com/cschwan/hep-mc/tree/master/include 
+.. _include directory: http://github.com/cschwan/hep-mc/tree/master/include
 .. _examples directory: http://github.com/cschwan/hep-mc/tree/master/examples
