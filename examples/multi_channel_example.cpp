@@ -28,8 +28,8 @@ int main(int argc, char* argv[])
 		double const sms0 = s - s0;
 		double const sms1 = s - s1;
 
-		return (std::exp(-sms0 * sms0) + std::exp(-sms1 * sms1)) 
-			/ std::sqrt(std::acos(-1.0));
+		return (2.0 * std::exp(-sms0 * sms0) + std::exp(-sms1 * sms1)) 
+			/ std::sqrt(std::acos(-1.0)) / 3.0;
 	};
 
 	auto const densities = [](
@@ -69,8 +69,13 @@ int main(int argc, char* argv[])
 		return false;
 	};
 
+#ifndef USE_MPI
 	hep::multi_channel_callback<double>(
 		hep::multi_channel_verbose_callback<double>);
+#else
+	hep::mpi_multi_channel_callback<double>(
+		hep::mpi_multi_channel_verbose_callback<double>);
+#endif
 
 #ifndef USE_MPI
 	auto const results = hep::multi_channel<double>(
@@ -80,7 +85,7 @@ int main(int argc, char* argv[])
 #endif
 		1,
 		1,
-		std::vector<std::size_t>(10, 1000),
+		std::vector<std::size_t>(10, 10000000),
 		function,
 		2,
 		densities
