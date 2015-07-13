@@ -2,12 +2,15 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(srcdir) -DGTEST_HAS_PTHREAD=0
 
 AM_DEFAULT_SOURCE_EXT = .cpp
 
-# convenience libraries for the google unit test framework
-check_LIBRARIES = libgtest.a libgtest_main.a
+# convenience libraries
+check_LIBRARIES = libgenz.a libgtest.a libgtest_main.a
+
+libgenz_a_SOURCES = genz_integrand.hpp genz_integrand.cpp
 libgtest_a_SOURCES = gtest/gtest.h gtest-all.cpp
 libgtest_main_a_SOURCES = gtest/gtest.h gtest_main.cpp
 
 check_PROGRAMS = \
+	test_genz_integrand \
 	test_mc_helper \
 	test_mc_point \
 	test_mc_result \
@@ -17,6 +20,7 @@ check_PROGRAMS = \
 	test_vegas_pdf
 
 # redundant for automake >= 1.11
+test_genz_integrand_SOURCES = test_genz_integrand.cpp
 test_mc_helper_SOURCES = test_mc_helper.cpp
 test_mc_point_SOURCES = test_mc_point.cpp
 test_mc_result_SOURCES = test_mc_result.cpp
@@ -27,9 +31,12 @@ test_vegas_pdf_SOURCES = test_vegas_pdf.cpp
 
 LDADD = libgtest.a libgtest_main.a
 
+test_genz_integrand_LDADD = libgenz.a $(LDADD)
+
 if HAVE_MPI
 
 check_LIBRARIES += libgtest_mpi_main.a
+
 libgtest_mpi_main_a_SOURCES = gtest/gtest.h gtest_mpi_main.cpp
 libgtest_mpi_main_a_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
 
