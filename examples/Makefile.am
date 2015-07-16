@@ -4,16 +4,16 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 
 noinst_PROGRAMS = \
 	helper_example \
-	read_linear_grid \
 	vegas_example \
-	vegas_grid \
+	vegas_read_pdf \
+	vegas_write_pdf \
 	vegas_stop_after_precision
 
 # redundant for automake >= 1.11
 helper_example_SOURCES = helper_example.cpp
-read_linear_grid_SOURCES = read_linear_grid.cpp
 vegas_example_SOURCES = vegas_example.cpp
-vegas_grid_SOURCES = vegas_grid.cpp
+vegas_read_pdf_SOURCES = vegas_read_pdf.cpp
+vegas_write_pdf_SOURCES = vegas_write_pdf.cpp
 vegas_stop_after_precision_SOURCES = vegas_stop_after_precision.cpp
 
 if HAVE_MPI

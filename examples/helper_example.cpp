@@ -5,7 +5,7 @@
 
 int main()
 {
-	// vector containing the results of five iterations
+	// vector containing the results of five (fictious) iterations
 	std::vector<hep::mc_result<double>> results = {
 		// create mc_results with the tuples (calls, estimate, error)
 		hep::create_result(100000, 0.987449, 0.0165879),
@@ -23,8 +23,21 @@ int main()
 		auto chi_square_dof = hep::chi_square_dof0(results.begin(),
 			results.begin() + (i+1));
 
-		std::cout << i << ": E=" << result.value << " +- " << result.error;
+		// print results
+		std::cout << ">> printing cumulative result for results 0 till " << i
+			<< "\n";
+		std::cout << "method 0: E=" << result.value << " +- " << result.error;
 		std::cout << " chi^2/dof=" << chi_square_dof << "\n";
+
+		// calculate cumulative results again, this time with a different method
+		result = hep::cumulative_result1(results.begin(),
+			results.begin() + (i+1));
+		chi_square_dof = hep::chi_square_dof1(results.begin(),
+			results.begin() + (i+1));
+
+		// print results
+		std::cout << "method 1: E=" << result.value << " +- " << result.error;
+		std::cout << " chi^2/dof=" << chi_square_dof << "\n\n";
 	}
 
 	return 0;

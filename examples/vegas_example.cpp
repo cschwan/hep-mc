@@ -4,20 +4,16 @@
 #include <iostream>
 #include <vector>
 
-// the function that will be integrated
+// the function that shall be integrated
 double square(hep::mc_point<double> const& x)
 {
-	return x.point[0] * x.point[0];
+	return 3.0 * x.point[0] * x.point[0];
 }
 
 int main()
 {
-	// this is what the integrator should give
-	double reference_result = 1.0 / 3.0;
-
 	// print reference result
-	std::cout << "computing integral of x^2 from 0 to 1 which is "
-		<< reference_result << "\n\n";
+	std::cout << ">> computing integral of 3*x^2 from 0 to 1 which is 1.0\n\n";
 
 	// set the verbose vegas callback function
 	hep::vegas_callback<double>(hep::vegas_verbose_callback<double>);
@@ -31,14 +27,15 @@ int main()
 		square
 	);
 
-	// results contains the estimations for each iteration. we could take the
+	// results contains the estimations for each iteration. We could take the
 	// result from last iteration, but here we instead choose to combine the
 	// results of all iterations but the first one in a cumulative result
 	auto result = hep::cumulative_result0(results.begin() + 1, results.end());
 	double chi_square_dof = hep::chi_square_dof0(results.begin() + 1,
 		results.end());
 
-	std::cout << "cumulative result (without first iteration):\nN="
+	// print the cumulative result
+	std::cout << ">> cumulative result (excluding first iteration):\n>> N="
 		<< result.calls << " I=" << result.value << " +- " << result.error
 		<< " chi^2/dof=" << chi_square_dof << "\n";
 

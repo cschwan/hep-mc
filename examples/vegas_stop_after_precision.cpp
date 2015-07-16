@@ -6,7 +6,7 @@
 
 double square(hep::mc_point<double> const& x)
 {
-	return x.point[0] * x.point[0];
+	return 3.0 * x.point[0] * x.point[0];
 }
 
 struct stop_after_precision
@@ -19,20 +19,29 @@ struct stop_after_precision
 
 	bool operator()(std::vector<hep::vegas_iteration_result<double>> const& r)
 	{
+		// print the results obtained so far
 		hep::vegas_verbose_callback<double>(r);
 
+		// compute cumulative result ...
 		auto const result = hep::cumulative_result0(r.begin(), r.end());
 
+		// ... and check for the absolute error ...
 		if (result.error < abs_error)
 		{
-			std::cout << "Absolute error " << result.error
-				<< " smaller than the limit " << abs_error << "\n";
+			std::cout << ">> absolute error " << result.error
+				<< " is smaller than the limit " << abs_error << "\n";
+
+			// returning false stops all remaining iterations
 			return false;
 		}
 
+		// ... and the relative error
 		if (result.error < rel_error * result.value)
 		{
-			std::cout << "Relative error smaller than the limit\n";
+			std::cout << ">> relative error " << (result.error / result.value)
+				<< " is smaller than the limit " << rel_error << "\n";
+
+			// returning false stops all remaining iterations
 			return false;
 		}
 
@@ -45,7 +54,7 @@ struct stop_after_precision
 
 int main()
 {
-	// stop if error is better than 1% (=0.01) or lower than 0.0001
+	// stop if error is better than lower than 0.0001 or better than 1% (=0.01)
 	hep::vegas_callback<double>(stop_after_precision(0.0001, 0.01));
 
 	// print only 3 digits

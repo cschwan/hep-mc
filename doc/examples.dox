@@ -2,9 +2,9 @@
 
 \example helper_example.cpp
 \example mpi_vegas_example.cpp
-\example read_linear_grid.cpp
 \example vegas_example.cpp
-\example vegas_grid.cpp
+\example vegas_read_pdf.cpp
 \example vegas_stop_after_precision.cpp
+\example vegas_write_pdf.cpp
 
 */
