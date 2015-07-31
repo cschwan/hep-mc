@@ -84,8 +84,8 @@ inline mc_result<T> mpi_plain(
 	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
 	sum = result.value * T(result.calls);
-	sum_of_squares = T(result.calls) * (result.value * result.value + T(calls) *
-		result.error * result.error);
+	sum_of_squares = T(result.calls) * (result.value * result.value
+		+ T(calls - 1) * result.error * result.error);
 
 	MPI_Allreduce(
 		MPI_IN_PLACE,
