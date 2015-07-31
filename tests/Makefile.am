@@ -39,14 +39,14 @@ libgtest_mpi_main_a_SOURCES = gtest/gtest.h gtest_mpi_main.cpp
 libgtest_mpi_main_a_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
 
 check_PROGRAMS += \
-	test_mpi_vegas
+	test_mpi_numerical_results
 
-test_mpi_vegas_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
-test_mpi_vegas_LDFLAGS = $(MPI_LDFLAGS)
-test_mpi_vegas_LDADD = libgtest.a libgtest_mpi_main.a $(MPI_LIBS)
+test_mpi_numerical_results_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
+test_mpi_numerical_results_LDFLAGS = $(MPI_LDFLAGS)
+test_mpi_numerical_results_LDADD = libgtest.a libgtest_mpi_main.a $(MPI_LIBS)
 
 # redundant for automake >= 1.11
-test_mpi_vegas_SOURCES = test_mpi_vegas.cpp
+test_mpi_numerical_results_SOURCES = test_mpi_numerical_results.cpp
 
 endif
 
