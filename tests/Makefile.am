@@ -15,8 +15,6 @@ check_PROGRAMS = \
 	test_mc_point \
 	test_mc_result \
 	test_numerical_results \
-	test_plain \
-	test_vegas \
 	test_vegas_icdf_bug \
 	test_vegas_pdf
 
@@ -26,8 +24,6 @@ test_mc_helper_SOURCES = test_mc_helper.cpp
 test_mc_point_SOURCES = test_mc_point.cpp
 test_mc_result_SOURCES = test_mc_result.cpp
 test_numerical_results_SOURCES = test_numerical_results.cpp
-test_plain_SOURCES = test_plain.cpp
-test_vegas_SOURCES = test_vegas.cpp
 test_vegas_icdf_bug_SOURCES = test_vegas_icdf_bug.cpp
 test_vegas_pdf_SOURCES = test_vegas_pdf.cpp
 
