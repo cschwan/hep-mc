@@ -66,7 +66,8 @@ int main(int argc, char* argv[])
 			channel_densities[0] = g0;
 		}
 
-		return false;
+		// global weight
+		return 1.0;
 	};
 
 #ifndef USE_MPI

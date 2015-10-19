@@ -68,23 +68,25 @@ inline std::vector<T> multi_channel_refine_weights(
 /// generator and the given `densities`. This must be a function with the
 /// following signature:
 /// \code
-/// bool my_density_functions(
+/// T my_density_functions(
 ///     std::size_t channel,
 ///     std::vector<T> const& random_numbers,
 ///     std::vector<T>& coordinates,
 ///     std::vector<T>& channel_densities
 /// );
 /// \endcode
-/// The variable `point` gives the uniformly generated point in the
-/// unit-hypercube, `channel` is the number of the channel that was randomly
-/// selected and `coordinates` must contain the mapped point for the selected
-/// channel. Note that the size of `coordinates` is determined by the parameter
-/// `map_dimensions`. For each channel, `channel_densities` must contain the
-/// probability density for the generated `coordinates`. If this function
-/// returns `true` it signals that `function` would return zero for the
-/// specified `coordinates`. In that case `function` will not be called and
-/// `channel_densities` will not be read out. This improves performance if many
-/// channels are used.
+/// The variable `random_numbers` contains the uniformly generated point in the
+/// unit-hypercube with `dimensions` numbers, `channel` is the number of the
+/// channel that was randomly selected (ranges from zero to
+/// `channel_weights.size() - 1`). This function must then map the random
+/// numbers to `coordinates`. Note that the size of `coordinates` is determined
+/// by the parameter `map_dimensions`. For each channel, `channel_densities`
+/// must contain the probability density for the generated `coordinates`. The
+/// return value of this function is a global weight this is applied to every
+/// channel. The primary reason for this weight is the special value of zero,
+/// i.e. `T()`, that shortcuts the evaluation of `function` for this point
+/// because it does not contribute. This improves performance if many channels
+/// are used and many points with weight zero are generated.
 template <typename T, typename F, typename D, typename R>
 inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
@@ -126,18 +128,19 @@ inline multi_channel_result<T> multi_channel_iteration(
 		std::size_t const channel = channel_selector(generator);
 
 		// compute the densities for `random_numbers` for every channel
-		bool zero = densities(channel, static_cast <std::vector<T> const&>
+		T const weight = densities(channel, static_cast <std::vector<T> const&>
 			(random_numbers), coordinates, channel_densities);
 
-		if (zero)
+		if (weight == T())
 		{
-			// function would return zero
+			// function does not contribute, skip evaluation
 			continue;
 		}
 
 		T total_density = T();
 		for (std::size_t j = 0; j != channels; ++j)
 		{
+			channel_densities[j] /= weight;
 			total_density += channel_weights[j] * channel_densities[j];
 		}
 
@@ -159,8 +162,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 		// these are the values W that are used to update the alphas
 		for (std::size_t j = 0; j != channels; ++j)
 		{
-			adjustment_data[j] += channel_densities[j] * square /
-				total_density;
+			adjustment_data[j] += channel_densities[j] * square / total_density;
 		}
 	}
 
