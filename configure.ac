@@ -51,7 +51,6 @@ AC_ARG_ENABLE([doxygen], AS_HELP_STRING([--enable-doxygen],
 AC_ARG_VAR([DOXYGEN], [Doxygen documentation generator])
 AS_IF([test "x$enable_doxygen" = "xyes"], [
 	AC_PATH_PROGS([DOXYGEN], [doxygen])
-	AS_IF([test x"$DOXYGEN" == x""], AC_MSG_ERROR([Doxygen requested but not found.]))
 	AS_IF([test -z "$DOXYGEN"], AC_MSG_ERROR([Doxygen not found but requested]))
 ])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
