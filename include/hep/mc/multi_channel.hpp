@@ -27,6 +27,7 @@
 #include <cstddef>
 #include <limits>
 #include <random>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -144,8 +145,9 @@ inline multi_channel_result<T> multi_channel_iteration(
 			total_density += channel_weights[j] * channel_densities[j];
 		}
 
-		multi_channel_point<T> const point(total_calls, random_numbers,
-			coordinates, channel, total_density);
+		multi_channel_point2<T, typename std::remove_reference<D>::type> const
+			point(total_calls, random_numbers, coordinates, channel,
+			total_density, densities);
 
 		T const value = function(point) * point.weight;
 

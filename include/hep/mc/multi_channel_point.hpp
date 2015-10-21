@@ -56,6 +56,33 @@ struct multi_channel_point : public mc_point<T>
 	std::vector<T> const& coordinates;
 };
 
+/// Point in the unit-hypercube for multi-channel Monte Carlo integration. This
+/// type also captures the density functions that are used to generate
+/// `coordinates`.
+template <typename T, typename D>
+struct multi_channel_point2 : public multi_channel_point<T>
+{
+	/// Constructor.
+	multi_channel_point2(
+		std::size_t calls,
+		std::vector<T> const& point,
+		std::vector<T> const& coordinates,
+		std::size_t channel,
+		T total_density,
+		D const& density_function
+	)
+		: multi_channel_point<T>(calls, point, coordinates, channel,
+			total_density)
+		, density_function(density_function)
+	{
+	}
+
+	/// The density function that constructed this point. See
+	/// \ref multi_channel_iteration for reference of the signature of this
+	/// function.
+	D const& density_function;
+};
+
 /// @}
 
 }
