@@ -41,12 +41,11 @@ libgtest_mpi_main_a_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
 check_PROGRAMS += \
 	test_mpi_numerical_results
 
-test_mpi_numerical_results_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
+test_mpi_numerical_results_CPPFLAGS = \
+	$(AM_CPPFLAGS) $(MPI_CPPFLAGS) -DHEP_USE_MPI
 test_mpi_numerical_results_LDFLAGS = $(MPI_LDFLAGS)
 test_mpi_numerical_results_LDADD = libgtest.a libgtest_mpi_main.a $(MPI_LIBS)
-
-# redundant for automake >= 1.11
-test_mpi_numerical_results_SOURCES = test_mpi_numerical_results.cpp
+test_mpi_numerical_results_SOURCES = test_numerical_results.cpp
 
 endif
 

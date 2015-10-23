@@ -2,7 +2,11 @@
 
 #include <vector>
 
+#ifndef HEP_USE_MPI
 #include "hep/mc.hpp"
+#else
+#include "hep/mc-mpi.hpp"
+#endif
 
 template <typename T>
 T function(hep::mc_point<T> const& x)
@@ -58,7 +62,16 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 {
 	using T = TypeParam;
 
-	auto const result = hep::plain<T>(2, 100000, function<T>);
+#ifndef HEP_USE_MPI
+	auto const result = hep::plain<T>(
+#else
+	auto const result = hep::mpi_plain<T>(
+		MPI_COMM_WORLD,
+#endif
+		2,
+		100000,
+		function<T>
+	);
 	auto const reference = reference_results<T>();
 
 	EXPECT_EQ( result.value , reference[0] );
@@ -69,7 +82,12 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 {
 	using T = TypeParam;
 
+#ifndef HEP_USE_MPI
 	auto const results = hep::vegas<T>(
+#else
+	auto const results = hep::mpi_vegas<T>(
+		MPI_COMM_WORLD,
+#endif
 		2,
 		std::vector<std::size_t>(5, 100000),
 		function<T>
