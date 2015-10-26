@@ -23,6 +23,7 @@
 #include <cmath>
 #include <cstddef>
 #include <limits>
+#include <type_traits>
 
 namespace
 {
@@ -30,12 +31,14 @@ namespace
 template <typename T, typename R>
 inline std::size_t random_number_usage()
 {
+	using S = typename std::remove_reference<R>::type;
+
 	// the number of random bits
 	std::size_t const b = std::numeric_limits<T>::digits;
 
 	// the number of different numbers the generator can generate
-	long double const r = static_cast <long double> (R::max())
-		- static_cast <long double> (R::min()) + 1.0L;
+	long double const r = static_cast <long double> (S::max())
+		- static_cast <long double> (S::min()) + 1.0L;
 
 	// the number of bits needed to hold the value of 'r'
 	std::size_t const log2r = std::log2(r);
