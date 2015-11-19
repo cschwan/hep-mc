@@ -1,5 +1,5 @@
-New in 0.3.2:
-=============
+New in 0.4:
+===========
 
 - added multi channel MC integrator with example
 - added multi channel MC integrator with example
