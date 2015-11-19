@@ -54,17 +54,9 @@ int main(int argc, char* argv[])
 		double const sms0 = s - s0;
 		double const sms1 = s - s1;
 
-		double const g0 = 1.0 / (1.0 + sms0 * sms0) / std::acos(-1.0);
-		double const g1 = 1.0 / (1.0 + sms1 * sms1) / std::acos(-1.0);
-
-		// check the number of channels
-		switch (channel_densities.size())
-		{
-		case 2:
-			channel_densities[1] = g1;
-		case 1:
-			channel_densities[0] = g0;
-		}
+		// set the channel densities
+		channel_densities[1] = 1.0 / (1.0 + sms1 * sms1) / std::acos(-1.0);
+		channel_densities[0] = 1.0 / (1.0 + sms0 * sms0) / std::acos(-1.0);
 
 		// global weight
 		return 1.0;
