@@ -39,7 +39,7 @@ namespace hep
 /// @{
 
 /// Implements the MPI-parallelized adaptive multi channel algorithm. See
-/// \ref multi_channel for a detailed description.
+/// \ref multi_channel_group for a detailed description of the parameters.
 template <typename T, typename F, typename D, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	MPI_Comm communicator,
@@ -109,7 +109,7 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 }
 
 /// Implements the MPI-parallelized adaptive multi channel algorithm. See
-/// \ref multi_channel for a detailed description.
+/// \ref multi_channel_group for a detailed description of the parameters.
 template <typename T, typename F, typename D, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	MPI_Comm communicator,

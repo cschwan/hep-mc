@@ -63,31 +63,10 @@ inline std::vector<T> multi_channel_refine_weights(
 	return new_weights;
 }
 
-/// Multi-channel integrator. Integrates `function` over the unit-hypercube with
-/// the specified number of dimensions using `calls` number of function calls.
-/// The integration is performed using random numbers from the specified
-/// generator and the given `densities`. This must be a function with the
-/// following signature:
-/// \code
-/// T my_density_functions(
-///     std::size_t channel,
-///     std::vector<T> const& random_numbers,
-///     std::vector<T>& coordinates,
-///     std::vector<T>& channel_densities
-/// );
-/// \endcode
-/// The variable `random_numbers` contains the uniformly generated point in the
-/// unit-hypercube with `dimensions` numbers, `channel` is the number of the
-/// channel that was randomly selected (ranges from zero to
-/// `channel_weights.size() - 1`). This function must then map the random
-/// numbers to `coordinates`. Note that the size of `coordinates` is determined
-/// by the parameter `map_dimensions`. For each channel, `channel_densities`
-/// must contain the probability density for the generated `coordinates`. The
-/// return value of this function is a global weight this is applied to every
-/// channel. The primary reason for this weight is the special value of zero,
-/// i.e. `T()`, that shortcuts the evaluation of `function` for this point
-/// because it does not contribute. This improves performance if many channels
-/// are used and many points with weight zero are generated.
+/// Performs exactly one iteration of the multi channel integration. The
+/// parameter `channel_weights` lets the user specify the weights of each
+/// channel. Note that they must add up to one. See \ref multi_channel_group for
+/// a description of the remaining parameters.
 template <typename T, typename F, typename D, typename R>
 inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
@@ -177,7 +156,10 @@ inline multi_channel_result<T> multi_channel_iteration(
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling
 /// \ref multi_channel_iteration with the specified parameters and refining
-/// the weights after each iteration with \ref multi_channel_refine_weights.
+/// the weights after each iteration with \ref multi_channel_refine_weights. The
+/// weights that are used for the first iteration must be given by the parameter
+/// `channel_weights`. See \ref multi_channel_group for a description of the
+/// remaining parameters.
 template <typename T, typename F, typename D, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> multi_channel(
 	std::size_t dimensions,
@@ -219,8 +201,12 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 	return results;
 }
 
-/// Perform an adaptive multi channel integration starting with equal weights
-/// for each channel.
+/// Performs `iteration_calls.size()` multi channel iterations by calling
+/// \ref multi_channel_iteration with the specified parameters and refining
+/// the weights after each iteration with \ref multi_channel_refine_weights. The
+/// weights used for the first iteration are \f$ \alpha = 1 / M \f$ with \f$ M
+/// \f$ the number of channels. See \ref multi_channel_group for a description
+/// of the remaining parameters.
 template <typename T, typename F, typename D, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> multi_channel(
 	std::size_t dimensions,
