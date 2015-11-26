@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include <cstddef>
 #include <vector>
 
 #ifndef HEP_USE_MPI
@@ -62,6 +63,8 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 {
 	using T = TypeParam;
 
+	std::size_t const calls = 100000;
+
 #ifndef HEP_USE_MPI
 	auto const result = hep::plain<T>(
 #else
@@ -69,18 +72,23 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 		MPI_COMM_WORLD,
 #endif
 		2,
-		100000,
+		calls,
 		function<T>
 	);
 	auto const reference = reference_results<T>();
 
 	EXPECT_EQ( result.value , reference[0] );
 	EXPECT_EQ( result.error , reference[1] );
+
+	EXPECT_EQ( result.calls , calls );
 }
 
 TYPED_TEST(NumericalResults, CheckVegasIntegration)
 {
 	using T = TypeParam;
+
+	std::size_t const calls = 100000;
+	std::size_t const iterations = 5;
 
 #ifndef HEP_USE_MPI
 	auto const results = hep::vegas<T>(
@@ -89,10 +97,12 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 		MPI_COMM_WORLD,
 #endif
 		2,
-		std::vector<std::size_t>(5, 100000),
+		std::vector<std::size_t>(iterations, calls),
 		function<T>
 	);
 	auto const reference = reference_results<T>();
+
+	ASSERT_EQ( results.size() , iterations );
 
 	EXPECT_EQ( results[0].value , reference[2] );
 	EXPECT_EQ( results[0].error , reference[3] );
@@ -104,4 +114,10 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 	EXPECT_EQ( results[3].error , reference[9] );
 	EXPECT_EQ( results[4].value , reference[10] );
 	EXPECT_EQ( results[4].error , reference[11] );
+
+	EXPECT_EQ( results[0].calls , calls );
+	EXPECT_EQ( results[1].calls , calls );
+	EXPECT_EQ( results[2].calls , calls );
+	EXPECT_EQ( results[3].calls , calls );
+	EXPECT_EQ( results[4].calls , calls );
 }
