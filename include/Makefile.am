@@ -7,6 +7,7 @@ nobase_include_HEADERS = \
 	hep/mc/mc_result.hpp \
 	hep/mc/multi_channel.hpp \
 	hep/mc/multi_channel_callback.hpp \
+	hep/mc/multi_channel_max_difference.hpp \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \
 	hep/mc/mpi_helper.hpp \

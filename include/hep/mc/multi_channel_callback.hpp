@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/multi_channel_result.hpp"
-#include "hep/mc/mc_helper.hpp"
+#include "hep/mc/multi_channel_max_difference.hpp"
 
 #include <cmath>
 #include <functional>
