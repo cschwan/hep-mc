@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/kahan_accumulator.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 
@@ -38,12 +39,7 @@ inline hep::mc_result<T> plain_iteration(
 	F&& function,
 	R&& generator
 ) {
-	// default-initialize sum and sum_of_squares
-	T sum = T();
-	T sum_of_squares = T();
-
-	// compensation variable for kahan summation
-	T compensation = T();
+	hep::kahan_accumulator<T> accumulator;
 
 	// storage for random numbers
 	std::vector<T> random_numbers(dimensions);
@@ -61,17 +57,11 @@ inline hep::mc_result<T> plain_iteration(
 		// evaluate function at position specified in random_numbers
 		T const value = function(hep::mc_point<T>(total_calls, random_numbers));
 
-		// perform kahan summation 'sum += value' - this improves precision if T
-		// is e.g. single precision and many values are added
-		T const y = value - compensation;
-		T const t = sum + y;
-		compensation = (t - sum) - y;
-		sum = t;
-
-		sum_of_squares += value * value;
+		accumulator.add(value);
 	}
 
-	return hep::mc_result<T>(total_calls, sum, sum_of_squares);
+	return hep::mc_result<T>(accumulator.count(), accumulator.sum(),
+		accumulator.sum_of_squares());
 }
 
 }

@@ -1,6 +1,8 @@
 New in 0.3.1:
 =============
 
+- added new internal class ``hep::kahan_accumulator``. This class takes care of
+  the kahan summation
 - changed interfaces ``mc_result`` and ``vegas_iteration_result``: Their member
   variables are now properly encapsulated and accessible via public member
   functions. Furthermore, the ``mc_result`` now allows to obtain ``sum()``,

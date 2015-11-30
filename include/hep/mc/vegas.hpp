@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/kahan_accumulator.hpp"
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
@@ -56,11 +57,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 	F&& function,
 	R&& generator
 ) {
-	T average = T();
-	T averaged_squares = T();
-
-	// for kahan summation
-	T compensation = T();
+	kahan_accumulator<T> accumulator;
 
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
@@ -79,21 +76,11 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		vegas_point<T> const point(total_calls, random_numbers, bin, pdf);
 
-		// evaluate function at the specified point and multiply with its weight
-		T const value = function(point) * point.weight;
+		T const value = function(point) * point.weight * T(total_calls);
 
-		// perform kahan summation 'sum += value' - this improves precision if T
-		// is single precision and many values are added
-		T const y = value - compensation;
-		T const t = average + y;
-		compensation = (t - average) - y;
-		average = t;
+		accumulator.add(value);
 
 		T const square = value * value;
-
-		// no kahan summation needed, because it affects the result only
-		// indirectly via the pdf
-		averaged_squares += square;
 
 		// save square for each bin in order to refine the pdf later
 		for (std::size_t j = 0; j != dimensions; ++j)
@@ -102,13 +89,8 @@ inline vegas_iteration_result<T> vegas_iteration(
 		}
 	}
 
-	// save 'sum' and 'sum_of_squares' by rescaling the variables
-	adjustment_data[dimensions * bins + 0] = average * T(total_calls);
-	adjustment_data[dimensions * bins + 1] = averaged_squares * T(total_calls)
-		* T(total_calls);
-
-	return vegas_iteration_result<T>(calls, *(adjustment_data.end() - 2),
-			*(adjustment_data.end() - 1), pdf, adjustment_data);
+	return vegas_iteration_result<T>(accumulator.count(), accumulator.sum(),
+		accumulator.sum_of_squares(), pdf, adjustment_data);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of

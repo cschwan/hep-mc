@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include <cstddef>
+//#include <cstdio>
 #include <vector>
 
 #ifndef HEP_USE_MPI
@@ -22,12 +23,12 @@ std::vector<T> reference_results();
 template <>
 std::vector<float> reference_results() {
 	return {
-		0xf.f7d32p-4F, 0x8.2b4edp-12F,
-		0xf.f7d30p-4F, 0x8.2b505p-12F,
-		0x8.02be3p-3F, 0x9.048eep-13F,
-		0x8.00063p-3F, 0xc.e5fbep-14F,
-		0xf.fe5c6p-4F, 0xb.46568p-14F,
-		0xf.ffaddp-4F, 0xa.c42a2p-14F
+		0xf.f7d32p-4f, 0x8.2b4edp-12f,
+		0xf.f7d30p-4f, 0x8.2b4efp-12f,
+		0x8.02be3p-3f, 0x9.04993p-13f,
+		0x8.00063p-3f, 0xc.e633ep-14f,
+		0xf.fe5c6p-4f, 0xb.4668cp-14f,
+		0xf.ffadfp-4f, 0xa.c45a6p-14f
 	};
 }
 
@@ -35,11 +36,11 @@ template <>
 std::vector<double> reference_results() {
 	return {
 		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c0p-12,
-		0xf.ffc86404543c0p-4, 0x8.2b672f116b4c0p-12,
-		0x8.01294905b4cd8p-3, 0x9.03ebf3d5a5800p-13,
-		0x8.00331091e43d8p-3, 0xc.d9e34cb3fb030p-14,
-		0xf.fe107b0b3d6a0p-4, 0xb.518ce429078a8p-14,
-		0xf.ffd9e3eac8cf8p-4, 0xa.d9002081b21f0p-14
+		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c8p-12,
+		0x8.01294905b4ce0p-3, 0x9.03ebf3d5a5248p-13,
+		0x8.00331091e43e0p-3, 0xc.d9e34cb3fbcf8p-14,
+		0xf.fe107b0b3d6a0p-4, 0xb.518ce42907288p-14,
+		0xf.ffd9e3eac8cf8p-4, 0xa.d9002081b1648p-14
 	};
 }
 
@@ -47,11 +48,11 @@ template <>
 std::vector<long double> reference_results() {
 	return {
 		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b780aep-12l,
-		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b7817dp-12l,
-		0x8.01294905b4cd55ap-3l, 0x9.03ebf3d5a522130p-13l,
-		0x8.00331091e43d804p-3l, 0xc.d9e34cb3fb9e6f0p-14l,
-		0xf.fe107b0b3d69c69p-4l, 0xb.518ce429071b33ap-14l,
-		0xf.ffd9e3eac8cf7eap-4l, 0xa.d9002081b209eb4p-14l
+		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b780adp-12l,
+		0x8.01294905b4cd55ap-3l, 0x9.03ebf3d5a522088p-13l,
+		0x8.00331091e43d804p-3l, 0xc.d9e34cb3fb9ebafp-14l,
+		0xf.fe107b0b3d69c68p-4l, 0xb.518ce429071b2b8p-14l,
+		0xf.ffd9e3eac8cf7eap-4l, 0xa.d9002081b209a36p-14l,
 	};
 }
 
@@ -120,4 +121,10 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 	EXPECT_EQ( results[2].calls() , calls );
 	EXPECT_EQ( results[3].calls() , calls );
 	EXPECT_EQ( results[4].calls() , calls );
+
+//	for (auto i : results)
+//	{
+//		std::printf("%La, %La,\n", static_cast <long double> (i.value()),
+//			static_cast <long double> (i.error()));
+//	}
 }
