@@ -25,9 +25,8 @@ int main()
 
 		// print results
 		std::cout << ">> printing cumulative result for results 0 till " << i
-			<< "\n";
-		std::cout << "method 0: E=" << result.value << " +- " << result.error;
-		std::cout << " chi^2/dof=" << chi_square_dof << "\n";
+			<< "\nmethod 0: E=" << result.value() << " +- " << result.error()
+			<< " chi^2/dof=" << chi_square_dof << "\n";
 
 		// calculate cumulative results again, this time with a different method
 		result = hep::cumulative_result1(results.begin(),
@@ -36,8 +35,8 @@ int main()
 			results.begin() + (i+1));
 
 		// print results
-		std::cout << "method 1: E=" << result.value << " +- " << result.error;
-		std::cout << " chi^2/dof=" << chi_square_dof << "\n\n";
+		std::cout << "method 1: E=" << result.value() << " +- "
+			<< result.error() << " chi^2/dof=" << chi_square_dof << "\n\n";
 	}
 
 	return 0;

@@ -28,18 +28,24 @@ namespace hep
 /// \addtogroup results
 /// @{
 
-/// The estimation of a Monte Carlo integration. Every Monte Carlo integrator
-/// returns one or more instances of this class.
+/**
+ * The estimation of a Monte Carlo integration. Every Monte Carlo integrator
+ * returns one or more instances of this class. The PLAIN Monte Carlo
+ * integrator, for example, calculates the parameters as follows:
+ * \f{align}{
+ *     E &= \frac{1}{N} \sum_{i=1}^N f ( \vec{x}_i ) \\
+ *     S^2 &= \frac{1}{N-1} \left[ \frac{1}{N} \sum_{i=1}^N f^2 ( \vec{x}_i )
+ *            - E^2  \right]
+ * \f}
+ */
 template <typename T>
 struct mc_result
 {
-	/// Constructor. If `calls` is set to zero, both `value` and `error` are
-	/// also set to zero.
+	/// Constructor.
 	mc_result(std::size_t calls, T sum, T sum_of_squares)
-		: calls(calls)
-		, value(calls < 1 ? T() : sum / T(calls))
-		, error(calls < 1 ? T() : std::sqrt((sum_of_squares /
-			calls - value * value) / T(calls - 1)))
+		: calls_(calls)
+		, sum_(sum)
+		, sum_of_squares_(sum_of_squares)
 	{
 	}
 
@@ -48,13 +54,46 @@ struct mc_result
 
 	/// The number of function evaluations \f$ N \f$ performed to obtain this
 	/// result.
-	std::size_t calls;
+	std::size_t calls() const
+	{
+		return calls_;
+	}
 
 	/// Expectation value \f$ E \f$ of this result.
-	T value;
+	T value() const
+	{
+		return sum_ / T(calls_);
+	}
 
-	/// Error \f$ S \f$ of the expectation value.
-	T error;
+	/// Variance \f$ S^2 \f$ of the expectation value.
+	T variance() const
+	{
+		return (sum_of_squares_ - sum_ * sum_ / T(calls_)) / T(calls_)
+			/ T(calls_ - 1);
+	}
+
+	/// Standard deviation \f$ S \f$ of the expectation value.
+	T error() const
+	{
+		return std::sqrt(variance());
+	}
+
+	/// Returns the sum, i.e. \f$ \sum_{i=1}^N f ( \vec{x}_i ) \f$.
+	T sum() const
+	{
+		return sum_;
+	}
+
+	/// Returns the sum of squares, i.e. \f$ \sum_{i=1}^N f^2 ( \vec{x}_i ) \f$.
+	T sum_of_squares() const
+	{
+		return sum_of_squares_;
+	}
+
+private:
+	std::size_t calls_;
+	T sum_;
+	T sum_of_squares_;
 };
 
 /// Creates a \ref mc_result using the parameters `calls`, `value` and `error`.

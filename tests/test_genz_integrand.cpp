@@ -116,13 +116,13 @@ void check_plain_integrator(test_data_type data)
 	auto result = hep::plain<T>(dimension, calls, integrand);
 
 	// approximation should lie with the error interval
-	EXPECT_NEAR( integrand.reference_result(), result.value, deviation *
-		result.error );
+	EXPECT_NEAR( integrand.reference_result(), result.value(), deviation *
+		result.error() );
 
 	// relative error should not be larger than 5%
-	if (result.value != T())
+	if (result.value() != T())
 	{
-		EXPECT_GT( T(0.15) , result.error / result.value );
+		EXPECT_GT( T(0.15) , result.error() / result.value() );
 	}
 }
 
@@ -146,13 +146,13 @@ void check_vegas_integrator(test_data_type data)
 	auto result = hep::cumulative_result1(results.begin(), results.end());
 
 	// approximation should lie with the error interval
-	EXPECT_NEAR( integrand.reference_result(), result.value, deviation *
-		result.error );
+	EXPECT_NEAR( integrand.reference_result(), result.value(), deviation *
+		result.error() );
 
 	// relative error should not be larger than 5%
-	if (result.value != T())
+	if (result.value() != T())
 	{
-		EXPECT_GT( T(0.07) , result.error / result.value );
+		EXPECT_GT( T(0.07) , result.error() / result.value() );
 	}
 }
 

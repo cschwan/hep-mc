@@ -1,7 +1,10 @@
 New in 0.3.1:
 =============
 
-
+- changed interfaces ``mc_result`` and ``vegas_iteration_result``: Their member
+  variables are now properly encapsulated and accessible via public member
+  functions. Furthermore, the ``mc_result`` now allows to obtain ``sum()``,
+  ``sum_of_squares()``, and ``variance()``
 
 New in 0.3:
 ===========

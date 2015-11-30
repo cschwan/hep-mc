@@ -63,20 +63,16 @@ inline mc_result<get_T<Iterator>> cumulative_result0(
 
 	for (Iterator i = begin; i != end; ++i)
 	{
-		T const tmp = T(1.0) / (i->error * i->error);
-		calls += i->calls;
+		T const tmp = T(1.0) / i->variance();
+		calls += i->calls();
 		variance += tmp;
-		estimate += tmp * i->value;
+		estimate += tmp * i->value();
 	}
 
-	variance  = T(1.0) / variance;
+	variance = T(1.0) / variance;
 	estimate *= variance;
 
-	return mc_result<T>(
-		calls,
-		T(calls) * estimate,
-		T(calls) * (estimate * estimate + T(calls - 1) * variance)
-	);
+	return create_result(calls, estimate, std::sqrt(variance));
 }
 
 /**
@@ -107,7 +103,7 @@ inline mc_result<get_T<Iterator>> cumulative_result1(
 		return mc_result<T>(0, T(), T());
 
 	case 1:
-		return create_result(begin->calls, begin->value, begin->error);
+		return *begin;
 	}
 
 	std::size_t calls = 0;
@@ -116,8 +112,8 @@ inline mc_result<get_T<Iterator>> cumulative_result1(
 
 	for (Iterator i = begin; i != end; ++i)
 	{
-		T const tmp = i->value;
-		calls += i->calls;
+		T const tmp = i->value();
+		calls += i->calls();
 		sum += tmp;
 		sum_of_squares += tmp * tmp;
 	}
@@ -154,8 +150,8 @@ inline T chi_square_dof(
 
 	for (Iterator i = begin; i != end; ++i)
 	{
-		T const tmp = i->value - result.value;
-		sum += tmp * tmp / (i->error * i->error);
+		T const tmp = i->value() - result.value();
+		sum += tmp * tmp / i->variance();
 		++n;
 	}
 

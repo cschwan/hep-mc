@@ -19,7 +19,7 @@ int main()
 	);
 
 	// write the pdf that was used to generate the last iteration
-	std::cout << std::scientific << results.back().pdf << "\n";
+	std::cout << std::scientific << results.back().pdf() << "\n";
 
 	return 0;
 }

@@ -26,9 +26,9 @@ struct stop_after_precision
 		auto const result = hep::cumulative_result0(r.begin(), r.end());
 
 		// ... and check for the absolute error ...
-		if (result.error < abs_error)
+		if (result.error() < abs_error)
 		{
-			std::cout << ">> absolute error " << result.error
+			std::cout << ">> absolute error " << result.error()
 				<< " is smaller than the limit " << abs_error << "\n";
 
 			// returning false stops all remaining iterations
@@ -36,9 +36,10 @@ struct stop_after_precision
 		}
 
 		// ... and the relative error
-		if (result.error < rel_error * result.value)
+		if (result.error() < rel_error * result.value())
 		{
-			std::cout << ">> relative error " << (result.error / result.value)
+			std::cout << ">> relative error "
+				<< (result.error() / result.value())
 				<< " is smaller than the limit " << rel_error << "\n";
 
 			// returning false stops all remaining iterations

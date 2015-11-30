@@ -77,10 +77,10 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 	);
 	auto const reference = reference_results<T>();
 
-	EXPECT_EQ( result.value , reference[0] );
-	EXPECT_EQ( result.error , reference[1] );
+	EXPECT_EQ( result.value() , reference[0] );
+	EXPECT_EQ( result.error() , reference[1] );
 
-	EXPECT_EQ( result.calls , calls );
+	EXPECT_EQ( result.calls() , calls );
 }
 
 TYPED_TEST(NumericalResults, CheckVegasIntegration)
@@ -104,20 +104,20 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 
 	ASSERT_EQ( results.size() , iterations );
 
-	EXPECT_EQ( results[0].value , reference[2] );
-	EXPECT_EQ( results[0].error , reference[3] );
-	EXPECT_EQ( results[1].value , reference[4] );
-	EXPECT_EQ( results[1].error , reference[5] );
-	EXPECT_EQ( results[2].value , reference[6] );
-	EXPECT_EQ( results[2].error , reference[7] );
-	EXPECT_EQ( results[3].value , reference[8] );
-	EXPECT_EQ( results[3].error , reference[9] );
-	EXPECT_EQ( results[4].value , reference[10] );
-	EXPECT_EQ( results[4].error , reference[11] );
+	EXPECT_EQ( results[0].value() , reference[2] );
+	EXPECT_EQ( results[0].error() , reference[3] );
+	EXPECT_EQ( results[1].value() , reference[4] );
+	EXPECT_EQ( results[1].error() , reference[5] );
+	EXPECT_EQ( results[2].value() , reference[6] );
+	EXPECT_EQ( results[2].error() , reference[7] );
+	EXPECT_EQ( results[3].value() , reference[8] );
+	EXPECT_EQ( results[3].error() , reference[9] );
+	EXPECT_EQ( results[4].value() , reference[10] );
+	EXPECT_EQ( results[4].error() , reference[11] );
 
-	EXPECT_EQ( results[0].calls , calls );
-	EXPECT_EQ( results[1].calls , calls );
-	EXPECT_EQ( results[2].calls , calls );
-	EXPECT_EQ( results[3].calls , calls );
-	EXPECT_EQ( results[4].calls , calls );
+	EXPECT_EQ( results[0].calls() , calls );
+	EXPECT_EQ( results[1].calls() , calls );
+	EXPECT_EQ( results[2].calls() , calls );
+	EXPECT_EQ( results[3].calls() , calls );
+	EXPECT_EQ( results[4].calls() , calls );
 }

@@ -12,9 +12,9 @@ TYPED_TEST(McResult, ConstructorAndMemberVariables)
 
 	hep::mc_result<T> result1(100, T(100.0), T(100.0));
 
-	EXPECT_EQ( 100U , result1.calls );
-	EXPECT_NEAR( T(1.0) , result1.value , T(1e-10) );
-	EXPECT_NEAR( T()    , result1.error , T(1e-10) );
+	EXPECT_EQ( 100U , result1.calls() );
+	EXPECT_NEAR( T(1.0) , result1.value() , T(1e-10) );
+	EXPECT_NEAR( T()    , result1.error() , T(1e-10) );
 }
 
 TYPED_TEST(McResult, CreateResult)
@@ -23,7 +23,7 @@ TYPED_TEST(McResult, CreateResult)
 
 	auto const result = hep::create_result(100, T(1.0), T());
 
-	EXPECT_EQ( 100U , result.calls );
-	EXPECT_NEAR( T(1.0) , result.value , T(1e-10) );
-	EXPECT_NEAR( T()    , result.error , T(1e-10) );
+	EXPECT_EQ( 100U , result.calls() );
+	EXPECT_NEAR( T(1.0) , result.value() , T(1e-10) );
+	EXPECT_NEAR( T()    , result.error() , T(1e-10) );
 }

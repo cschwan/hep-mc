@@ -65,7 +65,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
 
-	std::vector<T> adjustment_data(dimensions * bins + 2);
+	std::vector<T> adjustment_data(dimensions * bins);
 	std::vector<T> random_numbers(dimensions);
 	std::vector<std::size_t> bin(dimensions);
 
@@ -107,7 +107,8 @@ inline vegas_iteration_result<T> vegas_iteration(
 	adjustment_data[dimensions * bins + 1] = averaged_squares * T(total_calls)
 		* T(total_calls);
 
-	return vegas_iteration_result<T>(calls, pdf, adjustment_data);
+	return vegas_iteration_result<T>(calls, *(adjustment_data.end() - 2),
+			*(adjustment_data.end() - 1), pdf, adjustment_data);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of
@@ -143,7 +144,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 			break;
 		}
 
-		pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data);
+		pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data());
 	}
 
 	return results;

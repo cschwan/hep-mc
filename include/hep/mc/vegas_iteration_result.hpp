@@ -38,21 +38,32 @@ struct vegas_iteration_result : public mc_result<T>
 	/// Constructor.
 	vegas_iteration_result(
 		std::size_t calls,
+		T sum,
+		T sum_of_squares,
 		vegas_pdf<T> const& pdf,
 		std::vector<T> const& adjustment_data
 	)
-		: mc_result<T>(calls, *(adjustment_data.end() - 2),
-			*(adjustment_data.end() - 1))
-		, pdf(pdf)
-		, adjustment_data(adjustment_data)
+		: mc_result<T>(calls, sum, sum_of_squares)
+		, pdf_(pdf)
+		, adjustment_data_(adjustment_data)
 	{
 	}
 
 	/// The pdf used to obtain this result.
-	vegas_pdf<T> pdf;
+	vegas_pdf<T> const& pdf() const
+	{
+		return pdf_;
+	}
 
-	/// The data used to adjust the `pdf` for a subsequent iteration.
-	std::vector<T> adjustment_data;
+	/// The data used to adjust the \ref pdf for a subsequent iteration.
+	std::vector<T> const& adjustment_data() const
+	{
+		return adjustment_data_;
+	}
+
+private:
+	vegas_pdf<T> pdf_;
+	std::vector<T> adjustment_data_;
 };
 
 /// @}

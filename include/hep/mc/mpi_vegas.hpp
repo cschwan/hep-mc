@@ -64,6 +64,10 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	std::vector<vegas_iteration_result<T>> results;
 	results.reserve(iteration_calls.size());
 
+	// reserve a buffer for the MPI call to sum `adjustment_data`, `sum`, and
+	// `sum_of_squares`
+	std::vector<T> buffer(pdf.dimensions() * pdf.bins() + 2);
+
 	std::size_t const usage = pdf.dimensions() * random_number_usage<T, R>();
 
 	// perform iterations
@@ -77,25 +81,33 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 
+		buffer = result.adjustment_data();
+		buffer.push_back(result.sum());
+		buffer.push_back(result.sum_of_squares());
+
 		// add up results
 		MPI_Allreduce(
 			MPI_IN_PLACE,
-			&(result.adjustment_data[0]),
-			result.adjustment_data.size(),
+			&buffer[0],
+			buffer.size(),
 			mpi_datatype<T>(),
 			MPI_SUM,
 			communicator
 		);
 
-		// calculate accumulated results
-		results.emplace_back(*i, pdf, result.adjustment_data);
+		// extract sum and sum of squares and shorten the buffer
+		T sum = *(buffer.end() - 2);
+		T sum_of_squares = *(buffer.end() - 1);
+		buffer.resize(buffer.size() - 2);
+
+		results.emplace_back(*i, sum, sum_of_squares, pdf, buffer);
 
 		if (!mpi_vegas_callback<T>()(communicator, results))
 		{
 			break;
 		}
 
-		pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data);
+		pdf = vegas_refine_pdf(pdf, alpha, buffer);
 	}
 
 	return results;

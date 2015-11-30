@@ -65,11 +65,6 @@ inline mc_result<T> mpi_plain(
 	int world = 0;
 	MPI_Comm_size(communicator, &world);
 
-	// default-initialize sum and sum_of_squares
-	T  buffer[2]      = { T(), T() };
-	T& sum            = buffer[0];
-	T& sum_of_squares = buffer[1];
-
 	// the number of function calls for each MPI process
 	std::size_t const sub_calls = (calls / world) +
 		(static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
@@ -83,9 +78,10 @@ inline mc_result<T> mpi_plain(
 
 	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
-	sum = result.value * T(result.calls);
-	sum_of_squares = T(result.calls) * (result.value * result.value
-		+ T(calls - 1) * result.error * result.error);
+	T buffer[] = {
+		result.sum(),
+		result.sum_of_squares()
+	};
 
 	MPI_Allreduce(
 		MPI_IN_PLACE,
@@ -96,7 +92,7 @@ inline mc_result<T> mpi_plain(
 		communicator
 	);
 
-	return mc_result<T>(calls, sum, sum_of_squares);
+	return mc_result<T>(calls, buffer[0], buffer[1]);
 }
 
 /// @}

@@ -36,7 +36,7 @@ int main()
 
 	// print the cumulative result
 	std::cout << ">> cumulative result (excluding first iteration):\n>> N="
-		<< result.calls << " I=" << result.value << " +- " << result.error
+		<< result.calls() << " I=" << result.value() << " +- " << result.error()
 		<< " chi^2/dof=" << chi_square_dof << "\n";
 
 	return 0;
