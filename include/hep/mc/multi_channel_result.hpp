@@ -38,11 +38,12 @@ struct multi_channel_result : public mc_result<T>
 	/// values, being the sum of the sum of squares of the integration.
 	multi_channel_result(
 		std::size_t calls,
+		T sum,
+		T sum_of_squares,
 		std::vector<T> const& adjustment_data,
 		std::vector<T> const& channel_weights
 	)
-		: mc_result<T>(calls, *(adjustment_data.end() - 2),
-			*(adjustment_data.end() - 1))
+		: mc_result<T>(calls, sum, sum_of_squares)
 		, adjustment_data_(adjustment_data)
 		, channel_weights_(channel_weights)
 	{

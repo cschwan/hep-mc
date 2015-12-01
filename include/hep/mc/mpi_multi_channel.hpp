@@ -99,7 +99,10 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 			communicator
 		);
 
-		results.emplace_back(*i, buffer, weights);
+		T sum = *(buffer.end() - 2);
+		T sum_of_squares = *(buffer.end() - 1);
+
+		results.emplace_back(*i, sum, sum_of_squares, buffer, weights);
 
 		if (!mpi_multi_channel_callback<T>()(communicator, results))
 		{

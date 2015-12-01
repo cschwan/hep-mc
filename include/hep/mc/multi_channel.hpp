@@ -151,7 +151,8 @@ inline multi_channel_result<T> multi_channel_iteration(
 	adjustment_data[channels + 1] = averaged_squares * T(total_calls)
 		* T(total_calls);
 
-	return multi_channel_result<T>(calls, adjustment_data, channel_weights);
+	return multi_channel_result<T>(calls, adjustment_data[channels + 0],
+		adjustment_data[channels + 1], adjustment_data, channel_weights);
 }
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling
