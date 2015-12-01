@@ -89,9 +89,11 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 
 		buffer = result.adjustment_data();
+		buffer.push_back(result.sum());
+		buffer.push_back(result.sum_of_squares());
 
 		MPI_Allreduce(
-			&(result.adjustment_data()[0]),
+			MPI_IN_PLACE,
 			&buffer[0],
 			buffer.size(),
 			mpi_datatype<T>(),
@@ -101,6 +103,7 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 
 		T sum = *(buffer.end() - 2);
 		T sum_of_squares = *(buffer.end() - 1);
+		buffer.resize(buffer.size() - 2);
 
 		results.emplace_back(*i, sum, sum_of_squares, buffer, weights);
 

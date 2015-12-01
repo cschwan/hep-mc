@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/kahan_accumulator.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -78,18 +79,14 @@ inline multi_channel_result<T> multi_channel_iteration(
 	D&& densities,
 	R&& generator
 ) {
-	T average = T();
-	T averaged_squares = T();
-
-	// for kahan summation
-	T compensation = T();
+	kahan_accumulator<T> accumulator;
 
 	std::size_t const channels = channel_weights.size();
 
 	std::vector<T> random_numbers(dimensions);
 	std::vector<T> coordinates(map_dimensions);
 	std::vector<T> channel_densities(channels);
-	std::vector<T> adjustment_data(channels + 2);
+	std::vector<T> adjustment_data(channels);
 
 	// distribution that randomly selects a channel
 	std::discrete_distribution<std::size_t> channel_selector(
@@ -128,17 +125,11 @@ inline multi_channel_result<T> multi_channel_iteration(
 			point(total_calls, random_numbers, coordinates, channel,
 			total_density, densities);
 
-		T const value = function(point) * point.weight;
+		T const value = function(point) * point.weight * T(total_calls);
 
-		// perform kahan summation
-		T const y = value - compensation;
-		T const t = average + y;
-		compensation = (t - average) - y;
-		average = t;
+		accumulator.add(value);
 
 		T const square = value * value;
-
-		averaged_squares += square;
 
 		// these are the values W that are used to update the alphas
 		for (std::size_t j = 0; j != channels; ++j)
@@ -147,12 +138,8 @@ inline multi_channel_result<T> multi_channel_iteration(
 		}
 	}
 
-	adjustment_data[channels + 0] = average * T(total_calls);
-	adjustment_data[channels + 1] = averaged_squares * T(total_calls)
-		* T(total_calls);
-
-	return multi_channel_result<T>(calls, adjustment_data[channels + 0],
-		adjustment_data[channels + 1], adjustment_data, channel_weights);
+	return multi_channel_result<T>(calls, accumulator.sum(),
+		accumulator.sum_of_squares(), adjustment_data, channel_weights);
 }
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling

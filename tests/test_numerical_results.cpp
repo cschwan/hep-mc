@@ -33,11 +33,11 @@ std::vector<float> reference_results() {
 		0xf.fe5c6p-4f, 0xb.4668cp-14f,
 		0xf.ffadfp-4f, 0xa.c45a6p-14f,
 		// MULTI CHANNEL
-		0xf.f7d30p-4f, 0x8.2b505p-12f,
-		0x8.03f22p-3f, 0x8.31473p-12f,
-		0x8.00e3dp-3f, 0x8.333a8p-12f,
-		0xf.fdc35p-4f, 0x8.34b06p-12f,
-		0xf.fbccep-4f, 0x8.30604p-12f
+		0xf.f7d30p-4f, 0x8.2b4efp-12f,
+		0x8.03f22p-3f, 0x8.31456p-12f,
+		0x8.00e3dp-3f, 0x8.33374p-12f,
+		0xf.fdc35p-4f, 0x8.34ac7p-12f,
+		0xf.fbccep-4f, 0x8.30541p-12f
 	};
 }
 
@@ -53,11 +53,11 @@ std::vector<double> reference_results() {
 		0xf.fe107b0b3d6a0p-4, 0xb.518ce42907288p-14,
 		0xf.ffd9e3eac8cf8p-4, 0xa.d9002081b1648p-14,
 		// MULTI CHANNEL
-		0xf.ffc86404543c0p-4, 0x8.2b672f116b4c0p-12,
-		0x8.028e6efb5b418p-3, 0x8.32bfd3f0c9988p-12,
-		0xf.f928706e8fae8p-4, 0x8.2cded6f995da8p-12,
-		0x8.006378779d598p-3, 0x8.3454b2eb74ad8p-12,
-		0x8.010ec36645680p-3, 0x8.2e66988e3c540p-12
+		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c8p-12,
+		0x8.028e6efb5b418p-3, 0x8.32bfd3f0c9be8p-12,
+		0xf.f928706e8fae8p-4, 0x8.2cded6f995ad8p-12,
+		0x8.006378779d598p-3, 0x8.3454b2eb745a8p-12,
+		0x8.010ec36645680p-3, 0x8.2e66988e3c488p-12
 	};
 }
 
@@ -73,11 +73,11 @@ std::vector<long double> reference_results() {
 		0xf.fe107b0b3d69c68p-4l, 0xb.518ce429071b2b8p-14l,
 		0xf.ffd9e3eac8cf7eap-4l, 0xa.d9002081b209a36p-14l,
 		// MULTI CHANNEL
-		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b7817dp-12l,
-		0x8.028e6efb5b41703p-3l, 0x8.32bfd3f0c9aec73p-12l,
-		0xf.f928706e8fae36ep-4l, 0x8.2cded6f995b63b3p-12l,
-		0x8.006378779d59460p-3l, 0x8.3454b2eb74a4996p-12l,
-		0x8.010ec3664567e43p-3l, 0x8.2e66988e3c3f161p-12l
+		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b780adp-12l,
+		0x8.028e6efb5b41702p-3l, 0x8.32bfd3f0c9aec74p-12l,
+		0xf.f928706e8fae36ep-4l, 0x8.2cded6f995b63acp-12l,
+		0x8.006378779d59461p-3l, 0x8.3454b2eb74a4954p-12l,
+		0x8.010ec3664567e43p-3l, 0x8.2e66988e3c3f0f0p-12l
 	};
 }
 
@@ -208,4 +208,10 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results[2].calls() , calls );
 	EXPECT_EQ( results[3].calls() , calls );
 	EXPECT_EQ( results[4].calls() , calls );
+
+//	for (auto i : results)
+//	{
+//		std::printf("%La, %La,\n", static_cast <long double> (i.value()),
+//			static_cast <long double> (i.error()));
+//	}
 }
