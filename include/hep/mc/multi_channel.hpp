@@ -195,7 +195,8 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 			break;
 		}
 
-		weights = multi_channel_refine_weights(weights, result.adjustment_data);
+		weights = multi_channel_refine_weights(weights,
+			result.adjustment_data());
 	}
 
 	return results;

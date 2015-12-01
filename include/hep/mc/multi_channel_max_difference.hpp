@@ -41,12 +41,12 @@ inline T multi_channel_max_difference(multi_channel_result<T> const& result)
 {
 	T max = T();
 
-	for (std::size_t i = 0; i != result.adjustment_data.size() - 2; ++i)
+	for (std::size_t i = 0; i != result.adjustment_data().size() - 2; ++i)
 	{
-		for (std::size_t j = i + 1; j != result.adjustment_data.size() - 2; ++j)
+		for (std::size_t j = i+1; j != result.adjustment_data().size() - 2; ++j)
 		{
-			T const difference = std::fabs(result.adjustment_data[i] -
-				result.adjustment_data[j]);
+			T const difference = std::fabs(result.adjustment_data()[i] -
+				result.adjustment_data()[j]);
 
 			if (max < difference)
 			{

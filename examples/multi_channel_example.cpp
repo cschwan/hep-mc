@@ -95,11 +95,11 @@ int main(int argc, char* argv[])
 	for (auto const result : results)
 	{
 		std::cout << result.value() << " +- " << result.error() << "\t"
-			<< result.channel_weights[0];
+			<< result.channel_weights()[0];
 
-		if (result.channel_weights.size() == 2)
+		if (result.channel_weights().size() == 2)
 		{
-			std::cout << " " << result.channel_weights[1];
+			std::cout << " " << result.channel_weights()[1];
 		}
 
 		std::cout << "\n";

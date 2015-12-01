@@ -43,18 +43,29 @@ struct multi_channel_result : public mc_result<T>
 	)
 		: mc_result<T>(calls, *(adjustment_data.end() - 2),
 			*(adjustment_data.end() - 1))
-		, adjustment_data(adjustment_data)
-		, channel_weights(channel_weights)
+		, adjustment_data_(adjustment_data)
+		, channel_weights_(channel_weights)
 	{
 	}
 
+public:
 	/// This is the data used by \ref multi_channel_refine_weights to refine the
 	/// \ref channel_weights used in the same iteration. The refined weights are
 	/// then used in a subsequent iteration.
-	std::vector<T> adjustment_data;
+	std::vector<T> const& adjustment_data() const
+	{
+		return adjustment_data_;
+	}
 
 	/// The weight for each channel.
-	std::vector<T> channel_weights;
+	std::vector<T> const& channel_weights() const
+	{
+		return channel_weights_;
+	}
+
+private:
+	std::vector<T> adjustment_data_;
+	std::vector<T> channel_weights_;
 };
 
 /// @}

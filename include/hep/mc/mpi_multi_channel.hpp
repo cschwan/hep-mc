@@ -61,6 +61,8 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	std::vector<multi_channel_result<T>> results;
 	results.reserve(iteration_calls.size());
 
+	std::vector<T> buffer;
+
 	// FIXME: this assumes std::discrete_distribution takes two random numbers
 	// for the selection of a random channel; this is probably not true for all
 	// implementations
@@ -86,23 +88,25 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 
+		buffer = result.adjustment_data();
+
 		MPI_Allreduce(
-			MPI_IN_PLACE,
-			&(result.adjustment_data[0]),
-			result.adjustment_data.size(),
+			&(result.adjustment_data()[0]),
+			&buffer[0],
+			buffer.size(),
 			mpi_datatype<T>(),
 			MPI_SUM,
 			communicator
 		);
 
-		results.emplace_back(*i, result.adjustment_data, weights);
+		results.emplace_back(*i, buffer, weights);
 
 		if (!mpi_multi_channel_callback<T>()(communicator, results))
 		{
 			break;
 		}
 
-		weights = multi_channel_refine_weights(weights, result.adjustment_data);
+		weights = multi_channel_refine_weights(weights, buffer);
 	}
 
 	return results;
