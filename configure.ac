@@ -22,7 +22,7 @@ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_RANLIB
 
 # check for C++11 conforming compiler (autoconf-archive macro)
-AX_CXX_COMPILE_STDCXX_11([], [mandatory])
+AX_CXX_COMPILE_STDCXX([11], [], [mandatory])
 
 # point to a source file in order to let ./configure find itself
 AC_CONFIG_SRCDIR([include/hep/mc.hpp])
