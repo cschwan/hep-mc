@@ -9,7 +9,7 @@ libgenz_a_SOURCES = genz_integrand.hpp genz_integrand.cpp
 libgtest_a_SOURCES = gtest/gtest.h gtest-all.cpp
 libgtest_main_a_SOURCES = gtest/gtest.h gtest_main.cpp
 
-check_PROGRAMS = \
+serial_tests = \
 	test_discrete_distribution \
 	test_genz_integrand \
 	test_mc_helper \
@@ -18,6 +18,8 @@ check_PROGRAMS = \
 	test_numerical_results \
 	test_vegas_icdf_bug \
 	test_vegas_pdf
+
+check_PROGRAMS = $(serial_tests)
 
 # redundant for automake >= 1.11
 test_discrete_distribution_SOURCES = test_discrete_distribution.cpp
@@ -33,6 +35,8 @@ LDADD = libgtest.a libgtest_main.a
 
 test_genz_integrand_LDADD = libgenz.a $(LDADD)
 
+TESTS = $(serial_tests)
+
 if HAVE_MPI
 
 check_LIBRARIES += libgtest_mpi_main.a
@@ -40,8 +44,11 @@ check_LIBRARIES += libgtest_mpi_main.a
 libgtest_mpi_main_a_SOURCES = gtest/gtest.h gtest_mpi_main.cpp
 libgtest_mpi_main_a_CPPFLAGS = $(AM_CPPFLAGS) $(MPI_CPPFLAGS)
 
-check_PROGRAMS += \
-	test_mpi_numerical_results
+check_PROGRAMS += test_mpi_numerical_results
+dist_check_SCRIPTS = test_mpi_numerical_results.sh
+CLEANFILES = $(dist_check_SCRIPTS)
+
+TESTS += test_mpi_numerical_results.sh
 
 test_mpi_numerical_results_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(MPI_CPPFLAGS) -DHEP_USE_MPI
@@ -51,4 +58,3 @@ test_mpi_numerical_results_SOURCES = test_numerical_results.cpp
 
 endif
 
-TESTS = $(check_PROGRAMS)

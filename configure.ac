@@ -65,5 +65,9 @@ AC_CONFIG_FILES([
 	tests/Makefile
 ])
 
+# configure remaining files
+AC_CONFIG_FILES([tests/test_mpi_numerical_results.sh],
+	[chmod +x tests/test_mpi_numerical_results.sh])
+
 # write configure script
 AC_OUTPUT
