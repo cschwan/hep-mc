@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/kahan_accumulator.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
@@ -89,7 +90,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::vector<T> adjustment_data(channels);
 
 	// distribution that randomly selects a channel
-	std::discrete_distribution<std::size_t> channel_selector(
+	discrete_distribution<std::size_t, T> channel_selector(
 		channel_weights.begin(), channel_weights.end());
 
 	for (std::size_t i = 0; i != calls; ++i)

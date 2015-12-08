@@ -63,10 +63,9 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 
 	std::vector<T> buffer;
 
-	// FIXME: this assumes std::discrete_distribution takes two random numbers
-	// for the selection of a random channel; this is probably not true for all
-	// implementations
-	std::size_t const usage = 2 + dimensions * random_number_usage<T, R>();
+	// hep::discrete_distribution consumes as many random numbers as an
+	// additional dimension
+	std::size_t const usage = (1 + dimensions) * random_number_usage<T, R>();
 
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{

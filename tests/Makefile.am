@@ -10,6 +10,7 @@ libgtest_a_SOURCES = gtest/gtest.h gtest-all.cpp
 libgtest_main_a_SOURCES = gtest/gtest.h gtest_main.cpp
 
 check_PROGRAMS = \
+	test_discrete_distribution \
 	test_genz_integrand \
 	test_mc_helper \
 	test_mc_point \
@@ -19,6 +20,7 @@ check_PROGRAMS = \
 	test_vegas_pdf
 
 # redundant for automake >= 1.11
+test_discrete_distribution_SOURCES = test_discrete_distribution.cpp
 test_genz_integrand_SOURCES = test_genz_integrand.cpp
 test_mc_helper_SOURCES = test_mc_helper.cpp
 test_mc_point_SOURCES = test_mc_point.cpp
