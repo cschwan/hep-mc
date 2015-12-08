@@ -118,9 +118,10 @@ inline multi_channel_result<T> multi_channel_iteration(
 		T total_density = T();
 		for (std::size_t j = 0; j != channels; ++j)
 		{
-			channel_densities[j] /= weight;
 			total_density += channel_weights[j] * channel_densities[j];
 		}
+
+		total_density /= weight;
 
 		multi_channel_point2<T, typename std::remove_reference<D>::type> const
 			point(total_calls, random_numbers, coordinates, channel,
