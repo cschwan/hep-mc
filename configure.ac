@@ -55,10 +55,9 @@ AS_IF([test "x$enable_doxygen" = "xyes"], [
 ])
 AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
-# configure Makefiles and Doxyfile
+# configure Makefiles
 AC_CONFIG_FILES([
 	Makefile
-	doc/Doxyfile
 	doc/Makefile
 	examples/Makefile
 	include/Makefile
@@ -66,7 +65,7 @@ AC_CONFIG_FILES([
 ])
 
 # configure remaining files
-AC_CONFIG_FILES([tests/test_mpi_numerical_results.sh],
+AC_CONFIG_FILES([doc/Doxyfile tests/test_mpi_numerical_results.sh],
 	[chmod +x tests/test_mpi_numerical_results.sh])
 
 # write configure script

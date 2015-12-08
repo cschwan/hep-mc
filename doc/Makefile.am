@@ -1,6 +1,6 @@
 docpkg = $(PACKAGE_TARNAME)-doc-$(PACKAGE_VERSION).tar
 
-CLEANFILES = $(docpkg)
+CLEANFILES = Doxyfile $(docpkg)
 
 EXTRA_DIST = \
 	callbacks.dox \
