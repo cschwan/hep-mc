@@ -19,7 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/kahan_accumulator.hpp"
+#include "hep/mc/distribution_accumulator.hpp"
+#include "hep/mc/distributions.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 
@@ -32,14 +33,15 @@
 namespace
 {
 
-template <typename T, typename F, typename R>
-inline hep::mc_result<T> plain_iteration(
+template <typename T, typename F, typename D, typename R>
+inline std::vector<std::vector<hep::mc_result<T>>> plain_iteration(
 	std::size_t dimensions,
 	std::size_t calls,
 	F&& function,
+	D&& distributions,
 	R&& generator
 ) {
-	hep::kahan_accumulator<T> accumulator;
+	auto accumulator = make_distribution_accumulator(distributions);
 
 	// storage for random numbers
 	std::vector<T> random_numbers(dimensions);
@@ -54,14 +56,33 @@ inline hep::mc_result<T> plain_iteration(
 				std::numeric_limits<T>::digits>(generator);
 		}
 
-		// evaluate function at position specified in random_numbers
-		T const value = function(hep::mc_point<T>(random_numbers));
+		hep::mc_point<T> const point(random_numbers);
 
-		accumulator.add(value);
+		// evaluate function at position specified in random_numbers
+		T const value = function(point);
+
+		accumulator.add(point, value);
 	}
 
-	return hep::mc_result<T>(accumulator.count(), accumulator.sum(),
-		accumulator.sum_of_squares());
+	return accumulator.results();
+}
+
+template <typename T, typename F, typename R>
+inline hep::mc_result<T> plain_iteration(
+	std::size_t dimensions,
+	std::size_t calls,
+	F&& function,
+	R&& generator
+) {
+	// use default_distribution, which has one distribution with exactly one
+	// bin, i.e. every point lands in there -> simple MC integration
+	return plain_iteration<T>(
+		dimensions,
+		calls,
+		std::forward<F>(function),
+		hep::default_distribution<T>(),
+		std::forward<R>(generator)
+	)[0][0];
 }
 
 }

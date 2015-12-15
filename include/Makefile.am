@@ -1,5 +1,7 @@
 nobase_include_HEADERS = \
 	hep/mc/discrete_distribution.hpp \
+	hep/mc/distribution_accumulator.hpp \
+	hep/mc/distributions.hpp \
 	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
 	hep/mc/kahan_accumulator.hpp \
