@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/discrete_distribution.hpp"
-#include "hep/mc/kahan_accumulator.hpp"
+#include "hep/mc/distribution_accumulator.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -69,17 +69,18 @@ inline std::vector<T> multi_channel_refine_weights(
 /// parameter `channel_weights` lets the user specify the weights of each
 /// channel. Note that they must add up to one. See \ref multi_channel_group for
 /// a description of the remaining parameters.
-template <typename T, typename F, typename D, typename R>
-inline multi_channel_result<T> multi_channel_iteration(
+template <typename T, typename F, typename D, typename E, typename R>
+inline multi_channel_distribution_result<T> multi_channel_iteration(
 	std::size_t dimensions,
 	std::size_t map_dimensions,
 	std::size_t calls,
 	F&& function,
 	std::vector<T> const& channel_weights,
 	D&& densities,
+	E&& distributions,
 	R&& generator
 ) {
-	kahan_accumulator<T> accumulator;
+	auto accumulator = make_distribution_accumulator(distributions);
 
 	std::size_t const channels = channel_weights.size();
 
@@ -128,7 +129,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 
 		T const value = function(point) * point.weight();
 
-		accumulator.add(value);
+		accumulator.add(point, value);
 
 		T const square = value * value;
 
@@ -139,9 +140,35 @@ inline multi_channel_result<T> multi_channel_iteration(
 		}
 	}
 
-	return multi_channel_result<T>(calls, accumulator.sum(),
-		accumulator.sum_of_squares(), adjustment_data, channel_weights);
+	auto tmp = accumulator.result();
+	multi_channel_distribution_result<T> const result(tmp, adjustment_data,
+		channel_weights, tmp.distribution_results());
+
+	return result;
 }
+
+template <typename T, typename F, typename D, typename R>
+inline multi_channel_result<T> multi_channel_iteration(
+	std::size_t dimensions,
+	std::size_t map_dimensions,
+	std::size_t calls,
+	F&& function,
+	std::vector<T> const& channel_weights,
+	D&& densities,
+	R&& generator
+) {
+	return multi_channel_iteration<T>(
+		dimensions,
+		map_dimensions,
+		calls,
+		std::forward<F>(function),
+		channel_weights,
+		std::forward<D>(densities),
+		default_distribution<T>(),
+		std::forward<R>(generator)
+	);
+}
+
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling
 /// \ref multi_channel_iteration with the specified parameters and refining

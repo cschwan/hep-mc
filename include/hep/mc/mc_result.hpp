@@ -21,6 +21,7 @@
 
 #include <cmath>
 #include <cstddef>
+#include <vector>
 
 namespace hep
 {
@@ -94,6 +95,38 @@ private:
 	std::size_t calls_;
 	T sum_;
 	T sum_of_squares_;
+};
+
+/// Captures the results of distribution, in addition to the total result of the
+/// total integral.
+template <typename T>
+class distribution_result : public mc_result<T>
+{
+public:
+	/// Constructor.
+	distribution_result(
+		std::size_t calls,
+		T sum,
+		T sum_of_squares,
+		std::vector<std::vector<mc_result<T>>> const& distribution_results
+	)
+		: mc_result<T>(calls, sum, sum_of_squares)
+		, distribution_results_(distribution_results)
+	{
+	}
+
+	/// Returns the results for the distributions. There are exactly
+	/// `distribution_results().size()` number of distributions, each
+	/// distribution `i` having `distribution_results()[i].size()` number of
+	/// bins, which are accessed via `distributions_results()[i][j]`, where `j`
+	/// denotes the index of the bin.
+	std::vector<std::vector<mc_result<T>>> const& distribution_results() const
+	{
+		return distribution_results_;
+	}
+
+private:
+	std::vector<std::vector<mc_result<T>>> distribution_results_;
 };
 
 /// Creates a \ref mc_result using the parameters `calls`, `value` and `error`.

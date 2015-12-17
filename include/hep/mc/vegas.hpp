@@ -49,14 +49,15 @@ namespace hep
 /// will be called multiple times with a differently seeded generator and with
 /// `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
-template <typename T, typename F, typename R>
-inline vegas_iteration_result<T> vegas_iteration(
+template <typename T, typename F, typename D, typename R>
+inline vegas_distribution_result<T> vegas_iteration(
 	std::size_t calls,
 	vegas_pdf<T> const& pdf,
 	F&& function,
+	D&& distributions,
 	R&& generator
 ) {
-	kahan_accumulator<T> accumulator;
+	auto accumulator = make_distribution_accumulator(distributions);
 
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
@@ -77,7 +78,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		T const value = function(point) * point.weight();
 
-		accumulator.add(value);
+		accumulator.add(point, value);
 
 		T const square = value * value;
 
@@ -88,8 +89,27 @@ inline vegas_iteration_result<T> vegas_iteration(
 		}
 	}
 
-	return vegas_iteration_result<T>(accumulator.count(), accumulator.sum(),
-		accumulator.sum_of_squares(), pdf, adjustment_data);
+	auto tmp = accumulator.result();
+	vegas_distribution_result<T> const result(tmp, pdf, adjustment_data,
+		tmp.distribution_results());
+
+	return result;
+}
+
+template <typename T, typename F, typename R>
+inline vegas_iteration_result<T> vegas_iteration(
+	std::size_t calls,
+	vegas_pdf<T> const& pdf,
+	F&& function,
+	R&& generator
+) {
+	return vegas_iteration<T>(
+		calls,
+		pdf,
+		std::forward<F>(function),
+		default_distribution<T>(),
+		std::forward<R>(generator)
+	);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of

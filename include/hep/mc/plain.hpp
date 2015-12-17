@@ -34,7 +34,7 @@ namespace
 {
 
 template <typename T, typename F, typename D, typename R>
-inline std::vector<std::vector<hep::mc_result<T>>> plain_iteration(
+inline hep::distribution_result<T> plain_iteration(
 	std::size_t dimensions,
 	std::size_t calls,
 	F&& function,
@@ -64,7 +64,7 @@ inline std::vector<std::vector<hep::mc_result<T>>> plain_iteration(
 		accumulator.add(point, value);
 	}
 
-	return accumulator.results();
+	return accumulator.result();
 }
 
 template <typename T, typename F, typename R>
@@ -82,7 +82,7 @@ inline hep::mc_result<T> plain_iteration(
 		std::forward<F>(function),
 		hep::default_distribution<T>(),
 		std::forward<R>(generator)
-	)[0][0];
+	);
 }
 
 }

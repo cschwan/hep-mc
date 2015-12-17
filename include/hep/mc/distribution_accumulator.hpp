@@ -63,9 +63,10 @@ public:
 		++count_;
 	}
 
-	std::vector<std::vector<mc_result<T>>> results() const
+	distribution_result<T> result() const
 	{
-		return {{ mc_result<T>(count_, sum_, sum_of_squares_) }};
+		return distribution_result<T>(count_, sum_, sum_of_squares_,
+			std::vector<std::vector<mc_result<T>>>());
 	}
 
 private:
