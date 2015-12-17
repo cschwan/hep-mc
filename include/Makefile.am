@@ -4,7 +4,6 @@ nobase_include_HEADERS = \
 	hep/mc/distributions.hpp \
 	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
-	hep/mc/kahan_accumulator.hpp \
 	hep/mc/mc_helper.hpp \
 	hep/mc/mc_point.hpp \
 	hep/mc/mc_result.hpp \
