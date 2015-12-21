@@ -21,16 +21,6 @@ serial_tests = \
 
 check_PROGRAMS = $(serial_tests)
 
-# redundant for automake >= 1.11
-test_discrete_distribution_SOURCES = test_discrete_distribution.cpp
-test_genz_integrand_SOURCES = test_genz_integrand.cpp
-test_mc_helper_SOURCES = test_mc_helper.cpp
-test_mc_point_SOURCES = test_mc_point.cpp
-test_mc_result_SOURCES = test_mc_result.cpp
-test_numerical_results_SOURCES = test_numerical_results.cpp
-test_vegas_icdf_bug_SOURCES = test_vegas_icdf_bug.cpp
-test_vegas_pdf_SOURCES = test_vegas_pdf.cpp
-
 LDADD = libgtest.a libgtest_main.a
 
 test_genz_integrand_LDADD = libgenz.a $(LDADD)

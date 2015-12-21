@@ -10,14 +10,6 @@ noinst_PROGRAMS = \
 	vegas_write_pdf \
 	vegas_stop_after_precision
 
-# redundant for automake >= 1.11
-helper_example_SOURCES = helper_example.cpp
-multi_channel_example_SOURCES = multi_channel_example.cpp
-vegas_example_SOURCES = vegas_example.cpp
-vegas_read_pdf_SOURCES = vegas_read_pdf.cpp
-vegas_write_pdf_SOURCES = vegas_write_pdf.cpp
-vegas_stop_after_precision_SOURCES = vegas_stop_after_precision.cpp
-
 if HAVE_MPI
 
 noinst_PROGRAMS += \

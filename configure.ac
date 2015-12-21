@@ -9,7 +9,7 @@ AC_INIT([hep-mc], [0.4], [https://github.com/cschwan/hep-mc/issues],
 AC_CONFIG_AUX_DIR([build-aux])
 
 # initialize automake
-AM_INIT_AUTOMAKE([foreign -Wall dist-bzip2 no-dist-gzip nostdinc])
+AM_INIT_AUTOMAKE([1.11 foreign -Wall dist-bzip2 no-dist-gzip nostdinc])
 
 # put aclocal macros into m4
 AC_CONFIG_MACRO_DIR([m4])
