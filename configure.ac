@@ -65,7 +65,8 @@ AC_CONFIG_FILES([
 ])
 
 # configure remaining files
-AC_CONFIG_FILES([doc/Doxyfile tests/test_mpi_numerical_results.sh],
+AC_CONFIG_FILES([doc/Doxyfile])
+AC_CONFIG_FILES([tests/test_mpi_numerical_results.sh],
 	[chmod +x tests/test_mpi_numerical_results.sh])
 
 # write configure script
