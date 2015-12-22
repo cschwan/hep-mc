@@ -23,6 +23,7 @@
 #include "hep/mc/distributions.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
+#include "hep/mc/plain_distribution_result.hpp"
 
 #include <cstddef>
 #include <limits>
@@ -34,7 +35,7 @@ namespace
 {
 
 template <typename T, typename F, typename D, typename R>
-inline hep::distribution_result<T> plain_iteration(
+inline hep::plain_distribution_result<T> plain_iteration(
 	std::size_t dimensions,
 	std::size_t calls,
 	F&& function,
@@ -64,7 +65,7 @@ inline hep::distribution_result<T> plain_iteration(
 		accumulator.add(point, value);
 	}
 
-	return accumulator.result();
+	return hep::make_result<hep::plain_distribution_result<T>>(accumulator);
 }
 
 template <typename T, typename F, typename R>

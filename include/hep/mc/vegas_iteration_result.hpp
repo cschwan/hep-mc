@@ -66,34 +66,6 @@ private:
 	std::vector<T> adjustment_data_;
 };
 
-/// Distribution version of \ref vegas_iteration_result.
-template <typename T>
-class vegas_distribution_result : public vegas_iteration_result<T>
-{
-public:
-	/// Constructor.
-	vegas_distribution_result(
-		mc_result<T> const& result,
-		vegas_pdf<T> const& pdf,
-		std::vector<T> const& adjustment_data,
-		std::vector<std::vector<mc_result<T>>> const& distribution_results
-	)
-		: vegas_iteration_result<T>(result.calls(), result.sum(),
-			result.sum_of_squares(), pdf, adjustment_data)
-		, distribution_results_(distribution_results)
-	{
-	}
-
-	/// Returns the distributions.
-	std::vector<std::vector<mc_result<T>>> distribution_results() const
-	{
-		return distribution_results_;
-	}
-
-private:
-	std::vector<std::vector<mc_result<T>>> distribution_results_;
-};
-
 /// @}
 
 }

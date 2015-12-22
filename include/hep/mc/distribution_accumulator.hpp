@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/distributions.hpp"
+#include "hep/mc/distribution_result.hpp"
 #include "hep/mc/mc_result.hpp"
 
 #include <cstddef>
@@ -63,10 +64,24 @@ public:
 		++count_;
 	}
 
-	distribution_result<T> result() const
+	std::size_t count() const
 	{
-		return distribution_result<T>(count_, sum_, sum_of_squares_,
-			std::vector<std::vector<mc_result<T>>>());
+		return count_;
+	}
+
+	std::vector<std::vector<mc_result<T>>> distribution_results() const
+	{
+		return std::vector<std::vector<mc_result<T>>>();
+	}
+
+	T sum() const
+	{
+		return sum_;
+	}
+
+	T sum_of_squares() const
+	{
+		return sum_of_squares_;
 	}
 
 private:
@@ -83,6 +98,18 @@ inline distribution_accumulator<
 	typename std::remove_reference<D>::type::projector
 > make_distribution_accumulator(D&& distributions) {
 	return std::forward<D>(distributions);
+}
+
+template <typename R, typename D, typename... A>
+inline R make_result(D const& accumulator, A&&... args)
+{
+	return R(
+		accumulator.distribution_results(),
+		accumulator.count(),
+		accumulator.sum(),
+		accumulator.sum_of_squares(),
+		std::forward<A>(args)...
+	);
 }
 
 /// @}

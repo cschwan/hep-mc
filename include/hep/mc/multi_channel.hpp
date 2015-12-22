@@ -21,7 +21,9 @@
 
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/distribution_accumulator.hpp"
+#include "hep/mc/distributions.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
+#include "hep/mc/multi_channel_distribution_result.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 
@@ -140,11 +142,8 @@ inline multi_channel_distribution_result<T> multi_channel_iteration(
 		}
 	}
 
-	auto tmp = accumulator.result();
-	multi_channel_distribution_result<T> const result(tmp, adjustment_data,
-		channel_weights, tmp.distribution_results());
-
-	return result;
+	return make_result<multi_channel_distribution_result<T>>(accumulator,
+		channel_weights, adjustment_data);
 }
 
 template <typename T, typename F, typename D, typename R>

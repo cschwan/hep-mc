@@ -69,31 +69,6 @@ private:
 	std::vector<T> channel_weights_;
 };
 
-template <typename T>
-class multi_channel_distribution_result : public multi_channel_result<T>
-{
-public:
-	multi_channel_distribution_result(
-		mc_result<T> const& result,
-		std::vector<T> const& adjustment_data,
-		std::vector<T> const& channel_weights,
-		std::vector<std::vector<mc_result<T>>> distribution_results
-	)
-		: multi_channel_result<T>(result.calls(), result.sum(),
-			result.sum_of_squares(), adjustment_data, channel_weights)
-		, distribution_results_(distribution_results)
-	{
-	}
-
-	std::vector<std::vector<mc_result<T>>> distribution_results() const
-	{
-		return distribution_results_;
-	}
-
-private:
-	std::vector<std::vector<mc_result<T>>> distribution_results_;
-};
-
 /// @}
 
 }

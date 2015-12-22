@@ -19,7 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/distribution_accumulator.hpp"
+#include "hep/mc/distributions.hpp"
 #include "hep/mc/vegas_callback.hpp"
+#include "hep/mc/vegas_distribution_result.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
@@ -88,11 +91,8 @@ inline vegas_distribution_result<T> vegas_iteration(
 		}
 	}
 
-	auto tmp = accumulator.result();
-	vegas_distribution_result<T> const result(tmp, pdf, adjustment_data,
-		tmp.distribution_results());
-
-	return result;
+	return make_result<vegas_distribution_result<T>>(accumulator, pdf,
+		adjustment_data);
 }
 
 template <typename T, typename F, typename R>
