@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/buffer_helper.hpp"
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_multi_channel_callback.hpp"
@@ -40,7 +41,7 @@ namespace hep
 
 /// Implements the MPI-parallelized adaptive multi channel algorithm. See
 /// \ref multi_channel_group for a detailed description of the parameters.
-template <typename T, typename F, typename D, typename R = std::mt19937>
+template <class T, class F, class D, class P, class R = std::mt19937>
 inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	MPI_Comm communicator,
 	std::size_t dimensions,
@@ -49,6 +50,7 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	F&& function,
 	std::vector<T> const& channel_weights,
 	D&& densities,
+	P&& projector,
 	R&& generator = std::mt19937()
 ) {
 	int rank = 0;
@@ -74,36 +76,34 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 		std::size_t const calls = (*i / world) +
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
 
-		auto result = multi_channel_iteration(
+		auto const result = multi_channel_iteration(
 			dimensions,
 			map_dimensions,
 			calls,
 			function,
 			weights,
 			densities,
+			projector,
 			generator
 		);
 
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 
-		buffer = result.adjustment_data();
-		buffer.push_back(result.sum());
-		buffer.push_back(result.sum_of_squares());
-
-		MPI_Allreduce(
-			MPI_IN_PLACE,
-			&buffer[0],
-			buffer.size(),
-			mpi_datatype<T>(),
-			MPI_SUM,
-			communicator
+		auto const new_result = allreduce_result(
+			communicator,
+			result,
+			buffer,
+			result.adjustment_data()
 		);
 
-		T sum = *(buffer.end() - 2);
-		T sum_of_squares = *(buffer.end() - 1);
-		buffer.resize(buffer.size() - 2);
-
-		results.emplace_back(*i, sum, sum_of_squares, buffer, weights);
+		results.emplace_back(
+			new_result.distributions(),
+			new_result.calls(),
+			new_result.sum(),
+			new_result.sum_of_squares(),
+			buffer,
+			weights
+		);
 
 		if (!mpi_multi_channel_callback<T>()(communicator, results))
 		{
@@ -137,6 +137,33 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 		std::forward<F>(function),
 		std::vector<T>(channels, T(1.0) / T(channels)),
 		std::forward<D>(densities),
+		default_projector<T>(),
+		std::forward<R>(generator)
+	);
+}
+
+///
+template <class T, class F, class D, class P, class R = std::mt19937>
+inline std::vector<multi_channel_result<T>> mpi_multi_channel_distributions(
+	MPI_Comm communicator,
+	std::size_t dimensions,
+	std::size_t map_dimensions,
+	std::vector<std::size_t> const& iteration_calls,
+	F&& function,
+	std::size_t channels,
+	D&& densities,
+	P&& projector,
+	R&& generator = std::mt19937()
+) {
+	return mpi_multi_channel(
+		communicator,
+		dimensions,
+		map_dimensions,
+		iteration_calls,
+		std::forward<F>(function),
+		std::vector<T>(channels, T(1.0) / T(channels)),
+		std::forward<D>(densities),
+		std::forward<P>(projector),
 		std::forward<R>(generator)
 	);
 }

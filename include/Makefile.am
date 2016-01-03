@@ -1,10 +1,10 @@
 nobase_include_HEADERS = \
+	hep/mc/buffer_helper.hpp \
 	hep/mc/discrete_distribution.hpp \
 	hep/mc/distribution_accumulator.hpp \
 	hep/mc/distribution_parameters.hpp \
 	hep/mc/distribution_projector.hpp \
 	hep/mc/distribution_result.hpp \
-	hep/mc/distributions_with.hpp \
 	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
 	hep/mc/mc_helper.hpp \
@@ -22,6 +22,7 @@ nobase_include_HEADERS = \
 	hep/mc/mpi_vegas.hpp \
 	hep/mc/mpi_vegas_callback.hpp \
 	hep/mc/plain.hpp \
+	hep/mc/plain_result.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc/vegas_callback.hpp \
 	hep/mc/vegas_iteration_result.hpp \

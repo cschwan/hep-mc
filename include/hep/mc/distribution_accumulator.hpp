@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 
 #include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/distribution_result.hpp"
-#include "hep/mc/distributions_with.hpp"
-#include "hep/mc/mc_result.hpp"
 
 #include <cstddef>
 #include <type_traits>
@@ -96,7 +94,7 @@ public:
 		return accumulator_.count();
 	}
 
-	std::vector<hep::distribution_result<T>> results() const
+	std::vector<hep::distribution_result<T>> distributions() const
 	{
 		std::vector<hep::distribution_result<T>> result;
 		result.reserve(sum_.size());
@@ -182,7 +180,7 @@ public:
 		return count_;
 	}
 
-	std::vector<hep::distribution_result<T>> results() const
+	std::vector<hep::distribution_result<T>> distributions() const
 	{
 		return std::vector<hep::distribution_result<T>>();
 	}
@@ -204,27 +202,14 @@ private:
 	T sum_of_squares_;
 };
 
-template <typename D>
+template <typename P>
 inline distribution_accumulator<
-	typename std::remove_reference<D>::type::numeric_type,
-	typename std::remove_reference<D>::type::projector_type
-> make_distribution_accumulator(D&& distributions) {
-	return std::forward<D>(distributions);
-}
-
-template <typename R, typename D, typename... A>
-inline hep::distributions_with<R> make_result(D const& accumulator, A&&... args)
-{
-	return hep::distributions_with<R>(
-		accumulator.results(),
-		accumulator.count(),
-		accumulator.sum(),
-		accumulator.sum_of_squares(),
-		std::forward<A>(args)...
-	);
+	typename std::remove_reference<P>::type::numeric_type,
+	typename std::remove_reference<P>::type::projector_type
+> make_distribution_accumulator(P&& projector) {
+	return std::forward<P>(projector);
 }
 
 }
 
 #endif
-

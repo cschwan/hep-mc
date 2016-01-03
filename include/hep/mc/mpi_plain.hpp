@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2015  Christopher Schwan
+ * Copyright (C) 2013-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/buffer_helper.hpp"
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/mc_point.hpp"
@@ -73,26 +74,21 @@ inline mc_result<T> mpi_plain(
 
 	generator.discard(usage * discard_before(calls, rank, world));
 
-	auto result = plain_iteration<T>(dimensions, sub_calls, function,
-		generator);
+	auto const result = plain_iteration<T>(dimensions, sub_calls,
+		function, default_projector<T>(), generator);
 
 	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
-	T buffer[] = {
-		result.sum(),
-		result.sum_of_squares()
-	};
+	std::vector<T> buffer;
 
-	MPI_Allreduce(
-		MPI_IN_PLACE,
-		&buffer,
-		2,
-		mpi_datatype<T>(),
-		MPI_SUM,
-		communicator
+	auto const new_result = allreduce_result(
+		communicator,
+		result,
+		buffer,
+		std::vector<T>()
 	);
 
-	return mc_result<T>(calls, buffer[0], buffer[1]);
+	return new_result;
 }
 
 /// @}

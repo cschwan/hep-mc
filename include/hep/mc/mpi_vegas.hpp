@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2015  Christopher Schwan
+ * Copyright (C) 2013-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/buffer_helper.hpp"
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/mpi_helper.hpp"
@@ -77,30 +78,31 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 		std::size_t const calls = (*i / world) +
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
-		auto result = vegas_iteration(calls, pdf, function, generator);
+		auto const result = vegas_iteration(
+			calls,
+			pdf,
+			function,
+			default_projector<T>(),
+			generator
+		);
 
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 
-		buffer = result.adjustment_data();
-		buffer.push_back(result.sum());
-		buffer.push_back(result.sum_of_squares());
-
-		// add up results
-		MPI_Allreduce(
-			MPI_IN_PLACE,
-			&buffer[0],
-			buffer.size(),
-			mpi_datatype<T>(),
-			MPI_SUM,
-			communicator
+		auto const& new_result = allreduce_result(
+			communicator,
+			result,
+			buffer,
+			result.adjustment_data()
 		);
 
-		// extract sum and sum of squares and shorten the buffer
-		T sum = *(buffer.end() - 2);
-		T sum_of_squares = *(buffer.end() - 1);
-		buffer.resize(buffer.size() - 2);
-
-		results.emplace_back(*i, sum, sum_of_squares, pdf, buffer);
+		results.emplace_back(
+			new_result.distributions(),
+			new_result.calls(),
+			new_result.sum(),
+			new_result.sum_of_squares(),
+			pdf,
+			buffer
+		);
 
 		if (!mpi_vegas_callback<T>()(communicator, results))
 		{

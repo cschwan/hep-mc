@@ -1,9 +1,9 @@
-#ifndef HEP_MC_VEGAS_ITERATION_RESULT_HPP
-#define HEP_MC_VEGAS_ITERATION_RESULT_HPP
+#ifndef HEP_MC_PLAIN_RESULT_HPP
+#define HEP_MC_PLAIN_RESULT_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2016  Christopher Schwan
+ * Copyright (C) 2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/plain_result.hpp"
-#include "hep/mc/vegas_pdf.hpp"
+#include "hep/mc/distribution_result.hpp"
+#include "hep/mc/mc_result.hpp"
 
-#include <cstddef>
 #include <vector>
 
 namespace hep
@@ -31,40 +30,32 @@ namespace hep
 /// \addtogroup results
 /// @{
 
-/// The result of a single \ref vegas_iteration.
+/// Return type of the \ref plain MC integrator.
 template <typename T>
-struct vegas_iteration_result : public plain_result<T>
+class plain_result : public mc_result<T>
 {
+public:
 	/// Constructor.
-	vegas_iteration_result(
+	plain_result(
 		std::vector<distribution_result<T>> const& distributions,
 		std::size_t calls,
 		T sum,
-		T sum_of_squares,
-		vegas_pdf<T> const& pdf,
-		std::vector<T> const& adjustment_data
+		T sum_of_squares
 	)
-		: plain_result<T>(distributions, calls, sum, sum_of_squares)
-		, pdf_(pdf)
-		, adjustment_data_(adjustment_data)
+		: mc_result<T>(calls, sum, sum_of_squares)
+		, distributions_(distributions)
 	{
 	}
 
-	/// The pdf used to obtain this result.
-	vegas_pdf<T> const& pdf() const
+	/// Returns the differential distributions accumulated during the
+	/// integration.
+	std::vector<distribution_result<T>> const& distributions() const
 	{
-		return pdf_;
-	}
-
-	/// The data used to adjust the \ref pdf for a subsequent iteration.
-	std::vector<T> const& adjustment_data() const
-	{
-		return adjustment_data_;
+		return distributions_;
 	}
 
 private:
-	vegas_pdf<T> pdf_;
-	std::vector<T> adjustment_data_;
+	std::vector<distribution_result<T>> distributions_;
 };
 
 /// @}
@@ -72,3 +63,4 @@ private:
 }
 
 #endif
+

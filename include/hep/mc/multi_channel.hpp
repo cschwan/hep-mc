@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ inline std::vector<T> multi_channel_refine_weights(
 /// channel. Note that they must add up to one. See \ref multi_channel_group for
 /// a description of the remaining parameters.
 template <typename T, typename F, typename D, typename P, typename R>
-inline distributions_with<multi_channel_result<T>> multi_channel_iteration(
+inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
 	std::size_t map_dimensions,
 	std::size_t calls,
@@ -141,32 +141,15 @@ inline distributions_with<multi_channel_result<T>> multi_channel_iteration(
 		}
 	}
 
-	return make_result<multi_channel_result<T>>(accumulator, channel_weights,
-		adjustment_data);
+	return multi_channel_result<T>(
+		accumulator.distributions(),
+		accumulator.count(),
+		accumulator.sum(),
+		accumulator.sum_of_squares(),
+		adjustment_data,
+		channel_weights
+	);
 }
-
-template <typename T, typename F, typename D, typename R>
-inline multi_channel_result<T> multi_channel_iteration(
-	std::size_t dimensions,
-	std::size_t map_dimensions,
-	std::size_t calls,
-	F&& function,
-	std::vector<T> const& channel_weights,
-	D&& densities,
-	R&& generator
-) {
-	return multi_channel_iteration<T>(
-		dimensions,
-		map_dimensions,
-		calls,
-		std::forward<F>(function),
-		channel_weights,
-		std::forward<D>(densities),
-		default_projector<T>(),
-		std::forward<R>(generator)
-	).integral();
-}
-
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling
 /// \ref multi_channel_iteration with the specified parameters and refining
@@ -198,6 +181,7 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 			function,
 			weights,
 			densities,
+			default_projector<T>(),
 			generator
 		);
 

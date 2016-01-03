@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2015  Christopher Schwan
+ * Copyright (C) 2012-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,15 +50,15 @@ namespace hep
 /// will be called multiple times with a differently seeded generator and with
 /// `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
-template <typename T, typename F, typename D, typename R>
-inline distributions_with<vegas_iteration_result<T>> vegas_iteration(
+template <typename T, typename F, typename P, typename R>
+inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
 	vegas_pdf<T> const& pdf,
 	F&& function,
-	D&& distributions,
+	P&& projector,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(distributions);
+	auto accumulator = make_distribution_accumulator(projector);
 
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
@@ -90,24 +90,14 @@ inline distributions_with<vegas_iteration_result<T>> vegas_iteration(
 		}
 	}
 
-	return make_result<vegas_iteration_result<T>>(accumulator, pdf,
-		adjustment_data);
-}
-
-template <typename T, typename F, typename R>
-inline vegas_iteration_result<T> vegas_iteration(
-	std::size_t calls,
-	vegas_pdf<T> const& pdf,
-	F&& function,
-	R&& generator
-) {
-	return vegas_iteration<T>(
-		calls,
+	return vegas_iteration_result<T>(
+		accumulator.distributions(),
+		accumulator.count(),
+		accumulator.sum(),
+		accumulator.sum_of_squares(),
 		pdf,
-		std::forward<F>(function),
-		default_projector<T>(),
-		std::forward<R>(generator)
-	).integral();
+		adjustment_data
+	);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of
@@ -135,7 +125,13 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	// perform iterations
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
-		auto const result = vegas_iteration(*i, pdf, function, generator);
+		auto const result = vegas_iteration(
+			*i,
+			pdf,
+			function,
+			default_projector<T>(),
+			generator
+		);
 		results.push_back(result);
 
 		if (!vegas_callback<T>()(results))

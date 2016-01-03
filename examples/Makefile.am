@@ -3,6 +3,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_DEFAULT_SOURCE_EXT = .cpp
 
 noinst_PROGRAMS = \
+	distributions_example \
 	helper_example \
 	multi_channel_example \
 	vegas_example \

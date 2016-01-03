@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/mc_result.hpp"
+#include "hep/mc/plain_result.hpp"
 
 #include <cstddef>
 #include <vector>
@@ -32,18 +32,19 @@ namespace hep
 
 /// Result of a multi-channel integration.
 template <typename T>
-struct multi_channel_result : public mc_result<T>
+struct multi_channel_result : public plain_result<T>
 {
 	/// Constructor. The parameter `adjustment_data` must contain two additional
 	/// values, being the sum of the sum of squares of the integration.
 	multi_channel_result(
+		std::vector<distribution_result<T>> const& distributions,
 		std::size_t calls,
 		T sum,
 		T sum_of_squares,
 		std::vector<T> const& adjustment_data,
 		std::vector<T> const& channel_weights
 	)
-		: mc_result<T>(calls, sum, sum_of_squares)
+		: plain_result<T>(distributions, calls, sum, sum_of_squares)
 		, adjustment_data_(adjustment_data)
 		, channel_weights_(channel_weights)
 	{

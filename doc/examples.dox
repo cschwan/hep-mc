@@ -1,5 +1,6 @@
 /**
 
+\example distributions_example.cpp
 \example helper_example.cpp
 \example multi_channel_example.cpp
 \example mpi_vegas_example.cpp
