@@ -20,9 +20,8 @@
  */
 
 #include "hep/mc/distribution_accumulator.hpp"
-#include "hep/mc/distributions.hpp"
+#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/vegas_callback.hpp"
-#include "hep/mc/vegas_distribution_result.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
@@ -52,7 +51,7 @@ namespace hep
 /// `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
 template <typename T, typename F, typename D, typename R>
-inline vegas_distribution_result<T> vegas_iteration(
+inline distributions_with<vegas_iteration_result<T>> vegas_iteration(
 	std::size_t calls,
 	vegas_pdf<T> const& pdf,
 	F&& function,
@@ -91,7 +90,7 @@ inline vegas_distribution_result<T> vegas_iteration(
 		}
 	}
 
-	return make_result<vegas_distribution_result<T>>(accumulator, pdf,
+	return make_result<vegas_iteration_result<T>>(accumulator, pdf,
 		adjustment_data);
 }
 
@@ -106,9 +105,9 @@ inline vegas_iteration_result<T> vegas_iteration(
 		calls,
 		pdf,
 		std::forward<F>(function),
-		default_distribution<T>(),
+		default_projector<T>(),
 		std::forward<R>(generator)
-	);
+	).integral();
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of

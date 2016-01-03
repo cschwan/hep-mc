@@ -21,9 +21,8 @@
 
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/distribution_accumulator.hpp"
-#include "hep/mc/distributions.hpp"
+#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
-#include "hep/mc/multi_channel_distribution_result.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 
@@ -71,18 +70,18 @@ inline std::vector<T> multi_channel_refine_weights(
 /// parameter `channel_weights` lets the user specify the weights of each
 /// channel. Note that they must add up to one. See \ref multi_channel_group for
 /// a description of the remaining parameters.
-template <typename T, typename F, typename D, typename E, typename R>
-inline multi_channel_distribution_result<T> multi_channel_iteration(
+template <typename T, typename F, typename D, typename P, typename R>
+inline distributions_with<multi_channel_result<T>> multi_channel_iteration(
 	std::size_t dimensions,
 	std::size_t map_dimensions,
 	std::size_t calls,
 	F&& function,
 	std::vector<T> const& channel_weights,
 	D&& densities,
-	E&& distributions,
+	P&& projector,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(distributions);
+	auto accumulator = make_distribution_accumulator(projector);
 
 	std::size_t const channels = channel_weights.size();
 
@@ -142,8 +141,8 @@ inline multi_channel_distribution_result<T> multi_channel_iteration(
 		}
 	}
 
-	return make_result<multi_channel_distribution_result<T>>(accumulator,
-		channel_weights, adjustment_data);
+	return make_result<multi_channel_result<T>>(accumulator, channel_weights,
+		adjustment_data);
 }
 
 template <typename T, typename F, typename D, typename R>
@@ -163,9 +162,9 @@ inline multi_channel_result<T> multi_channel_iteration(
 		std::forward<F>(function),
 		channel_weights,
 		std::forward<D>(densities),
-		default_distribution<T>(),
+		default_projector<T>(),
 		std::forward<R>(generator)
-	);
+	).integral();
 }
 
 

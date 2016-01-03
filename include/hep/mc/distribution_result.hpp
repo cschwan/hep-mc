@@ -22,51 +22,45 @@
 #include "hep/mc/mc_result.hpp"
 
 #include <cstddef>
-#include <utility>
+#include <type_traits>
 #include <vector>
 
 namespace hep
 {
 
-/// \addtogroup results
+/// \addtogroup distributions
 /// @{
 
-/// Holds the result of type `R` for an integration and, in addition, the
-/// results for the generated distributions.
-template <typename R>
-class distribution_result : public R
+///
+template <typename T>
+class distribution_result
 {
 public:
-	/// Shortcut to the numeric type of `R`.
-	using numeric_type = typename R::numeric_type;
-
-	/// Constructor. This stores `distribution_results` and forwards all
-	/// remaining arguments to the constructor of `R`.
-	template <typename... A>
+	///
 	distribution_result(
-		std::vector<std::vector<mc_result<numeric_type>>> const&
-			distribution_results,
-		std::size_t calls,
-		numeric_type sum,
-		numeric_type sum_of_squares,
-		A&&... args
+		std::vector<T> const& mid_points,
+		std::vector<mc_result<T>> const& results
 	)
-		: R(calls, sum, sum_of_squares, std::forward<A>(args)...)
-		, distribution_results_(distribution_results)
+		: mid_points_(mid_points)
+		, results_(results)
 	{
 	}
 
-	/// Returns the results for each bin in every distribution. The bin with
-	/// index `j` of distribution `i` is accessed as follows:
-	/// `distribution_results().at(i).at(j)`.
-	std::vector<std::vector<mc_result<numeric_type>>> distribution_results()
-	const
+	///
+	std::vector<T> const& mid_points() const
 	{
-		return distribution_results_;
+		return mid_points_;
+	}
+
+	///
+	std::vector<mc_result<T>> const& results() const
+	{
+		return results_;
 	}
 
 private:
-	std::vector<std::vector<mc_result<numeric_type>>> distribution_results_;
+	std::vector<T> mid_points_;
+	std::vector<mc_result<T>> results_;
 };
 
 /// @}

@@ -1,5 +1,5 @@
-#ifndef HEP_MC_DISTRIBUTIONS_HPP
-#define HEP_MC_DISTRIBUTIONS_HPP
+#ifndef HEP_MC_DISTRIBUTION_PARAMETERS_HPP
+#define HEP_MC_DISTRIBUTION_PARAMETERS_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -19,12 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/distributions.hpp"
-#include "hep/mc/mc_result.hpp"
-
 #include <cstddef>
-#include <type_traits>
-#include <vector>
 
 namespace hep
 {
@@ -32,33 +27,54 @@ namespace hep
 /// \addtogroup distributions
 /// @{
 
-template <typename T, typename P>
-class distributions;
-
-/// @}
-
-/// \addtogroup internal
-/// @{
-
-struct one_bin_projector
-{
-};
-
+/// Defines the parameters of a one-dimensional differential distribution.
 template <typename T>
-class distributions<T, one_bin_projector>
+class distribution_parameters
 {
 public:
-	using projector = one_bin_projector;
-	using numeric_type = T;
+	/// Constructor.
+	distribution_parameters(std::size_t bins, T x_min, T x_max)
+		: bins_(bins)
+		, x_min_(x_min)
+		, bin_size_((x_max - x_min) / bins)
+	{
+	}
 
-	distributions() = default;
+	/// Number of bins for this distribution.
+	std::size_t bins() const
+	{
+		return bins_;
+	}
+
+	/// Highest value of the x-axis that is still part of the differential
+	/// distribution.
+	T x_max() const
+	{
+		return x_min_ + bin_size_ * bins_;
+	}
+
+	/// Lowest value of the x-axis that is still part of the differential
+	/// distribution.
+	T x_min() const
+	{
+		return x_min_;
+	}
+
+	/// Size of each bin in every distribution.
+	T bin_size() const
+	{
+		return bin_size_;
+	}
+
+private:
+	std::size_t bins_;
+	T x_min_;
+	T bin_size_;
 };
-
-template <typename T>
-using default_distribution = distributions<T, one_bin_projector>;
 
 /// @}
 
 }
 
 #endif
+

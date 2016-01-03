@@ -19,8 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/distributions.hpp"
+#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/distribution_result.hpp"
+#include "hep/mc/distributions_with.hpp"
 #include "hep/mc/mc_result.hpp"
 
 #include <cstddef>
@@ -28,20 +29,132 @@
 #include <utility>
 #include <vector>
 
-namespace hep
+namespace
 {
 
-/// \addtogroup internal
-/// @{
-
-template <typename T, typename D>
-class distribution_accumulator;
-
-template <typename T>
-class distribution_accumulator<T, one_bin_projector>
+template <typename T, typename P>
+class distribution_accumulator
 {
 public:
-	distribution_accumulator(distributions<T, one_bin_projector> const&)
+	distribution_accumulator(hep::distribution_projector<T, P> const& projector)
+		: accumulator_(hep::default_projector<T>())
+		, projector_(projector)
+		, compensation_(projector.parameters().size())
+		, sum_(projector.parameters().size())
+		, sum_of_squares_(projector.parameters().size())
+		, projections_(projector.parameters().size())
+	{
+		for (std::size_t i = 0; i != projector.parameters().size(); ++i)
+		{
+			std::size_t const bins = projector.parameters()[i].bins();
+
+			compensation_[i].resize(bins);
+			sum_[i].resize(bins);
+			sum_of_squares_[i].resize(bins);
+		}
+	}
+
+	template <typename M>
+	void add(M const& point, T value)
+	{
+		// `accumulator` takes care of the total integration result
+		accumulator_.add(point, value);
+
+		// project the point
+		projector_.projector()(point, projections_);
+
+		for (std::size_t i = 0; i != sum_.size(); ++i)
+		{
+			T const x = projections_[i] - projector_.parameters()[i].x_min();
+
+			if (x < T())
+			{
+				// point lies left from our leftmost bin
+				continue;
+			}
+
+			std::size_t const j = x / projector_.parameters()[i].bin_size();
+
+			if (j >= projector_.parameters()[i].bins())
+			{
+				// point lies right from our rightmost bin
+				continue;
+			}
+
+			// kahan summation for each bin
+			T const y = value - compensation_[i][j];
+			T const t = sum_[i][j] + y;
+			compensation_[i][j] = (t - sum_[i][j]) - y;
+			sum_[i][j] = t;
+
+			sum_of_squares_[i][j] += value * value;
+		}
+	}
+
+	std::size_t count() const
+	{
+		return accumulator_.count();
+	}
+
+	std::vector<hep::distribution_result<T>> results() const
+	{
+		std::vector<hep::distribution_result<T>> result;
+		result.reserve(sum_.size());
+
+		for (std::size_t i = 0; i != sum_.size(); ++i)
+		{
+			std::vector<T> midpoints(sum_[i].size());
+			std::vector<hep::mc_result<T>> results;
+
+			results.reserve(sum_[i].size());
+
+			auto const& parameters = projector_.parameters()[i];
+
+			T const inv_bin_size = T(1.0) /
+				projector_.parameters()[i].bin_size();
+
+			for (std::size_t j = 0; j != sum_[i].size(); ++j)
+			{
+				midpoints.push_back(parameters.x_min() +
+					T(i + 0.5) * parameters.bin_size());
+
+				results.emplace_back(
+					accumulator_.count(),
+					inv_bin_size * sum_[i][j],
+					inv_bin_size * inv_bin_size * sum_of_squares_[i][j]
+				);
+			}
+
+			result.emplace_back(midpoints, results);
+		}
+
+		return result;
+	}
+
+	T sum() const
+	{
+		return accumulator_.sum();
+	}
+
+	T sum_of_squares() const
+	{
+		return accumulator_.sum_of_squares();
+	}
+
+private:
+	distribution_accumulator<T, hep::one_bin_projector> accumulator_;
+	hep::distribution_projector<T, P> projector_;
+	std::vector<std::vector<T>> compensation_;
+	std::vector<std::vector<T>> sum_;
+	std::vector<std::vector<T>> sum_of_squares_;
+	std::vector<T> projections_;
+};
+
+template <typename T>
+class distribution_accumulator<T, hep::one_bin_projector>
+{
+public:
+	distribution_accumulator(hep::default_projector<T> const&)
 		: count_(0)
 		, compensation_()
 		, sum_()
@@ -69,9 +182,9 @@ public:
 		return count_;
 	}
 
-	std::vector<std::vector<mc_result<T>>> distribution_results() const
+	std::vector<hep::distribution_result<T>> results() const
 	{
-		return std::vector<std::vector<mc_result<T>>>();
+		return std::vector<hep::distribution_result<T>>();
 	}
 
 	T sum() const
@@ -91,28 +204,25 @@ private:
 	T sum_of_squares_;
 };
 
-/// Creates an accumulator using the specified `distributions`.
 template <typename D>
 inline distribution_accumulator<
 	typename std::remove_reference<D>::type::numeric_type,
-	typename std::remove_reference<D>::type::projector
+	typename std::remove_reference<D>::type::projector_type
 > make_distribution_accumulator(D&& distributions) {
 	return std::forward<D>(distributions);
 }
 
 template <typename R, typename D, typename... A>
-inline R make_result(D const& accumulator, A&&... args)
+inline hep::distributions_with<R> make_result(D const& accumulator, A&&... args)
 {
-	return R(
-		accumulator.distribution_results(),
+	return hep::distributions_with<R>(
+		accumulator.results(),
 		accumulator.count(),
 		accumulator.sum(),
 		accumulator.sum_of_squares(),
 		std::forward<A>(args)...
 	);
 }
-
-/// @}
 
 }
 

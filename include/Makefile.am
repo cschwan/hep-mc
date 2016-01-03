@@ -1,8 +1,10 @@
 nobase_include_HEADERS = \
 	hep/mc/discrete_distribution.hpp \
 	hep/mc/distribution_accumulator.hpp \
+	hep/mc/distribution_parameters.hpp \
+	hep/mc/distribution_projector.hpp \
 	hep/mc/distribution_result.hpp \
-	hep/mc/distributions.hpp \
+	hep/mc/distributions_with.hpp \
 	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
 	hep/mc/mc_helper.hpp \
@@ -10,7 +12,6 @@ nobase_include_HEADERS = \
 	hep/mc/mc_result.hpp \
 	hep/mc/multi_channel.hpp \
 	hep/mc/multi_channel_callback.hpp \
-	hep/mc/multi_channel_distribution_result.hpp \
 	hep/mc/multi_channel_max_difference.hpp \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \
@@ -21,10 +22,8 @@ nobase_include_HEADERS = \
 	hep/mc/mpi_vegas.hpp \
 	hep/mc/mpi_vegas_callback.hpp \
 	hep/mc/plain.hpp \
-	hep/mc/plain_distribution_result.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc/vegas_callback.hpp \
-	hep/mc/vegas_distribution_result.hpp \
 	hep/mc/vegas_iteration_result.hpp \
 	hep/mc/vegas_pdf.hpp \
 	hep/mc/vegas_point.hpp \

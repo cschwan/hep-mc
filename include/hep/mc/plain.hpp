@@ -20,10 +20,9 @@
  */
 
 #include "hep/mc/distribution_accumulator.hpp"
-#include "hep/mc/distributions.hpp"
+#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
-#include "hep/mc/plain_distribution_result.hpp"
 
 #include <cstddef>
 #include <limits>
@@ -34,15 +33,15 @@
 namespace
 {
 
-template <typename T, typename F, typename D, typename R>
-inline hep::plain_distribution_result<T> plain_iteration(
+template <typename T, typename F, typename P, typename R>
+inline hep::distributions_with<hep::mc_result<T>> plain_iteration(
 	std::size_t dimensions,
 	std::size_t calls,
 	F&& function,
-	D&& distributions,
+	P&& projector,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(distributions);
+	auto accumulator = make_distribution_accumulator(projector);
 
 	// storage for random numbers
 	std::vector<T> random_numbers(dimensions);
@@ -65,7 +64,7 @@ inline hep::plain_distribution_result<T> plain_iteration(
 		accumulator.add(point, value);
 	}
 
-	return hep::make_result<hep::plain_distribution_result<T>>(accumulator);
+	return make_result<hep::mc_result<T>>(accumulator);
 }
 
 template <typename T, typename F, typename R>
@@ -75,15 +74,13 @@ inline hep::mc_result<T> plain_iteration(
 	F&& function,
 	R&& generator
 ) {
-	// use default_distribution, which has one distribution with exactly one
-	// bin, i.e. every point lands in there -> simple MC integration
 	return plain_iteration<T>(
 		dimensions,
 		calls,
 		std::forward<F>(function),
-		hep::default_distribution<T>(),
+		hep::default_projector<T>(),
 		std::forward<R>(generator)
-	);
+	).integral();
 }
 
 }
@@ -98,7 +95,7 @@ namespace hep
 /// unit-hypercube with the specified `dimensions` using `calls` function
 /// evaluations with randomly chosen points determined by `generator`. The
 /// generator is not seeded.
-
+///
 /// \param dimensions The number of parameters `function` accepts.
 /// \param calls The number of function calls that are used to obtain the
 ///        result.
@@ -117,6 +114,27 @@ inline mc_result<T> plain(
 		dimensions,
 		calls,
 		std::forward<F>(function),
+		std::forward<R>(generator)
+	);
+}
+
+/// PLAIN Monte Carlo integrator with support for generating distributions. The
+/// parameter `projector` must be of the type \ref distribution_projector. For
+/// the explanation of the other parameters see \ref plain.
+template <typename T, typename F, typename P, typename R = std::mt19937>
+inline distributions_with<mc_result<T>> plain_distributions(
+	std::size_t dimensions,
+	std::size_t calls,
+	F&& function,
+	P&& projector,
+	R&& generator = std::mt19937()
+) {
+	return plain_iteration<T>(
+		dimensions,
+		calls,
+		calls,
+		std::forward<F>(function),
+		std::forward<P>(projector),
 		std::forward<R>(generator)
 	);
 }
