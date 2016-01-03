@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <limits>
 #include <random>
+#include <utility>
 #include <vector>
 
 namespace
@@ -91,7 +92,13 @@ inline mc_result<T> plain(
 	F&& function,
 	R&& generator = std::mt19937()
 ) {
-	return plain_iteration<T>(dimensions, calls, calls, function, generator);
+	return plain_iteration<T>(
+		dimensions,
+		calls,
+		calls,
+		std::forward<F>(function),
+		std::forward<R>(generator)
+	);
 }
 
 /// @}
