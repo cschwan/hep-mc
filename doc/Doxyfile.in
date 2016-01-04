@@ -2,6 +2,7 @@ AUTOLINK_SUPPORT       = NO
 BUILTIN_STL_SUPPORT    = YES
 BRIEF_MEMBER_DESC      = NO
 CITE_BIB_FILES         = @srcdir@/references.bib
+COLLABORATION_GRAPH    = NO
 ENABLE_PREPROCESSING   = YES
 EXAMPLE_PATH           = @top_srcdir@/examples
 EXTRACT_ALL            = YES

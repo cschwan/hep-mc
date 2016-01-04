@@ -1,10 +1,10 @@
 docpkg = $(PACKAGE_TARNAME)-doc-$(PACKAGE_VERSION).tar
 
-CLEANFILES = Doxyfile $(docpkg)
+CLEANFILES = $(docpkg)
 
 EXTRA_DIST = \
 	callbacks.dox \
-	Doxyfile \
+	Doxyfile.in \
 	DoxygenLayout.xml \
 	examples.dox \
 	extra.css \
@@ -19,7 +19,7 @@ EXTRA_DIST = \
 	vegas.dox \
 	vegas_pdf.dox
 
-$(docpkg): $(EXTRA_DIST) $(top_builddir)/include/stamp-headers
+$(docpkg): Doxyfile $(EXTRA_DIST) $(top_builddir)/include/stamp-headers
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile
 	$(AM_V_at)tar cf $(docpkg) html/
 
