@@ -91,8 +91,8 @@ inline vegas_iteration_result<T> vegas_iteration(
 	}
 
 	return vegas_iteration_result<T>(
-		accumulator.distributions(),
-		accumulator.count(),
+		accumulator.distributions(calls),
+		calls,
 		accumulator.sum(),
 		accumulator.sum_of_squares(),
 		pdf,

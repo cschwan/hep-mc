@@ -89,41 +89,38 @@ public:
 		}
 	}
 
-	std::size_t count() const
-	{
-		return accumulator_.count();
-	}
-
-	std::vector<hep::distribution_result<T>> distributions() const
-	{
+	std::vector<hep::distribution_result<T>> distributions(
+		std::size_t calls
+	) const {
 		std::vector<hep::distribution_result<T>> result;
 		result.reserve(sum_.size());
 
-		for (std::size_t i = 0; i != sum_.size(); ++i)
+		// loop over all distributions
+		for (std::size_t dist = 0; dist != sum_.size(); ++dist)
 		{
-			std::vector<T> midpoints(sum_[i].size());
-			std::vector<hep::mc_result<T>> results;
+			std::vector<T> mid_points;
+			std::vector<hep::mc_result<T>> bin_results;
 
-			results.reserve(sum_[i].size());
+			mid_points.reserve(sum_[dist].size());
+			bin_results.reserve(sum_[dist].size());
 
-			auto const& parameters = projector_.parameters()[i];
+			auto const& parameters = projector_.parameters()[dist];
+			T const inv_bin_size = T(1.0) / parameters.bin_size();
 
-			T const inv_bin_size = T(1.0) /
-				projector_.parameters()[i].bin_size();
-
-			for (std::size_t j = 0; j != sum_[i].size(); ++j)
+			// loop over the bins of the current distribution
+			for (std::size_t bin = 0; bin != sum_[dist].size(); ++bin)
 			{
-				midpoints.push_back(parameters.x_min() +
-					T(i + 0.5) * parameters.bin_size());
+				mid_points.push_back(parameters.x_min() +
+					T(bin + 0.5) * parameters.bin_size());
 
-				results.emplace_back(
-					accumulator_.count(),
-					inv_bin_size * sum_[i][j],
-					inv_bin_size * inv_bin_size * sum_of_squares_[i][j]
+				bin_results.emplace_back(
+					calls,
+					inv_bin_size * sum_[dist][bin],
+					inv_bin_size * inv_bin_size * sum_of_squares_[dist][bin]
 				);
 			}
 
-			result.emplace_back(midpoints, results);
+			result.emplace_back(mid_points, bin_results);
 		}
 
 		return result;
@@ -153,8 +150,7 @@ class distribution_accumulator<T, hep::one_bin_projector>
 {
 public:
 	distribution_accumulator(hep::default_projector<T> const&)
-		: count_(0)
-		, compensation_()
+		: compensation_()
 		, sum_()
 		, sum_of_squares_()
 	{
@@ -171,16 +167,9 @@ public:
 
 		// no kahan summation for `sum_of_squares_`, should be OK without
 		sum_of_squares_ += value * value;
-
-		++count_;
 	}
 
-	std::size_t count() const
-	{
-		return count_;
-	}
-
-	std::vector<hep::distribution_result<T>> distributions() const
+	std::vector<hep::distribution_result<T>> distributions(std::size_t) const
 	{
 		return std::vector<hep::distribution_result<T>>();
 	}
@@ -196,7 +185,6 @@ public:
 	}
 
 private:
-	std::size_t count_;
 	T compensation_;
 	T sum_;
 	T sum_of_squares_;

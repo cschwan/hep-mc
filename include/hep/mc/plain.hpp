@@ -65,8 +65,8 @@ inline hep::plain_result<T> plain_iteration(
 	}
 
 	return hep::plain_result<T>(
-		accumulator.distributions(),
-		accumulator.count(),
+		accumulator.distributions(calls),
+		calls,
 		accumulator.sum(),
 		accumulator.sum_of_squares()
 	);

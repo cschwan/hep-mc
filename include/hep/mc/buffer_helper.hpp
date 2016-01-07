@@ -43,16 +43,16 @@ hep::plain_result<T> allreduce_result(
 	buffer.push_back(result.sum());
 	buffer.push_back(result.sum_of_squares());
 	
-	for (auto const distribution : result.distributions())
+	for (auto const& distribution : result.distributions())
 	{
-		for (auto const bin : distribution.results())
+		for (auto const& bin : distribution.results())
 		{
 			buffer.push_back(bin.sum());
 			buffer.push_back(bin.sum_of_squares());
 		}
 	}
 
-	// merge `buffer` of all processes into `buffer` again ...
+	// ... merge `buffer` of all processes into `buffer` again ...
 	MPI_Allreduce(
 		MPI_IN_PLACE,
 		&buffer[0],
@@ -68,14 +68,12 @@ hep::plain_result<T> allreduce_result(
 	T sum_of_squares = buffer[index++];
 
 	std::vector<hep::distribution_result<T>> distributions;
-	std::vector<hep::mc_result<T>> bins;
-	for (std::size_t j = 0; j != result.distributions().size(); ++j)
+	for (auto const& distribution : result.distributions())
 	{
-		bins.clear();
-		auto const& distribution = result.distributions()[j];
-		std::size_t const size = result.distributions().size();
+		std::vector<hep::mc_result<T>> bins;
+		bins.reserve(distribution.results().size());
 
-		for (std::size_t k = 0; k != size; ++k)
+		for (std::size_t i = 0; i != distribution.results().size(); ++i)
 		{
 			bins.emplace_back(result.calls(), buffer[index], buffer[index + 1]);
 			index += 2;

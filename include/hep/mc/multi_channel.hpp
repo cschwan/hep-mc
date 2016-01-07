@@ -142,8 +142,8 @@ inline multi_channel_result<T> multi_channel_iteration(
 	}
 
 	return multi_channel_result<T>(
-		accumulator.distributions(),
-		accumulator.count(),
+		accumulator.distributions(calls),
+		calls,
 		accumulator.sum(),
 		accumulator.sum_of_squares(),
 		adjustment_data,
