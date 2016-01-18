@@ -61,7 +61,7 @@ inline hep::plain_result<T> plain_iteration(
 		// evaluate function at position specified in random_numbers
 		T const value = function(point);
 
-		accumulator.add(point, value);
+		accumulator.add(point, function, value);
 	}
 
 	return hep::plain_result<T>(

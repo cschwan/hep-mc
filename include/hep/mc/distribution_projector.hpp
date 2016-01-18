@@ -44,14 +44,19 @@ public:
 	/// Constructor. The projector must be a function with the following
 	/// signature:
 	/// \code
-	/// void projector(P const& point, std::vector<T>& x);
+	/// void projector(
+	///		P const& point,
+	///		hep::bin_projector<T>& projector,
+	///		hep::function_value<T> const& value
+	/// );
 	/// \endcode
 	/// Here the type `P` is the type of the Monte Carlo point that is also
 	/// passed to the integrand function, i.e. at least \ref mc_point. The type
 	/// `T` is the numerical type used to perform the calculations. The
-	/// parameter `x` is as large as `parameters.size()` and must be filled with
-	/// the projection of `point` to the value of the x-axes of all the
-	/// differential distributions.
+	/// `projector` is used to bin the `value` of the integrand into the
+	/// different distributions. `value` can also be of the type
+	/// `hep::function_value2<T, F>` where `F` must be the type of the
+	/// integrand. The integrand itself can be accessed via `.integrand()`.
 	distribution_projector(
 		P projector,
 		std::vector<distribution_parameters<T>> const& parameters

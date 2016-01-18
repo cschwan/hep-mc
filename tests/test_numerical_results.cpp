@@ -244,7 +244,10 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 //	}
 
 	auto const projector = hep::make_distribution_projector<T>(
-		[](hep::mc_point<T> const&, std::vector<T>& x) { x[0] = T(0.5); },
+		[](hep::mc_point<T> const&, hep::bin_projector<T>& projector,
+		hep::function_value<T> const& value) {
+			projector.add(0, T(0.5), value.value());
+		},
 		hep::distribution_parameters<T>(1, T(), T(1.0))
 	);
 

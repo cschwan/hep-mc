@@ -1,4 +1,5 @@
 nobase_include_HEADERS = \
+	hep/mc/bin_projector.hpp \
 	hep/mc/buffer_helper.hpp \
 	hep/mc/callback_helper.hpp \
 	hep/mc/discrete_distribution.hpp \
@@ -6,6 +7,7 @@ nobase_include_HEADERS = \
 	hep/mc/distribution_parameters.hpp \
 	hep/mc/distribution_projector.hpp \
 	hep/mc/distribution_result.hpp \
+	hep/mc/function_value.hpp \
 	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
 	hep/mc/mc_helper.hpp \

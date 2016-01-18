@@ -6,12 +6,13 @@ double arctan(hep::mc_point<double> const& point)
 	return std::atan(projection);
 }
 
-void projector_function(
+void bin_projector_function(
 	hep::mc_point<double> const& point,
-	std::vector<double>& x
+	hep::bin_projector<double>& projector,
+	hep::function_value<double> value
 ) {
 	double const projection = 10.0 * point.point()[0] - 5.0;
-	x[0] = projection;
+	projector.add(0, projection, value.value());
 }
 
 int main()
@@ -23,7 +24,7 @@ int main()
 	// onto the value of the x-axis, the boundary values, and the number of
 	// bins)
 	auto const projector = hep::make_distribution_projector<double>(
-		projector_function,
+		bin_projector_function,
 		parameters
 	);
 

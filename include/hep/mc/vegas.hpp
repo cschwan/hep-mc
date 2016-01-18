@@ -79,7 +79,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		T const value = function(point) * point.weight();
 
-		accumulator.add(point, value);
+		accumulator.add(point, function, value);
 
 		T const square = value * value;
 

@@ -19,8 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/bin_projector.hpp"
 #include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/distribution_result.hpp"
+#include "hep/mc/function_value.hpp"
 
 #include <cstddef>
 #include <type_traits>
@@ -36,94 +38,28 @@ class distribution_accumulator
 public:
 	distribution_accumulator(hep::distribution_projector<T, P> const& projector)
 		: accumulator_(hep::default_projector<T>())
-		, projector_(projector)
-		, compensation_(projector.parameters().size())
-		, sum_(projector.parameters().size())
-		, sum_of_squares_(projector.parameters().size())
-		, projections_(projector.parameters().size())
+		, bin_projector_(projector.parameters())
+		, bin_projector_function_(projector.projector())
 	{
-		for (std::size_t i = 0; i != projector.parameters().size(); ++i)
-		{
-			std::size_t const bins = projector.parameters()[i].bins();
-
-			compensation_[i].resize(bins);
-			sum_[i].resize(bins);
-			sum_of_squares_[i].resize(bins);
-		}
 	}
 
-	template <typename M>
-	void add(M const& point, T value)
+	template <typename M, typename F>
+	void add(M const& point, F const& function, T value)
 	{
 		// `accumulator` takes care of the total integration result
-		accumulator_.add(point, value);
+		accumulator_.add(point, function, value);
 
-		// project the point
-		projector_.projector()(point, projections_);
-
-		for (std::size_t i = 0; i != sum_.size(); ++i)
-		{
-			T const x = projections_[i] - projector_.parameters()[i].x_min();
-
-			if (x < T())
-			{
-				// point lies left from our leftmost bin
-				continue;
-			}
-
-			std::size_t const j = x / projector_.parameters()[i].bin_size();
-
-			if (j >= projector_.parameters()[i].bins())
-			{
-				// point lies right from our rightmost bin
-				continue;
-			}
-
-			// kahan summation for each bin
-			T const y = value - compensation_[i][j];
-			T const t = sum_[i][j] + y;
-			compensation_[i][j] = (t - sum_[i][j]) - y;
-			sum_[i][j] = t;
-
-			sum_of_squares_[i][j] += value * value;
-		}
+		bin_projector_function_(
+			point,
+			bin_projector_,
+			hep::function_value2<T, F>(function, value)
+		);
 	}
 
 	std::vector<hep::distribution_result<T>> distributions(
 		std::size_t calls
 	) const {
-		std::vector<hep::distribution_result<T>> result;
-		result.reserve(sum_.size());
-
-		// loop over all distributions
-		for (std::size_t dist = 0; dist != sum_.size(); ++dist)
-		{
-			std::vector<T> mid_points;
-			std::vector<hep::mc_result<T>> bin_results;
-
-			mid_points.reserve(sum_[dist].size());
-			bin_results.reserve(sum_[dist].size());
-
-			auto const& parameters = projector_.parameters()[dist];
-			T const inv_bin_size = T(1.0) / parameters.bin_size();
-
-			// loop over the bins of the current distribution
-			for (std::size_t bin = 0; bin != sum_[dist].size(); ++bin)
-			{
-				mid_points.push_back(parameters.x_min() +
-					T(bin + 0.5) * parameters.bin_size());
-
-				bin_results.emplace_back(
-					calls,
-					inv_bin_size * sum_[dist][bin],
-					inv_bin_size * inv_bin_size * sum_of_squares_[dist][bin]
-				);
-			}
-
-			result.emplace_back(mid_points, bin_results);
-		}
-
-		return result;
+		return bin_projector_.distributions(calls);
 	}
 
 	T sum() const
@@ -138,11 +74,8 @@ public:
 
 private:
 	distribution_accumulator<T, hep::one_bin_projector> accumulator_;
-	hep::distribution_projector<T, P> projector_;
-	std::vector<std::vector<T>> compensation_;
-	std::vector<std::vector<T>> sum_;
-	std::vector<std::vector<T>> sum_of_squares_;
-	std::vector<T> projections_;
+	hep::bin_projector<T> bin_projector_;
+	P bin_projector_function_;
 };
 
 template <typename T>
@@ -156,8 +89,8 @@ public:
 	{
 	}
 
-	template <typename P>
-	void add(P const&, T value)
+	template <typename M, typename F>
+	void add(M const&, F const&, T value)
 	{
 		// perform kahan summation 'sum_ += value'
 		T const y = value - compensation_;
