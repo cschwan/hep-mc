@@ -157,7 +157,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 /// weights that are used for the first iteration must be given by the parameter
 /// `channel_weights`. See \ref multi_channel_group for a description of the
 /// remaining parameters.
-template <typename T, typename F, typename D, typename R = std::mt19937>
+template <class T, class F, class D, class P, class R = std::mt19937>
 inline std::vector<multi_channel_result<T>> multi_channel(
 	std::size_t dimensions,
 	std::size_t map_dimensions,
@@ -165,6 +165,7 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 	F&& function,
 	std::vector<T> const& channel_weights,
 	D&& densities,
+	P&& projector,
 	R&& generator = std::mt19937()
 ) {
 	auto weights = channel_weights;
@@ -181,7 +182,7 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 			function,
 			weights,
 			densities,
-			default_projector<T>(),
+			projector,
 			generator
 		);
 
@@ -222,6 +223,30 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 		std::forward<F>(function),
 		std::vector<T>(channels, T(1.0) / T(channels)),
 		std::forward<D>(densities),
+		default_projector<T>(),
+		std::forward<R>(generator)
+	);
+}
+
+template <class T, class F, class D, class P, class R = std::mt19937>
+inline std::vector<multi_channel_result<T>> multi_channel_distributions(
+	std::size_t dimensions,
+	std::size_t map_dimensions,
+	std::vector<std::size_t> const& iteration_calls,
+	F&& function,
+	std::size_t channels,
+	D&& densities,
+	P&& projector,
+	R&& generator = std::mt19937()
+) {
+	return multi_channel(
+		dimensions,
+		map_dimensions,
+		iteration_calls,
+		std::forward<F>(function),
+		std::vector<T>(channels, T(1.0) / T(channels)),
+		std::forward<D>(densities),
+		std::forward<P>(projector),
 		std::forward<R>(generator)
 	);
 }

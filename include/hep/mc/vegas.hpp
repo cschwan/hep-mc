@@ -108,11 +108,12 @@ inline vegas_iteration_result<T> vegas_iteration(
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by
 /// \ref vegas_iteration_result.pdf obtained by a previous \ref vegas call.
-template <typename T, typename F, typename R = std::mt19937>
+template <typename T, typename F, typename P, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(
 	std::vector<std::size_t> const& iteration_calls,
 	F&& function,
 	vegas_pdf<T> const& start_pdf,
+	P&& projector,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
@@ -129,7 +130,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 			*i,
 			pdf,
 			function,
-			default_projector<T>(),
+			projector,
 			generator
 		);
 		results.push_back(result);
@@ -164,6 +165,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 		iteration_calls,
 		std::forward<F>(function),
 		vegas_pdf<T>(dimensions, bins),
+		default_projector<T>(),
 		alpha,
 		std::forward<R>(generator)
 	);

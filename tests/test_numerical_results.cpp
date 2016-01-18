@@ -242,4 +242,92 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 //		std::printf("%La, %La,\n", static_cast <long double> (i.value()),
 //			static_cast <long double> (i.error()));
 //	}
+
+	auto const projector = hep::make_distribution_projector<T>(
+		[](hep::mc_point<T> const&, std::vector<T>& x) { x[0] = T(0.5); },
+		hep::distribution_parameters<T>(1, T(), T(1.0))
+	);
+
+#ifndef HEP_USE_MPI
+	auto const results2 = hep::multi_channel_distributions<T>(
+#else
+	auto const results2 = hep::mpi_multi_channel_distributions<T>(
+		MPI_COMM_WORLD,
+#endif
+		2,
+		2,
+		std::vector<std::size_t>(iterations, calls),
+		function<T>,
+		1,
+		unit_densities,
+		projector
+	);
+
+	ASSERT_EQ( results2.size() , iterations );
+	ASSERT_EQ( results2[0].distributions().size() , 1 );
+	ASSERT_EQ( results2[1].distributions().size() , 1 );
+	ASSERT_EQ( results2[2].distributions().size() , 1 );
+	ASSERT_EQ( results2[3].distributions().size() , 1 );
+	ASSERT_EQ( results2[4].distributions().size() , 1 );
+	ASSERT_EQ( results2[0].distributions()[0].results().size() , 1 );
+	ASSERT_EQ( results2[1].distributions()[0].results().size() , 1 );
+	ASSERT_EQ( results2[2].distributions()[0].results().size() , 1 );
+	ASSERT_EQ( results2[3].distributions()[0].results().size() , 1 );
+	ASSERT_EQ( results2[4].distributions()[0].results().size() , 1 );
+
+	EXPECT_EQ( results2[0].value() , results[0].value() );
+	EXPECT_EQ( results2[0].error() , results[0].error() );
+	EXPECT_EQ( results2[0].calls() , results[0].calls() );
+	EXPECT_EQ( results2[1].value() , results[1].value() );
+	EXPECT_EQ( results2[1].error() , results[1].error() );
+	EXPECT_EQ( results2[1].calls() , results[1].calls() );
+	EXPECT_EQ( results2[2].value() , results[2].value() );
+	EXPECT_EQ( results2[2].error() , results[2].error() );
+	EXPECT_EQ( results2[2].calls() , results[2].calls() );
+	EXPECT_EQ( results2[3].value() , results[3].value() );
+	EXPECT_EQ( results2[3].error() , results[3].error() );
+	EXPECT_EQ( results2[3].calls() , results[3].calls() );
+	EXPECT_EQ( results2[4].value() , results[4].value() );
+	EXPECT_EQ( results2[4].error() , results[4].error() );
+	EXPECT_EQ( results2[4].calls() , results[4].calls() );
+
+	EXPECT_EQ( results2[0].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( results2[0].distributions()[0].results()[0].value() ,
+		results[0].value() );
+	EXPECT_EQ( results2[0].distributions()[0].results()[0].error() ,
+		results[0].error() );
+	EXPECT_EQ( results2[0].distributions()[0].results()[0].calls() ,
+		results[0].calls() );
+
+	EXPECT_EQ( results2[1].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( results2[1].distributions()[0].results()[0].value() ,
+		results[1].value() );
+	EXPECT_EQ( results2[1].distributions()[0].results()[0].error() ,
+		results[1].error() );
+	EXPECT_EQ( results2[1].distributions()[0].results()[0].calls() ,
+		results[1].calls() );
+
+	EXPECT_EQ( results2[2].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( results2[2].distributions()[0].results()[0].value() ,
+		results[2].value() );
+	EXPECT_EQ( results2[2].distributions()[0].results()[0].error() ,
+		results[2].error() );
+	EXPECT_EQ( results2[2].distributions()[0].results()[0].calls() ,
+		results[2].calls() );
+
+	EXPECT_EQ( results2[3].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( results2[3].distributions()[0].results()[0].value() ,
+		results[3].value() );
+	EXPECT_EQ( results2[3].distributions()[0].results()[0].error() ,
+		results[3].error() );
+	EXPECT_EQ( results2[3].distributions()[0].results()[0].calls() ,
+		results[3].calls() );
+
+	EXPECT_EQ( results2[4].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( results2[4].distributions()[0].results()[0].value() ,
+		results[4].value() );
+	EXPECT_EQ( results2[4].distributions()[0].results()[0].error() ,
+		results[4].error() );
+	EXPECT_EQ( results2[4].distributions()[0].results()[0].calls() ,
+		results[4].calls() );
 }
