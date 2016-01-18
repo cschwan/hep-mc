@@ -1,5 +1,6 @@
 nobase_include_HEADERS = \
 	hep/mc/buffer_helper.hpp \
+	hep/mc/callback_helper.hpp \
 	hep/mc/discrete_distribution.hpp \
 	hep/mc/distribution_accumulator.hpp \
 	hep/mc/distribution_parameters.hpp \

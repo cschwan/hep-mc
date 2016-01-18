@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2015  Christopher Schwan
+ * Copyright (C) 2014-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/callback_helper.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/mc_helper.hpp"
 
@@ -73,6 +74,8 @@ inline bool vegas_verbose_callback(
 	std::cout << "all iterations: N=" << result.calls() << " E="
 		<< result.value() << " +- " << result.error() << " ("
 		<< relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
+
+	print_distributions(std::cout, results.back());
 
 	std::cout.flush();
 
