@@ -73,7 +73,7 @@ inline mc_result<T> mpi_plain(
 
 	generator.discard(usage * discard_before(calls, rank, world));
 
-	auto result = plain_iteration<T>(dimensions, calls, sub_calls, function,
+	auto result = plain_iteration<T>(dimensions, sub_calls, function,
 		generator);
 
 	generator.discard(usage * discard_after(calls, sub_calls, rank, world));

@@ -74,7 +74,6 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::size_t dimensions,
 	std::size_t map_dimensions,
 	std::size_t calls,
-	std::size_t total_calls,
 	F&& function,
 	std::vector<T> const& channel_weights,
 	D&& densities,
@@ -124,10 +123,10 @@ inline multi_channel_result<T> multi_channel_iteration(
 		total_density /= weight;
 
 		multi_channel_point2<T, typename std::remove_reference<D>::type> const
-			point(total_calls, random_numbers, coordinates, channel,
-			total_density, densities);
+			point(random_numbers, coordinates, channel, total_density,
+			densities);
 
-		T const value = function(point) * point.weight() * T(total_calls);
+		T const value = function(point) * point.weight();
 
 		accumulator.add(value);
 
@@ -170,7 +169,6 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 		auto const result = multi_channel_iteration(
 			dimensions,
 			map_dimensions,
-			calls,
 			calls,
 			function,
 			weights,

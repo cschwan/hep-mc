@@ -77,7 +77,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 		std::size_t const calls = (*i / world) +
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
-		auto result = vegas_iteration(calls, *i, pdf, function, generator);
+		auto result = vegas_iteration(calls, pdf, function, generator);
 
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 

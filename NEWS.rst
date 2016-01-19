@@ -3,6 +3,10 @@ New in 0.5:
 
 - encapsulated all members of the class ``mc_point`` and classes deriving from
   it
+- WARNING: interface changes to the class ``mc_point`` and all deriving classes;
+  the member function does no longer include the averaging factor 1/N where N is
+  the number of calls. If you used this member variable before, you MUST CHANGE
+  YOUR CODE accordingly.
 
 New in 0.4:
 ===========

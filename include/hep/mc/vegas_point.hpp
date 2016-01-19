@@ -44,15 +44,13 @@ public:
 	/// by `total_calls`. For each dimension the point falls into a bin whose
 	/// index is written `bin`.
 	vegas_point(
-		std::size_t total_calls,
 		std::vector<T>& random_numbers,
 		std::vector<std::size_t>& bin,
 		vegas_pdf<T> const& pdf
 	)
-		: mc_point<T>(total_calls, random_numbers)
+		: mc_point<T>(random_numbers, vegas_icdf(pdf, random_numbers, bin))
 		, bin_(bin)
 	{
-		this->weight_ *= vegas_icdf(pdf, random_numbers, bin);
 	}
 
 	/// The indices that determine the bins of the point in the binned pdf.

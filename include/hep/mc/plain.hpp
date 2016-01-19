@@ -35,7 +35,6 @@ namespace
 template <typename T, typename F, typename R>
 inline hep::mc_result<T> plain_iteration(
 	std::size_t dimensions,
-	std::size_t total_calls,
 	std::size_t calls,
 	F&& function,
 	R&& generator
@@ -56,7 +55,7 @@ inline hep::mc_result<T> plain_iteration(
 		}
 
 		// evaluate function at position specified in random_numbers
-		T const value = function(hep::mc_point<T>(total_calls, random_numbers));
+		T const value = function(hep::mc_point<T>(random_numbers));
 
 		accumulator.add(value);
 	}
@@ -94,7 +93,6 @@ inline mc_result<T> plain(
 ) {
 	return plain_iteration<T>(
 		dimensions,
-		calls,
 		calls,
 		std::forward<F>(function),
 		std::forward<R>(generator)

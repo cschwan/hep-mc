@@ -37,17 +37,15 @@ class multi_channel_point : public mc_point<T>
 public:
 	/// Constructor.
 	multi_channel_point(
-		std::size_t calls,
 		std::vector<T> const& point,
 		std::vector<T> const& coordinates,
 		std::size_t channel,
 		T total_density
 	)
-		: mc_point<T>(calls, point)
+		: mc_point<T>(point, T(1.0) / total_density)
 		, channel_(channel)
 		, coordinates_(coordinates)
 	{
-		this->weight_ /= total_density;
 	}
 
 	/// The selected channel for this point.
@@ -76,15 +74,13 @@ class multi_channel_point2 : public multi_channel_point<T>
 public:
 	/// Constructor.
 	multi_channel_point2(
-		std::size_t calls,
 		std::vector<T> const& point,
 		std::vector<T> const& coordinates,
 		std::size_t channel,
 		T total_density,
 		D const& density_function
 	)
-		: multi_channel_point<T>(calls, point, coordinates, channel,
-			total_density)
+		: multi_channel_point<T>(point, coordinates, channel, total_density)
 		, density_function_(density_function)
 	{
 	}

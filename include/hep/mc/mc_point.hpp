@@ -37,16 +37,17 @@ public:
 	/// Constructor. The weight is computed using the inverse of `calls`,
 	/// `point` determines the location of this point in the hypercube of
 	/// dimension `point.size()`.
-	mc_point(std::size_t calls, std::vector<T> const& point)
-		: weight_(T(1.0) / T(calls))
+	mc_point(std::vector<T> const& point, T weight = T(1.0))
+		: weight_(weight)
 		, point_(point)
 	{
 	}
 
-	/// The weight \f$ w \f$ of this point. Depending on the integration
-	/// algorithm the weight might be constant over the entire hypercube (e.g.
-	/// \ref plain) or dependent on the region in which it lies (e.g.
-	/// \ref vegas).
+	/// The weight \f$ w \f$ of this point. The PLAIN integrator (\ref plain)
+	/// produces points that have weight equals one, i.e. are constant over the
+	/// entire unit-hypercube; this also means that weight does not include the
+	/// averaging factor \f$ 1 / N \f$ that is used to produces the expected
+	/// value.
 	T weight() const
 	{
 		return weight_;
@@ -59,10 +60,8 @@ public:
 		return point_;
 	}
 
-protected:
-	T weight_;
-
 private:
+	T weight_;
 	std::vector<T> const& point_;
 };
 

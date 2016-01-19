@@ -52,7 +52,6 @@ namespace hep
 template <typename T, typename F, typename R>
 inline vegas_iteration_result<T> vegas_iteration(
 	std::size_t calls,
-	std::size_t total_calls,
 	vegas_pdf<T> const& pdf,
 	F&& function,
 	R&& generator
@@ -74,9 +73,9 @@ inline vegas_iteration_result<T> vegas_iteration(
 				std::numeric_limits<T>::digits>(generator);
 		}
 
-		vegas_point<T> const point(total_calls, random_numbers, bin, pdf);
+		vegas_point<T> const point(random_numbers, bin, pdf);
 
-		T const value = function(point) * point.weight() * T(total_calls);
+		T const value = function(point) * point.weight();
 
 		accumulator.add(value);
 
@@ -118,7 +117,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	// perform iterations
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
-		auto const result = vegas_iteration(*i, *i, pdf, function, generator);
+		auto const result = vegas_iteration(*i, pdf, function, generator);
 		results.push_back(result);
 
 		if (!vegas_callback<T>()(results))

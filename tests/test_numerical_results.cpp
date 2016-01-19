@@ -28,17 +28,17 @@ std::vector<float> reference_results() {
 		// PLAIN
 		0xf.f7d32p-4f, 0x8.2b4edp-12f,
 		// VEGAS
-		0xf.f7d30p-4f, 0x8.2b4efp-12f,
-		0x8.02be3p-3f, 0x9.04993p-13f,
-		0x8.00063p-3f, 0xc.e633ep-14f,
-		0xf.fe5c6p-4f, 0xb.4668cp-14f,
-		0xf.ffadfp-4f, 0xa.c45a6p-14f,
+		0xf.f7d32p-4f, 0x8.2b4edp-12f,
+		0x8.02be3p-3f, 0x9.0497bp-13f,
+		0x8.00063p-3f, 0xc.e6325p-14f,
+		0xf.fe5c6p-4f, 0xb.465fap-14f,
+		0xf.ffadfp-4f, 0xa.c4601p-14f,
 		// MULTI CHANNEL
-		0xf.fca45p-4f, 0x8.2b526p-12f,
+		0xf.fca45p-4f, 0x8.2b528p-12f,
 		0x8.00671p-3f, 0x8.34a28p-12f,
-		0xf.fdca3p-4f, 0x8.30b94p-12f,
+		0xf.fdca4p-4f, 0x8.30b93p-12f,
 		0xf.ffb0dp-4f, 0x8.2c270p-12f,
-		0x8.0206bp-3f, 0x8.2f979p-12f,
+		0x8.0206bp-3f, 0x8.2f97ap-12f,
 	};
 }
 
@@ -48,16 +48,16 @@ std::vector<double> reference_results() {
 		// PLAIN
 		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c0p-12,
 		// VEGAS
-		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c8p-12,
-		0x8.01294905b4ce0p-3, 0x9.03ebf3d5a5248p-13,
-		0x8.00331091e43e0p-3, 0xc.d9e34cb3fbcf8p-14,
+		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c0p-12,
+		0x8.01294905b4cd8p-3, 0x9.03ebf3d5a5328p-13,
+		0x8.00331091e43d8p-3, 0xc.d9e34cb3fbe98p-14,
 		0xf.fe107b0b3d6a0p-4, 0xb.518ce42907288p-14,
-		0xf.ffd9e3eac8cf8p-4, 0xa.d9002081b1648p-14,
+		0xf.ffd9e3eac8cf8p-4, 0xa.d9002081b1b58p-14,
 		// MULTI CHANNEL
 		0x8.03dfd55411338p-3, 0x8.3187b223d05d8p-12,
-		0x8.0160eaaa1b870p-3, 0x8.2e3155f6b94e8p-12,
-		0x8.0413e49ae60a8p-3, 0x8.3d83dfe23a5b8p-12,
-		0x8.04a60eeee06f8p-3, 0x8.2e8cbae21e658p-12,
+		0x8.0160eaaa1b870p-3, 0x8.2e3155f6b94f8p-12,
+		0x8.0413e49ae60a8p-3, 0x8.3d83dfe23a5a8p-12,
+		0x8.04a60eeee06f0p-3, 0x8.2e8cbae21e648p-12,
 		0x8.04de1ba046340p-3, 0x8.35c33ae807200p-12,
 	};
 }

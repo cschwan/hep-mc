@@ -78,7 +78,6 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 			dimensions,
 			map_dimensions,
 			calls,
-			*i,
 			function,
 			weights,
 			densities,
