@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	constexpr double s1 = +10.0;
 
 	auto const function = [](hep::multi_channel_point<double> const& x) {
-		double s = x.coordinates[0];
+		double s = x.coordinates()[0];
 
 		double const sms0 = s - s0;
 		double const sms1 = s - s1;

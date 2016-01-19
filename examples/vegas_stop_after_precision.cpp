@@ -6,7 +6,7 @@
 
 double square(hep::mc_point<double> const& x)
 {
-	return 3.0 * x.point[0] * x.point[0];
+	return 3.0 * x.point()[0] * x.point()[0];
 }
 
 struct stop_after_precision

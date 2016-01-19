@@ -32,8 +32,9 @@ namespace hep
 
 /// Point in the unit-hypercube for multi-channel Monte Carlo integration.
 template <typename T>
-struct multi_channel_point : public mc_point<T>
+class multi_channel_point : public mc_point<T>
 {
+public:
 	/// Constructor.
 	multi_channel_point(
 		std::size_t calls,
@@ -43,25 +44,36 @@ struct multi_channel_point : public mc_point<T>
 		T total_density
 	)
 		: mc_point<T>(calls, point)
-		, channel(channel)
-		, coordinates(coordinates)
+		, channel_(channel)
+		, coordinates_(coordinates)
 	{
-		this->weight /= total_density;
+		this->weight_ /= total_density;
 	}
 
 	/// The selected channel for this point.
-	std::size_t channel;
+	std::size_t channel() const
+	{
+		return channel_;
+	}
 
 	/// The point in the hypercube transformed by the current \ref channel.
-	std::vector<T> const& coordinates;
+	std::vector<T> const& coordinates() const
+	{
+		return coordinates_;
+	}
+
+private:
+	std::size_t channel_;
+	std::vector<T> const& coordinates_;
 };
 
 /// Point in the unit-hypercube for multi-channel Monte Carlo integration. This
 /// type also captures the density functions that are used to generate
 /// `coordinates`.
 template <typename T, typename D>
-struct multi_channel_point2 : public multi_channel_point<T>
+class multi_channel_point2 : public multi_channel_point<T>
 {
+public:
 	/// Constructor.
 	multi_channel_point2(
 		std::size_t calls,
@@ -73,14 +85,20 @@ struct multi_channel_point2 : public multi_channel_point<T>
 	)
 		: multi_channel_point<T>(calls, point, coordinates, channel,
 			total_density)
-		, density_function(density_function)
+		, density_function_(density_function)
 	{
 	}
 
 	/// The density function that constructed this point. See
 	/// \ref multi_channel_iteration for reference of the signature of this
 	/// function.
-	D const& density_function;
+	D const& density_function() const
+	{
+		return density_function_;
+	}
+
+private:
+	D const& density_function_;
 };
 
 /// @}

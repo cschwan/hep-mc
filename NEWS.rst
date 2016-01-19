@@ -1,3 +1,9 @@
+New in 0.5:
+===========
+
+- encapsulated all members of the class ``mc_point`` and classes deriving from
+  it
+
 New in 0.4:
 ===========
 

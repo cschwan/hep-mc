@@ -31,14 +31,15 @@ namespace hep
 /// A random point \f$ \vec{x} \in [0,1]^d \f$ in the \f$ d \f$-dimensional
 /// hypercube with an associated weight.
 template <typename T>
-struct mc_point
+class mc_point
 {
+public:
 	/// Constructor. The weight is computed using the inverse of `calls`,
 	/// `point` determines the location of this point in the hypercube of
 	/// dimension `point.size()`.
 	mc_point(std::size_t calls, std::vector<T> const& point)
-		: weight(T(1.0) / T(calls))
-		, point(point)
+		: weight_(T(1.0) / T(calls))
+		, point_(point)
 	{
 	}
 
@@ -46,11 +47,23 @@ struct mc_point
 	/// algorithm the weight might be constant over the entire hypercube (e.g.
 	/// \ref plain) or dependent on the region in which it lies (e.g.
 	/// \ref vegas).
-	T weight;
+	T weight() const
+	{
+		return weight_;
+	}
 
 	/// The coordinates of this point of the hypercube. The dimension can be
 	/// obtained using `point.size()`.
-	std::vector<T> const& point;
+	std::vector<T> const& point() const
+	{
+		return point_;
+	}
+
+protected:
+	T weight_;
+
+private:
+	std::vector<T> const& point_;
 };
 
 /// @}

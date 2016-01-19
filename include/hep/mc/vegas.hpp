@@ -76,7 +76,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		vegas_point<T> const point(total_calls, random_numbers, bin, pdf);
 
-		T const value = function(point) * point.weight * T(total_calls);
+		T const value = function(point) * point.weight() * T(total_calls);
 
 		accumulator.add(value);
 
@@ -85,7 +85,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 		// save square for each bin in order to refine the pdf later
 		for (std::size_t j = 0; j != dimensions; ++j)
 		{
-			adjustment_data[j * bins + point.bin[j]] += square;
+			adjustment_data[j * bins + point.bin()[j]] += square;
 		}
 	}
 

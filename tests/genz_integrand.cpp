@@ -29,13 +29,13 @@ T integrand<T>::operator()(hep::mc_point<T> const& x) const
 {
 	std::size_t const s = a.size();
 
-	assert( x.point.size() == s );
+	assert( x.point().size() == s );
 
 	T ax = T();
 
 	for (std::size_t i = 0; i != s; ++i)
 	{
-		ax += a[i] * x.point[i];
+		ax += a[i] * x.point()[i];
 	}
 
 	T exponent = T();
@@ -49,7 +49,7 @@ T integrand<T>::operator()(hep::mc_point<T> const& x) const
 	case product_peak:
 		for (std::size_t i = 0; i != s; ++i)
 		{
-			T const xmu = x.point[i] - u[i];
+			T const xmu = x.point()[i] - u[i];
 			result /= T(1.0) / (a[i] * a[i]) + xmu * xmu;
 		}
 
@@ -62,7 +62,7 @@ T integrand<T>::operator()(hep::mc_point<T> const& x) const
 	case gaussian:
 		for (std::size_t i = 0; i != s; ++i)
 		{
-			T const xmu = x.point[i] - u[i];
+			T const xmu = x.point()[i] - u[i];
 			exponent += a[i] * a[i] * xmu * xmu;
 		}
 
@@ -71,14 +71,14 @@ T integrand<T>::operator()(hep::mc_point<T> const& x) const
 	case c0_function:
 		for (std::size_t i = 0; i != s; ++i)
 		{
-			exponent += a[i] * std::fabs(x.point[i] - u[i]);
+			exponent += a[i] * std::fabs(x.point()[i] - u[i]);
 		}
 
 		return std::exp(-exponent);
 
 	case discontinuous:
-		if ((x.point[0] > u[0]) || ((x.point.size() > 1) &&
-			(x.point[1] > u[1])))
+		if ((x.point()[0] > u[0]) || ((x.point().size() > 1) &&
+			(x.point()[1] > u[1])))
 		{
 			return T();
 		}

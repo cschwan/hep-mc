@@ -35,8 +35,9 @@ namespace hep
 /// with the additional information in which bin(s) of a \ref vegas_pdf the
 /// point lies.
 template <typename T>
-struct vegas_point : public mc_point<T>
+class vegas_point : public mc_point<T>
 {
+public:
 	/// Creates a new point in the unit-hypercube \f$ U \f$ using the
 	/// probability distribution function `pdf` and the random numbers in
 	/// `random_numbers` for a Monte Carlo iteration with sample size specified
@@ -49,13 +50,19 @@ struct vegas_point : public mc_point<T>
 		vegas_pdf<T> const& pdf
 	)
 		: mc_point<T>(total_calls, random_numbers)
-		, bin(bin)
+		, bin_(bin)
 	{
-		this->weight *= vegas_icdf(pdf, random_numbers, bin);
+		this->weight_ *= vegas_icdf(pdf, random_numbers, bin);
 	}
 
 	/// The indices that determine the bins of the point in the binned pdf.
-	std::vector<std::size_t> const& bin;
+	std::vector<std::size_t> const& bin() const
+	{
+		return bin_;
+	}
+
+private:
+	std::vector<std::size_t> const& bin_;
 };
 
 /// @}

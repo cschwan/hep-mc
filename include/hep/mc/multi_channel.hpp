@@ -127,7 +127,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 			point(total_calls, random_numbers, coordinates, channel,
 			total_density, densities);
 
-		T const value = function(point) * point.weight * T(total_calls);
+		T const value = function(point) * point.weight() * T(total_calls);
 
 		accumulator.add(value);
 

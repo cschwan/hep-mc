@@ -9,7 +9,7 @@
 // the function that shall be integrated
 double square(hep::mc_point<double> const& x)
 {
-	return 3.0 * x.point[0] * x.point[0];
+	return 3.0 * x.point()[0] * x.point()[0];
 }
 
 // run this program in parallel by starting it with `mpiexec`, e.g.

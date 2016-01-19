@@ -16,7 +16,7 @@ template <typename T>
 T function(hep::mc_point<T> const& x)
 {
 	return T(3.0) / T(2.0) *
-		(x.point[0] * x.point[0] + x.point[1] * x.point[1]);
+		(x.point()[0] * x.point()[0] + x.point()[1] * x.point()[1]);
 }
 
 template <typename T>
