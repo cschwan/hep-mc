@@ -92,7 +92,8 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 			communicator,
 			result,
 			buffer,
-			result.adjustment_data()
+			result.adjustment_data(),
+			*i
 		);
 
 		results.emplace_back(

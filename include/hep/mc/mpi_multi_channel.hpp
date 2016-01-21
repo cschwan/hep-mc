@@ -93,7 +93,8 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 			communicator,
 			result,
 			buffer,
-			result.adjustment_data()
+			result.adjustment_data(),
+			*i
 		);
 
 		results.emplace_back(

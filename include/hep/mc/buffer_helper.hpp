@@ -36,7 +36,8 @@ hep::plain_result<T> allreduce_result(
 	MPI_Comm communicator,
 	hep::plain_result<T> const& result,
 	std::vector<T>& buffer,
-	std::vector<T> const& in_buffer
+	std::vector<T> const& in_buffer,
+	std::size_t total_calls
 ) {
 	// pack everything into `buffer` ...
 	buffer = in_buffer;
@@ -75,7 +76,7 @@ hep::plain_result<T> allreduce_result(
 
 		for (std::size_t i = 0; i != distribution.results().size(); ++i)
 		{
-			bins.emplace_back(result.calls(), buffer[index], buffer[index + 1]);
+			bins.emplace_back(total_calls, buffer[index], buffer[index + 1]);
 			index += 2;
 		}
 
@@ -87,7 +88,7 @@ hep::plain_result<T> allreduce_result(
 
 	return hep::plain_result<T>(
 		distributions,
-		result.calls(),
+		total_calls,
 		sum,
 		sum_of_squares
 	);
