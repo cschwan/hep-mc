@@ -1,6 +1,8 @@
 New in 0.5:
 ===========
 
+- added the possibility to generate differential distributions during the
+  integration
 - encapsulated all members of the class ``mc_point`` and classes deriving from
   it
 - WARNING: interface changes to the class ``mc_point`` and all deriving classes;

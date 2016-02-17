@@ -29,10 +29,13 @@
 namespace hep
 {
 
+/// Class that project the multi-dimensional Monte Carlo point into a discrete
+/// bin and generates the corresponding distributions.
 template <typename T>
 class bin_projector
 {
 public:
+	/// Constructor.
 	bin_projector(std::vector<distribution_parameters<T>> const& parameters)
 		: parameters_(parameters)
 		, compensation_(parameters.size())
@@ -50,7 +53,8 @@ public:
 	}
 
 	/// Projects a point for the distribution with the specified `index` to the
-	/// x-axis at the value `projection` and sets the value to `value`.
+	/// x-axis at the value `projection` and sets the value to `value`. Note
+	/// that you have to manually multiply with the corresponding weight.
 	void add(std::size_t index, T projection, T value)
 	{
 		T const x = projection - parameters_[index].x_min();

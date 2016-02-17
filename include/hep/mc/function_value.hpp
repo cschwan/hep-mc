@@ -33,7 +33,8 @@ public:
 	{
 	}
 
-	/// Returns the result of the function evaluation.
+	/// Returns the result of the function evaluation. Note that the function is
+	/// multiplied with the corresponding weight.
 	T value() const
 	{
 		return value_;

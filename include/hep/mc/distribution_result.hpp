@@ -31,12 +31,12 @@ namespace hep
 /// \addtogroup distributions
 /// @{
 
-///
+/// Captures the result of the integration of a distribution.
 template <typename T>
 class distribution_result
 {
 public:
-	///
+	/// Constructor.
 	distribution_result(
 		std::vector<T> const& mid_points,
 		std::vector<mc_result<T>> const& results
@@ -46,13 +46,14 @@ public:
 	{
 	}
 
-	///
+	/// Returns the middle point of each bin of this distribution.
 	std::vector<T> const& mid_points() const
 	{
 		return mid_points_;
 	}
 
-	///
+	/// Returns the result for each bin, corresponding to the bin positions
+	/// returned by \ref mid_points.
 	std::vector<mc_result<T>> const& results() const
 	{
 		return results_;
