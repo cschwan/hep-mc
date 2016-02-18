@@ -12,7 +12,6 @@ New in 0.4:
 ===========
 
 - added multi channel MC integrator with example
-- added multi channel MC integrator with example
 - added a new MC helper function ``hep::multi_channel_max_difference`` that
   calculates the maximum difference for adaptive optimization in multi channel
   MC
