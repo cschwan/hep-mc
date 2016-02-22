@@ -2,7 +2,13 @@ New in 0.5:
 ===========
 
 - added the possibility to generate differential distributions during the
-  integration
+  integration. The distribution results can be accessed using the new
+  ``_result`` classes that capture the it in the type
+  ``hep::distribution_result``
+- WARNING: ``hep::plain`` now returns a ``hep::plain_result`` which contains the
+  results for possibly generated distributions
+- WARNING: all ``_result`` classes except ``hep::mc_result`` derive now from
+  ``hep::plain_result``.
 - encapsulated all members of the class ``mc_point`` and classes deriving from
   it
 - WARNING: interface changes to the class ``mc_point`` and all deriving classes;
