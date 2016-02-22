@@ -3,24 +3,23 @@ New in 0.5:
 
 - WARNING: completely changed the interfaces of all integrators; the functions
   that are integrated must now be specified by using an ``hep::integrand`` or
-  ``hep::multi_channel_integrand`` which obtained by using
+  ``hep::multi_channel_integrand`` which are obtained by using
   ``hep::make_integrand`` or ``hep::make_multi_channel_integrand``. This allows
   the library to support the generation of differential distributions for all
-  integrators
-- added the possibility to generate differential distributions during the
-  integration. The distribution results can be accessed using the new
-  ``_result`` classes that capture the it in the type
-  ``hep::distribution_result``
+  integrators. If distributions should be generated, the integrands must accept
+  a second parameter, a reference to ``hep::bin_projector``, that takes care of
+  the binning. The results of the distributions are captured in a
+  ``hep::distribution_result`` for each distribution
 - WARNING: ``hep::plain`` now returns a ``hep::plain_result`` which contains the
   results for possibly generated distributions
 - WARNING: all ``_result`` classes except ``hep::mc_result`` derive now from
-  ``hep::plain_result``.
+  ``hep::plain_result``
 - encapsulated all members of the class ``mc_point`` and classes deriving from
   it
 - WARNING: interface changes to the class ``mc_point`` and all deriving classes;
   the member function does no longer include the averaging factor 1/N where N is
   the number of calls. If you used this member variable before, you MUST CHANGE
-  YOUR CODE accordingly.
+  YOUR CODE accordingly
 
 New in 0.4:
 ===========
