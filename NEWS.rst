@@ -1,6 +1,12 @@
 New in 0.5:
 ===========
 
+- WARNING: completely changed the interfaces of all integrators; the functions
+  that are integrated must now be specified by using an ``hep::integrand`` or
+  ``hep::multi_channel_integrand`` which obtained by using
+  ``hep::make_integrand`` or ``hep::make_multi_channel_integrand``. This allows
+  the library to support the generation of differential distributions for all
+  integrators
 - added the possibility to generate differential distributions during the
   integration. The distribution results can be accessed using the new
   ``_result`` classes that capture the it in the type
