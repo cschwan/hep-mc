@@ -20,10 +20,12 @@
  */
 
 #include "hep/mc/global_configuration.hpp"
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/multi_channel.hpp"
+#include "hep/mc/multi_channel_integrand.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 #include "hep/mc/plain.hpp"

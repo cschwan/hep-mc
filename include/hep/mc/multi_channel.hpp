@@ -70,23 +70,19 @@ inline std::vector<T> multi_channel_refine_weights(
 /// parameter `channel_weights` lets the user specify the weights of each
 /// channel. Note that they must add up to one. See \ref multi_channel_group for
 /// a description of the remaining parameters.
-template <typename T, typename F, typename D, typename P, typename R>
+template <typename T, typename I, typename R>
 inline multi_channel_result<T> multi_channel_iteration(
-	std::size_t dimensions,
-	std::size_t map_dimensions,
+	I&& integrand,
 	std::size_t calls,
-	F&& function,
 	std::vector<T> const& channel_weights,
-	D&& densities,
-	P&& projector,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(projector);
+	auto accumulator = make_distribution_accumulator2(integrand);
 
 	std::size_t const channels = channel_weights.size();
 
-	std::vector<T> random_numbers(dimensions);
-	std::vector<T> coordinates(map_dimensions);
+	std::vector<T> random_numbers(integrand.dimensions());
+	std::vector<T> coordinates(integrand.map_dimensions());
 	std::vector<T> channel_densities(channels);
 	std::vector<T> adjustment_data(channels);
 
@@ -97,7 +93,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	for (std::size_t i = 0; i != calls; ++i)
 	{
 		// generate as many random numbers as we need
-		for (std::size_t j = 0; j != dimensions; ++j)
+		for (std::size_t j = 0; j != integrand.dimensions(); ++j)
 		{
 			random_numbers[j] = std::generate_canonical<T,
 				std::numeric_limits<T>::digits>(generator);
@@ -107,8 +103,9 @@ inline multi_channel_result<T> multi_channel_iteration(
 		std::size_t const channel = channel_selector(generator);
 
 		// compute the densities for `random_numbers` for every channel
-		T const weight = densities(channel, static_cast <std::vector<T> const&>
-			(random_numbers), coordinates, channel_densities);
+		T const weight = integrand.densities()(channel,
+			static_cast <std::vector<T> const&> (random_numbers), coordinates,
+			channel_densities);
 
 		if (weight == T())
 		{
@@ -124,13 +121,13 @@ inline multi_channel_result<T> multi_channel_iteration(
 
 		total_density /= weight;
 
-		multi_channel_point2<T, typename std::remove_reference<D>::type> const
-			point(random_numbers, coordinates, channel, total_density,
-			densities);
+		multi_channel_point2<T, typename std::remove_reference<I>::type
+			::density_type> const point(random_numbers, coordinates, channel,
+			total_density, integrand.densities());
 
-		T const value = function(point) * point.weight();
+		T const value = integrand.function()(point) * point.weight();
 
-		accumulator.add(point, function, value);
+		accumulator.add(point, integrand.function(), value);
 
 		T const square = value * value;
 
@@ -157,15 +154,11 @@ inline multi_channel_result<T> multi_channel_iteration(
 /// weights that are used for the first iteration must be given by the parameter
 /// `channel_weights`. See \ref multi_channel_group for a description of the
 /// remaining parameters.
-template <class T, class F, class D, class P, class R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> multi_channel(
-	std::size_t dimensions,
-	std::size_t map_dimensions,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
 	std::vector<T> const& channel_weights,
-	D&& densities,
-	P&& projector,
 	R&& generator = std::mt19937()
 ) {
 	auto weights = channel_weights;
@@ -175,16 +168,8 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 
 	for (std::size_t const calls : iteration_calls)
 	{
-		auto const result = multi_channel_iteration(
-			dimensions,
-			map_dimensions,
-			calls,
-			function,
-			weights,
-			densities,
-			projector,
-			generator
-		);
+		auto const result = multi_channel_iteration(integrand, calls, weights,
+			generator);
 
 		results.push_back(result);
 
@@ -206,47 +191,16 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 /// weights used for the first iteration are \f$ \alpha = 1 / M \f$ with \f$ M
 /// \f$ the number of channels. See \ref multi_channel_group for a description
 /// of the remaining parameters.
-template <typename T, typename F, typename D, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> multi_channel(
-	std::size_t dimensions,
-	std::size_t map_dimensions,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
-	std::size_t channels,
-	D&& densities,
 	R&& generator = std::mt19937()
 ) {
 	return multi_channel(
-		dimensions,
-		map_dimensions,
+		std::forward<I>(integrand),
 		iteration_calls,
-		std::forward<F>(function),
-		std::vector<T>(channels, T(1.0) / T(channels)),
-		std::forward<D>(densities),
-		default_projector<T>(),
-		std::forward<R>(generator)
-	);
-}
-
-template <class T, class F, class D, class P, class R = std::mt19937>
-inline std::vector<multi_channel_result<T>> multi_channel_distributions(
-	std::size_t dimensions,
-	std::size_t map_dimensions,
-	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
-	std::size_t channels,
-	D&& densities,
-	P&& projector,
-	R&& generator = std::mt19937()
-) {
-	return multi_channel(
-		dimensions,
-		map_dimensions,
-		iteration_calls,
-		std::forward<F>(function),
-		std::vector<T>(channels, T(1.0) / T(channels)),
-		std::forward<D>(densities),
-		std::forward<P>(projector),
+		std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
 		std::forward<R>(generator)
 	);
 }

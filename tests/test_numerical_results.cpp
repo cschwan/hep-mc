@@ -98,9 +98,8 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 	auto const result = hep::mpi_plain<T>(
 		MPI_COMM_WORLD,
 #endif
-		2,
-		calls,
-		function<T>
+		hep::make_integrand<T>(function<T>, 2),
+		calls
 	);
 	auto const reference = reference_results<T>();
 
@@ -134,9 +133,8 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 	auto const results = hep::mpi_vegas<T>(
 		MPI_COMM_WORLD,
 #endif
-		2,
-		std::vector<std::size_t>(iterations, calls),
-		function<T>
+		hep::make_integrand<T>(function<T>, 2),
+		std::vector<std::size_t>(iterations, calls)
 	);
 	auto const reference = reference_results<T>();
 
@@ -201,12 +199,9 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	auto const results = hep::mpi_multi_channel<T>(
 		MPI_COMM_WORLD,
 #endif
-		2,
-		2,
-		std::vector<std::size_t>(iterations, calls),
-		function<T>,
-		1,
-		unit_densities
+		hep::make_multi_channel_integrand<T>(function<T>, 2, unit_densities, 2,
+			2),
+		std::vector<std::size_t>(iterations, calls)
 	);
 	auto const reference = reference_results<T>();
 
@@ -243,27 +238,27 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 //			static_cast <long double> (i.error()));
 //	}
 
-	auto const projector = hep::make_distribution_projector<T>(
-		[](hep::mc_point<T> const&, hep::bin_projector<T>& projector,
-		hep::function_value<T> const& value) {
+	auto const projector = [](hep::mc_point<T> const&, hep::bin_projector<T>&
+		projector, hep::function_value<T> const& value) {
 			projector.add(0, T(0.5), value.value());
-		},
-		hep::distribution_parameters<T>(1, T(), T(1.0))
-	);
+		};
 
 #ifndef HEP_USE_MPI
-	auto const results2 = hep::multi_channel_distributions<T>(
+	auto const results2 = hep::multi_channel<T>(
 #else
-	auto const results2 = hep::mpi_multi_channel_distributions<T>(
+	auto const results2 = hep::mpi_multi_channel<T>(
 		MPI_COMM_WORLD,
 #endif
-		2,
-		2,
-		std::vector<std::size_t>(iterations, calls),
-		function<T>,
-		1,
-		unit_densities,
-		projector
+		hep::make_multi_channel_integrand<T>(
+			function<T>,
+			2,
+			unit_densities,
+			2,
+			2,
+			projector,
+			hep::distribution_parameters<T>(1, T(), T(1.0))
+		),
+		std::vector<std::size_t>(iterations, calls)
 	);
 
 	ASSERT_EQ( results2.size() , iterations );

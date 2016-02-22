@@ -44,11 +44,11 @@ namespace hep
 /// Implements the MPI-parallelized VEGAS algorithm. This function can be used
 /// to start from an already adapted grid, e.g. one by
 /// \ref vegas_iteration_result.pdf obtained by a previous \ref vegas call.
-template <typename T, typename F, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
 	vegas_pdf<T> const& start_pdf,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
@@ -78,13 +78,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 
 		std::size_t const calls = (*i / world) +
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
-		auto const result = vegas_iteration(
-			calls,
-			pdf,
-			function,
-			default_projector<T>(),
-			generator
-		);
+		auto const result = vegas_iteration(integrand, calls, pdf, generator);
 
 		generator.discard(usage * discard_after(*i, calls, rank, world));
 
@@ -139,21 +133,20 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 ///        usually set between `1` and `2`.
 /// \param generator The random number generator that will be used to generate
 ///        random points from the hypercube. This generator is properly seeded.
-template <typename T, typename F, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	MPI_Comm communicator,
-	std::size_t dimensions,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
 	std::size_t bins = 128,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
 	return mpi_vegas(
 		communicator,
+		std::forward<I>(integrand),
 		iteration_calls,
-		std::forward<F>(function),
-		vegas_pdf<T>(dimensions, bins),
+		vegas_pdf<T>(integrand.dimensions(), bins),
 		alpha,
 		std::forward<R>(generator)
 	);

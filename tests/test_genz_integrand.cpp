@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "genz_integrand.hpp"
 
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/vegas.hpp"
 
@@ -113,7 +114,10 @@ void check_plain_integrator(test_data_type data)
 	auto integrand = genz::integrand<T>(type, params.affective(),
 		params.unaffective());
 
-	auto result = hep::plain<T>(dimension, calls, integrand);
+	auto result = hep::plain<T>(
+		hep::make_integrand<T>(integrand, dimension),
+		calls
+	);
 
 	// approximation should lie with the error interval
 	EXPECT_NEAR( integrand.reference_result(), result.value(), deviation *
@@ -141,8 +145,10 @@ void check_vegas_integrator(test_data_type data)
 	auto integrand = genz::integrand<T>(type, params.affective(),
 		params.unaffective());
 
-	auto results = hep::vegas<T>(dimension,
-		std::vector<std::size_t>(10, calls / 10), integrand);
+	auto results = hep::vegas<T>(
+		hep::make_integrand<T>(integrand, dimension),
+		std::vector<std::size_t>(10, calls / 10)
+	);
 	auto result = hep::cumulative_result1(results.begin(), results.end());
 
 	// approximation should lie with the error interval

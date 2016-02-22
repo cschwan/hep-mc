@@ -42,9 +42,8 @@ int main(int argc, char* argv[])
 	// individual iterations
 	auto results = hep::mpi_vegas<double>(
 		MPI_COMM_WORLD,
-		1,
-		std::vector<std::size_t>(5, 10000000),
-		square
+		hep::make_integrand<double>(square, 1),
+		std::vector<std::size_t>(5, 10000000)
 	);
 
 	// results contains the estimations for each iteration. We could take the

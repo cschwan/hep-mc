@@ -12,9 +12,8 @@ int main()
 {
 	// integrate the square function with two iterations and five bins
 	auto results = hep::vegas<double>(
-		1,
+		hep::make_integrand<double>(square, 1),
 		std::vector<std::size_t>(2, 100),
-		square,
 		5
 	);
 

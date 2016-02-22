@@ -53,12 +53,11 @@ namespace hep
 ///        \ref integrands for further explanation.
 /// \param generator The random number generator that will be used to generate
 ///        random points from the hypercube. This generator is properly seeded.
-template <typename T, typename F, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline mc_result<T> mpi_plain(
 	MPI_Comm communicator,
-	std::size_t dimensions,
+	I&& integrand,
 	std::size_t calls,
-	F&& function,
 	R&& generator = std::mt19937()
 ) {
 	int rank = 0;
@@ -70,12 +69,12 @@ inline mc_result<T> mpi_plain(
 	std::size_t const sub_calls = (calls / world) +
 		(static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
 
-	std::size_t const usage = dimensions * random_number_usage<T, R>();
+	std::size_t const usage = integrand.dimensions() *
+		random_number_usage<T, R>();
 
 	generator.discard(usage * discard_before(calls, rank, world));
 
-	auto const result = plain_iteration<T>(dimensions, sub_calls,
-		function, default_projector<T>(), generator);
+	auto const result = plain<T>(integrand, sub_calls, generator);
 
 	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 

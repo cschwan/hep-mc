@@ -50,15 +50,14 @@ namespace hep
 /// will be called multiple times with a differently seeded generator and with
 /// `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
-template <typename T, typename F, typename P, typename R>
+template <typename T, typename I, typename R>
 inline vegas_iteration_result<T> vegas_iteration(
+	I&& integrand,
 	std::size_t calls,
 	vegas_pdf<T> const& pdf,
-	F&& function,
-	P&& projector,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(projector);
+	auto accumulator = make_distribution_accumulator2(integrand);
 
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
@@ -77,9 +76,9 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		vegas_point<T> const point(random_numbers, bin, pdf);
 
-		T const value = function(point) * point.weight();
+		T const value = integrand.function()(point) * point.weight();
 
-		accumulator.add(point, function, value);
+		accumulator.add(point, integrand.function(), value);
 
 		T const square = value * value;
 
@@ -108,12 +107,11 @@ inline vegas_iteration_result<T> vegas_iteration(
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by
 /// \ref vegas_iteration_result.pdf obtained by a previous \ref vegas call.
-template <typename T, typename F, typename P, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
 	vegas_pdf<T> const& start_pdf,
-	P&& projector,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
@@ -126,13 +124,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	// perform iterations
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
-		auto const result = vegas_iteration(
-			*i,
-			pdf,
-			function,
-			projector,
-			generator
-		);
+		auto const result = vegas_iteration(integrand, *i, pdf, generator);
 		results.push_back(result);
 
 		if (!vegas_callback<T>()(results))
@@ -152,20 +144,18 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 /// value in `iteration_calls`. The pdf that is sampled from has `bins` for each
 /// dimension as is refined \ref vegas_refine_pdf using the\f$ \alpha
 /// \f$-parameter given by `alpha`.
-template <typename T, typename F, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<vegas_iteration_result<T>> vegas(
-	std::size_t dimensions,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
 	std::size_t bins = 128,
 	T alpha = T(1.5),
 	R&& generator = std::mt19937()
 ) {
 	return vegas(
+		std::forward<I>(integrand),
 		iteration_calls,
-		std::forward<F>(function),
-		vegas_pdf<T>(dimensions, bins),
-		default_projector<T>(),
+		vegas_pdf<T>(integrand.dimensions(), bins),
 		alpha,
 		std::forward<R>(generator)
 	);

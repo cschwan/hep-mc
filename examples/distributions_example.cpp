@@ -17,24 +17,19 @@ void bin_projector_function(
 
 int main()
 {
-	// a differential distribution with 100 bins, covering the interval [5,+5]
-	hep::distribution_parameters<double> parameters(100, -5.0, 5.0);
-
-	// create the projector (the function that actually projects the mc_point
-	// onto the value of the x-axis, the boundary values, and the number of
-	// bins)
-	auto const projector = hep::make_distribution_projector<double>(
+	// create the integrand: We want to integrate the function `arctan` which
+	// has a single dimension, and furthermore we want to generate a
+	// differential distribution of this function using 100 bins in the interval
+	// [-5,+5]
+	auto integrand = hep::make_integrand<double>(
+		arctan,
+		1,
 		bin_projector_function,
-		parameters
+		hep::distribution_parameters<double>(100, -5.0, 5.0)
 	);
 
 	// now integrate and record the differential distributions
-	auto const result = hep::plain_distributions<double>(
-		1,
-		1000000,
-		arctan,
-		projector
-	);
+	auto const result = hep::plain<double>(integrand, 1000000);
 
 	// integral is zero
 	std::cout << "integral is I = " << result.value() << " +- "

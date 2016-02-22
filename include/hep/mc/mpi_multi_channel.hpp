@@ -41,16 +41,12 @@ namespace hep
 
 /// Implements the MPI-parallelized adaptive multi channel algorithm. See
 /// \ref multi_channel_group for a detailed description of the parameters.
-template <class T, class F, class D, class P, class R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	MPI_Comm communicator,
-	std::size_t dimensions,
-	std::size_t map_dimensions,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
 	std::vector<T> const& channel_weights,
-	D&& densities,
-	P&& projector,
 	R&& generator = std::mt19937()
 ) {
 	int rank = 0;
@@ -67,7 +63,8 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 
 	// hep::discrete_distribution consumes as many random numbers as an
 	// additional dimension
-	std::size_t const usage = (1 + dimensions) * random_number_usage<T, R>();
+	std::size_t const usage = (1 + integrand.dimensions()) *
+		random_number_usage<T, R>();
 
 	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
 	{
@@ -77,13 +74,9 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 			(static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
 
 		auto const result = multi_channel_iteration(
-			dimensions,
-			map_dimensions,
+			integrand,
 			calls,
-			function,
 			weights,
-			densities,
-			projector,
 			generator
 		);
 
@@ -119,52 +112,18 @@ inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 
 /// Implements the MPI-parallelized adaptive multi channel algorithm. See
 /// \ref multi_channel_group for a detailed description of the parameters.
-template <typename T, typename F, typename D, typename R = std::mt19937>
+template <typename T, typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<T>> mpi_multi_channel(
 	MPI_Comm communicator,
-	std::size_t dimensions,
-	std::size_t map_dimensions,
+	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
-	std::size_t channels,
-	D&& densities,
 	R&& generator = std::mt19937()
 ) {
 	return mpi_multi_channel(
 		communicator,
-		dimensions,
-		map_dimensions,
+		std::forward<I>(integrand),
 		iteration_calls,
-		std::forward<F>(function),
-		std::vector<T>(channels, T(1.0) / T(channels)),
-		std::forward<D>(densities),
-		default_projector<T>(),
-		std::forward<R>(generator)
-	);
-}
-
-///
-template <class T, class F, class D, class P, class R = std::mt19937>
-inline std::vector<multi_channel_result<T>> mpi_multi_channel_distributions(
-	MPI_Comm communicator,
-	std::size_t dimensions,
-	std::size_t map_dimensions,
-	std::vector<std::size_t> const& iteration_calls,
-	F&& function,
-	std::size_t channels,
-	D&& densities,
-	P&& projector,
-	R&& generator = std::mt19937()
-) {
-	return mpi_multi_channel(
-		communicator,
-		dimensions,
-		map_dimensions,
-		iteration_calls,
-		std::forward<F>(function),
-		std::vector<T>(channels, T(1.0) / T(channels)),
-		std::forward<D>(densities),
-		std::forward<P>(projector),
+		std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
 		std::forward<R>(generator)
 	);
 }

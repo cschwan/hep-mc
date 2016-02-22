@@ -10,11 +10,13 @@ nobase_include_HEADERS = \
 	hep/mc/function_value.hpp \
 	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
+	hep/mc/integrand.hpp \
 	hep/mc/mc_helper.hpp \
 	hep/mc/mc_point.hpp \
 	hep/mc/mc_result.hpp \
 	hep/mc/multi_channel.hpp \
 	hep/mc/multi_channel_callback.hpp \
+	hep/mc/multi_channel_integrand.hpp \
 	hep/mc/multi_channel_max_difference.hpp \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \

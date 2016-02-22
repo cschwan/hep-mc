@@ -30,101 +30,49 @@
 #include <utility>
 #include <vector>
 
-namespace
-{
-
-template <typename T, typename F, typename P, typename R>
-inline hep::plain_result<T> plain_iteration(
-	std::size_t dimensions,
-	std::size_t calls,
-	F&& function,
-	P&& projector,
-	R&& generator
-) {
-	auto accumulator = make_distribution_accumulator(projector);
-
-	// storage for random numbers
-	std::vector<T> random_numbers(dimensions);
-
-	// iterate over calls
-	for (std::size_t i = 0; i != calls; ++i)
-	{
-		// fill container with random numbers
-		for (std::size_t j = 0; j != dimensions; ++j)
-		{
-			random_numbers[j] = std::generate_canonical<T,
-				std::numeric_limits<T>::digits>(generator);
-		}
-
-		hep::mc_point<T> const point(random_numbers);
-
-		// evaluate function at position specified in random_numbers
-		T const value = function(point);
-
-		accumulator.add(point, function, value);
-	}
-
-	return hep::plain_result<T>(
-		accumulator.distributions(calls),
-		calls,
-		accumulator.sum(),
-		accumulator.sum_of_squares()
-	);
-}
-
-}
-
 namespace hep
 {
 
 /// \addtogroup plain_group
 /// @{
 
-/// PLAIN Monte Carlo integrator. This function integrates `function` over the
-/// unit-hypercube with the specified `dimensions` using `calls` function
-/// evaluations with randomly chosen points determined by `generator`. The
-/// generator is not seeded.
-///
-/// \param dimensions The number of parameters `function` accepts.
-/// \param calls The number of function calls that are used to obtain the
-///        result.
-/// \param function The function that will be integrated over the hypercube. See
-///        \ref integrands for further explanation.
-/// \param generator The random number generator that will be used to generate
-///        random points from the hypercube. This generator is not seeded.
-template <typename T, typename F, typename R = std::mt19937>
+/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the
+/// unit-hypercube `calls` function evaluations with randomly chosen points
+/// determined by `generator`.
+template <typename T, typename I, typename R = std::mt19937>
 inline plain_result<T> plain(
-	std::size_t dimensions,
+	I&& integrand,
 	std::size_t calls,
-	F&& function,
 	R&& generator = std::mt19937()
 ) {
-	return plain_iteration<T>(
-		dimensions,
-		calls,
-		std::forward<F>(function),
-		default_projector<T>(),
-		std::forward<R>(generator)
-	);
-}
+	auto accumulator = make_distribution_accumulator2(integrand);
 
-/// PLAIN Monte Carlo integrator with support for generating distributions. The
-/// parameter `projector` must be of the type \ref distribution_projector. For
-/// the explanation of the other parameters see \ref plain.
-template <typename T, typename F, typename P, typename R = std::mt19937>
-inline plain_result<T> plain_distributions(
-	std::size_t dimensions,
-	std::size_t calls,
-	F&& function,
-	P&& projector,
-	R&& generator = std::mt19937()
-) {
-	return plain_iteration<T>(
-		dimensions,
+	// storage for random numbers
+	std::vector<T> random_numbers(integrand.dimensions());
+
+	// iterate over calls
+	for (std::size_t i = 0; i != calls; ++i)
+	{
+		// fill container with random numbers
+		for (std::size_t j = 0; j != integrand.dimensions(); ++j)
+		{
+			random_numbers[j] = std::generate_canonical<T,
+				std::numeric_limits<T>::digits>(generator);
+		}
+
+		mc_point<T> const point(random_numbers);
+
+		// evaluate function at position specified in random_numbers
+		T const value = integrand.function()(point);
+
+		accumulator.add(point, integrand.function(), value);
+	}
+
+	return plain_result<T>(
+		accumulator.distributions(calls),
 		calls,
-		std::forward<F>(function),
-		std::forward<P>(projector),
-		std::forward<R>(generator)
+		accumulator.sum(),
+		accumulator.sum_of_squares()
 	);
 }
 
