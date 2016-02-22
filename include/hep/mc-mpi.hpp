@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc.hpp"
+
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_multi_channel.hpp"
