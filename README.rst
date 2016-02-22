@@ -5,32 +5,33 @@ Project Description
 following integrators are implemented:
 
 - PLAIN,
-- VEGAS, and
-- a Multi Channel integrator with adaptive weight optimization as described in
-  Ref. [1]_.
+- VEGAS [1]_ [2]_, and
+- a Multi Channel integrator with adaptive weight optimization described in Ref.
+  [3]_.
 
-In addition, some integrators are available for parallel integration using MPI.
+For each integrator there is an ``mpi_`` variant that uses the `Message Passing
+Interface (MPI) <http://www.mpi-forum.org/>`_ to run the integration in
+parallel.
 
-The aim of this project is to provide functions and classes that are:
+The aim of this project is to provide functions and classes that are
 
 - *easily usable*, e.g. the default VEGAS routine can be called with only three
   parameters. More can be given if the default parameters are not satisfactory,
-- *templatized* in order to support a wide range of floating point types used to
-  perform the numerical computations (e.g. ``float``, ``double``,
-  ``long double`` and custom types),
+- *templatized* in order to support all floating point types used to perform the
+  numerical computations, i.e. ``float``, ``double``, and ``long double``,
 - *modularized* which makes it easy to develop new integration algorithms on top
   of known ones - e.g. VEGAS with a modified rebinning algorithm,
-- *compatible* to the new C++11 random number generators interface, see e.g.
-  here: http://en.cppreference.com/w/cpp/numeric/random. This enables one to
-  choose between a variety of standard generators or to write a custom one and
-  use it with the integration routines.
+- *compatible* to the C++11 random number generators interface, see e.g. here:
+  http://en.cppreference.com/w/cpp/numeric/random. This enables one to choose
+  between a variety of standard generators or to write a custom one and use it
+  with the integration routines.
 
 Usage
 =====
 
-Since this library uses features from the new C++11 standard, you have to enable
-these with your compiler. For the GCC and clang compilers this can be done by
-passing an additional parameter to the compiler, e.g.::
+This library uses features from the C++11 standard which need to be enabled with
+your compiler. For the GCC and clang compilers this can be done by passing an
+additional parameter to the compiler, e.g.::
 
     g++ -std=c++0x my_program.cpp
 
@@ -38,8 +39,12 @@ Since this project is based on templates, the inclusion of the main header,::
 
     #include <hep/mc.hpp>
 
-is sufficient to use it and you do not need to link against a library. To see
-the library in action take a look the example programs in the
+is sufficient to use it; you do not need to link against a library. If you
+intend to use the MPI variants of the integrators include::
+
+    #include <hep/mc-mpi.hpp>
+
+instead. To see the library in action take a look the example programs in the
 `examples directory`_.
 
 Documentation and Examples
@@ -69,8 +74,8 @@ documentation pass ``--enable-doxygen`` to ``./configure``. Example programs are
 compiled when you add ``--enable-examples``. For more options type ``./configure
 --help``.
 
-When you got the sources with ``git`` or downloaded them as a ZIP file, you will
-notice that the configure script is missing. Then run::
+If you downloaded the sources with ``git`` or got them as a ZIP file, you will
+notice that the configure script is missing. In that case run::
 
     autoreconf -fiv
 
@@ -79,8 +84,16 @@ inside the project's top-level directory. This will generate the missing files.
 References
 ==========
 
-.. [1] R. Kleiss, R. Pittau. "Weight optimization in multichannel Monte Carlo".
-       In: Comp. Phys. Commun. 83 (1994), pp. 141-146. DOI:
+.. [1] G. P. Lepage. "A New Algorithm for Adaptive Multidimensional
+       Integration". J. of Comp. Phys. 27 (1978), pp. 192-203. DOI:
+       `10.1016/0021-9991(78)90004-9
+       <http://dx.doi.org/10.1016/0021-9991(78)90004-9>`_.
+
+.. [2] G.P. Lepage. "VEGAS: An Adaptive Multi-dimensional Integration Program".
+       Cornell preprint CLNS 80-447 (1980).
+
+.. [3] R. Kleiss, R. Pittau. "Weight optimization in multichannel Monte Carlo".
+       Comp. Phys. Commun. 83 (1994), pp. 141-146. DOI:
        `10.1016/0010-4655(94)90043-4
        <http://dx.doi.org/10.1016/0010-4655(94)90043-4>`_. arXiv:
        `hep-ph/9405257 <http://arxiv.org/abs/hep-ph/9405257>`_.
