@@ -21,7 +21,6 @@
 
 #include "hep/mc/bin_projector.hpp"
 #include "hep/mc/distribution_result.hpp"
-#include "hep/mc/function_value.hpp"
 
 #include <cstddef>
 #include <type_traits>
