@@ -20,6 +20,19 @@ T function(hep::mc_point<T> const& x)
 }
 
 template <typename T>
+T function_with_distribution(
+	hep::mc_point<T> const& x,
+	hep::bin_projector<T>& projector
+) {
+	T const value = T(3.0) / T(2.0) * (x.point()[0] * x.point()[0] +
+		x.point()[1] * x.point()[1]);
+
+	projector.add(0, T(0.5), value * x.weight());
+
+	return value;
+}
+
+template <typename T>
 std::vector<T> reference_results();
 
 template <>
@@ -199,8 +212,13 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	auto const results = hep::mpi_multi_channel<T>(
 		MPI_COMM_WORLD,
 #endif
-		hep::make_multi_channel_integrand<T>(function<T>, 2, unit_densities, 2,
-			2),
+		hep::make_multi_channel_integrand<T>(
+			function<T>,
+			2,
+			unit_densities,
+			2,
+			2
+		),
 		std::vector<std::size_t>(iterations, calls)
 	);
 	auto const reference = reference_results<T>();
@@ -238,11 +256,6 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 //			static_cast <long double> (i.error()));
 //	}
 
-	auto const projector = [](hep::mc_point<T> const&, hep::bin_projector<T>&
-		projector, hep::function_value<T> const& value) {
-			projector.add(0, T(0.5), value.value());
-		};
-
 #ifndef HEP_USE_MPI
 	auto const results2 = hep::multi_channel<T>(
 #else
@@ -250,12 +263,11 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 		MPI_COMM_WORLD,
 #endif
 		hep::make_multi_channel_integrand<T>(
-			function<T>,
+			function_with_distribution<T>,
 			2,
 			unit_densities,
 			2,
 			2,
-			projector,
 			hep::distribution_parameters<T>(1, T(), T(1.0))
 		),
 		std::vector<std::size_t>(iterations, calls)

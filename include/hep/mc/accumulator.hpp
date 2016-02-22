@@ -1,5 +1,5 @@
-#ifndef HEP_MC_DISTRIBUTION_ACCUMULATOR_HPP
-#define HEP_MC_DISTRIBUTION_ACCUMULATOR_HPP
+#ifndef HEP_MC_ACCUMULATOR_HPP
+#define HEP_MC_ACCUMULATOR_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -28,45 +28,42 @@
 #include <utility>
 #include <vector>
 
-namespace hep
-{
-
-/// Dummy class for integrands that do not wish to generate any differential
-/// distributions.
-class one_bin_projector
-{
-};
-
-}
-
 namespace
 {
 
-template <typename T, typename P>
-class distribution_accumulator
+template <typename T, bool distributions>
+class accumulator;
+
+template <typename T>
+class accumulator<T, true>
 {
 public:
-	distribution_accumulator(
-		P const& projector,
-		std::vector<hep::distribution_parameters<T>> const& parameters
-	)
-		: accumulator_(hep::one_bin_projector(), parameters)
+	accumulator(std::vector<hep::distribution_parameters<T>> const& parameters)
+		: compensation_()
+		, sum_()
+		, sum_of_squares_()
 		, bin_projector_(parameters)
-		, bin_projector_function_(projector)
 	{
 	}
 
-	template <typename M, typename F>
-	void add(M const& point, F const& function, T value)
+	template <typename I, typename P>
+	T invoke(I& integrand, P const& point)
 	{
-		// `accumulator` takes care of the total integration result
-		accumulator_.add(point, function, value);
+		// call the integrand function with the supplied point. Distributions
+		// are generated here
+		T const value = integrand.function()(point, bin_projector_) *
+			point.weight();
 
-		bin_projector_function_(
-			point,
-			bin_projector_,
-			hep::function_value2<T, F>(function, value)
-		);
+		// perform kahan summation 'sum_ += value'
+		T const y = value - compensation_;
+		T const t = sum_ + y;
+		compensation_ = (t - sum_) - y;
+		sum_ = t;
+
+		// no kahan summation for `sum_of_squares_`, should be OK without
+		sum_of_squares_ += value * value;
+
+		return value;
 	}
 
 	std::vector<hep::distribution_result<T>> distributions(
@@ -77,26 +74,26 @@ public:
 
 	T sum() const
 	{
-		return accumulator_.sum();
+		return sum_;
 	}
 
 	T sum_of_squares() const
 	{
-		return accumulator_.sum_of_squares();
+		return sum_of_squares_;
 	}
 
 private:
-	distribution_accumulator<T, hep::one_bin_projector> accumulator_;
+	T compensation_;
+	T sum_;
+	T sum_of_squares_;
 	hep::bin_projector<T> bin_projector_;
-	P bin_projector_function_;
 };
 
 template <typename T>
-class distribution_accumulator<T, hep::one_bin_projector>
+class accumulator<T, false>
 {
 public:
-	distribution_accumulator(
-		hep::one_bin_projector const&,
+	accumulator(
 		std::vector<hep::distribution_parameters<T>> const&
 	)
 		: compensation_()
@@ -105,9 +102,13 @@ public:
 	{
 	}
 
-	template <typename M, typename F>
-	void add(M const&, F const&, T value)
+	template <typename I, typename P>
+	T invoke(I& integrand, P const& point)
 	{
+		// call the integrand function with the supplied point. No distributions
+		// are generated here
+		T const value = integrand.function()(point) * point.weight();
+
 		// perform kahan summation 'sum_ += value'
 		T const y = value - compensation_;
 		T const t = sum_ + y;
@@ -116,10 +117,13 @@ public:
 
 		// no kahan summation for `sum_of_squares_`, should be OK without
 		sum_of_squares_ += value * value;
+
+		return value;
 	}
 
 	std::vector<hep::distribution_result<T>> distributions(std::size_t) const
 	{
+		// return empty distributions
 		return std::vector<hep::distribution_result<T>>();
 	}
 
@@ -140,18 +144,14 @@ private:
 };
 
 template <typename I>
-inline distribution_accumulator<
-	typename std::remove_reference<I>::type::numeric_type,
-	typename std::remove_reference<I>::type::projector_type
-> make_distribution_accumulator(I&& integrand)
-{
-	using T = typename std::remove_reference<I>::type::numeric_type;
-	using P = typename std::remove_reference<I>::type::projector_type;
+inline accumulator<typename I::numeric_type, I::has_distributions>
+make_accumulator(
+	I const& integrand
+) {
+	using T = typename I::numeric_type;
+	constexpr bool has_distributions = I::has_distributions;
 
-	return distribution_accumulator<T, P>(
-		integrand.projector(),
-		integrand.parameters()
-	);
+	return accumulator<T, has_distributions>(integrand.parameters());
 }
 
 }

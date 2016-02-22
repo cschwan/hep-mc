@@ -1,18 +1,18 @@
 #include "hep/mc.hpp"
 
-double arctan(hep::mc_point<double> const& point)
-{
-	double const projection = 10.0 * point.point()[0] - 5.0;
-	return std::atan(projection);
-}
-
-void bin_projector_function(
+double arctan(
 	hep::mc_point<double> const& point,
-	hep::bin_projector<double>& projector,
-	hep::function_value<double> value
+	hep::bin_projector<double>& projector
 ) {
 	double const projection = 10.0 * point.point()[0] - 5.0;
-	projector.add(0, projection, value.value());
+	double const value = std::atan(projection);
+
+	// add to the first (zeroth) distribution. Since we are integrating with
+	// PLAIN, we could leave out the multiplication with the weight, but in
+	// general this is needed
+	projector.add(0, projection, value * point.weight());
+
+	return value;
 }
 
 int main()
@@ -24,7 +24,6 @@ int main()
 	auto integrand = hep::make_integrand<double>(
 		arctan,
 		1,
-		bin_projector_function,
 		hep::distribution_parameters<double>(100, -5.0, 5.0)
 	);
 

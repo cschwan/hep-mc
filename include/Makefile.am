@@ -1,9 +1,9 @@
 nobase_include_HEADERS = \
+	hep/mc/accumulator.hpp \
 	hep/mc/bin_projector.hpp \
 	hep/mc/buffer_helper.hpp \
 	hep/mc/callback_helper.hpp \
 	hep/mc/discrete_distribution.hpp \
-	hep/mc/distribution_accumulator.hpp \
 	hep/mc/distribution_parameters.hpp \
 	hep/mc/distribution_result.hpp \
 	hep/mc/function_value.hpp \

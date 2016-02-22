@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/distribution_accumulator.hpp"
+#include "hep/mc/accumulator.hpp"
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
@@ -56,7 +56,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 	vegas_pdf<T> const& pdf,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(integrand);
+	auto accumulator = make_accumulator(integrand);
 
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
@@ -75,10 +75,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 
 		vegas_point<T> const point(random_numbers, bin, pdf);
 
-		T const value = integrand.function()(point) * point.weight();
-
-		accumulator.add(point, integrand.function(), value);
-
+		T const value = accumulator.invoke(integrand, point);
 		T const square = value * value;
 
 		// save square for each bin in order to refine the pdf later

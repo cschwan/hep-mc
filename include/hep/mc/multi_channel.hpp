@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/accumulator.hpp"
 #include "hep/mc/discrete_distribution.hpp"
-#include "hep/mc/distribution_accumulator.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -76,7 +76,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::vector<T> const& channel_weights,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator(integrand);
+	auto accumulator = make_accumulator(integrand);
 
 	std::size_t const channels = channel_weights.size();
 
@@ -124,10 +124,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 			::density_type> const point(random_numbers, coordinates, channel,
 			total_density, integrand.densities());
 
-		T const value = integrand.function()(point) * point.weight();
-
-		accumulator.add(point, integrand.function(), value);
-
+		T const value = accumulator.invoke(integrand, point);
 		T const square = value * value;
 
 		// these are the values W that are used to update the alphas
