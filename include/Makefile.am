@@ -5,7 +5,6 @@ nobase_include_HEADERS = \
 	hep/mc/discrete_distribution.hpp \
 	hep/mc/distribution_accumulator.hpp \
 	hep/mc/distribution_parameters.hpp \
-	hep/mc/distribution_projector.hpp \
 	hep/mc/distribution_result.hpp \
 	hep/mc/function_value.hpp \
 	hep/mc/generator_helper.hpp \

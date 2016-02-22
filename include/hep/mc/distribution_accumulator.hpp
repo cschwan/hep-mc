@@ -20,7 +20,6 @@
  */
 
 #include "hep/mc/bin_projector.hpp"
-#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/distribution_result.hpp"
 #include "hep/mc/function_value.hpp"
 
@@ -34,7 +33,7 @@ namespace hep
 
 /// Dummy class for integrands that do not wish to generate any differential
 /// distributions.
-class one_bin_projector2
+class one_bin_projector
 {
 };
 
@@ -47,10 +46,13 @@ template <typename T, typename P>
 class distribution_accumulator
 {
 public:
-	distribution_accumulator(hep::distribution_projector<T, P> const& projector)
-		: accumulator_(hep::default_projector<T>())
-		, bin_projector_(projector.parameters())
-		, bin_projector_function_(projector.projector())
+	distribution_accumulator(
+		P const& projector,
+		std::vector<hep::distribution_parameters<T>> const& parameters
+	)
+		: accumulator_(hep::one_bin_projector(), parameters)
+		, bin_projector_(parameters)
+		, bin_projector_function_(projector)
 	{
 	}
 
@@ -93,102 +95,8 @@ template <typename T>
 class distribution_accumulator<T, hep::one_bin_projector>
 {
 public:
-	distribution_accumulator(hep::default_projector<T> const&)
-		: compensation_()
-		, sum_()
-		, sum_of_squares_()
-	{
-	}
-
-	template <typename M, typename F>
-	void add(M const&, F const&, T value)
-	{
-		// perform kahan summation 'sum_ += value'
-		T const y = value - compensation_;
-		T const t = sum_ + y;
-		compensation_ = (t - sum_) - y;
-		sum_ = t;
-
-		// no kahan summation for `sum_of_squares_`, should be OK without
-		sum_of_squares_ += value * value;
-	}
-
-	std::vector<hep::distribution_result<T>> distributions(std::size_t) const
-	{
-		return std::vector<hep::distribution_result<T>>();
-	}
-
-	T sum() const
-	{
-		return sum_;
-	}
-
-	T sum_of_squares() const
-	{
-		return sum_of_squares_;
-	}
-
-private:
-	T compensation_;
-	T sum_;
-	T sum_of_squares_;
-};
-
-template <typename T, typename P>
-class distribution_accumulator2
-{
-public:
-	distribution_accumulator2(
-		P const& projector,
-		std::vector<hep::distribution_parameters<T>> const& parameters
-	)
-		: accumulator_(hep::one_bin_projector2(), parameters)
-		, bin_projector_(parameters)
-		, bin_projector_function_(projector)
-	{
-	}
-
-	template <typename M, typename F>
-	void add(M const& point, F const& function, T value)
-	{
-		// `accumulator` takes care of the total integration result
-		accumulator_.add(point, function, value);
-
-		bin_projector_function_(
-			point,
-			bin_projector_,
-			hep::function_value2<T, F>(function, value)
-		);
-	}
-
-	std::vector<hep::distribution_result<T>> distributions(
-		std::size_t calls
-	) const {
-		return bin_projector_.distributions(calls);
-	}
-
-	T sum() const
-	{
-		return accumulator_.sum();
-	}
-
-	T sum_of_squares() const
-	{
-		return accumulator_.sum_of_squares();
-	}
-
-private:
-	distribution_accumulator2<T, hep::one_bin_projector2> accumulator_;
-	hep::bin_projector<T> bin_projector_;
-	P bin_projector_function_;
-};
-
-template <typename T>
-class distribution_accumulator2<T, hep::one_bin_projector2>
-{
-public:
-	distribution_accumulator2(
-		hep::one_bin_projector2 const&,
+	distribution_accumulator(
+		hep::one_bin_projector const&,
 		std::vector<hep::distribution_parameters<T>> const&
 	)
 		: compensation_()
@@ -232,26 +140,18 @@ private:
 };
 
 template <typename I>
-inline distribution_accumulator2<
+inline distribution_accumulator<
 	typename std::remove_reference<I>::type::numeric_type,
 	typename std::remove_reference<I>::type::projector_type
-> make_distribution_accumulator2(I&& integrand)
+> make_distribution_accumulator(I&& integrand)
 {
 	using T = typename std::remove_reference<I>::type::numeric_type;
 	using P = typename std::remove_reference<I>::type::projector_type;
 
-	return distribution_accumulator2<T, P>(
+	return distribution_accumulator<T, P>(
 		integrand.projector(),
 		integrand.parameters()
 	);
-}
-
-template <typename P>
-inline distribution_accumulator<
-	typename std::remove_reference<P>::type::numeric_type,
-	typename std::remove_reference<P>::type::projector_type
-> make_distribution_accumulator(P&& projector) {
-	return std::forward<P>(projector);
 }
 
 }

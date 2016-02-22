@@ -20,7 +20,6 @@
  */
 
 #include "hep/mc/distribution_accumulator.hpp"
-#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
@@ -57,7 +56,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 	vegas_pdf<T> const& pdf,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator2(integrand);
+	auto accumulator = make_distribution_accumulator(integrand);
 
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();

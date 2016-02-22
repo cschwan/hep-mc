@@ -20,7 +20,6 @@
  */
 
 #include "hep/mc/distribution_accumulator.hpp"
-#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/plain_result.hpp"
 
@@ -45,7 +44,7 @@ inline plain_result<T> plain(
 	std::size_t calls,
 	R&& generator = std::mt19937()
 ) {
-	auto accumulator = make_distribution_accumulator2(integrand);
+	auto accumulator = make_distribution_accumulator(integrand);
 
 	// storage for random numbers
 	std::vector<T> random_numbers(integrand.dimensions());

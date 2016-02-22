@@ -21,7 +21,6 @@
 
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/distribution_accumulator.hpp"
-#include "hep/mc/distribution_projector.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -77,7 +76,7 @@ inline multi_channel_result<T> multi_channel_iteration(
 	std::vector<T> const& channel_weights,
 	R&& generator
 ) {
-	auto accumulator = make_distribution_accumulator2(integrand);
+	auto accumulator = make_distribution_accumulator(integrand);
 
 	std::size_t const channels = channel_weights.size();
 
