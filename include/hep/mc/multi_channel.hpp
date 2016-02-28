@@ -120,9 +120,11 @@ inline multi_channel_result<T> multi_channel_iteration(
 
 		total_density /= weight;
 
-		multi_channel_point2<T, typename std::remove_reference<I>::type
-			::density_type> const point(random_numbers, coordinates, channel,
-			total_density, integrand.densities());
+		using density_type = typename std::remove_reference<
+			typename std::remove_reference<I>::type::density_type>::type;
+
+		multi_channel_point2<T, density_type> const point(random_numbers,
+			coordinates, channel, total_density, integrand.densities());
 
 		T const value = accumulator.invoke(integrand, point);
 		T const square = value * value;
