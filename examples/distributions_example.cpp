@@ -2,7 +2,7 @@
 
 double arctan(
 	hep::mc_point<double> const& point,
-	hep::bin_projector<double>& projector
+	hep::projector<double>& projector
 ) {
 	double const projection = 10.0 * point.point()[0] - 5.0;
 	double const value = std::atan(projection);

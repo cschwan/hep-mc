@@ -1,5 +1,5 @@
-#ifndef HEP_MC_BIN_PROJECTOR_HPP
-#define HEP_MC_BIN_PROJECTOR_HPP
+#ifndef HEP_MC_PROJECTOR_HPP
+#define HEP_MC_PROJECTOR_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -32,11 +32,11 @@ namespace hep
 /// Class that project the multi-dimensional Monte Carlo point into a discrete
 /// bin and generates the corresponding distributions.
 template <typename T>
-class bin_projector
+class projector
 {
 public:
 	/// Constructor.
-	bin_projector(std::vector<distribution_parameters<T>> const& parameters)
+	projector(std::vector<distribution_parameters<T>> const& parameters)
 		: parameters_(parameters)
 		, compensation_(parameters.size())
 		, sum_(parameters.size())

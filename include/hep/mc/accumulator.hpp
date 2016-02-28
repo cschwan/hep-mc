@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/bin_projector.hpp"
+#include "hep/mc/projector.hpp"
 #include "hep/mc/distribution_result.hpp"
 
 #include <cstddef>
@@ -41,7 +41,7 @@ public:
 		: compensation_()
 		, sum_()
 		, sum_of_squares_()
-		, bin_projector_(parameters)
+		, projector_(parameters)
 	{
 	}
 
@@ -50,7 +50,7 @@ public:
 	{
 		// call the integrand function with the supplied point. Distributions
 		// are generated here
-		T const value = integrand.function()(point, bin_projector_) *
+		T const value = integrand.function()(point, projector_) *
 			point.weight();
 
 		// perform kahan summation 'sum_ += value'
@@ -68,7 +68,7 @@ public:
 	std::vector<hep::distribution_result<T>> distributions(
 		std::size_t calls
 	) const {
-		return bin_projector_.distributions(calls);
+		return projector_.distributions(calls);
 	}
 
 	T sum() const
@@ -85,7 +85,7 @@ private:
 	T compensation_;
 	T sum_;
 	T sum_of_squares_;
-	hep::bin_projector<T> bin_projector_;
+	hep::projector<T> projector_;
 };
 
 template <typename T>

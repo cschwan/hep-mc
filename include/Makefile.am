@@ -1,6 +1,5 @@
 nobase_include_HEADERS = \
 	hep/mc/accumulator.hpp \
-	hep/mc/bin_projector.hpp \
 	hep/mc/buffer_helper.hpp \
 	hep/mc/callback_helper.hpp \
 	hep/mc/discrete_distribution.hpp \
@@ -26,6 +25,7 @@ nobase_include_HEADERS = \
 	hep/mc/mpi_vegas_callback.hpp \
 	hep/mc/plain.hpp \
 	hep/mc/plain_result.hpp \
+	hep/mc/projector.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc/vegas_callback.hpp \
 	hep/mc/vegas_iteration_result.hpp \

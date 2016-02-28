@@ -22,7 +22,7 @@ T function(hep::mc_point<T> const& x)
 template <typename T>
 T function_with_distribution(
 	hep::mc_point<T> const& x,
-	hep::bin_projector<T>& projector
+	hep::projector<T>& projector
 ) {
 	T const value = T(3.0) / T(2.0) * (x.point()[0] * x.point()[0] +
 		x.point()[1] * x.point()[1]);

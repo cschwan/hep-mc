@@ -7,8 +7,8 @@ New in 0.5:
   ``hep::make_integrand`` or ``hep::make_multi_channel_integrand``. This allows
   the library to support the generation of differential distributions for all
   integrators. If distributions should be generated, the integrands must accept
-  a second parameter, a reference to ``hep::bin_projector``, that takes care of
-  the binning. The results of the distributions are captured in a
+  a second parameter, a reference to ``hep::projector``, that takes care of the
+  binning. The results of the distributions are captured in a
   ``hep::distribution_result`` for each distribution
 - WARNING: ``hep::plain`` now returns a ``hep::plain_result`` which contains the
   results for possibly generated distributions
