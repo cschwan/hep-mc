@@ -4,17 +4,19 @@
 
 \brief How integrand functions are written
 
-Functions that can be integrated by the Monte Carlo algorithms must accept a single parameter of the
-type \ref mc_point and return a value of type `T`. For example, an integrand of the form \f$
-f(x) := x^2 \f$ implemented with double precision numbers would like:
+Functions that can be integrated by the Monte Carlo algorithms must accept a
+single parameter of the type \ref mc_point and return a value of type `T`. For
+example, an integrand of the form \f$ f(x) := x^2 \f$ implemented with double
+precision numbers would look like:
 \code
 double square(hep::mc_point<double> const& x)
 {
     return x.point[0] * x.point[0];
 }
 \endcode
-Some integration algorithms, e.g. \ref vegas, supply additional information that can be accessed by
-capturing the argument with a different type, e.g. for VEGAS by \ref vegas_point :
+Some integration algorithms, e.g. \ref vegas, supply additional information that
+can be accessed by capturing the argument with a different type, e.g. for VEGAS
+by \ref vegas_point :
 \code
 double square(hep::vegas_point<double> const& x)
 {
@@ -22,14 +24,13 @@ double square(hep::vegas_point<double> const& x)
 }
 \endcode
 
-If additional variables in the integrand are necessary, they can be supplied by global variables or
-using functors:
+If additional variables in the integrand are necessary, they can be supplied by
+global variables or using functors:
 \code
-struct integrand
+class power
 {
-    double exponent;
-
-    integrand(double exponent)
+public:
+    power(double exponent)
         : exponent(exponent)
     {
     }
@@ -38,11 +39,46 @@ struct integrand
     {
         return std::pow(x.point[0], exponent);
     }
+
+private:
+    double exponent;
 };
 \endcode
-which would be called using \ref plain by
+
+Starting with version 0.5 it is possible to generate differential distributions,
+which can be generated if a second argument is accepted, e.g.
 \code
-hep::mc_result<double> result = hep::plain<double>(1, 1000, integrand(2.0));
+double square_with_distribution(
+	hep::mc_point<double> const& x,
+	hep::projector<double>& projector
+) {
+	double const x = x.point[0];
+	double const f = x * x;
+
+	// add the the tuple `(x, f)` to the zeroeth distribution
+	projector.add(0, x, f);
+
+	return f;
+}
+\endcode
+
+Specifying the integrand is not enough for the Monte Carlo integration routines.
+For example they must know how many dimensions, i.e. how many random numbers,
+the integrand requires. Since this is generic for all algorithms, starting with
+version 0.5 the complete integrand information is specified by creating an \ref
+integrand, e.g. for the examples above:
+\code
+// the integer specifies the dimension of the integrand `square`
+auto square_integrand = hep::make_integrand<double>(square, 1);
+
+// captures `exponent = 2.0` with an instance of `power` with integrand
+// `power::operator()`
+auto power_integrand = hep::make_integrand<double>>(power(2.0), 1);
+
+// the third argument specifies the distribution parameters: the x-axis ranges
+// from -10 to 10 and is subdivided into 100 bins
+auto square_distributions = hep::make_integrand<double>(square, 1,
+	hep::distribution_parameters<double>(-10.0, +10.0, 200));
 \endcode
 
 */

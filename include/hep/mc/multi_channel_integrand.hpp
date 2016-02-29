@@ -28,7 +28,7 @@
 namespace hep
 {
 
-/// \addtogroup integrand_group
+/// \addtogroup integrands
 /// @{
 
 /// Class representing a function that can be integrated using the multi channel

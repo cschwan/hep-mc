@@ -46,11 +46,10 @@ namespace hep
 ///
 /// \param communicator The MPI communicator that is used to communicate between
 ///        the different MPI processes.
-/// \param dimensions The number of parameters `function` accepts.
+/// \param integrand The function that will be integrated over the hypercube.
+///        See \ref integrands for further explanation.
 /// \param calls The number of function calls that are used to obtain the
 ///        result.
-/// \param function The function that will be integrated over the hypercube. See
-///        \ref integrands for further explanation.
 /// \param generator The random number generator that will be used to generate
 ///        random points from the hypercube. This generator is properly seeded.
 template <typename T, typename I, typename R = std::mt19937>

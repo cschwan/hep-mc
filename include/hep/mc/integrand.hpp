@@ -28,7 +28,7 @@
 namespace hep
 {
 
-/// \addtogroup integrand_group
+/// \addtogroup integrands
 /// @{
 
 /// Class representing a function that can be integrated using the PLAIN-like
@@ -85,7 +85,7 @@ private:
 };
 
 /// PLAIN/VEGAS constructor. This function constructs an integrand using the
-/// given `function` that must accept points from the \f$ d \d$-dimensional
+/// given `function` that must accept points from the \f$ d \f$-dimensional
 /// hypercube, where \f$ d \f$ is given by the parameter `dimensions`.
 template <typename T, typename F>
 inline integrand<T, F, false> make_integrand(
