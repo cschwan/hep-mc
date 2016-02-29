@@ -4,6 +4,7 @@ CLEANFILES = $(docpkg)
 
 EXTRA_DIST = \
 	callbacks.dox \
+	distributions.dox \
 	Doxyfile.in \
 	DoxygenLayout.xml \
 	examples.dox \

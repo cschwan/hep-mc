@@ -1,0 +1,14 @@
+/**
+
+\defgroup distributions Differential Distributions
+
+\brief Generation and interpretation of differential distributions
+
+The generation of distributions is done automatically if the integrand accepts a
+\ref bin_projector that specifies how the values of the integrand are binned
+and, during integrand creation, if the distribution parameters are correctly
+specified. The result of each integration algorithm will then contain a vector
+of \ref distribution_result entries that each contains the result of a separate
+distribution.
+
+*/
