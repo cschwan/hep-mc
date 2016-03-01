@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "hep/mc/multi_channel_result.hpp"
 
 #include <cmath>
+#include <cstddef>
 
 namespace hep
 {

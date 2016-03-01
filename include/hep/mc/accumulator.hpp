@@ -20,11 +20,10 @@
  */
 
 #include "hep/mc/projector.hpp"
+#include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/distribution_result.hpp"
 
 #include <cstddef>
-#include <type_traits>
-#include <utility>
 #include <vector>
 
 namespace

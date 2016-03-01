@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2014  Christopher Schwan
+ * Copyright (C) 2012-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,16 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//#include "hep/mc/accumulator.hpp"
+//#include "hep/mc/callback_helper.hpp"
+//#include "hep/mc/discrete_distribution.hpp"
+#include "hep/mc/distribution_parameters.hpp"
+#include "hep/mc/distribution_result.hpp"
+//#include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/multi_channel.hpp"
+#include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_integrand.hpp"
+#include "hep/mc/multi_channel_max_difference.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 #include "hep/mc/plain.hpp"
+#include "hep/mc/plain_result.hpp"
+#include "hep/mc/projector.hpp"
 #include "hep/mc/vegas.hpp"
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_iteration_result.hpp"

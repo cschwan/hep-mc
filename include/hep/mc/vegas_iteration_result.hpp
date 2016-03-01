@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/distribution_result.hpp"
 #include "hep/mc/plain_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 

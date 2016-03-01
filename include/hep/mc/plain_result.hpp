@@ -22,6 +22,7 @@
 #include "hep/mc/distribution_result.hpp"
 #include "hep/mc/mc_result.hpp"
 
+#include <cstddef>
 #include <vector>
 
 namespace hep
