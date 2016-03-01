@@ -84,9 +84,19 @@ private:
 	std::size_t dimensions_;
 };
 
-/// PLAIN/VEGAS constructor. This function constructs an integrand using the
-/// given `function` that must accept points from the \f$ d \f$-dimensional
-/// hypercube, where \f$ d \f$ is given by the parameter `dimensions`.
+/// PLAIN/VEGAS integrand constructor. This function constructs an \ref
+/// integrand using the given `function` that must accept points from the \f$ d
+/// \f$-dimensional hypercube, where \f$ d \f$ is given by the parameter
+/// `dimensions`. The type of the point is determined by the integration
+/// algorithm later used on the integrand, e.g. for \ref vegas it is \ref
+/// vegas_point. For this case the integrand would look like:
+/// \code
+/// T function(hep::vegas_point<T> const& x)
+/// {
+///     // x.point.size() is as large as specified with `dimensions`
+///     return /* calculate the function value from x.point */;
+/// }
+/// \endcode
 template <typename T, typename F>
 inline integrand<T, F, false> make_integrand(
 	F&& function,
@@ -99,7 +109,25 @@ inline integrand<T, F, false> make_integrand(
 	);
 }
 
-/// PLAIN/VEGAS distributions constructor.
+/// PLAIN/VEGAS distributions constructor. This function constructs an \ref
+/// integrand using the given `function` that must accept points from the \f$ d
+/// \f$-dimensional hypercube and a reference to a \ref projector that generates
+/// the distributions. The dimension \f$ d \f$ is given by the parameter
+/// `dimension` and `parameters` define the number and parameters of the
+/// distribution(s). For the VEGAS algorithm the function would look like:
+/// \code
+/// T function(hep::vegas_point<T> const& x, hep::projector<T>& projector)
+/// {
+///     T const x0 = /* calculate the position of `x` for the distribution 0 */;
+///     T const f = /* calculate the function value from x.point */;
+///
+///     // add the function value `f` to the zeroeth distribution at `x0`
+///     projector.add(0, x0, f * x.weight());
+///
+///     // return the value of the function for the integrator
+///     return f;
+/// }
+/// \endcode
 template <typename T, typename F, typename... D>
 inline integrand<T, F, true> make_integrand(
 	F&& function,

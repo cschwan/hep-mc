@@ -29,6 +29,9 @@
 namespace hep
 {
 
+/// \addtogroup distributions
+/// @{
+
 /// Class that project the multi-dimensional Monte Carlo point into a discrete
 /// bin and generates the corresponding distributions.
 template <typename T>
@@ -123,6 +126,8 @@ private:
 	std::vector<std::vector<T>> sum_;
 	std::vector<std::vector<T>> sum_of_squares_;
 };
+
+/// @}
 
 }
 

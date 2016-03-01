@@ -84,10 +84,28 @@ private:
 	std::size_t channels_;
 };
 
-/// Multi channel constructor.
+/// Multi channel integrand constructor. For a description of the parameters see
+/// \ref make_integrand. In addition, Multi Channel integrators need an
+/// additonal function `densities` that compute the PDFs and the CDFs for a
+/// randomly selected channel. This function would look like:
+/// \code
+/// T densities(
+///     std::size_t channel,
+///     std::vector<T> const& random_numbers,
+///     std::vector<T>& coordinates,
+///	    std:;vector<T>& channel_densities
+/// ) {
+///     // for the selected `channel`, which is an integer from the half-open
+///     // interval [0, channels) and the given `random_numbers` with 
+///     // `random_numbers.size() == dimensions` compute the CDFs and store them
+///     // in `coordinates` which is large as specified with `map_dimensions`.
+///     // Also compute the PDFs and store them in `channel_densities`
+///
+///     return /* jacobian */;
+/// }
+/// \endcode
 template <typename T, typename F, typename D>
-inline multi_channel_integrand<T, F, D, false>
-make_multi_channel_integrand(
+inline multi_channel_integrand<T, F, D, false> make_multi_channel_integrand(
 	F&& function,
 	std::size_t dimensions,
 	D&& densities,
@@ -104,7 +122,7 @@ make_multi_channel_integrand(
 	);
 }
 
-/// Multi channel distribution constructor.
+/// Multi channel integrand constructor for distributions.
 template <typename T, typename F, typename D, typename... Ds>
 inline multi_channel_integrand<T, F, D, true> make_multi_channel_integrand(
 	F&& function,

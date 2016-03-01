@@ -30,7 +30,7 @@ namespace hep
 /// \addtogroup integrands
 /// @{
 
-/// Point in the unit-hypercube for multi-channel Monte Carlo integration.
+/// Point in the unit-hypercube for Multi Channel Monte Carlo integration.
 template <typename T>
 class multi_channel_point : public mc_point<T>
 {
