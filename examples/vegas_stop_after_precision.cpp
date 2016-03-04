@@ -17,7 +17,7 @@ struct stop_after_precision
 	{
 	}
 
-	bool operator()(std::vector<hep::vegas_iteration_result<double>> const& r)
+	bool operator()(std::vector<hep::vegas_result<double>> const& r)
 	{
 		// print the results obtained so far
 		hep::vegas_verbose_callback<double>(r);

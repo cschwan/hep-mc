@@ -21,9 +21,9 @@
 
 #include "hep/mc/accumulator.hpp"
 #include "hep/mc/vegas_callback.hpp"
-#include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
+#include "hep/mc/vegas_result.hpp"
 
 #include <cstddef>
 #include <limits>
@@ -50,7 +50,7 @@ namespace hep
 /// `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
 template <typename T, typename I, typename R>
-inline vegas_iteration_result<T> vegas_iteration(
+inline vegas_result<T> vegas_iteration(
 	I&& integrand,
 	std::size_t calls,
 	vegas_pdf<T> const& pdf,
@@ -85,7 +85,7 @@ inline vegas_iteration_result<T> vegas_iteration(
 		}
 	}
 
-	return vegas_iteration_result<T>(
+	return vegas_result<T>(
 		accumulator.distributions(calls),
 		calls,
 		accumulator.sum(),
@@ -102,9 +102,9 @@ inline vegas_iteration_result<T> vegas_iteration(
 /// \alpha \f$-parameter given by `alpha`.
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by
-/// \ref vegas_iteration_result.pdf obtained by a previous \ref vegas call.
+/// \ref vegas_result.pdf obtained by a previous \ref vegas call.
 template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_iteration_result<T>> vegas(
+inline std::vector<vegas_result<T>> vegas(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	vegas_pdf<T> const& start_pdf,
@@ -114,7 +114,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 	auto pdf = start_pdf;
 
 	// vector holding all iteration results
-	std::vector<vegas_iteration_result<T>> results;
+	std::vector<vegas_result<T>> results;
 	results.reserve(iteration_calls.size());
 
 	// perform iterations
@@ -141,7 +141,7 @@ inline std::vector<vegas_iteration_result<T>> vegas(
 /// dimension as is refined \ref vegas_refine_pdf using the\f$ \alpha
 /// \f$-parameter given by `alpha`.
 template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_iteration_result<T>> vegas(
+inline std::vector<vegas_result<T>> vegas(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	std::size_t bins = 128,

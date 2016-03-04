@@ -20,8 +20,8 @@
  */
 
 #include "hep/mc/callback_helper.hpp"
-#include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/mc_helper.hpp"
+#include "hep/mc/vegas_result.hpp"
 
 #include <cmath>
 #include <functional>
@@ -39,9 +39,8 @@ namespace hep
 ///
 /// \see \ref vegas_callback
 template <typename T>
-inline bool vegas_default_callback(
-	std::vector<vegas_iteration_result<T>> const&
-) {
+inline bool vegas_default_callback(std::vector<vegas_result<T>> const&)
+{
 	return true;
 }
 
@@ -50,9 +49,8 @@ inline bool vegas_default_callback(
 ///
 /// \see \ref vegas_callback
 template <typename T>
-inline bool vegas_verbose_callback(
-	std::vector<vegas_iteration_result<T>> const& results
-) {
+inline bool vegas_verbose_callback(std::vector<vegas_result<T>> const& results)
+{
 	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
 	T const relative_error_percent = (T(100.0) * results.back().error() /
@@ -85,8 +83,7 @@ inline bool vegas_verbose_callback(
 /// The type of callback function that can be set by the user with
 /// \ref vegas_callback.
 template <typename T>
-using vegas_callback_type =
-	std::function<bool(std::vector<vegas_iteration_result<T>>)>;
+using vegas_callback_type = std::function<bool(std::vector<vegas_result<T>>)>;
 
 /// Sets the vegas `callback` function and returns it. This function is called
 /// after each iteration performed by \ref vegas. The default callback is

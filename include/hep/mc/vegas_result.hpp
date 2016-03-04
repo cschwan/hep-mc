@@ -1,5 +1,5 @@
-#ifndef HEP_MC_VEGAS_ITERATION_RESULT_HPP
-#define HEP_MC_VEGAS_ITERATION_RESULT_HPP
+#ifndef HEP_MC_VEGAS_RESULT_HPP
+#define HEP_MC_VEGAS_RESULT_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -34,11 +34,11 @@ namespace hep
 
 /// The result of a single \ref vegas_iteration.
 template <typename T>
-class vegas_iteration_result : public plain_result<T>
+class vegas_result : public plain_result<T>
 {
 public:
 	/// Constructor.
-	vegas_iteration_result(
+	vegas_result(
 		std::vector<distribution_result<T>> const& distributions,
 		std::size_t calls,
 		T sum,

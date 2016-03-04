@@ -1,6 +1,7 @@
 New in 0.5:
 ===========
 
+- WARNING: renamed the class ``vegas_iteration_result`` to ``vegas_result``
 - WARNING: completely changed the interfaces of all integrators; the functions
   that are integrated must now be specified by using an ``hep::integrand`` or
   ``hep::multi_channel_integrand`` which are obtained by using

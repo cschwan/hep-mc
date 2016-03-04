@@ -25,8 +25,8 @@
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_vegas_callback.hpp"
 #include "hep/mc/vegas.hpp"
-#include "hep/mc/vegas_iteration_result.hpp"
 #include "hep/mc/vegas_pdf.hpp"
+#include "hep/mc/vegas_result.hpp"
 
 #include <cstddef>
 #include <random>
@@ -42,10 +42,10 @@ namespace hep
 /// @{
 
 /// Implements the MPI-parallelized VEGAS algorithm. This function can be used
-/// to start from an already adapted grid, e.g. one by
-/// \ref vegas_iteration_result.pdf obtained by a previous \ref vegas call.
+/// to start from an already adapted grid, e.g. one by \ref vegas_result.pdf
+/// obtained by a previous \ref vegas call.
 template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_iteration_result<T>> mpi_vegas(
+inline std::vector<vegas_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
@@ -62,7 +62,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 	auto pdf = start_pdf;
 
 	// vector holding all iteration results
-	std::vector<vegas_iteration_result<T>> results;
+	std::vector<vegas_result<T>> results;
 	results.reserve(iteration_calls.size());
 
 	// reserve a buffer for the MPI call to sum `adjustment_data`, `sum`, and
@@ -119,7 +119,7 @@ inline std::vector<vegas_iteration_result<T>> mpi_vegas(
 /// out. The callback function is able to stop the integration if it returns
 /// `false`. In this case less iterations are performed than requested.
 template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_iteration_result<T>> mpi_vegas(
+inline std::vector<vegas_result<T>> mpi_vegas(
 	MPI_Comm communicator,
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,

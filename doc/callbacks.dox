@@ -14,13 +14,13 @@ mechanism lets the user do exactly this, by setting an appropriate callback
 function, e.g. for VEGAS via \ref vegas_callback. This callback function is then
 called after each completed iteration.
 
-The function must accept a vector of the results, e.g. \ref
-vegas_iteration_result, in the case of VEGAS, that will contain the results of
-every iteration performed so far. Using these results the function must decide
-if the integrator should proceed with the remaining iterations (in that case the
-function returns `true`) or if the integrator should stop and discard the
-remaining iterations (return `false`). In the case of MPI-parallized routines
-the MPI callbacks must also accept the MPI communicator as its first argument.
+The function must accept a vector of the results, e.g. \ref vegas_result, in the
+case of VEGAS, that will contain the results of every iteration performed so
+far. Using these results the function must decide if the integrator should
+proceed with the remaining iterations (in that case the function returns `true`)
+or if the integrator should stop and discard the remaining iterations (return
+`false`). In the case of MPI-parallized routines the MPI callbacks must also
+accept the MPI communicator as its first argument.
 
 This library comes with two predefined callback functions for ach integrator,
 

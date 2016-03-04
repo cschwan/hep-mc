@@ -28,9 +28,9 @@ nobase_include_HEADERS = \
 	hep/mc/projector.hpp \
 	hep/mc/vegas.hpp \
 	hep/mc/vegas_callback.hpp \
-	hep/mc/vegas_iteration_result.hpp \
 	hep/mc/vegas_pdf.hpp \
 	hep/mc/vegas_point.hpp \
+	hep/mc/vegas_result.hpp \
 	hep/mc.hpp \
 	hep/mc-mpi.hpp
 

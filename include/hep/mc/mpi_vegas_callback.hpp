@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/vegas_callback.hpp"
-#include "hep/mc/vegas_iteration_result.hpp"
+#include "hep/mc/vegas_result.hpp"
 
 #include <functional>
 #include <vector>
@@ -40,7 +40,7 @@ namespace hep
 template <typename T>
 inline bool mpi_vegas_default_callback(
 	MPI_Comm,
-	std::vector<vegas_iteration_result<T>> const&
+	std::vector<vegas_result<T>> const&
 ) {
 	return true;
 }
@@ -54,7 +54,7 @@ inline bool mpi_vegas_default_callback(
 template <typename T>
 inline bool mpi_vegas_verbose_callback(
 	MPI_Comm communicator,
-	std::vector<vegas_iteration_result<T>> const& results
+	std::vector<vegas_result<T>> const& results
 ) {
 	int rank = -1;
 	MPI_Comm_rank(communicator, &rank);
@@ -71,7 +71,7 @@ inline bool mpi_vegas_verbose_callback(
 /// \ref mpi_vegas_callback.
 template <typename T>
 using mpi_vegas_callback_type =
-	std::function<bool(MPI_Comm, std::vector<vegas_iteration_result<T>>)>;
+	std::function<bool(MPI_Comm, std::vector<vegas_result<T>>)>;
 
 /// Sets the vegas `callback` function and returns it. This function is called
 /// after each iteration performed by \ref mpi_vegas. The default callback is
