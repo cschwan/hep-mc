@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2015  Christopher Schwan
+ * Copyright (C) 2012-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,12 @@ namespace hep
  * \f}
  */
 template <typename T>
-struct mc_result
+class mc_result
 {
+public:
+	/// The numeric type used for member variables.
+	using numeric_type = T;
+
 	/// Constructor.
 	mc_result(std::size_t calls, T sum, T sum_of_squares)
 		: calls_(calls)
@@ -50,8 +54,6 @@ struct mc_result
 	{
 	}
 
-	/// The numeric type used for member variables.
-	typedef T numeric_type;
 
 	/// The number of function evaluations \f$ N \f$ performed to obtain this
 	/// result.

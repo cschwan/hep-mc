@@ -34,8 +34,9 @@ namespace hep
 
 /// The result of a single \ref vegas_iteration.
 template <typename T>
-struct vegas_iteration_result : public plain_result<T>
+class vegas_iteration_result : public plain_result<T>
 {
+public:
 	/// Constructor.
 	vegas_iteration_result(
 		std::vector<distribution_result<T>> const& distributions,

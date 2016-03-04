@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,9 @@ namespace hep
 
 /// Result of a multi-channel integration.
 template <typename T>
-struct multi_channel_result : public plain_result<T>
+class multi_channel_result : public plain_result<T>
 {
+public:
 	/// Constructor. The parameter `adjustment_data` must contain two additional
 	/// values, being the sum of the sum of squares of the integration.
 	multi_channel_result(
@@ -50,7 +51,6 @@ struct multi_channel_result : public plain_result<T>
 	{
 	}
 
-public:
 	/// This is the data used by \ref multi_channel_refine_weights to refine the
 	/// \ref channel_weights used in the same iteration. The refined weights are
 	/// then used in a subsequent iteration.
