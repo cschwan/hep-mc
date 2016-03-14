@@ -1,11 +1,11 @@
 nobase_include_HEADERS = \
-	hep/mc/accumulator.hpp \
-	hep/mc/buffer_helper.hpp \
-	hep/mc/callback_helper.hpp \
-	hep/mc/discrete_distribution.hpp \
+	hep/mc/internal/accumulator.hpp \
+	hep/mc/internal/callback_helper.hpp \
+	hep/mc/internal/discrete_distribution.hpp \
+	hep/mc/internal/generator_helper.hpp \
+	hep/mc/internal/mpi_helper.hpp \
 	hep/mc/distribution_parameters.hpp \
 	hep/mc/distribution_result.hpp \
-	hep/mc/generator_helper.hpp \
 	hep/mc/global_configuration.hpp \
 	hep/mc/integrand.hpp \
 	hep/mc/mc_helper.hpp \
@@ -17,7 +17,6 @@ nobase_include_HEADERS = \
 	hep/mc/multi_channel_max_difference.hpp \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \
-	hep/mc/mpi_helper.hpp \
 	hep/mc/mpi_multi_channel.hpp \
 	hep/mc/mpi_multi_channel_callback.hpp \
 	hep/mc/mpi_plain.hpp \

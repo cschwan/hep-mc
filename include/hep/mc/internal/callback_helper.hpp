@@ -1,5 +1,5 @@
-#ifndef HEP_MC_CALLBACK_HELPER_HPP
-#define HEP_MC_CALLBACK_HELPER_HPP
+#ifndef HEP_MC_INTERNAL_CALLBACK_HELPER_HPP
+#define HEP_MC_INTERNAL_CALLBACK_HELPER_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration

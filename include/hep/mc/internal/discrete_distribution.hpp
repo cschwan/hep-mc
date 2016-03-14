@@ -1,9 +1,9 @@
-#ifndef HEP_MC_DISCRETE_DISTRIBUTION_HPP
-#define HEP_MC_DISCRETE_DISTRIBUTION_HPP
+#ifndef HEP_MC_INTERNAL_DISCRETE_DISTRIBUTION_HPP
+#define HEP_MC_INTERNAL_DISCRETE_DISTRIBUTION_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

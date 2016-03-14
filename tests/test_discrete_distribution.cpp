@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "hep/mc/discrete_distribution.hpp"
+#include "hep/mc/internal/discrete_distribution.hpp"
 
 #include <cstddef>
 #include <random>

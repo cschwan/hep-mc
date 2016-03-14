@@ -19,12 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/buffer_helper.hpp"
-#include "hep/mc/generator_helper.hpp"
+#include "hep/mc/internal/generator_helper.hpp"
+#include "hep/mc/internal/mpi_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
-#include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/plain.hpp"
 
 #include <cstddef>

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/accumulator.hpp"
+#include "hep/mc/internal/accumulator.hpp"
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"

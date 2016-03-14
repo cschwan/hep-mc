@@ -1,5 +1,5 @@
-#ifndef HEP_MC_ACCUMULATOR_HPP
-#define HEP_MC_ACCUMULATOR_HPP
+#ifndef HEP_MC_INTERNAL_ACCUMULATOR_HPP
+#define HEP_MC_INTERNAL_ACCUMULATOR_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration

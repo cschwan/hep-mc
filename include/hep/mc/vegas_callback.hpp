@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/callback_helper.hpp"
+#include "hep/mc/internal/callback_helper.hpp"
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/vegas_result.hpp"
 

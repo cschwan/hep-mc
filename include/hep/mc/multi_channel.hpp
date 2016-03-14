@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/accumulator.hpp"
-#include "hep/mc/discrete_distribution.hpp"
+#include "hep/mc/internal/accumulator.hpp"
+#include "hep/mc/internal/discrete_distribution.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"

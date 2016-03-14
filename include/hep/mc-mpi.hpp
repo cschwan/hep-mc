@@ -21,8 +21,6 @@
 
 #include "hep/mc.hpp"
 
-//#include "hep/mc/buffer_helper.hpp"
-#include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_multi_channel.hpp"
 #include "hep/mc/mpi_multi_channel_callback.hpp"
 #include "hep/mc/mpi_plain.hpp"

@@ -1,5 +1,5 @@
-#ifndef HEP_MC_BUFFER_HELPER_HPP
-#define HEP_MC_BUFFER_HELPER_HPP
+#ifndef HEP_MC_INTERNAL_BUFFER_HELPER_HPP
+#define HEP_MC_INTERNAL_BUFFER_HELPER_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -32,6 +32,27 @@ namespace
 {
 
 template <typename T>
+MPI_Datatype mpi_datatype();
+
+template <>
+inline MPI_Datatype mpi_datatype<float>()
+{
+	return MPI_FLOAT;
+}
+
+template <>
+inline MPI_Datatype mpi_datatype<double>()
+{
+	return MPI_DOUBLE;
+}
+
+template <>
+inline MPI_Datatype mpi_datatype<long double>()
+{
+	return MPI_LONG_DOUBLE;
+}
+
+template <typename T>
 hep::plain_result<T> allreduce_result(
 	MPI_Comm communicator,
 	hep::plain_result<T> const& result,
@@ -43,7 +64,7 @@ hep::plain_result<T> allreduce_result(
 	buffer = in_buffer;
 	buffer.push_back(result.sum());
 	buffer.push_back(result.sum_of_squares());
-	
+
 	for (auto const& distribution : result.distributions())
 	{
 		for (auto const& bin : distribution.results())
@@ -82,7 +103,7 @@ hep::plain_result<T> allreduce_result(
 
 		distributions.emplace_back(distribution.mid_points(), bins);
 	}
-	
+
 	// resize `buffer` - contains the merged `additional_data`
 	buffer.resize(in_buffer.size());
 

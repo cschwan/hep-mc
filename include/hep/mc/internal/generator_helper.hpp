@@ -1,9 +1,9 @@
-#ifndef HEP_MC_GENERATOR_HELPER_HPP
-#define HEP_MC_GENERATOR_HELPER_HPP
+#ifndef HEP_MC_INTERNAL_GENERATOR_HELPER_HPP
+#define HEP_MC_INTERNAL_GENERATOR_HELPER_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2015  Christopher Schwan
+ * Copyright (C) 2014-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
