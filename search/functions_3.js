@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['mc_5fpoint',['mc_point',['../structhep_1_1mc__point.html#a2dbf82e73f2a8607aefca38ca3088747',1,'hep::mc_point']]],
-  ['mc_5fresult',['mc_result',['../structhep_1_1mc__result.html#a6df99417d89de90a1e2663a2568cd896',1,'hep::mc_result']]],
-  ['mpi_5fplain',['mpi_plain',['../group__plain__group.html#ga313cbceeb4de9c916ec97138e195b57c',1,'hep']]],
-  ['mpi_5fvegas',['mpi_vegas',['../group__vegas__group.html#gac31e35f1c3b2f80bd678be8100c3ff87',1,'hep::mpi_vegas(MPI_Comm communicator, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, F &amp;&amp;function, vegas_pdf&lt; T &gt; const &amp;start_pdf, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())'],['../group__vegas__group.html#gaa572c7de231d01911488524c2a998b93',1,'hep::mpi_vegas(MPI_Comm communicator, std::size_t dimensions, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, F &amp;&amp;function, std::size_t bins=128, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())']]],
-  ['mpi_5fvegas_5fcallback',['mpi_vegas_callback',['../group__vegas__callback__group.html#gadb47eb6529daa5ddf5805612f4045c72',1,'hep']]],
-  ['mpi_5fvegas_5fdefault_5fcallback',['mpi_vegas_default_callback',['../group__vegas__callback__group.html#ga6941d7adc077139cd1af190688b5553a',1,'hep']]],
-  ['mpi_5fvegas_5fverbose_5fcallback',['mpi_vegas_verbose_callback',['../group__vegas__callback__group.html#gac1a47a3f8b85bb45de91ef22cdffc9c7',1,'hep']]]
+  ['densities',['densities',['../classhep_1_1multi__channel__integrand.html#a2b73815dc0582bd5697d4affed60c43e',1,'hep::multi_channel_integrand']]],
+  ['density_5ffunction',['density_function',['../classhep_1_1multi__channel__point2.html#a9608c1f0d089ad2b3f47ccaa91dee068',1,'hep::multi_channel_point2']]],
+  ['dimensions',['dimensions',['../classhep_1_1integrand.html#ab60389c520ed1cc98b4525a4db8415c1',1,'hep::integrand::dimensions()'],['../classhep_1_1vegas__pdf.html#aaea267b37b8ee54e5b3297e600c6e3b8',1,'hep::vegas_pdf::dimensions()']]],
+  ['distribution_5fparameters',['distribution_parameters',['../classhep_1_1distribution__parameters.html#ad6b8771729f5fedaa3323ae1095657bc',1,'hep::distribution_parameters']]],
+  ['distribution_5fresult',['distribution_result',['../classhep_1_1distribution__result.html#ae1893fab19bd6ca29639bb256bb674ea',1,'hep::distribution_result']]],
+  ['distributions',['distributions',['../classhep_1_1plain__result.html#a3e6f1c9bf019b4cebe32bda9482e72d3',1,'hep::plain_result::distributions()'],['../classhep_1_1projector.html#a85629381ea280d381e6b866b2f9c9920',1,'hep::projector::distributions()']]]
 ];

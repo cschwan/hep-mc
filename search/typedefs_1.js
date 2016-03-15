@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['numeric_5ftype',['numeric_type',['../structhep_1_1mc__result.html#aaa0b8e7c973250e67b50f388b01da171',1,'hep::mc_result']]]
+  ['function_5ftype',['function_type',['../classhep_1_1integrand.html#a6a996c76cbd91c8f46756ce8d9873bb4',1,'hep::integrand']]]
 ];

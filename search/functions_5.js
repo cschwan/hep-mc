@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['plain',['plain',['../group__plain__group.html#ga8aa89594e016d52157faf782fdd40635',1,'hep']]]
+  ['function',['function',['../classhep_1_1integrand.html#a6a2dc5efe499e62db115bbae2ef5322b',1,'hep::integrand']]]
 ];

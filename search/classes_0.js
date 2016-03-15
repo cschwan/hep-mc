@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['mc_5fpoint',['mc_point',['../structhep_1_1mc__point.html',1,'hep']]],
-  ['mc_5fresult',['mc_result',['../structhep_1_1mc__result.html',1,'hep']]]
+  ['distribution_5fparameters',['distribution_parameters',['../classhep_1_1distribution__parameters.html',1,'hep']]],
+  ['distribution_5fresult',['distribution_result',['../classhep_1_1distribution__result.html',1,'hep']]]
 ];

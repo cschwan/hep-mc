@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['plain_20integrator',['PLAIN Integrator',['../group__plain__group.html',1,'']]]
+  ['global_20configuration_20options',['Global Configuration Options',['../group__global__configuration.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['set_5fbin_5fleft',['set_bin_left',['../classhep_1_1vegas__pdf.html#a1c32e9dcda275ec26c9a832efebce3a5',1,'hep::vegas_pdf']]]
+  ['results',['results',['../classhep_1_1distribution__result.html#aa4d11b87084c7ffa3edcc602bd7fc0c8',1,'hep::distribution_result::results()'],['../group__results.html',1,'(Global Namespace)']]]
 ];

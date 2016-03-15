@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['results',['Results',['../group__results.html',1,'']]]
+  ['integrand_20functions',['Integrand Functions',['../group__integrands.html',1,'']]]
 ];

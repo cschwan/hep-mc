@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classhep_1_1mc__result.html" title="hep::mc_result\&lt; T \&gt;" alt="" coords="5,42,145,69"/>
+<area shape="rect" id="node2" href="$classhep_1_1plain__result.html" title="Return type of the plain MC integrator. " alt="" coords="193,42,343,69"/>
+<area shape="rect" id="node3" href="$classhep_1_1multi__channel__result.html" title="Result of a multi&#45;channel integration. " alt="" coords="404,5,535,47"/>
+<area shape="rect" id="node4" href="$classhep_1_1vegas__result.html" title="The result of a single vegas_iteration. " alt="" coords="391,71,548,98"/>
+</map>

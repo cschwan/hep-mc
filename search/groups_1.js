@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['integrand_20functions',['Integrand Functions',['../group__integrands.html',1,'']]]
+  ['differential_20distributions',['Differential Distributions',['../group__distributions.html',1,'']]]
 ];

@@ -1,0 +1,5 @@
+<map id="hep::mc_result&lt; T &gt;" name="hep::mc_result&lt; T &gt;">
+<area shape="rect" id="node2" href="$classhep_1_1plain__result.html" title="Return type of the plain MC integrator. " alt="" coords="80,80,229,107"/>
+<area shape="rect" id="node3" href="$classhep_1_1multi__channel__result.html" title="Result of a multi&#45;channel integration. " alt="" coords="5,155,136,196"/>
+<area shape="rect" id="node4" href="$classhep_1_1vegas__result.html" title="The result of a single vegas_iteration. " alt="" coords="160,162,317,189"/>
+</map>
