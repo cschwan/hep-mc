@@ -2,29 +2,31 @@ Project Description
 ===================
 
 ``hep-mc`` is a C++11 template library for Monte Carlo integration. The
-following integrators are implemented:
+following integration algorithms are available:
 
 - PLAIN,
-- VEGAS [1]_ [2]_, and
-- a Multi Channel integrator with adaptive weight optimization described in Ref.
-  [3]_.
+- VEGAS [1]_ [2]_, and a
+- MULTI CHANNEL integrator with adaptive weight optimization [3]_.
 
-For each integrator there is an ``mpi_`` variant that uses the `Message Passing
-Interface (MPI) <http://www.mpi-forum.org/>`_ to run the integration in
-parallel.
+Features
+========
 
-The aim of this project is to provide functions and classes that are
-
-- *easily usable*, e.g. the default VEGAS routine can be called with only three
-  parameters. More can be given if the default parameters are not satisfactory,
-- *templatized* in order to support all floating point types used to perform the
-  numerical computations, i.e. ``float``, ``double``, and ``long double``,
-- *modularized* which makes it easy to develop new integration algorithms on top
-  of known ones - e.g. VEGAS with a modified rebinning algorithm,
-- *compatible* to the C++11 random number generators interface, see e.g. here:
-  http://en.cppreference.com/w/cpp/numeric/random. This enables one to choose
-  between a variety of standard generators or to write a custom one and use it
-  with the integration routines.
+- For each integrator a function prefixed with ``mpi_`` is available that uses
+  the `Message Passing Interface (MPI) <http://www.mpi-forum.org/>`_ to run the
+  integration in parallel. The parallel integration is designed in such a way
+  that it returns the numerically same result as its non-parallel counterpart.
+  In particular this means that the result is independent from the number of
+  processors used and only dependent on the seed of the random number generator.
+- Arbitrary many differential distributions can be generated during the
+  integration.
+- Callback functions can be used to print intermediate results as soon as they
+  are available.
+- For random number generation the classes of the C++ standard library are used.
+  This enables one to quickly change the number generators or even use custom
+  ones.
+- All functions are templatized in order to support all floating point types of
+  C++, i.e. ``float``, ``double``, and ``long double``. Kahan summation is used
+  to prevent a loss of numerical accuracy.
 
 Usage
 =====
@@ -35,7 +37,7 @@ additional parameter to the compiler, e.g.::
 
     g++ -std=c++0x my_program.cpp
 
-Since this project is based on templates, the inclusion of the main header,::
+The inclusion of the main header,::
 
     #include <hep/mc.hpp>
 
@@ -44,13 +46,13 @@ intend to use the MPI variants of the integrators include::
 
     #include <hep/mc-mpi.hpp>
 
-instead. To see the library in action take a look the example programs in the
+instead. To see the library in action take a look at the example programs in the
 `examples directory`_.
 
 Documentation and Examples
 ==========================
 
-Documentation is available online at http://cschwan.github.io/hep-mc or can be
+Documentation is available online at http://cschwan.github.io/hep-mc and can be
 generated from sources (see Installation_). The examples can be viewed from
 within the documentation.
 
