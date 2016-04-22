@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/internal/accumulator.hpp"
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/plain_result.hpp"
 
@@ -38,12 +39,14 @@ namespace hep
 /// PLAIN Monte Carlo integrator. This function integrates `integrand` over the
 /// unit-hypercube `calls` function evaluations with randomly chosen points
 /// determined by `generator`.
-template <typename T, typename I, typename R = std::mt19937>
-inline plain_result<T> plain(
+template <typename I, typename R = std::mt19937>
+inline plain_result<numeric_type_of<I>> plain(
 	I&& integrand,
 	std::size_t calls,
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	// the accumulator takes care of the actual evaluation of the integrand and
 	// the generation of possible distribution(s)
 	auto accumulator = make_accumulator(integrand);

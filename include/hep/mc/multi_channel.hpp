@@ -21,6 +21,7 @@
 
 #include "hep/mc/internal/accumulator.hpp"
 #include "hep/mc/internal/discrete_distribution.hpp"
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -69,13 +70,15 @@ inline std::vector<T> multi_channel_refine_weights(
 /// parameter `channel_weights` lets the user specify the weights of each
 /// channel. Note that they must add up to one. See \ref multi_channel_group for
 /// a description of the remaining parameters.
-template <typename T, typename I, typename R>
-inline multi_channel_result<T> multi_channel_iteration(
+template <typename I, typename R>
+inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 	I&& integrand,
 	std::size_t calls,
-	std::vector<T> const& channel_weights,
+	std::vector<numeric_type_of<I>> const& channel_weights,
 	R&& generator
 ) {
+	using T = numeric_type_of<I>;
+
 	auto accumulator = make_accumulator(integrand);
 
 	std::size_t const channels = channel_weights.size();
@@ -152,13 +155,15 @@ inline multi_channel_result<T> multi_channel_iteration(
 /// weights that are used for the first iteration must be given by the parameter
 /// `channel_weights`. See \ref multi_channel_group for a description of the
 /// remaining parameters.
-template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<multi_channel_result<T>> multi_channel(
+template <typename I, typename R = std::mt19937>
+inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	std::vector<T> const& channel_weights,
+	std::vector<numeric_type_of<I>> const& channel_weights,
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	auto weights = channel_weights;
 
 	std::vector<multi_channel_result<T>> results;
@@ -189,12 +194,14 @@ inline std::vector<multi_channel_result<T>> multi_channel(
 /// weights used for the first iteration are \f$ \alpha = 1 / M \f$ with \f$ M
 /// \f$ the number of channels. See \ref multi_channel_group for a description
 /// of the remaining parameters.
-template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<multi_channel_result<T>> multi_channel(
+template <typename I, typename R = std::mt19937>
+inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	return multi_channel(
 		std::forward<I>(integrand),
 		iteration_calls,

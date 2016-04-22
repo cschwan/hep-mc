@@ -62,7 +62,7 @@ int main()
 	std::cout.precision(3);
 
 	// perform 100 iterations with 1000 calls each _at maximum_
-	auto results = hep::vegas<double>(
+	auto results = hep::vegas(
 		hep::make_integrand<double>(square, 1),
 		std::vector<std::size_t>(100, 1000)
 	);

@@ -71,9 +71,9 @@ int main(int argc, char* argv[])
 #endif
 
 #ifndef USE_MPI
-	auto const results = hep::multi_channel<double>(
+	auto const results = hep::multi_channel(
 #else
-	auto const results = hep::mpi_multi_channel<double>(
+	auto const results = hep::mpi_multi_channel(
 		MPI_COMM_WORLD,
 #endif
 		hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 2),

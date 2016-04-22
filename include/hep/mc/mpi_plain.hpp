@@ -22,6 +22,7 @@
 #include "hep/mc/internal/generator_helper.hpp"
 #include "hep/mc/internal/mpi_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/plain.hpp"
@@ -51,13 +52,15 @@ namespace hep
 ///        result.
 /// \param generator The random number generator that will be used to generate
 ///        random points from the hypercube. This generator is properly seeded.
-template <typename T, typename I, typename R = std::mt19937>
-inline mc_result<T> mpi_plain(
+template <typename I, typename R = std::mt19937>
+inline mc_result<numeric_type_of<I>> mpi_plain(
 	MPI_Comm communicator,
 	I&& integrand,
 	std::size_t calls,
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	int rank = 0;
 	MPI_Comm_rank(communicator, &rank);
 	int world = 0;
@@ -72,7 +75,7 @@ inline mc_result<T> mpi_plain(
 
 	generator.discard(usage * discard_before(calls, rank, world));
 
-	auto const result = plain<T>(integrand, sub_calls, generator);
+	auto const result = plain(integrand, sub_calls, generator);
 
 	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 

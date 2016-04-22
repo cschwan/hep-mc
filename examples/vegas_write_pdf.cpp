@@ -11,7 +11,7 @@ double square(hep::mc_point<double> const& x)
 int main()
 {
 	// integrate the square function with two iterations and five bins
-	auto results = hep::vegas<double>(
+	auto results = hep::vegas(
 		hep::make_integrand<double>(square, 1),
 		std::vector<std::size_t>(2, 100),
 		5

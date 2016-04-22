@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/internal/accumulator.hpp"
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
@@ -49,13 +50,15 @@ namespace hep
 /// will be called multiple times with a differently seeded generator and with
 /// `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
-template <typename T, typename I, typename R>
-inline vegas_result<T> vegas_iteration(
+template <typename I, typename R>
+inline vegas_result<numeric_type_of<I>> vegas_iteration(
 	I&& integrand,
 	std::size_t calls,
-	vegas_pdf<T> const& pdf,
+	vegas_pdf<numeric_type_of<I>> const& pdf,
 	R&& generator
 ) {
+	using T = numeric_type_of<I>;
+
 	auto accumulator = make_accumulator(integrand);
 
 	std::size_t const dimensions = pdf.dimensions();
@@ -103,14 +106,16 @@ inline vegas_result<T> vegas_iteration(
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by
 /// \ref vegas_result.pdf obtained by a previous \ref vegas call.
-template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<T>> vegas(
+template <typename I, typename R = std::mt19937>
+inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	vegas_pdf<T> const& start_pdf,
-	T alpha = T(1.5),
+	vegas_pdf<numeric_type_of<I>> const& start_pdf,
+	numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	auto pdf = start_pdf;
 
 	// vector holding all iteration results
@@ -140,14 +145,16 @@ inline std::vector<vegas_result<T>> vegas(
 /// value in `iteration_calls`. The pdf that is sampled from has `bins` for each
 /// dimension as is refined \ref vegas_refine_pdf using the\f$ \alpha
 /// \f$-parameter given by `alpha`.
-template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<T>> vegas(
+template <typename I, typename R = std::mt19937>
+inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	std::size_t bins = 128,
-	T alpha = T(1.5),
+	numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	return vegas(
 		std::forward<I>(integrand),
 		iteration_calls,

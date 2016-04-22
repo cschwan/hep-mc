@@ -114,7 +114,7 @@ void check_plain_integrator(test_data_type data)
 	auto integrand = genz::integrand<T>(type, params.affective(),
 		params.unaffective());
 
-	auto result = hep::plain<T>(
+	auto result = hep::plain(
 		hep::make_integrand<T>(integrand, dimension),
 		calls
 	);
@@ -145,7 +145,7 @@ void check_vegas_integrator(test_data_type data)
 	auto integrand = genz::integrand<T>(type, params.affective(),
 		params.unaffective());
 
-	auto results = hep::vegas<T>(
+	auto results = hep::vegas(
 		hep::make_integrand<T>(integrand, dimension),
 		std::vector<std::size_t>(10, calls / 10)
 	);

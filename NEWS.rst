@@ -3,6 +3,8 @@ New in 0.5:
 
 - WARNING: this version introduces a lot of interface changes; if you used
   previous version of this library you must update your code accordingly
+- when calling the integration algorithms the numeric type must no longer be
+  explicitly specified. The type information is now infered from the integrand
 - renamed the class ``vegas_iteration_result`` to ``vegas_result``
 - completely changed the interfaces of all integrators; the functions that are
   integrated must now be specified by using an ``hep::integrand`` or

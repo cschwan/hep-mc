@@ -28,7 +28,7 @@ int main()
 	);
 
 	// now integrate and record the differential distributions
-	auto const result = hep::plain<double>(integrand, 1000000);
+	auto const result = hep::plain(integrand, 1000000);
 
 	// integral is zero
 	std::cout << "integral is I = " << result.value() << " +- "

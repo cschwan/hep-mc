@@ -22,6 +22,7 @@
 #include "hep/mc/internal/generator_helper.hpp"
 #include "hep/mc/internal/mpi_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
+#include "hep/mc/integrand.hpp"
 #include "hep/mc/mpi_vegas_callback.hpp"
 #include "hep/mc/vegas.hpp"
 #include "hep/mc/vegas_pdf.hpp"
@@ -43,15 +44,17 @@ namespace hep
 /// Implements the MPI-parallelized VEGAS algorithm. This function can be used
 /// to start from an already adapted grid, e.g. one by \ref vegas_result.pdf
 /// obtained by a previous \ref vegas call.
-template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<T>> mpi_vegas(
+template <typename I, typename R = std::mt19937>
+inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
 	MPI_Comm communicator,
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
-	vegas_pdf<T> const& start_pdf,
-	T alpha = T(1.5),
+	vegas_pdf<numeric_type_of<I>> const& start_pdf,
+	numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	int rank = 0;
 	MPI_Comm_rank(communicator, &rank);
 	int world = 0;
@@ -117,15 +120,17 @@ inline std::vector<vegas_result<T>> mpi_vegas(
 /// function set by \ref mpi_vegas_callback which can e.g. be used to print them
 /// out. The callback function is able to stop the integration if it returns
 /// `false`. In this case less iterations are performed than requested.
-template <typename T, typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<T>> mpi_vegas(
+template <typename I, typename R = std::mt19937>
+inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
 	MPI_Comm communicator,
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	std::size_t bins = 128,
-	T alpha = T(1.5),
+	numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
 	R&& generator = std::mt19937()
 ) {
+	using T = numeric_type_of<I>;
+
 	return mpi_vegas(
 		communicator,
 		std::forward<I>(integrand),

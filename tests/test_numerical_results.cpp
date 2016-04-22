@@ -106,9 +106,9 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 	std::size_t const calls = 100000;
 
 #ifndef HEP_USE_MPI
-	auto const result = hep::plain<T>(
+	auto const result = hep::plain(
 #else
-	auto const result = hep::mpi_plain<T>(
+	auto const result = hep::mpi_plain(
 		MPI_COMM_WORLD,
 #endif
 		hep::make_integrand<T>(function<T>, 2),
@@ -141,9 +141,9 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 	std::size_t const iterations = 5;
 
 #ifndef HEP_USE_MPI
-	auto const results = hep::vegas<T>(
+	auto const results = hep::vegas(
 #else
-	auto const results = hep::mpi_vegas<T>(
+	auto const results = hep::mpi_vegas(
 		MPI_COMM_WORLD,
 #endif
 		hep::make_integrand<T>(function<T>, 2),
@@ -207,9 +207,9 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	};
 
 #ifndef HEP_USE_MPI
-	auto const results = hep::multi_channel<T>(
+	auto const results = hep::multi_channel(
 #else
-	auto const results = hep::mpi_multi_channel<T>(
+	auto const results = hep::mpi_multi_channel(
 		MPI_COMM_WORLD,
 #endif
 		hep::make_multi_channel_integrand<T>(
@@ -257,9 +257,9 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 //	}
 
 #ifndef HEP_USE_MPI
-	auto const results2 = hep::multi_channel<T>(
+	auto const results2 = hep::multi_channel(
 #else
-	auto const results2 = hep::mpi_multi_channel<T>(
+	auto const results2 = hep::mpi_multi_channel(
 		MPI_COMM_WORLD,
 #endif
 		hep::make_multi_channel_integrand<T>(

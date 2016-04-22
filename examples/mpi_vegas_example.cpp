@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	// perform 5 iteration with 1000 calls each; this function will also call
 	// vegas_verbose_callback after each iteration which in turn prints the
 	// individual iterations
-	auto results = hep::mpi_vegas<double>(
+	auto results = hep::mpi_vegas(
 		MPI_COMM_WORLD,
 		hep::make_integrand<double>(square, 1),
 		std::vector<std::size_t>(5, 10000000)

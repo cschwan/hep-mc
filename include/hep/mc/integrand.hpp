@@ -141,6 +141,11 @@ inline integrand<T, F, true> make_integrand(
 	);
 }
 
+/// Shortcut for accessing the numeric type of an integrand that is possibly a
+/// reference.
+template <typename I>
+using numeric_type_of = typename std::remove_reference<I>::type::numeric_type;
+
 /// @}
 
 }
