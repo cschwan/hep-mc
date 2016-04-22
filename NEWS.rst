@@ -1,19 +1,21 @@
 New in 0.5:
 ===========
 
-- WARNING: renamed the class ``vegas_iteration_result`` to ``vegas_result``
-- WARNING: completely changed the interfaces of all integrators; the functions
-  that are integrated must now be specified by using an ``hep::integrand`` or
+- WARNING: this version introduces a lot of interface changes; if you used
+  previous version of this library you must update your code accordingly
+- renamed the class ``vegas_iteration_result`` to ``vegas_result``
+- completely changed the interfaces of all integrators; the functions that are
+  integrated must now be specified by using an ``hep::integrand`` or
   ``hep::multi_channel_integrand`` which are obtained by using
   ``hep::make_integrand`` or ``hep::make_multi_channel_integrand``. This allows
   the library to support the generation of differential distributions for all
   integrators. If distributions should be generated, the integrands must accept
   a second parameter, a reference to ``hep::projector``, that takes care of the
   binning. The results of the distributions are captured in a
-  ``hep::distribution_result`` for each distribution
-- WARNING: ``hep::plain`` now returns a ``hep::plain_result`` which contains the
-  results for possibly generated distributions
-- WARNING: all ``_result`` classes except ``hep::mc_result`` derive now from
+``hep::distribution_result`` for each distribution
+- ``hep::plain`` now returns a ``hep::plain_result`` which contains the results
+  for possibly generated distributions
+- all ``_result`` classes except ``hep::mc_result`` derive now from
   ``hep::plain_result``
 - encapsulated all members of the class ``mc_point`` and classes deriving from
   it
