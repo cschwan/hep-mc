@@ -14,7 +14,7 @@ New in 0.5:
   integrators. If distributions should be generated, the integrands must accept
   a second parameter, a reference to ``hep::projector``, that takes care of the
   binning. The results of the distributions are captured in a
-``hep::distribution_result`` for each distribution
+  ``hep::distribution_result`` for each distribution
 - ``hep::plain`` now returns a ``hep::plain_result`` which contains the results
   for possibly generated distributions
 - all ``_result`` classes except ``hep::mc_result`` derive now from

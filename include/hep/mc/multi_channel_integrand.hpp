@@ -93,7 +93,7 @@ private:
 ///     std::size_t channel,
 ///     std::vector<T> const& random_numbers,
 ///     std::vector<T>& coordinates,
-///	    std:;vector<T>& channel_densities
+///	    std::vector<T>& channel_densities
 /// ) {
 ///     // for the selected `channel`, which is an integer from the half-open
 ///     // interval [0, channels) and the given `random_numbers` with 

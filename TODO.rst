@@ -1,12 +1,18 @@
 GENERAL
 =======
 
-- make callback functions argument to the algorithms?
+- add ``non_zero_calls()`` member function to ``_result`` classes; since this
+  parameter is an integer the MPI reduce routine has to be adapted
 - write cumulative functions that accumulate also the distributions
 - check if it is possible to automatically multiply the weight to the function
   value when creating distributions
 - remove the globally set callback functions and make them local to every call
   to an integrator?
+
+FOAM
+====
+
+- write new integrator using the FOAM algorithm?
 
 MULTI CHANNEL
 =============

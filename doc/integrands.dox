@@ -63,17 +63,21 @@ double square_with_distribution(
 \endcode
 
 Specifying the integrand is not enough for the Monte Carlo integration routines.
-For example they must know how many dimensions, i.e. how many random numbers,
-the integrand requires. Since this is generic for all algorithms, starting with
-version 0.5 the complete integrand information is specified by creating an \ref
-integrand, e.g. for the examples above:
+They also must know how many dimensions, i.e. how many random numbers, the
+integrand requires and the numeric type with which the operations should be
+performed. If distribution should be accumulated during the integration the
+binning (how many bins, upper and lower boundary) must be specified as well.
+Since this is generic for all algorithms, starting with version 0.5 the complete
+integrand information is specified by creating an \ref integrand, e.g. for the
+examples above:
 \code
-// the integer specifies the dimension of the integrand `square`
+// the integer specifies the dimension of the integrand `square`, `double`
+// specifies the numeric type the integration algorithm should use
 auto square_integrand = hep::make_integrand<double>(square, 1);
 
 // captures `exponent = 2.0` with an instance of `power` with integrand
 // `power::operator()`
-auto power_integrand = hep::make_integrand<double>>(power(2.0), 1);
+auto power_integrand = hep::make_integrand<double>(power(2.0), 1);
 
 // the third argument specifies the distribution parameters: the x-axis ranges
 // from -10 to 10 and is subdivided into 100 bins
