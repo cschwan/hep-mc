@@ -11,6 +11,7 @@ libgtest_main_a_SOURCES = gtest/gtest.h gtest_main.cpp
 
 serial_tests = \
 	test_discrete_distribution \
+	test_distributions \
 	test_genz_integrand \
 	test_mc_helper \
 	test_mc_point \
