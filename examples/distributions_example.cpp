@@ -7,10 +7,8 @@ double arctan(
 	double const projection = 10.0 * point.point()[0] - 5.0;
 	double const value = std::atan(projection);
 
-	// add to the first (zeroth) distribution. Since we are integrating with
-	// PLAIN, we could leave out the multiplication with the weight, but in
-	// general this is needed
-	projector.add(0, projection, value * point.weight());
+	// add to the first (zeroth) distribution
+	projector.add(0, projection, value);
 
 	return value;
 }

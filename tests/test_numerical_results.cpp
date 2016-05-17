@@ -27,7 +27,7 @@ T function_with_distribution(
 	T const value = T(3.0) / T(2.0) * (x.point()[0] * x.point()[0] +
 		x.point()[1] * x.point()[1]);
 
-	projector.add(0, T(0.5), value * x.weight());
+	projector.add(0, T(0.5), value);
 
 	return value;
 }

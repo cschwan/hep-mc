@@ -18,7 +18,7 @@ T arctan(hep::mc_point<T> const& point, hep::projector<T>& projector)
 	T const x = T(10.0) * point.point().at(0) - T(5.0);
 	T const f = std::atan(x);
 
-	projector.add(0, x, f * point.weight());
+	projector.add(0, x, f);
 
 	return f;
 }
@@ -380,10 +380,12 @@ TYPED_TEST(DistributionResults, CheckPlainIntegration)
 //		);
 //	}
 
+	// TODO: check `mid_points()`
+
 	for (std::size_t i = 0; i != 100; ++i)
 	{
-		EXPECT_EQ( distribution.at(i).value() , std::get<0>(reference.at(i)) );
-		EXPECT_EQ( distribution.at(i).error() , std::get<1>(reference.at(i)) );
+		EXPECT_DOUBLE_EQ( distribution.at(i).value() , std::get<0>(reference.at(i)) );
+		EXPECT_DOUBLE_EQ( distribution.at(i).error() , std::get<1>(reference.at(i)) );
 		EXPECT_EQ( distribution.at(i).calls() , calls );
 	}
 }

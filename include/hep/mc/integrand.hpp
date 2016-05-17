@@ -113,7 +113,7 @@ inline integrand<T, F, false> make_integrand(
 /// integrand using the given `function` that must accept points from the \f$ d
 /// \f$-dimensional hypercube and a reference to a \ref projector that generates
 /// the distributions. The dimension \f$ d \f$ is given by the parameter
-/// `dimension` and `parameters` define the number and parameters of the
+/// `dimension`, and `parameters` define the number and parameters of the
 /// distribution(s). For the VEGAS algorithm the function would look like:
 /// \code
 /// T function(hep::vegas_point<T> const& x, hep::projector<T>& projector)
@@ -122,7 +122,7 @@ inline integrand<T, F, false> make_integrand(
 ///     T const f = /* calculate the function value from x.point */;
 ///
 ///     // add the function value `f` to the zeroeth distribution at `x0`
-///     projector.add(0, x0, f * x.weight());
+///     projector.add(0, x0, f);
 ///
 ///     // return the value of the function for the integrator
 ///     return f;

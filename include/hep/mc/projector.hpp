@@ -19,12 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/distribution_parameters.hpp"
-#include "hep/mc/distribution_result.hpp"
-#include "hep/mc/mc_result.hpp"
+#include "hep/mc/internal/accumulator_fwd.hpp"
 
 #include <cstddef>
-#include <vector>
 
 namespace hep
 {
@@ -32,98 +29,34 @@ namespace hep
 /// \addtogroup distributions
 /// @{
 
-/// Class that project the multi-dimensional Monte Carlo point into a discrete
-/// bin and generates the corresponding distributions.
+/// Interface for generating differential distributions.
 template <typename T>
 class projector
 {
 public:
-	/// Constructor.
-	projector(std::vector<distribution_parameters<T>> const& parameters)
-		: parameters_(parameters)
-		, compensation_(parameters.size())
-		, sum_(parameters.size())
-		, sum_of_squares_(parameters.size())
+	/// \cond DOXYGEN_IGNORE
+	projector(accumulator<T, true>& accumulator, T weight)
+		: accumulator_(accumulator)
+		, weight_(weight)
 	{
-		for (std::size_t i = 0; i != parameters.size(); ++i)
-		{
-			std::size_t const bins = parameters[i].bins();
-
-			compensation_[i].resize(bins);
-			sum_[i].resize(bins);
-			sum_of_squares_[i].resize(bins);
-		}
 	}
+	// \endcond
 
 	/// Projects a point for the distribution with the specified `index` to the
-	/// x-axis at the value `projection` and sets the value to `value`. Note
-	/// that you have to manually multiply with the corresponding weight.
-	void add(std::size_t index, T projection, T value)
-	{
-		T const x = projection - parameters_[index].x_min();
-
-		if (x < T())
-		{
-			return;
-		}
-
-		std::size_t const bin = x / parameters_[index].bin_size();
-
-		if (bin >= parameters_[index].bins())
-		{
-			return;
-		}
-
-		// kahan summation for each bin
-		T const y = value - compensation_[index][bin];
-		T const t = sum_[index][bin] + y;
-		compensation_[index][bin] = (t - sum_[index][bin]) - y;
-		sum_[index][bin] = t;
-
-		sum_of_squares_[index][bin] += value * value;
-	}
-
-	/// Returns the accumulated distributions for `calls` ellapsed calls.
-	std::vector<distribution_result<T>> distributions(std::size_t calls) const
-	{
-		std::vector<distribution_result<T>> result;
-		result.reserve(sum_.size());
-
-		// loop over all distributions
-		for (std::size_t dist = 0; dist != sum_.size(); ++dist)
-		{
-			std::vector<mc_result<T>> bin_results;
-
-			bin_results.reserve(sum_[dist].size());
-
-			auto const& params = parameters_[dist];
-			T const inv_bin_size = T(1.0) / params.bin_size();
-
-			// loop over the bins of the current distribution
-			for (std::size_t bin = 0; bin != sum_[dist].size(); ++bin)
-			{
-				bin_results.emplace_back(
-					calls,
-					inv_bin_size * sum_[dist][bin],
-					inv_bin_size * inv_bin_size * sum_of_squares_[dist][bin]
-				);
-			}
-
-			result.emplace_back(params, bin_results);
-		}
-
-		return result;
-	}
+	/// x-axis at the value `projection` and sets the value to `value`. The
+	/// weight of the point is automatically multiplied with `value`.
+	void add(std::size_t index, T projection, T value);
 
 private:
-	std::vector<distribution_parameters<T>> parameters_;
-	std::vector<std::vector<T>> compensation_;
-	std::vector<std::vector<T>> sum_;
-	std::vector<std::vector<T>> sum_of_squares_;
+	accumulator<T, true>& accumulator_;
+	T weight_;
 };
 
 /// @}
 
 }
+
+// contains definition of `add` because of circular dependency on `accumulator`
+#include "hep/mc/internal/accumulator.hpp"
 
 #endif
