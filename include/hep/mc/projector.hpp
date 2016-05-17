@@ -92,10 +92,8 @@ public:
 		// loop over all distributions
 		for (std::size_t dist = 0; dist != sum_.size(); ++dist)
 		{
-			std::vector<T> mid_points;
 			std::vector<mc_result<T>> bin_results;
 
-			mid_points.reserve(sum_[dist].size());
 			bin_results.reserve(sum_[dist].size());
 
 			auto const& params = parameters_[dist];
@@ -104,9 +102,6 @@ public:
 			// loop over the bins of the current distribution
 			for (std::size_t bin = 0; bin != sum_[dist].size(); ++bin)
 			{
-				mid_points.push_back(params.x_min() +
-					T(bin + 0.5) * params.bin_size());
-
 				bin_results.emplace_back(
 					calls,
 					inv_bin_size * sum_[dist][bin],
@@ -114,7 +109,7 @@ public:
 				);
 			}
 
-			result.emplace_back(mid_points, bin_results);
+			result.emplace_back(params, bin_results);
 		}
 
 		return result;

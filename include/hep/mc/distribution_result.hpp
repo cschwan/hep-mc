@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/mc_result.hpp"
 
 #include <vector>
@@ -36,18 +37,35 @@ class distribution_result
 public:
 	/// Constructor.
 	distribution_result(
-		std::vector<T> const& mid_points,
+		distribution_parameters<T> const& parameters,
 		std::vector<mc_result<T>> const& results
 	)
-		: mid_points_(mid_points)
+		: parameters_(parameters)
 		, results_(results)
 	{
 	}
 
-	/// Returns the middle point of each bin of this distribution.
-	std::vector<T> const& mid_points() const
+	/// Returns the parameters associated with this distribution.
+	distribution_parameters<T> const& parameters() const
 	{
-		return mid_points_;
+		return parameters_;
+	}
+
+	/// Returns the middle point of each bin of this distribution.
+	std::vector<T> mid_points() const
+	{
+		std::vector<T> result;
+		result.reserve(parameters_.bins());
+
+		T x = parameters_.x_min() + T(0.5) * parameters_.bin_size();
+
+		for (std::size_t bin = 0; bin != parameters_.bins(); ++bin)
+		{
+			result.push_back(x);
+			x += parameters_.bin_size();
+		}
+
+		return result;
 	}
 
 	/// Returns the result for each bin, corresponding to the bin positions
@@ -58,7 +76,7 @@ public:
 	}
 
 private:
-	std::vector<T> mid_points_;
+	distribution_parameters<T> parameters_;
 	std::vector<mc_result<T>> results_;
 };
 

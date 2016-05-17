@@ -101,7 +101,7 @@ hep::plain_result<T> allreduce_result(
 			index += 2;
 		}
 
-		distributions.emplace_back(distribution.mid_points(), bins);
+		distributions.emplace_back(distribution.parameters(), bins);
 	}
 
 	// resize `buffer` - contains the merged `additional_data`
