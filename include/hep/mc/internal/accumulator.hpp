@@ -142,6 +142,11 @@ public:
 		return result;
 	}
 
+	std::vector<hep::distribution_parameters<T>> const& parameters() const
+	{
+		return parameters_;
+	}
+
 	T sum() const
 	{
 		return sums_[0];
@@ -220,6 +225,12 @@ inline void projector<T>::add(std::size_t index, T projection, T value)
 {
 	// grant selective access to the following function (only)
 	accumulator_.add_to_distribution(index, projection, value * weight_);
+}
+
+template <typename T>
+inline std::vector<distribution_parameters<T>> const&
+projector<T>::parameters() const {
+	return accumulator_.parameters();
 }
 
 }

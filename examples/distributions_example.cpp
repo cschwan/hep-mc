@@ -4,7 +4,12 @@ double arctan(
 	hep::mc_point<double> const& point,
 	hep::projector<double>& projector
 ) {
-	double const projection = 10.0 * point.point()[0] - 5.0;
+	auto const params = projector.parameters().at(0);
+
+	double const x_range = params.x_max() - params.x_min();
+	double const x_min = params.x_min();
+
+	double const projection = x_range * point.point()[0] + x_min;
 	double const value = std::atan(projection);
 
 	// add to the first (zeroth) distribution

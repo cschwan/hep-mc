@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/internal/accumulator_fwd.hpp"
+#include "hep/mc/distribution_parameters.hpp"
 
 #include <cstddef>
 
@@ -46,6 +47,9 @@ public:
 	/// x-axis at the value `projection` and sets the value to `value`. The
 	/// weight of the point is automatically multiplied with `value`.
 	void add(std::size_t index, T projection, T value);
+
+	/// Returns the parameters of the distributions.
+	std::vector<distribution_parameters<T>> const& parameters() const;
 
 private:
 	accumulator<T, true>& accumulator_;
