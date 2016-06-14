@@ -8,6 +8,8 @@ GENERAL
   value when creating distributions
 - remove the globally set callback functions and make them local to every call
   to an integrator?
+- add a string to the ``distribution_parameters`` class to identify different
+  distributions
 
 FOAM
 ====

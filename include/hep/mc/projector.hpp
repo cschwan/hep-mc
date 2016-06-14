@@ -45,7 +45,9 @@ public:
 
 	/// Projects a point for the distribution with the specified `index` to the
 	/// x-axis at the value `projection` and sets the value to `value`. The
-	/// weight of the point is automatically multiplied with `value`.
+	/// weight of the point is automatically multiplied with `value`. Note that
+	/// index must be smaller than the size of the vector returned by \ref
+	/// parameters.
 	void add(std::size_t index, T projection, T value);
 
 	/// Returns the parameters of the distributions.

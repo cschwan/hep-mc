@@ -92,14 +92,6 @@ auto test_data = {
 using test_data_type = std::tuple<int, int, int, int, genz::integrand_type>;
 
 template <typename T>
-struct GenzTest : public ::testing::TestWithParam<test_data_type>
-{
-	using TypeParam = T;
-};
-
-using GenzTestWithDouble = GenzTest<double>;
-
-template <typename T>
 void check_plain_integrator(test_data_type data)
 {
 	int dimension = std::get<0>(data);
@@ -161,6 +153,14 @@ void check_vegas_integrator(test_data_type data)
 		EXPECT_GT( T(0.07) , result.error() / result.value() );
 	}
 }
+
+template <typename T>
+struct GenzTest : public ::testing::TestWithParam<test_data_type>
+{
+	using TypeParam = T;
+};
+
+using GenzTestWithDouble = GenzTest<double>;
 
 TEST_P(GenzTestWithDouble, CheckPlainIntegrator)
 {
