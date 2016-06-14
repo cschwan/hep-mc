@@ -11,38 +11,44 @@ following integration algorithms are available:
 Features
 ========
 
-- For each integrator a function prefixed with ``mpi_`` is available that uses
-  the `Message Passing Interface (MPI) <http://www.mpi-forum.org/>`_ to run the
-  integration in parallel. The parallel integration is designed in such a way
-  that it returns the numerically same result as its non-parallel counterpart.
-  In particular this means that the result is independent from the number of
+- **Parallelization**: For each integrator a function prefixed with ``mpi_`` is
+  available that uses the `Message Passing Interface (MPI)
+  <http://www.mpi-forum.org/>`_ to run the integration in parallel (locally or
+  on a cluster). The parallel integration is designed in such a way that it
+  returns the numerically same result as its non-parallel counterpart. In
+  particular this means that the result is independent from the number of
   processors used and only dependent on the seed of the random number generator.
-- Arbitrary many differential distributions can be generated during the
-  integration.
-- Callback functions can be used to print intermediate results as soon as they
-  are available.
-- For random number generation the classes of the C++ standard library are used.
-  This enables one to quickly change the number generators or even use custom
-  ones.
-- All functions are templatized in order to support all floating point types of
-  C++, i.e. ``float``, ``double``, and ``long double``. Kahan summation is used
-  to prevent a loss of numerical accuracy.
+- **Distributions**: Arbitrary many differential distributions can be generated
+  during the integration.
+- **Intermediate results**: Callback functions can be used to print intermediate
+  results as soon as they are available. After the integration is finished each
+  intermediate result can be extracted separately if the automatically weighted
+  average does not suit the user.
+- **Random numbers**: Random numbers are generated using the C++ standard
+  library `random <http://en.cppreference.com/w/cpp/numeric/random>`_. This
+  library offers many random number generators from which the user can choose.
+  If no random number generator is explicitly requested a Mersennne twister
+  (MT19937) is used.
+- **Numeric Types**: All functions are templatized in order to support all
+  floating point types of C++, i.e. ``float``, ``double``, and ``long double``.
+  Kahan summation is used to prevent a loss of numerical accuracy in
+  long-running integrations.
 
 Usage
 =====
 
-This library uses features from the C++11 standard which need to be enabled with
-your compiler. For the GCC and clang compilers this can be done by passing an
-additional parameter to the compiler, e.g.::
+This library uses features from the ISO C++11 standard which must be enabled
+with your compiler. For the GCC and clang compilers this can be done by passing
+an additional parameter to the compiler, e.g. ::
 
     g++ -std=c++0x my_program.cpp
 
-The inclusion of the main header,::
+The inclusion of the main header, ::
 
     #include <hep/mc.hpp>
 
 is sufficient to use it; you do not need to link against a library. If you
-intend to use the MPI variants of the integrators include::
+intend to use the MPI variants of the integrators include ::
 
     #include <hep/mc-mpi.hpp>
 
@@ -65,7 +71,7 @@ that needs to be compiled.
 
 If you want to automatically compile the example programs, generate the
 documentation, and/or install the headers you can also use the usual sequence
-for autotools-based projects, i.e.::
+for autotools-based projects, i.e. ::
 
     ./configure --prefix=/usr/local
     make
@@ -77,7 +83,7 @@ compiled when you add ``--enable-examples``. For more options type ``./configure
 --help``.
 
 If you downloaded the sources with ``git`` or got them as a ZIP file, you will
-notice that the configure script is missing. In that case run::
+notice that the configure script is missing. In that case run ::
 
     autoreconf -fiv
 
