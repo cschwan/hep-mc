@@ -7,6 +7,6 @@ var searchData=
   ['distribution_5fparameters',['distribution_parameters',['../classhep_1_1distribution__parameters.html',1,'hep']]],
   ['distribution_5fparameters',['distribution_parameters',['../classhep_1_1distribution__parameters.html#ad6b8771729f5fedaa3323ae1095657bc',1,'hep::distribution_parameters']]],
   ['distribution_5fresult',['distribution_result',['../classhep_1_1distribution__result.html',1,'hep']]],
-  ['distribution_5fresult',['distribution_result',['../classhep_1_1distribution__result.html#ae1893fab19bd6ca29639bb256bb674ea',1,'hep::distribution_result']]],
-  ['distributions',['distributions',['../classhep_1_1plain__result.html#a3e6f1c9bf019b4cebe32bda9482e72d3',1,'hep::plain_result::distributions()'],['../classhep_1_1projector.html#a85629381ea280d381e6b866b2f9c9920',1,'hep::projector::distributions()'],['../group__distributions.html',1,'(Global Namespace)']]]
+  ['distribution_5fresult',['distribution_result',['../classhep_1_1distribution__result.html#ac055495aa82ca7e5a47ba71ad919a9cd',1,'hep::distribution_result']]],
+  ['distributions',['distributions',['../classhep_1_1plain__result.html#a3e6f1c9bf019b4cebe32bda9482e72d3',1,'hep::plain_result::distributions()'],['../group__distributions.html',1,'(Global Namespace)']]]
 ];

@@ -150,7 +150,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    std::cout.precision(3);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// perform 100 iterations with 1000 calls each _at maximum_</span></div>
-<div class="line">    <span class="keyword">auto</span> results = hep::vegas&lt;double&gt;(</div>
+<div class="line">    <span class="keyword">auto</span> results = <a name="a4"></a><a class="code" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">hep::vegas</a>(</div>
 <div class="line">        hep::make_integrand&lt;double&gt;(square, 1),</div>
 <div class="line">        std::vector&lt;std::size_t&gt;(100, 1000)</div>
 <div class="line">    );</div>

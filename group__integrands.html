@@ -84,6 +84,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Integrand Functions</div>  </div>
@@ -95,7 +96,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">{</div>
 <div class="line">    <span class="keywordflow">return</span> x.<a class="code" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>[0] * x.<a class="code" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>[0];</div>
 <div class="line">}</div>
-</div><!-- fragment --><p> Some integration algorithms, e.g. <a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a>, supply additional information that can be accessed by capturing the argument with a different type, e.g. for VEGAS by <a class="el" href="classhep_1_1vegas__point.html">vegas_point</a> : </p><div class="fragment"><div class="line"><span class="keywordtype">double</span> square(<a class="code" href="classhep_1_1vegas__point.html">hep::vegas_point&lt;double&gt;</a> <span class="keyword">const</span>&amp; x)</div>
+</div><!-- fragment --><p> Some integration algorithms, e.g. <a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a>, supply additional information that can be accessed by capturing the argument with a different type, e.g. for VEGAS by <a class="el" href="classhep_1_1vegas__point.html">vegas_point</a> : </p><div class="fragment"><div class="line"><span class="keywordtype">double</span> square(<a class="code" href="classhep_1_1vegas__point.html">hep::vegas_point&lt;double&gt;</a> <span class="keyword">const</span>&amp; x)</div>
 <div class="line">{</div>
 <div class="line">    <span class="keywordflow">return</span> x.<a class="code" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>[0] * x.<a class="code" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>[0];</div>
 <div class="line">}</div>
@@ -127,17 +128,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"></div>
 <div class="line">    <span class="keywordflow">return</span> f;</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>Specifying the integrand is not enough for the Monte Carlo integration routines. For example they must know how many dimensions, i.e. how many random numbers, the integrand requires. Since this is generic for all algorithms, starting with version 0.5 the complete integrand information is specified by creating an <a class="el" href="classhep_1_1integrand.html">integrand</a>, e.g. for the examples above: </p><div class="fragment"><div class="line"><span class="comment">// the integer specifies the dimension of the integrand `square`</span></div>
+</div><!-- fragment --><p>Specifying the integrand is not enough for the Monte Carlo integration routines. They also must know how many dimensions, i.e. how many random numbers, the integrand requires and the numeric type with which the operations should be performed. If distribution should be accumulated during the integration the binning (how many bins, upper and lower boundary) must be specified as well. Since this is generic for all algorithms, starting with version 0.5 the complete integrand information is specified by creating an <a class="el" href="classhep_1_1integrand.html">integrand</a>, e.g. for the examples above: </p><div class="fragment"><div class="line"><span class="comment">// the integer specifies the dimension of the integrand `square`, `double`</span></div>
+<div class="line"><span class="comment">// specifies the numeric type the integration algorithm should use</span></div>
 <div class="line"><span class="keyword">auto</span> square_integrand = hep::make_integrand&lt;double&gt;(square, 1);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// captures `exponent = 2.0` with an instance of `power` with integrand</span></div>
 <div class="line"><span class="comment">// `power::operator()`</span></div>
-<div class="line"><span class="keyword">auto</span> power_integrand = hep::make_integrand&lt;double&gt;&gt;(power(2.0), 1);</div>
+<div class="line"><span class="keyword">auto</span> power_integrand = hep::make_integrand&lt;double&gt;(power(2.0), 1);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// the third argument specifies the distribution parameters: the x-axis ranges</span></div>
 <div class="line"><span class="comment">// from -10 to 10 and is subdivided into 100 bins</span></div>
 <div class="line"><span class="keyword">auto</span> square_distributions = hep::make_integrand&lt;double&gt;(square, 1,</div>
-<div class="line">    <a class="code" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters&lt;double&gt;</a>(-10.0, +10.0, 200));</div>
+<div class="line">    <a class="code" href="group__distributions.html#gad15207a1e70b88e01af77a6b5ec097ae">hep::make_dist_params</a>(-10.0, +10.0, 200));</div>
 </div><!-- fragment --> <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -153,6 +155,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1vegas__point.html">hep::vegas_point&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:gab6993610267daf446a6ad7d420802b82"><td class="memTemplParams" colspan="2">template&lt;typename I &gt; </td></tr>
+<tr class="memitem:gab6993610267daf446a6ad7d420802b82"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#gab6993610267daf446a6ad7d420802b82">hep::numeric_type_of</a> = typename std::remove_reference&lt; I &gt;::type::numeric_type</td></tr>
+<tr class="separator:gab6993610267daf446a6ad7d420802b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -171,6 +179,22 @@ D, false &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="
 D, true &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#ga4a775d1bad801260cd5051d8c473b62e">hep::make_multi_channel_integrand</a> (F &amp;&amp;function, std::size_t dimensions, D &amp;&amp;densities, std::size_t map_dimensions, std::size_t channels, Ds &amp;&amp;...parameters)</td></tr>
 <tr class="separator:ga4a775d1bad801260cd5051d8c473b62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="gab6993610267daf446a6ad7d420802b82"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename I &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="group__integrands.html#gab6993610267daf446a6ad7d420802b82">hep::numeric_type_of</a> = typedef typename std::remove_reference&lt;I&gt;::type::numeric_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Shortcut for accessing the numeric type of an integrand that is possibly a reference. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="gaa04af437998d4319b6e0e268079d0e16"></a>
 <div class="memitem">
@@ -205,7 +229,7 @@ template&lt;typename T , typename F &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>PLAIN/VEGAS integrand constructor. This function constructs an <a class="el" href="classhep_1_1integrand.html">integrand</a> using the given <code>function</code> that must accept points from the \( d \)-dimensional hypercube, where \( d \) is given by the parameter <code>dimensions</code>. The type of the point is determined by the integration algorithm later used on the integrand, e.g. for <a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a> it is <a class="el" href="classhep_1_1vegas__point.html">vegas_point</a>. For this case the integrand would look like: </p><div class="fragment"><div class="line">T <span class="keyword">function</span>(<a class="code" href="classhep_1_1vegas__point.html">hep::vegas_point&lt;T&gt;</a> <span class="keyword">const</span>&amp; x)</div>
+<p>PLAIN/VEGAS integrand constructor. This function constructs an <a class="el" href="classhep_1_1integrand.html">integrand</a> using the given <code>function</code> that must accept points from the \( d \)-dimensional hypercube, where \( d \) is given by the parameter <code>dimensions</code>. The type of the point is determined by the integration algorithm later used on the integrand, e.g. for <a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a> it is <a class="el" href="classhep_1_1vegas__point.html">vegas_point</a>. For this case the integrand would look like: </p><div class="fragment"><div class="line">T <span class="keyword">function</span>(<a class="code" href="classhep_1_1vegas__point.html">hep::vegas_point&lt;T&gt;</a> <span class="keyword">const</span>&amp; x)</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// x.point.size() is as large as specified with `dimensions`</span></div>
 <div class="line">    <span class="keywordflow">return</span> <span class="comment">/* calculate the function value from x.point */</span>;</div>
@@ -252,13 +276,13 @@ template&lt;typename T , typename F , typename... D&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>PLAIN/VEGAS distributions constructor. This function constructs an <a class="el" href="classhep_1_1integrand.html">integrand</a> using the given <code>function</code> that must accept points from the \( d \)-dimensional hypercube and a reference to a <a class="el" href="classhep_1_1projector.html">projector</a> that generates the distributions. The dimension \( d \) is given by the parameter <code>dimension</code> and <code>parameters</code> define the number and parameters of the distribution(s). For the VEGAS algorithm the function would look like: </p><div class="fragment"><div class="line">T <span class="keyword">function</span>(<a class="code" href="classhep_1_1vegas__point.html">hep::vegas_point&lt;T&gt;</a> <span class="keyword">const</span>&amp; x, <a class="code" href="classhep_1_1projector.html">hep::projector&lt;T&gt;</a>&amp; projector)</div>
+<p>PLAIN/VEGAS distributions constructor. This function constructs an <a class="el" href="classhep_1_1integrand.html">integrand</a> using the given <code>function</code> that must accept points from the \( d \)-dimensional hypercube and a reference to a <a class="el" href="classhep_1_1projector.html">projector</a> that generates the distributions. The dimension \( d \) is given by the parameter <code>dimension</code>, and <code>parameters</code> define the number and parameters of the distribution(s). For the VEGAS algorithm the function would look like: </p><div class="fragment"><div class="line">T <span class="keyword">function</span>(<a class="code" href="classhep_1_1vegas__point.html">hep::vegas_point&lt;T&gt;</a> <span class="keyword">const</span>&amp; x, <a class="code" href="classhep_1_1projector.html">hep::projector&lt;T&gt;</a>&amp; projector)</div>
 <div class="line">{</div>
 <div class="line">    T <span class="keyword">const</span> x0 = <span class="comment">/* calculate the position of `x` for the distribution 0 */</span>;</div>
 <div class="line">    T <span class="keyword">const</span> f = <span class="comment">/* calculate the function value from x.point */</span>;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// add the function value `f` to the zeroeth distribution at `x0`</span></div>
-<div class="line">    projector.add(0, x0, f * x.weight());</div>
+<div class="line">    projector.<a class="code" href="classhep_1_1projector.html#aec7cb88f25ea134b1af63e62475f93a6">add</a>(0, x0, f);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// return the value of the function for the integrator</span></div>
 <div class="line">    <span class="keywordflow">return</span> f;</div>
@@ -321,7 +345,7 @@ template&lt;typename T , typename F , typename D &gt; </div>
 <div class="line">    std::size_t channel,</div>
 <div class="line">    std::vector&lt;T&gt; <span class="keyword">const</span>&amp; random_numbers,</div>
 <div class="line">    std::vector&lt;T&gt;&amp; coordinates,</div>
-<div class="line">    <a class="code" href="namespacestd.html">std</a>:;vector&lt;T&gt;&amp; channel_densities</div>
+<div class="line">    std::vector&lt;T&gt;&amp; channel_densities</div>
 <div class="line">) {</div>
 <div class="line">    <span class="comment">// for the selected `channel`, which is an integer from the half-open</span></div>
 <div class="line">    <span class="comment">// interval [0, channels) and the given `random_numbers` with </span></div>

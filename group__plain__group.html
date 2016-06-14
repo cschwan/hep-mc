@@ -93,31 +93,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>The PLAIN Monte Carlo integration algorithm is the most simple integration that simply generates random numbers \( \vec{x}_i \in [0,1]^d \) in the \( d \)-dimensional hypercube \( [0,1]^d \) and averages the integrand evaluated at these points.</p>
 <p>The algorithm is available in two forms:</p>
 <ul>
-<li><a class="el" href="group__plain__group.html#ga177da9c7fac0304c40d182ceb6008359">plain</a>, the single process interface and</li>
-<li><a class="el" href="group__plain__group.html#ga95c6cd9a9b9c32a70157a20821173b9d">mpi_plain</a> which uses the Message Passing Interface (MPI) to distribute the calculation among parallel running processes. </li>
+<li><a class="el" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">plain</a>, the single process interface and</li>
+<li><a class="el" href="group__plain__group.html#ga971ae73dba3eae09cab40980a3a34e0c">mpi_plain</a> which uses the Message Passing Interface (MPI) to distribute the calculation among parallel running processes. </li>
 </ul>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga95c6cd9a9b9c32a70157a20821173b9d"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga95c6cd9a9b9c32a70157a20821173b9d"><td class="memTemplItemLeft" align="right" valign="top">mc_result&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__plain__group.html#ga95c6cd9a9b9c32a70157a20821173b9d">hep::mpi_plain</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::size_t calls, R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga95c6cd9a9b9c32a70157a20821173b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga177da9c7fac0304c40d182ceb6008359"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga177da9c7fac0304c40d182ceb6008359"><td class="memTemplItemLeft" align="right" valign="top">plain_result&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__plain__group.html#ga177da9c7fac0304c40d182ceb6008359">hep::plain</a> (I &amp;&amp;integrand, std::size_t calls, R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga177da9c7fac0304c40d182ceb6008359"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga971ae73dba3eae09cab40980a3a34e0c"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:ga971ae73dba3eae09cab40980a3a34e0c"><td class="memTemplItemLeft" align="right" valign="top">mc_result&lt; numeric_type_of&lt; I &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__plain__group.html#ga971ae73dba3eae09cab40980a3a34e0c">hep::mpi_plain</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::size_t calls, R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:ga971ae73dba3eae09cab40980a3a34e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9158156deb02a89c800f8817c89ef4e3"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:ga9158156deb02a89c800f8817c89ef4e3"><td class="memTemplItemLeft" align="right" valign="top">plain_result&lt; numeric_type_of<br class="typebreak" />
+&lt; I &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">hep::plain</a> (I &amp;&amp;integrand, std::size_t calls, R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:ga9158156deb02a89c800f8817c89ef4e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga95c6cd9a9b9c32a70157a20821173b9d"></a>
+<a class="anchor" id="ga971ae73dba3eae09cab40980a3a34e0c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
+template&lt;typename I , typename R  = std::mt19937&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">mc_result&lt;T&gt; hep::mpi_plain </td>
+          <td class="memname">mc_result&lt;numeric_type_of&lt;I&gt; &gt; hep::mpi_plain </td>
           <td>(</td>
           <td class="paramtype">MPI_Comm&#160;</td>
           <td class="paramname"><em>communicator</em>, </td>
@@ -165,17 +166,17 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga177da9c7fac0304c40d182ceb6008359"></a>
+<a class="anchor" id="ga9158156deb02a89c800f8817c89ef4e3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
+template&lt;typename I , typename R  = std::mt19937&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">plain_result&lt;T&gt; hep::plain </td>
+          <td class="memname">plain_result&lt;numeric_type_of&lt;I&gt; &gt; hep::plain </td>
           <td>(</td>
           <td class="paramtype">I &amp;&amp;&#160;</td>
           <td class="paramname"><em>integrand</em>, </td>
@@ -205,7 +206,8 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
 </table>
 </div><div class="memdoc">
 <p>PLAIN Monte Carlo integrator. This function integrates <code>integrand</code> over the unit-hypercube <code>calls</code> function evaluations with randomly chosen points determined by <code>generator</code>. </p>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="distributions_example_8cpp-example.html#a6">distributions_example.cpp</a>.</dd>
+</dl>
 </div>
 </div>
 </div><!-- contents -->

@@ -90,43 +90,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The VEGAS Monte Carlo integration algorithm. </p>
-<p>The VEGAS Monte Carlo integration algorithm divides the integration into several sub-integrations, called iterations, and uses the results to automatically construct a PDF that is then used to do importance sampling in order to reduce the error, e.g. compared to <a class="el" href="group__plain__group.html#ga177da9c7fac0304c40d182ceb6008359">plain</a>.</p>
+<p>The VEGAS Monte Carlo integration algorithm divides the integration into several sub-integrations, called iterations, and uses the results to automatically construct a PDF that is then used to do importance sampling in order to reduce the error, e.g. compared to <a class="el" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">plain</a>.</p>
 <p>The VEGAS algorithm is available in two forms:</p>
 <ul>
-<li><a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a>, the single process interface and</li>
-<li><a class="el" href="group__vegas__group.html#gaaa3d4ec505e3a7f3f6350c3b87f8fb36">mpi_vegas</a> which uses the Message Passing Interface (MPI) to distribute the calculation among parallel running processes. </li>
+<li><a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a>, the single process interface and</li>
+<li><a class="el" href="group__vegas__group.html#gaeea62ef28be6b448b104b00c4ba10b7b">mpi_vegas</a> which uses the Message Passing Interface (MPI) to distribute the calculation among parallel running processes. </li>
 </ul>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gaaa3d4ec505e3a7f3f6350c3b87f8fb36"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:gaaa3d4ec505e3a7f3f6350c3b87f8fb36"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#gaaa3d4ec505e3a7f3f6350c3b87f8fb36">hep::mpi_vegas</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, vegas_pdf&lt; T &gt; const &amp;start_pdf, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:gaaa3d4ec505e3a7f3f6350c3b87f8fb36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae11545da136e5653cf9d2c556e8fb858"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:gae11545da136e5653cf9d2c556e8fb858"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#gae11545da136e5653cf9d2c556e8fb858">hep::mpi_vegas</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t bins=128, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:gae11545da136e5653cf9d2c556e8fb858"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9304630a2d27587bcc2536bf1d6c5615"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R &gt; </td></tr>
-<tr class="memitem:ga9304630a2d27587bcc2536bf1d6c5615"><td class="memTemplItemLeft" align="right" valign="top">vegas_result&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga9304630a2d27587bcc2536bf1d6c5615">hep::vegas_iteration</a> (I &amp;&amp;integrand, std::size_t calls, vegas_pdf&lt; T &gt; const &amp;pdf, R &amp;&amp;generator)</td></tr>
-<tr class="separator:ga9304630a2d27587bcc2536bf1d6c5615"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaada59d2b99e014be6f362f384da25483"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:gaada59d2b99e014be6f362f384da25483"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">hep::vegas</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, vegas_pdf&lt; T &gt; const &amp;start_pdf, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:gaada59d2b99e014be6f362f384da25483"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga984d8910b3a15ea986646027cf3ea7fb"><td class="memTemplParams" colspan="2">template&lt;typename T , typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga984d8910b3a15ea986646027cf3ea7fb"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga984d8910b3a15ea986646027cf3ea7fb">hep::vegas</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t bins=128, T alpha=T(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga984d8910b3a15ea986646027cf3ea7fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeea62ef28be6b448b104b00c4ba10b7b"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:gaeea62ef28be6b448b104b00c4ba10b7b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result<br class="typebreak" />
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#gaeea62ef28be6b448b104b00c4ba10b7b">hep::mpi_vegas</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;start_pdf, numeric_type_of&lt; I &gt; alpha=numeric_type_of&lt; I &gt;(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:gaeea62ef28be6b448b104b00c4ba10b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga010716294c1f2be7f5f85e0d7c60cece"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:ga010716294c1f2be7f5f85e0d7c60cece"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result<br class="typebreak" />
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga010716294c1f2be7f5f85e0d7c60cece">hep::mpi_vegas</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t bins=128, numeric_type_of&lt; I &gt; alpha=numeric_type_of&lt; I &gt;(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:ga010716294c1f2be7f5f85e0d7c60cece"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga718a856863c67b09514117d0a71881fe"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R &gt; </td></tr>
+<tr class="memitem:ga718a856863c67b09514117d0a71881fe"><td class="memTemplItemLeft" align="right" valign="top">vegas_result&lt; numeric_type_of<br class="typebreak" />
+&lt; I &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga718a856863c67b09514117d0a71881fe">hep::vegas_iteration</a> (I &amp;&amp;integrand, std::size_t calls, vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;pdf, R &amp;&amp;generator)</td></tr>
+<tr class="separator:ga718a856863c67b09514117d0a71881fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadeec73e19658d11a4fc99776cc92c1f6"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:gadeec73e19658d11a4fc99776cc92c1f6"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result<br class="typebreak" />
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">hep::vegas</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;start_pdf, numeric_type_of&lt; I &gt; alpha=numeric_type_of&lt; I &gt;(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:gadeec73e19658d11a4fc99776cc92c1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga19fcfe8b93a04f58b3aa9f39ced7dae8"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:ga19fcfe8b93a04f58b3aa9f39ced7dae8"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; vegas_result<br class="typebreak" />
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__vegas__group.html#ga19fcfe8b93a04f58b3aa9f39ced7dae8">hep::vegas</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t bins=128, numeric_type_of&lt; I &gt; alpha=numeric_type_of&lt; I &gt;(1.5), R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:ga19fcfe8b93a04f58b3aa9f39ced7dae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="gaaa3d4ec505e3a7f3f6350c3b87f8fb36"></a>
+<a class="anchor" id="gaeea62ef28be6b448b104b00c4ba10b7b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
+template&lt;typename I , typename R  = std::mt19937&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;vegas_result&lt;T&gt; &gt; hep::mpi_vegas </td>
+          <td class="memname">std::vector&lt;vegas_result&lt;numeric_type_of&lt;I&gt; &gt; &gt; hep::mpi_vegas </td>
           <td>(</td>
           <td class="paramtype">MPI_Comm&#160;</td>
           <td class="paramname"><em>communicator</em>, </td>
@@ -146,14 +151,14 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vegas_pdf&lt; T &gt; const &amp;&#160;</td>
+          <td class="paramtype">vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;&#160;</td>
           <td class="paramname"><em>start_pdf</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>T(1.5)</code>, </td>
+          <td class="paramtype">numeric_type_of&lt; I &gt;&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>numeric_type_of&lt;I&gt;(1.5)</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -173,21 +178,22 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an already adapted grid, e.g. one by <a class="el" href="classhep_1_1vegas__result.html#ad77c22b49fd6227a7070e23c64b8378b">vegas_result::pdf</a> obtained by a previous <a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a> call. </p>
-
+<p>Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an already adapted grid, e.g. one by <a class="el" href="classhep_1_1vegas__result.html#ad77c22b49fd6227a7070e23c64b8378b">vegas_result::pdf</a> obtained by a previous <a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a> call. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="mpi_vegas_example_8cpp-example.html#a2">mpi_vegas_example.cpp</a>.</dd>
+</dl>
 </div>
 </div>
-<a class="anchor" id="gae11545da136e5653cf9d2c556e8fb858"></a>
+<a class="anchor" id="ga010716294c1f2be7f5f85e0d7c60cece"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
+template&lt;typename I , typename R  = std::mt19937&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;vegas_result&lt;T&gt; &gt; hep::mpi_vegas </td>
+          <td class="memname">std::vector&lt;vegas_result&lt;numeric_type_of&lt;I&gt; &gt; &gt; hep::mpi_vegas </td>
           <td>(</td>
           <td class="paramtype">MPI_Comm&#160;</td>
           <td class="paramname"><em>communicator</em>, </td>
@@ -213,8 +219,8 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>T(1.5)</code>, </td>
+          <td class="paramtype">numeric_type_of&lt; I &gt;&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>numeric_type_of&lt;I&gt;(1.5)</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -234,21 +240,21 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Implements the MPI-parallelized VEGAS algorithm. See <a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a> for a more detailed description on the VEGAS algorithm. In contrast to the single-threaded versions this function makes sure that every random number generator is seeded differently so every MPI process yields an independent result. After each iteration the intermediate results are passed to the function set by <a class="el" href="group__callbacks.html#gadb47eb6529daa5ddf5805612f4045c72">mpi_vegas_callback</a> which can e.g. be used to print them out. The callback function is able to stop the integration if it returns <code>false</code>. In this case less iterations are performed than requested. </p>
+<p>Implements the MPI-parallelized VEGAS algorithm. See <a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a> for a more detailed description on the VEGAS algorithm. In contrast to the single-threaded versions this function makes sure that every random number generator is seeded differently so every MPI process yields an independent result. After each iteration the intermediate results are passed to the function set by <a class="el" href="group__callbacks.html#gadb47eb6529daa5ddf5805612f4045c72">mpi_vegas_callback</a> which can e.g. be used to print them out. The callback function is able to stop the integration if it returns <code>false</code>. In this case less iterations are performed than requested. </p>
 
 </div>
 </div>
-<a class="anchor" id="gaada59d2b99e014be6f362f384da25483"></a>
+<a class="anchor" id="gadeec73e19658d11a4fc99776cc92c1f6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
+template&lt;typename I , typename R  = std::mt19937&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;vegas_result&lt;T&gt; &gt; hep::vegas </td>
+          <td class="memname">std::vector&lt;vegas_result&lt;numeric_type_of&lt;I&gt; &gt; &gt; hep::vegas </td>
           <td>(</td>
           <td class="paramtype">I &amp;&amp;&#160;</td>
           <td class="paramname"><em>integrand</em>, </td>
@@ -262,14 +268,14 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vegas_pdf&lt; T &gt; const &amp;&#160;</td>
+          <td class="paramtype">vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;&#160;</td>
           <td class="paramname"><em>start_pdf</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>T(1.5)</code>, </td>
+          <td class="paramtype">numeric_type_of&lt; I &gt;&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>numeric_type_of&lt;I&gt;(1.5)</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -290,21 +296,22 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Integrates <code>function</code> by performing <code>iteration_calls.size()</code> iterations of the VEGAS algorithm, with as many function calls for each iteration specified by the corresponding value in <code>iteration_calls</code>. The pdf refinement is done using <a class="el" href="group__vegas__pdf__group.html#ga61cf454ae1f35640c315a8f733fa6dbb">vegas_refine_pdf</a> which is called with the \( \alpha \)-parameter given by <code>alpha</code>.</p>
-<p>This function can be used to start from an already adapted pdf, e.g. one by <a class="el" href="classhep_1_1vegas__result.html#ad77c22b49fd6227a7070e23c64b8378b">vegas_result::pdf</a> obtained by a previous <a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a> call. </p>
-
+<p>This function can be used to start from an already adapted pdf, e.g. one by <a class="el" href="classhep_1_1vegas__result.html#ad77c22b49fd6227a7070e23c64b8378b">vegas_result::pdf</a> obtained by a previous <a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a> call. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="vegas_example_8cpp-example.html#a2">vegas_example.cpp</a>, <a class="el" href="vegas_stop_after_precision_8cpp-example.html#a4">vegas_stop_after_precision.cpp</a>, and <a class="el" href="vegas_write_pdf_8cpp-example.html#a2">vegas_write_pdf.cpp</a>.</dd>
+</dl>
 </div>
 </div>
-<a class="anchor" id="ga984d8910b3a15ea986646027cf3ea7fb"></a>
+<a class="anchor" id="ga19fcfe8b93a04f58b3aa9f39ced7dae8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
+template&lt;typename I , typename R  = std::mt19937&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;vegas_result&lt;T&gt; &gt; hep::vegas </td>
+          <td class="memname">std::vector&lt;vegas_result&lt;numeric_type_of&lt;I&gt; &gt; &gt; hep::vegas </td>
           <td>(</td>
           <td class="paramtype">I &amp;&amp;&#160;</td>
           <td class="paramname"><em>integrand</em>, </td>
@@ -324,8 +331,8 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>alpha</em> = <code>T(1.5)</code>, </td>
+          <td class="paramtype">numeric_type_of&lt; I &gt;&#160;</td>
+          <td class="paramname"><em>alpha</em> = <code>numeric_type_of&lt;I&gt;(1.5)</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -349,17 +356,17 @@ template&lt;typename T , typename I , typename R  = std::mt19937&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga9304630a2d27587bcc2536bf1d6c5615"></a>
+<a class="anchor" id="ga718a856863c67b09514117d0a71881fe"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename I , typename R &gt; </div>
+template&lt;typename I , typename R &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vegas_result&lt;T&gt; hep::vegas_iteration </td>
+          <td class="memname">vegas_result&lt;numeric_type_of&lt;I&gt; &gt; hep::vegas_iteration </td>
           <td>(</td>
           <td class="paramtype">I &amp;&amp;&#160;</td>
           <td class="paramname"><em>integrand</em>, </td>
@@ -373,7 +380,7 @@ template&lt;typename T , typename I , typename R &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vegas_pdf&lt; T &gt; const &amp;&#160;</td>
+          <td class="paramtype">vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;&#160;</td>
           <td class="paramname"><em>pdf</em>, </td>
         </tr>
         <tr>
@@ -395,7 +402,7 @@ template&lt;typename T , typename I , typename R &gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Performs one VEGAS iteration. This integrates <code>function</code> over the unit-hypercube using <code>calls</code> function evaluations with random numbers generated by <code>generator</code>. The generator is not seeded. The <code>pdf</code> is used to implement importance sampling; stratified sampling is not used. The dimension of the function is determined by <code>pdf.size()</code>.</p>
-<p>The parameter <code>total_calls</code> determines the sample size \( N \) of the iteration <a class="el" href="group__vegas__group.html#ga9304630a2d27587bcc2536bf1d6c5615">vegas_iteration</a> performs and therefore usually has usually the same value as <code>calls</code>. If VEGAS is run in parallel, then this function will be called multiple times with a differently seeded generator and with <code>calls</code> parameters each smaller than <code>total_calls</code> but their sum being equal to <code>total_calls</code>. </p>
+<p>The parameter <code>total_calls</code> determines the sample size \( N \) of the iteration <a class="el" href="group__vegas__group.html#ga718a856863c67b09514117d0a71881fe">vegas_iteration</a> performs and therefore usually has usually the same value as <code>calls</code>. If VEGAS is run in parallel, then this function will be called multiple times with a differently seeded generator and with <code>calls</code> parameters each smaller than <code>total_calls</code> but their sum being equal to <code>total_calls</code>. </p>
 
 </div>
 </div>

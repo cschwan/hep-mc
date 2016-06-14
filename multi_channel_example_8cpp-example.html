@@ -159,11 +159,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#ifndef USE_MPI</span></div>
-<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = hep::multi_channel&lt;double&gt;(</div>
-<div class="line"><span class="preprocessor">#else</span></div>
-<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = hep::mpi_multi_channel&lt;double&gt;(</div>
+<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = <a name="a1"></a><a class="code" href="group__multi__channel__group.html#ga702388703b85a350ac0c477312fcf71c">hep::multi_channel</a>(</div>
+<div class="line">#<span class="keywordflow">else</span></div>
+<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = <a name="a2"></a><a class="code" href="group__multi__channel__group.html#ga37f545de3446e6d2045eeac76ff56383">hep::mpi_multi_channel</a>(</div>
 <div class="line">        MPI_COMM_WORLD,</div>
-<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line">#endif</div>
 <div class="line">        hep::make_multi_channel_integrand&lt;double&gt;(<span class="keyword">function</span>, 1, densities, 1, 2),</div>
 <div class="line">        std::vector&lt;std::size_t&gt;(10, 10000000)</div>
 <div class="line">    );</div>

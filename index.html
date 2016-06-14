@@ -113,7 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// perform 5 iteration with 1000 calls each; this function will also call</span></div>
 <div class="line">    <span class="comment">// vegas_verbose_callback after each iteration which in turn prints the</span></div>
 <div class="line">    <span class="comment">// individual iterations</span></div>
-<div class="line">    <span class="keyword">auto</span> results = hep::vegas&lt;double&gt;(</div>
+<div class="line">    <span class="keyword">auto</span> results = <a class="code" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">hep::vegas</a>(</div>
 <div class="line">        hep::make_integrand&lt;double&gt;(square, 1),</div>
 <div class="line">        std::vector&lt;std::size_t&gt;(5, 1000)</div>
 <div class="line">    );</div>

@@ -109,7 +109,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// perform 5 iteration with 1000 calls each; this function will also call</span></div>
 <div class="line">    <span class="comment">// vegas_verbose_callback after each iteration which in turn prints the</span></div>
 <div class="line">    <span class="comment">// individual iterations</span></div>
-<div class="line">    <span class="keyword">auto</span> results = hep::vegas&lt;double&gt;(</div>
+<div class="line">    <span class="keyword">auto</span> results = <a name="a2"></a><a class="code" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">hep::vegas</a>(</div>
 <div class="line">        hep::make_integrand&lt;double&gt;(square, 1),</div>
 <div class="line">        std::vector&lt;std::size_t&gt;(5, 1000)</div>
 <div class="line">    );</div>
@@ -117,8 +117,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// results contains the estimations for each iteration. We could take the</span></div>
 <div class="line">    <span class="comment">// result from last iteration, but here we instead choose to combine the</span></div>
 <div class="line">    <span class="comment">// results of all iterations but the first one in a cumulative result</span></div>
-<div class="line">    <span class="keyword">auto</span> result = <a name="a2"></a><a class="code" href="group__results.html#gaa780f6f8497c2598902d1e3c59345796">hep::cumulative_result0</a>(results.begin() + 1, results.end());</div>
-<div class="line">    <span class="keywordtype">double</span> <a name="a3"></a><a class="code" href="group__results.html#ga276c092765419532ec50f68090626863">chi_square_dof</a> = <a name="a4"></a><a class="code" href="group__results.html#ga44db028bc67ef05171614a560b0fd400">hep::chi_square_dof0</a>(results.begin() + 1,</div>
+<div class="line">    <span class="keyword">auto</span> result = <a name="a3"></a><a class="code" href="group__results.html#gaa780f6f8497c2598902d1e3c59345796">hep::cumulative_result0</a>(results.begin() + 1, results.end());</div>
+<div class="line">    <span class="keywordtype">double</span> <a name="a4"></a><a class="code" href="group__results.html#ga276c092765419532ec50f68090626863">chi_square_dof</a> = <a name="a5"></a><a class="code" href="group__results.html#ga44db028bc67ef05171614a560b0fd400">hep::chi_square_dof0</a>(results.begin() + 1,</div>
 <div class="line">        results.end());</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// print the cumulative result</span></div>

@@ -92,13 +92,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <a name="_a0"></a><a class="code" href="classhep_1_1mc__point.html">hep::mc_point&lt;double&gt;</a> <span class="keyword">const</span>&amp; point,</div>
 <div class="line">    <a name="_a1"></a><a class="code" href="classhep_1_1projector.html">hep::projector&lt;double&gt;</a>&amp; projector</div>
 <div class="line">) {</div>
-<div class="line">    <span class="keywordtype">double</span> <span class="keyword">const</span> projection = 10.0 * point.<a name="a2"></a><a class="code" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>()[0] - 5.0;</div>
+<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> params = projector.<a name="a2"></a><a class="code" href="classhep_1_1projector.html#afe67d228dc5b68b0bd90503b0a5c0921">parameters</a>().at(0);</div>
+<div class="line"></div>
+<div class="line">    <span class="keywordtype">double</span> <span class="keyword">const</span> x_range = params.x_max() - params.x_min();</div>
+<div class="line">    <span class="keywordtype">double</span> <span class="keyword">const</span> x_min = params.x_min();</div>
+<div class="line"></div>
+<div class="line">    <span class="keywordtype">double</span> <span class="keyword">const</span> projection = x_range * point.<a name="a3"></a><a class="code" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>()[0] + x_min;</div>
 <div class="line">    <span class="keywordtype">double</span> <span class="keyword">const</span> value = std::atan(projection);</div>
 <div class="line"></div>
-<div class="line">    <span class="comment">// add to the first (zeroth) distribution. Since we are integrating with</span></div>
-<div class="line">    <span class="comment">// PLAIN, we could leave out the multiplication with the weight, but in</span></div>
-<div class="line">    <span class="comment">// general this is needed</span></div>
-<div class="line">    projector.<a name="a3"></a><a class="code" href="classhep_1_1projector.html#aec7cb88f25ea134b1af63e62475f93a6">add</a>(0, projection, value * point.<a name="a4"></a><a class="code" href="classhep_1_1mc__point.html#a32ae4e0b22ee693f01e59089b0f1809f">weight</a>());</div>
+<div class="line">    <span class="comment">// add to the first (zeroth) distribution</span></div>
+<div class="line">    projector.<a name="a4"></a><a class="code" href="classhep_1_1projector.html#aec7cb88f25ea134b1af63e62475f93a6">add</a>(0, projection, value);</div>
 <div class="line"></div>
 <div class="line">    <span class="keywordflow">return</span> value;</div>
 <div class="line">}</div>
@@ -112,11 +115,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="keyword">auto</span> integrand = hep::make_integrand&lt;double&gt;(</div>
 <div class="line">        arctan,</div>
 <div class="line">        1,</div>
-<div class="line">        <a name="_a5"></a><a class="code" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters&lt;double&gt;</a>(100, -5.0, 5.0)</div>
+<div class="line">        <a name="a5"></a><a class="code" href="group__distributions.html#gad15207a1e70b88e01af77a6b5ec097ae">hep::make_dist_params</a>(100, -5.0, 5.0)</div>
 <div class="line">    );</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// now integrate and record the differential distributions</span></div>
-<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> result = hep::plain&lt;double&gt;(integrand, 1000000);</div>
+<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> result = <a name="a6"></a><a class="code" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">hep::plain</a>(integrand, 1000000);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// integral is zero</span></div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;integral is I = &quot;</span> &lt;&lt; result.value() &lt;&lt; <span class="stringliteral">&quot; +- &quot;</span></div>

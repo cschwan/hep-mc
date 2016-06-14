@@ -91,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Obtaining, combining and checking results. </p>
-<p>Results can always be obtained by capturing the return-value of the integration functions. The types depend on the algorithm used, e.g. <a class="el" href="group__plain__group.html#ga177da9c7fac0304c40d182ceb6008359">plain</a> returns an instance of <a class="el" href="classhep_1_1mc__result.html">mc_result</a> which stores the estimate of the integral, its error and the number of integrand calls used to obtain this result. The <a class="el" href="group__vegas__group.html#gaada59d2b99e014be6f362f384da25483">vegas</a> and <a class="el" href="group__vegas__group.html#ga9304630a2d27587bcc2536bf1d6c5615">vegas_iteration</a> functions return one or a vector of instances of <a class="el" href="classhep_1_1vegas__result.html">vegas_result</a> that gives additional information about the PDF that was used during this iteration and the data accumulated that would be used to compute the PDF for the next iteration. </p>
+<p>Results can always be obtained by capturing the return-value of the integration functions. The types depend on the algorithm used, e.g. <a class="el" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">plain</a> returns an instance of <a class="el" href="classhep_1_1mc__result.html">mc_result</a> which stores the estimate of the integral, its error and the number of integrand calls used to obtain this result. The <a class="el" href="group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6">vegas</a> and <a class="el" href="group__vegas__group.html#ga718a856863c67b09514117d0a71881fe">vegas_iteration</a> functions return one or a vector of instances of <a class="el" href="classhep_1_1vegas__result.html">vegas_result</a> that gives additional information about the PDF that was used during this iteration and the data accumulated that would be used to compute the PDF for the next iteration. </p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -172,7 +172,7 @@ template&lt;typename Iterator , typename T &gt; </div>
 \[ \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left( E_i - E \right)^2}{S_i^2} \]
 </p>
 <p> If the range [<code>begin</code>, <code>end</code>) is empty, the result is zero. If it contains one element the result is infinity. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="helper_example_8cpp-example.html#a2">helper_example.cpp</a>, <a class="el" href="mpi_vegas_example_8cpp-example.html#a3">mpi_vegas_example.cpp</a>, and <a class="el" href="vegas_example_8cpp-example.html#a3">vegas_example.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="helper_example_8cpp-example.html#a2">helper_example.cpp</a>, <a class="el" href="mpi_vegas_example_8cpp-example.html#a4">mpi_vegas_example.cpp</a>, and <a class="el" href="vegas_example_8cpp-example.html#a4">vegas_example.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -210,7 +210,7 @@ template&lt;typename Iterator &gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Wrapper function for <a class="el" href="group__results.html#ga276c092765419532ec50f68090626863">chi_square_dof</a> with parameter <code>result</code> computed by <a class="el" href="group__results.html#gaa780f6f8497c2598902d1e3c59345796">cumulative_result0</a>. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="helper_example_8cpp-example.html#a3">helper_example.cpp</a>, <a class="el" href="mpi_vegas_example_8cpp-example.html#a4">mpi_vegas_example.cpp</a>, and <a class="el" href="vegas_example_8cpp-example.html#a4">vegas_example.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="helper_example_8cpp-example.html#a3">helper_example.cpp</a>, <a class="el" href="mpi_vegas_example_8cpp-example.html#a5">mpi_vegas_example.cpp</a>, and <a class="el" href="vegas_example_8cpp-example.html#a5">vegas_example.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -333,7 +333,7 @@ template&lt;typename Iterator &gt; </div>
 <p>Computes a cumulative result using a range of results pointed to by <code>begin</code> and <code>end</code>. If \( E_i, S_i, N_i \) are the estimate, error and number of calls of each iteration in the range defined by [<code>begin</code>, <code>end</code>) and \( M \) the number of results, then the cumulative result is computed as: </p><p class="formulaDsp">
 \begin{align} E &amp;= S^2 \sum_{i=1}^M \frac{E_i}{S_i^2} \\ S &amp;= \left( \sum_{i=1}^M \frac{1}{S_i^2} \right)^{-\frac{1}{2}} \\ N &amp;= \sum_{i=1}^M N_i \end{align}
 </p>
- <dl><dt><b>Examples: </b></dt><dd><a class="el" href="helper_example_8cpp-example.html#a1">helper_example.cpp</a>, <a class="el" href="mpi_vegas_example_8cpp-example.html#a2">mpi_vegas_example.cpp</a>, <a class="el" href="vegas_example_8cpp-example.html#a2">vegas_example.cpp</a>, and <a class="el" href="vegas_stop_after_precision_8cpp-example.html#a3">vegas_stop_after_precision.cpp</a>.</dd>
+ <dl><dt><b>Examples: </b></dt><dd><a class="el" href="helper_example_8cpp-example.html#a1">helper_example.cpp</a>, <a class="el" href="mpi_vegas_example_8cpp-example.html#a3">mpi_vegas_example.cpp</a>, <a class="el" href="vegas_example_8cpp-example.html#a3">vegas_example.cpp</a>, and <a class="el" href="vegas_stop_after_precision_8cpp-example.html#a3">vegas_stop_after_precision.cpp</a>.</dd>
 </dl>
 </div>
 </div>
