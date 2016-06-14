@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/internal/callback_helper.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
 
@@ -76,8 +75,6 @@ inline bool multi_channel_verbose_callback(
 	std::cout << "all iterations: N=" << result.calls() << " E="
 		<< result.value() << " +- " << result.error() << " ("
 		<< relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
-
-	print_distributions(std::cout, results.back());
 
 	std::cout.flush();
 

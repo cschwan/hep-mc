@@ -1,7 +1,6 @@
 nobase_include_HEADERS = \
 	hep/mc/internal/accumulator.hpp \
 	hep/mc/internal/accumulator_fwd.hpp \
-	hep/mc/internal/callback_helper.hpp \
 	hep/mc/internal/discrete_distribution.hpp \
 	hep/mc/internal/generator_helper.hpp \
 	hep/mc/internal/mpi_helper.hpp \
