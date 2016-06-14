@@ -27,7 +27,7 @@ int main()
 	auto integrand = hep::make_integrand<double>(
 		arctan,
 		1,
-		hep::distribution_parameters<double>(100, -5.0, 5.0)
+		hep::make_dist_params(100, -5.0, 5.0)
 	);
 
 	// now integrate and record the differential distributions

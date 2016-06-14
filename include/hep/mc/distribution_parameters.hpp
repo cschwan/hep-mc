@@ -72,6 +72,14 @@ private:
 	T bin_size_;
 };
 
+/// Shortcut for calling the constructor that automatically determines the
+/// numeric type.
+template <typename T>
+distribution_parameters<T> make_dist_params(std::size_t bins, T x_min, T x_max)
+{
+	return distribution_parameters<T>(bins, x_min, x_max);
+}
+
 /// @}
 
 }

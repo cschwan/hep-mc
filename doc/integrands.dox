@@ -82,7 +82,7 @@ auto power_integrand = hep::make_integrand<double>(power(2.0), 1);
 // the third argument specifies the distribution parameters: the x-axis ranges
 // from -10 to 10 and is subdivided into 100 bins
 auto square_distributions = hep::make_integrand<double>(square, 1,
-	hep::distribution_parameters<double>(-10.0, +10.0, 200));
+	hep::make_dist_params(-10.0, +10.0, 200));
 \endcode
 
 */
