@@ -274,16 +274,16 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	);
 
 	ASSERT_EQ( results2.size() , iterations );
-	ASSERT_EQ( results2[0].distributions().size() , 1 );
-	ASSERT_EQ( results2[1].distributions().size() , 1 );
-	ASSERT_EQ( results2[2].distributions().size() , 1 );
-	ASSERT_EQ( results2[3].distributions().size() , 1 );
-	ASSERT_EQ( results2[4].distributions().size() , 1 );
-	ASSERT_EQ( results2[0].distributions()[0].results().size() , 1 );
-	ASSERT_EQ( results2[1].distributions()[0].results().size() , 1 );
-	ASSERT_EQ( results2[2].distributions()[0].results().size() , 1 );
-	ASSERT_EQ( results2[3].distributions()[0].results().size() , 1 );
-	ASSERT_EQ( results2[4].distributions()[0].results().size() , 1 );
+	ASSERT_EQ( results2[0].distributions().size() , 1u );
+	ASSERT_EQ( results2[1].distributions().size() , 1u );
+	ASSERT_EQ( results2[2].distributions().size() , 1u );
+	ASSERT_EQ( results2[3].distributions().size() , 1u );
+	ASSERT_EQ( results2[4].distributions().size() , 1u );
+	ASSERT_EQ( results2[0].distributions()[0].results().size() , 1u );
+	ASSERT_EQ( results2[1].distributions()[0].results().size() , 1u );
+	ASSERT_EQ( results2[2].distributions()[0].results().size() , 1u );
+	ASSERT_EQ( results2[3].distributions()[0].results().size() , 1u );
+	ASSERT_EQ( results2[4].distributions()[0].results().size() , 1u );
 
 	EXPECT_EQ( results2[0].value() , results[0].value() );
 	EXPECT_EQ( results2[0].error() , results[0].error() );

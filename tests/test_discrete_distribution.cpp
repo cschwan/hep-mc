@@ -20,11 +20,11 @@ TYPED_TEST(DiscreteDistribution, DistributionWithOneBin)
 		weights.end());
 
 	// distribution with one bin should always give that one bin
-	EXPECT_EQ( distribution(rng) , 0 );
-	EXPECT_EQ( distribution(rng) , 0 );
-	EXPECT_EQ( distribution(rng) , 0 );
-	EXPECT_EQ( distribution(rng) , 0 );
-	EXPECT_EQ( distribution(rng) , 0 );
+	EXPECT_EQ( distribution(rng) , 0u );
+	EXPECT_EQ( distribution(rng) , 0u );
+	EXPECT_EQ( distribution(rng) , 0u );
+	EXPECT_EQ( distribution(rng) , 0u );
+	EXPECT_EQ( distribution(rng) , 0u );
 }
 
 TYPED_TEST(DiscreteDistribution, DistributionWithTwoEqualBins)
