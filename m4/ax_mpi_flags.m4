@@ -24,7 +24,7 @@
 #
 # LICENSE
 #
-#   Copyright (c) 2014 Christopher Schwan <schwan@uni-mainz.de>
+#   Copyright (c) 2014-2016 Christopher Schwan <handgranaten-herbert@posteo.de>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -59,12 +59,12 @@ AC_DEFUN([_AX_MPI_FLAGS], [dnl
     set dummy ${ax_mpi_flags}; shift
     while test $[@%:@] -gt 0; do
         AS_CASE([$[1]],
-                [-D|-I],   [MPI_CPPFLAGS="$MPI_CPPFLAGS $[1] $[2]"; shift],
-                [-D*|-I*], [MPI_CPPFLAGS="$MPI_CPPFLAGS $[1]"],
-                [-L],      [MPI_LDFLAGS="$MPI_LDFLAGS $[1] $[2]"; shift],
-                [-L*],     [MPI_LDFLAGS="$MPI_LDFLAGS $[1]"],
-                [-l],      [MPI_LIBS="$MPI_LIBS $[1] $[2]"; shift],
-                [-l*],     [MPI_LIBS="$MPI_LIBS $[1]"],
+                [-D|-I],    [MPI_CPPFLAGS="$MPI_CPPFLAGS $[1] $[2]"; shift],
+                [-D*|-I*],  [MPI_CPPFLAGS="$MPI_CPPFLAGS $[1]"],
+                [-L],       [MPI_LDFLAGS="$MPI_LDFLAGS $[1] $[2]"; shift],
+                [-L*|-Wl*], [MPI_LDFLAGS="$MPI_LDFLAGS $[1]"],
+                [-l],       [MPI_LIBS="$MPI_LIBS $[1] $[2]"; shift],
+                [-l*],      [MPI_LIBS="$MPI_LIBS $[1]"],
 
                 [AS_ECHO(["$as_me:$LINENO: ignored flag '$[1]'"]) >&AS_MESSAGE_LOG_FD]
         )
