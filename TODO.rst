@@ -4,8 +4,6 @@ GENERAL
 - add ``non_zero_calls()`` member function to ``_result`` classes; since this
   parameter is an integer the MPI reduce routine has to be adapted
 - write cumulative functions that accumulate also the distributions
-- check if it is possible to automatically multiply the weight to the function
-  value when creating distributions
 - remove the globally set callback functions and make them local to every call
   to an integrator?
 - add a string to the ``distribution_parameters`` class to identify different
