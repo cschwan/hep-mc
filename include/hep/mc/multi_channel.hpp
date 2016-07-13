@@ -104,8 +104,8 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 		// randomly select a channel
 		std::size_t const channel = channel_selector(generator);
 
-		// compute the densities for `random_numbers` for every channel
-		T const weight = integrand.densities()(channel,
+		// compute the coordinates for `random_numbers` for the given channel
+		T const weight = integrand.map()(channel,
 			static_cast <std::vector<T> const&> (random_numbers), coordinates,
 			channel_densities);
 
@@ -123,11 +123,11 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 
 		total_density /= weight;
 
-		using density_type = typename std::remove_reference<
-			typename std::remove_reference<I>::type::density_type>::type;
+		using map_type = typename std::remove_reference<
+			typename std::remove_reference<I>::type::map_type>::type;
 
-		multi_channel_point2<T, density_type> const point(random_numbers,
-			coordinates, channel, total_density, integrand.densities());
+		multi_channel_point2<T, map_type> const point(random_numbers,
+			coordinates, channel, total_density, integrand.map());
 
 		T const value = accumulator.invoke(integrand, point);
 		T const square = value * value;

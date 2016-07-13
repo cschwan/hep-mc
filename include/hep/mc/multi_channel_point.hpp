@@ -66,9 +66,8 @@ private:
 };
 
 /// Point in the unit-hypercube for multi-channel Monte Carlo integration. This
-/// type also captures the density functions that are used to generate
-/// `coordinates`.
-template <typename T, typename D>
+/// type also captures the map that is used to generate `coordinates`.
+template <typename T, typename M>
 class multi_channel_point2 : public multi_channel_point<T>
 {
 public:
@@ -78,23 +77,23 @@ public:
 		std::vector<T> const& coordinates,
 		std::size_t channel,
 		T total_density,
-		D const& density_function
+		M const& map
 	)
 		: multi_channel_point<T>(point, coordinates, channel, total_density)
-		, density_function_(density_function)
+		, map_(map)
 	{
 	}
 
-	/// The density function that constructed this point. See
-	/// \ref multi_channel_iteration for reference of the signature of this
+	/// The map function that constructed this point. See
+	/// \ref multi_channel_iteration for reference on the signature of this
 	/// function.
-	D const& density_function() const
+	M const& map() const
 	{
-		return density_function_;
+		return map_;
 	}
 
 private:
-	D const& density_function_;
+	M const& map_;
 };
 
 /// @}

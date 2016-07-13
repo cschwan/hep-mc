@@ -3,6 +3,8 @@ New in 0.5:
 
 - WARNING: this version introduces a lot of interface changes; if you used
   previous version of this library you must update your code accordingly
+- changed name of ``density_function()`` in ``hep::multi_channel_point`` to
+  ``map()``
 - when calling the integration algorithms the numeric type must no longer be
   explicitly specified. The type information is now infered from the integrand
 - renamed the class ``vegas_iteration_result`` to ``vegas_result``

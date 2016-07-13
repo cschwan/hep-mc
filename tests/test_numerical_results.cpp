@@ -192,16 +192,19 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	std::size_t const calls = 100000;
 	std::size_t const iterations = 5;
 
-	auto unit_densities = [](std::size_t, std::vector<T> const& random_numbers,
-		std::vector<T>& coordinates, std::vector<T>& channel_densities) {
-
+	auto unit_densities = [](
+		std::size_t,
+		std::vector<T> const& random_numbers,
+		std::vector<T>& coordinates,
+		std::vector<T>& densities
+	) {
 		std::copy(
 			random_numbers.begin(),
 			random_numbers.end(),
 			coordinates.begin()
 		);
 
-		std::fill(channel_densities.begin(), channel_densities.end(), T(1.0));
+		std::fill(densities.begin(), densities.end(), T(1.0));
 
 		return T(1.0);
 	};

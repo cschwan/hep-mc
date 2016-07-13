@@ -33,37 +33,37 @@ namespace hep
 
 /// Class representing a function that can be integrated using the multi channel
 /// algorithms.
-template <typename T, typename F, typename D, bool distributions>
+template <typename T, typename F, typename M, bool distributions>
 class multi_channel_integrand : public integrand<T, F, distributions>
 {
 public:
 	/// Type of the density function.
-	using density_type = D;
+	using map_type = M;
 
 	/// Constructor. Instead of using the constructor directly you should
 	/// consider using one of the helper functions \ref
 	/// make_multi_channel_integrand.
-	template <typename G, typename E>
+	template <typename G, typename N>
 	multi_channel_integrand(
 		G&& function,
 		std::size_t dimensions,
-		E&& densities,
+		N&& map,
 		std::size_t map_dimensions,
 		std::size_t channels,
 		std::vector<distribution_parameters<T>> const& parameters
 	)
 		: integrand<T, G, distributions>(std::forward<G>(function), dimensions,
 			parameters)
-		, densities_(std::forward<E>(densities))
+		, map_(std::forward<N>(map))
 		, map_dimensions_(map_dimensions)
 		, channels_(channels)
 	{
 	}
 
 	/// Returns the density functions.
-	D& densities()
+	map_type& map()
 	{
-		return densities_;
+		return map_;
 	}
 
 	/// Returns the size of the vector the mappings map onto.
@@ -79,43 +79,43 @@ public:
 	}
 
 private:
-	D densities_;
+	M map_;
 	std::size_t map_dimensions_;
 	std::size_t channels_;
 };
 
 /// Multi channel integrand constructor. For a description of the parameters see
 /// \ref make_integrand. In addition, Multi Channel integrators need an
-/// additonal function `densities` that compute the PDFs and the CDFs for a
-/// randomly selected channel. This function would look like:
+/// additonal function `map` that computes the PDFs and the CDFs for a
+/// randomly selected channel. This function should look like:
 /// \code
-/// T densities(
+/// T map(
 ///     std::size_t channel,
 ///     std::vector<T> const& random_numbers,
 ///     std::vector<T>& coordinates,
-///	    std::vector<T>& channel_densities
+///	    std::vector<T>& densities
 /// ) {
 ///     // for the selected `channel`, which is an integer from the half-open
 ///     // interval [0, channels) and the given `random_numbers` with 
 ///     // `random_numbers.size() == dimensions` compute the CDFs and store them
 ///     // in `coordinates` which is large as specified with `map_dimensions`.
-///     // Also compute the PDFs and store them in `channel_densities`
+///     // Also compute the PDFs and store them in `densities`
 ///
 ///     return /* jacobian */;
 /// }
 /// \endcode
-template <typename T, typename F, typename D>
-inline multi_channel_integrand<T, F, D, false> make_multi_channel_integrand(
+template <typename T, typename F, typename M>
+inline multi_channel_integrand<T, F, M, false> make_multi_channel_integrand(
 	F&& function,
 	std::size_t dimensions,
-	D&& densities,
+	M&& map,
 	std::size_t map_dimensions,
 	std::size_t channels
 ) {
-	return multi_channel_integrand<T, F, D, false>(
+	return multi_channel_integrand<T, F, M, false>(
 		std::forward<F>(function),
 		dimensions,
-		std::forward<D>(densities),
+		std::forward<M>(map),
 		map_dimensions,
 		channels,
 		std::vector<distribution_parameters<T>>()
@@ -123,19 +123,19 @@ inline multi_channel_integrand<T, F, D, false> make_multi_channel_integrand(
 }
 
 /// Multi channel integrand constructor for distributions.
-template <typename T, typename F, typename D, typename... Ds>
-inline multi_channel_integrand<T, F, D, true> make_multi_channel_integrand(
+template <typename T, typename F, typename M, typename... Ds>
+inline multi_channel_integrand<T, F, M, true> make_multi_channel_integrand(
 	F&& function,
 	std::size_t dimensions,
-	D&& densities,
+	M&& map,
 	std::size_t map_dimensions,
 	std::size_t channels,
 	Ds&&... parameters
 ) {
-	return multi_channel_integrand<T, F, D, true>(
+	return multi_channel_integrand<T, F, M, true>(
 		std::forward<F>(function),
 		dimensions,
-		std::forward<D>(densities),
+		std::forward<M>(map),
 		map_dimensions,
 		channels,
 		std::vector<distribution_parameters<T>>{std::forward<Ds>(parameters)...}
