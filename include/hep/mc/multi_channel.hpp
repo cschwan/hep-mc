@@ -23,6 +23,7 @@
 #include "hep/mc/internal/discrete_distribution.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
+#include "hep/mc/multi_channel_map.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 
@@ -107,7 +108,7 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 		// compute the coordinates for `random_numbers` for the given channel
 		T const weight = integrand.map()(channel,
 			static_cast <std::vector<T> const&> (random_numbers), coordinates,
-			channel_densities);
+			channel_densities, multi_channel_map::calculate_coordinates);
 
 		if (weight == T())
 		{

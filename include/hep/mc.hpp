@@ -29,6 +29,7 @@
 #include "hep/mc/multi_channel.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_integrand.hpp"
+#include "hep/mc/multi_channel_map.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"

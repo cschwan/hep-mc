@@ -36,8 +36,15 @@ int main(int argc, char* argv[])
 		std::size_t channel,
 		std::vector<double> const& random_numbers,
 		std::vector<double>& coordinates,
-		std::vector<double>& channel_densities
+		std::vector<double>& densities,
+		hep::multi_channel_map action
 	) {
+		if (action == hep::multi_channel_map::calculate_densities)
+		{
+			// we calculated the densities already
+			return 1.0;
+		}
+
 		double s = std::tan(std::acos(-1.0) * (random_numbers[0] - 0.5));
 
 		if (channel == 0)
@@ -55,8 +62,8 @@ int main(int argc, char* argv[])
 		double const sms1 = s - s1;
 
 		// set the channel densities
-		channel_densities[1] = 1.0 / (1.0 + sms1 * sms1) / std::acos(-1.0);
-		channel_densities[0] = 1.0 / (1.0 + sms0 * sms0) / std::acos(-1.0);
+		densities[1] = 1.0 / (1.0 + sms1 * sms1) / std::acos(-1.0);
+		densities[0] = 1.0 / (1.0 + sms0 * sms0) / std::acos(-1.0);
 
 		// global weight
 		return 1.0;

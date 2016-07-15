@@ -14,6 +14,7 @@ nobase_include_HEADERS = \
 	hep/mc/multi_channel.hpp \
 	hep/mc/multi_channel_callback.hpp \
 	hep/mc/multi_channel_integrand.hpp \
+	hep/mc/multi_channel_map.hpp \
 	hep/mc/multi_channel_max_difference.hpp \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \

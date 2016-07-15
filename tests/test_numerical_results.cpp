@@ -196,8 +196,15 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 		std::size_t,
 		std::vector<T> const& random_numbers,
 		std::vector<T>& coordinates,
-		std::vector<T>& densities
+		std::vector<T>& densities,
+		hep::multi_channel_map action
 	) {
+		if (action == hep::multi_channel_map::calculate_densities)
+		{
+			// we calculated the densities already
+			return T(1.0);
+		}
+
 		std::copy(
 			random_numbers.begin(),
 			random_numbers.end(),
