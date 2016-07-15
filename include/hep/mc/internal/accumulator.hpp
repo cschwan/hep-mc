@@ -68,12 +68,17 @@ public:
 	template <typename I, typename P>
 	T invoke(I& integrand, P const& point)
 	{
-		hep::projector<T> projector(*this, point.weight());
+		hep::projector<T> projector(*this, point);
 
 		// call the integrand function with the supplied point. Distributions
 		// are generated here
-		T const value = integrand.function()(point, projector) * point.weight();
-		accumulate(sums_[0], sums_[1], compensations_[0], value);
+		T value = integrand.function()(point, projector);
+
+		if (value != T())
+		{
+			value *= point.weight();
+			accumulate(sums_[0], sums_[1], compensations_[0], value);
+		}
 
 		return value;
 	}
@@ -178,8 +183,13 @@ public:
 	{
 		// call the integrand function with the supplied point. No distributions
 		// are generated here
-		T const value = integrand.function()(point) * point.weight();
-		accumulate(sums_[0], sums_[1], sums_[2], value);
+		T value = integrand.function()(point);
+
+		if (value != T())
+		{
+			value *= point.weight();
+			accumulate(sums_[0], sums_[1], sums_[2], value);
+		}
 
 		return value;
 	}
@@ -224,7 +234,11 @@ template <typename T>
 inline void projector<T>::add(std::size_t index, T projection, T value)
 {
 	// grant selective access to the following function (only)
-	accumulator_.add_to_distribution(index, projection, value * weight_);
+	accumulator_.add_to_distribution(
+		index,
+		projection,
+		value * point_.weight()
+	);
 }
 
 template <typename T>

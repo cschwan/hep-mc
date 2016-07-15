@@ -44,7 +44,8 @@ the numerical type, e.g. `double`:
               std::size_t channel,
               std::vector<T> const& random_numbers,
               std::vector<T>& coordinates,
-              std::vector<T>& channel_densities
+              std::vector<T>& densities,
+              hep::multi_channel_map action
           );
 
       - The parameter `channel` gives the randomly selected channel and
@@ -53,11 +54,12 @@ the numerical type, e.g. `double`:
       - `coordinates` has the size previously specified by `map_dimensions` and
         must be filled by `my_density_functions` with the components of the
         vector \f$ \vec{y} \in V \f$ using the CDF \f$ \vec{y} = \vec{y}_i  (
-        \vec{x} ) \f$.
-      - The last parameter `channel_densities` has the size specified by
-        `channels` and must be filled by `my_density_functions` with all
-        densities \f$ \left\{ p_j ( \vec{y} ) \right\}_{j=1}^M \f$ evaluated at
-        \f$ \vec{y} = \vec{y}_i ( \vec{x} ) \f$.
+        \vec{x} ) \f$ if `action` is `calculate_coordinates`.
+	  - The parameter `densities` has the size specified by `channels` and must
+		be filled by `my_density_functions` with all densities \f$ \left\{ p_j (
+		\vec{y} ) \right\}_{j=1}^M \f$ evaluated at \f$ \vec{y} = \vec{y}_i (
+        \vec{x} ) \f$ if the value of `action` is `calcualate_densities`, but it
+        also already calculated before.
       - The return value of this function determines the jacobian \f$ J_i (
         \vec{x} ) \f$ of the map \f$ U \to V \f$. If this factor is exactly
         zero, i.e. `T()`, this is taken as a hint to skip the evaluation of

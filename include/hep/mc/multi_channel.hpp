@@ -86,7 +86,7 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 
 	std::vector<T> random_numbers(integrand.dimensions());
 	std::vector<T> coordinates(integrand.map_dimensions());
-	std::vector<T> channel_densities(channels);
+	std::vector<T> densities(channels);
 	std::vector<T> adjustment_data(channels);
 
 	// distribution that randomly selects a channel
@@ -105,38 +105,40 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 		// randomly select a channel
 		std::size_t const channel = channel_selector(generator);
 
-		// compute the coordinates for `random_numbers` for the given channel
-		T const weight = integrand.map()(channel,
-			static_cast <std::vector<T> const&> (random_numbers), coordinates,
-			channel_densities, multi_channel_map::calculate_coordinates);
-
-		if (weight == T())
-		{
-			// function does not contribute, skip evaluation
-			continue;
-		}
-
-		T total_density = T();
-		for (std::size_t j = 0; j != channels; ++j)
-		{
-			total_density += channel_weights[j] * channel_densities[j];
-		}
-
-		total_density /= weight;
-
 		using map_type = typename std::remove_reference<
 			typename std::remove_reference<I>::type::map_type>::type;
 
-		multi_channel_point2<T, map_type> const point(random_numbers,
-			coordinates, channel, total_density, integrand.map());
+		// calculate `coordinates` and possibly `densities`
+		integrand.map()(
+			channel,
+			random_numbers,
+			coordinates,
+			densities,
+			multi_channel_map::calculate_coordinates
+		);
+
+		multi_channel_point2<T, map_type> const point(
+			random_numbers,
+			coordinates,
+			channel,
+			densities,
+			channel_weights,
+			integrand.map()
+		);
 
 		T const value = accumulator.invoke(integrand, point);
-		T const square = value * value;
+
+		if (value == T())
+		{
+			continue;
+		}
+
+		T const square = value * value * point.weight();
 
 		// these are the values W that are used to update the alphas
 		for (std::size_t j = 0; j != channels; ++j)
 		{
-			adjustment_data[j] += channel_densities[j] * square / total_density;
+			adjustment_data[j] += densities[j] * square;
 		}
 	}
 

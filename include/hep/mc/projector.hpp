@@ -21,6 +21,7 @@
 
 #include "hep/mc/internal/accumulator_fwd.hpp"
 #include "hep/mc/distribution_parameters.hpp"
+#include "hep/mc/mc_point.hpp"
 
 #include <cstddef>
 
@@ -36,9 +37,9 @@ class projector
 {
 public:
 	/// \cond DOXYGEN_IGNORE
-	projector(accumulator<T, true>& accumulator, T weight)
+	projector(accumulator<T, true>& accumulator, mc_point<T> const& point)
 		: accumulator_(accumulator)
-		, weight_(weight)
+		, point_(point)
 	{
 	}
 	// \endcond
@@ -55,7 +56,7 @@ public:
 
 private:
 	accumulator<T, true>& accumulator_;
-	T weight_;
+	mc_point<T> const& point_;
 };
 
 /// @}

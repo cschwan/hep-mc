@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2015  Christopher Schwan
+ * Copyright (C) 2012-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,12 +43,15 @@ public:
 	{
 	}
 
+	/// Destructor.
+	virtual ~mc_point() = default;
+
 	/// The weight \f$ w \f$ of this point. The PLAIN integrator (\ref plain)
 	/// produces points that have weight equals one, i.e. are constant over the
-	/// entire unit-hypercube; this also means that weight does not include the
-	/// averaging factor \f$ 1 / N \f$ that is used to produces the expected
+	/// entire unit-hypercube. This also means that weight does not include the
+	/// averaging factor \f$ 1 / N \f$ that is used to produce the expected
 	/// value.
-	T weight() const
+	virtual T weight() const
 	{
 		return weight_;
 	}
@@ -60,8 +63,8 @@ public:
 		return point_;
 	}
 
-private:
-	T weight_;
+protected:
+	T mutable weight_;
 	std::vector<T> const& point_;
 };
 

@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/mc_point.hpp"
+#include "hep/mc/multi_channel_map.hpp"
 
 #include <cstddef>
 #include <vector>
@@ -38,11 +39,11 @@ public:
 	/// Constructor.
 	multi_channel_point(
 		std::vector<T> const& point,
-		std::vector<T> const& coordinates,
-		std::size_t channel,
-		T total_density
+		T weight,
+		std::vector<T>& coordinates,
+		std::size_t channel
 	)
-		: mc_point<T>(point, T(1.0) / total_density)
+		: mc_point<T>(point, weight)
 		, channel_(channel)
 		, coordinates_(coordinates)
 	{
@@ -60,9 +61,9 @@ public:
 		return coordinates_;
 	}
 
-private:
+protected:
 	std::size_t channel_;
-	std::vector<T> const& coordinates_;
+	std::vector<T>& coordinates_;
 };
 
 /// Point in the unit-hypercube for multi-channel Monte Carlo integration. This
@@ -74,12 +75,15 @@ public:
 	/// Constructor.
 	multi_channel_point2(
 		std::vector<T> const& point,
-		std::vector<T> const& coordinates,
+		std::vector<T>& coordinates,
 		std::size_t channel,
-		T total_density,
-		M const& map
+		std::vector<T>& densities,
+		std::vector<T> const& channel_weights,
+		M& map
 	)
-		: multi_channel_point<T>(point, coordinates, channel, total_density)
+		: multi_channel_point<T>(point, T(), coordinates, channel)
+		, densities_(densities)
+		, channel_weights_(channel_weights)
 		, map_(map)
 	{
 	}
@@ -92,8 +96,37 @@ public:
 		return map_;
 	}
 
+	/// Returns the weight for this Monte Carlo point.
+	T weight() const override
+	{
+		if (this->weight_ == T())
+		{
+			// lazy evaluation of the jacobian of `map` and `densities`
+			this->weight_ = map_(
+				this->channel_,
+				this->point_,
+				this->coordinates_,
+				densities_,
+				multi_channel_map::calculate_densities
+			);
+
+			T total_density = T();
+
+			for (std::size_t j = 0; j != channel_weights_.size(); ++j)
+			{
+				total_density += channel_weights_[j] * densities_[j];
+			}
+
+			this->weight_ /= total_density;
+		}
+
+		return this->weight_;
+	}
+
 private:
-	M const& map_;
+	std::vector<T>& densities_;
+	std::vector<T> const& channel_weights_;
+	M& map_;
 };
 
 /// @}

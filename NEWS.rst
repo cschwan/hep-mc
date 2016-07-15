@@ -1,8 +1,14 @@
 New in 0.5:
 ===========
 
-- WARNING: this version introduces a lot of interface changes; if you used
-  previous version of this library you must update your code accordingly
+- WARNING: this version introduces many interface changes; if you used previous
+  version of this library you must update your code accordingly
+- implemented lazy evaluation of the weight for the multi channel integrator.
+  This required to change the interface of the map function which now must
+  accept an additional parameter ``action`` that determines whether the
+  ``coordinates`` or the ``densities`` must be calculated. This in turn enables
+  the algorithm to skip the evaluation of ``densities`` when the integrand
+  returns a zero value
 - changed name of ``density_function()`` in ``hep::multi_channel_point`` to
   ``map()``
 - when calling the integration algorithms the numeric type must no longer be
