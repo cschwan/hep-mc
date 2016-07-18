@@ -3821,13 +3821,12 @@ bool ParseInt32(const Message& src_text, const char* str, Int32* value);
 // corresponding to the given Google Test flag.
 bool BoolFromGTestEnv(const char* flag, bool default_val);
 GTEST_API_ Int32 Int32FromGTestEnv(const char* flag, Int32 default_val);
-const char* StringFromGTestEnv(const char* flag, const char* default_val);
+std::string StringFromGTestEnv(const char* flag, const char* default_val);
 
 }  // namespace internal
 }  // namespace testing
 
 #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_
-
 
 #if GTEST_OS_LINUX
 # include <stdlib.h>
@@ -20457,13 +20456,13 @@ class TestWithParam : public Test, public WithParamInterface<T> {
 // AssertionResult. For more information on how to use AssertionResult with
 // these macros see comments on that class.
 #define EXPECT_TRUE(condition) \
-  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
+  GTEST_TEST_BOOLEAN_((condition), #condition, false, true, \
                       GTEST_NONFATAL_FAILURE_)
 #define EXPECT_FALSE(condition) \
   GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
                       GTEST_NONFATAL_FAILURE_)
 #define ASSERT_TRUE(condition) \
-  GTEST_TEST_BOOLEAN_(condition, #condition, false, true, \
+  GTEST_TEST_BOOLEAN_((condition), #condition, false, true, \
                       GTEST_FATAL_FAILURE_)
 #define ASSERT_FALSE(condition) \
   GTEST_TEST_BOOLEAN_(!(condition), #condition, true, false, \
