@@ -54,7 +54,6 @@ public:
 	{
 	}
 
-
 	/// The number of function evaluations \f$ N \f$ performed to obtain this
 	/// result.
 	std::size_t calls() const

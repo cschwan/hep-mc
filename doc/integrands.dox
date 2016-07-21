@@ -66,10 +66,9 @@ Specifying the integrand is not enough for the Monte Carlo integration routines.
 They also must know how many dimensions, i.e. how many random numbers, the
 integrand requires and the numeric type with which the operations should be
 performed. If distribution should be accumulated during the integration the
-binning (how many bins, upper and lower boundary) must be specified as well.
-Since this is generic for all algorithms, starting with version 0.5 the complete
-integrand information is specified by creating an \ref integrand, e.g. for the
-examples above:
+binning (how many bins, upper and lower boundaries) must be specified as well.
+Since this is generic for all algorithms the complete integrand information is
+specified by creating an \ref integrand, which looks for the examples above:
 \code
 // the integer specifies the dimension of the integrand `square`, `double`
 // specifies the numeric type the integration algorithm should use
@@ -83,6 +82,29 @@ auto power_integrand = hep::make_integrand<double>(power(2.0), 1);
 // from -10 to 10 and is subdivided into 100 bins
 auto square_distributions = hep::make_integrand<double>(square, 1,
 	hep::make_dist_params(-10.0, +10.0, 200));
+\endcode
+
+An integrand for a multi channel integrator requires even more information
+because the user PDFs and CDFs must be provided. Both must be calculated in
+function that we call `map` and has the following signature:
+\code
+T map(
+    std::size_t channel,
+    std::vector<T> const& random_numbers,
+    std::vector<T>& coordinates,
+    std::vector<T>& densities,
+    hep::multi_channel_map action
+);
+\endcode
+A \ref multi_channel_integrand is now created e.g. as follows:
+\code
+auto mc_integrand = hep::make_multi_channel_integrand<double>(
+    function, // the integrand function that we wish to integrate
+    10,       // the integration is ten dimensional
+    map,      // the map function providing PDFs and CDFs
+    20,       // `map` maps the ten random numbers to twenty in `coordinates`
+    200       // `map` uses two hundred channels
+);
 \endcode
 
 */

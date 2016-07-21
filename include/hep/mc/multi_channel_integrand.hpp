@@ -93,17 +93,18 @@ private:
 ///     std::size_t channel,
 ///     std::vector<T> const& random_numbers,
 ///     std::vector<T>& coordinates,
-///	    std::vector<T>& densities
-/// ) {
-///     // for the selected `channel`, which is an integer from the half-open
-///     // interval [0, channels) and the given `random_numbers` with 
-///     // `random_numbers.size() == dimensions` compute the CDFs and store them
-///     // in `coordinates` which is large as specified with `map_dimensions`.
-///     // Also compute the PDFs and store them in `densities`
-///
-///     return /* jacobian */;
-/// }
+///	    std::vector<T>& densities,
+///     hep::multi_channel_map action
+/// );
 /// \endcode
+/// This function is called by the multi channel integrator, first with the
+/// parameter `action` set to \ref multi_channel_map::calculate_coordinates,
+/// which signals that the vector `coordinates` must be filled using the CDFs.
+/// The return value is ignored for this function call. If the integrand returns
+/// a non-zero value `map` is called again with `action` set to
+/// \ref multi_channel_map::calculate_densities, which means that the vector
+/// `densities` must be populated with all PDFs for the given `channel` and
+/// `random_numbers`. The return value is the jacobian for the given `channel`.
 template <typename T, typename F, typename M>
 inline multi_channel_integrand<T, F, M, false> make_multi_channel_integrand(
 	F&& function,
