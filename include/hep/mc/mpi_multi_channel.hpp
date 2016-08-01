@@ -47,6 +47,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	std::vector<numeric_type_of<I>> const& channel_weights,
+	std::size_t min_calls_per_channel = 0,
 	R&& generator = std::mt19937()
 ) {
 	using T = numeric_type_of<I>;
@@ -106,7 +107,9 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
 			break;
 		}
 
-		weights = multi_channel_refine_weights(weights, buffer);
+		T const minimum_weight = T(min_calls_per_channel) / *i;
+
+		weights = multi_channel_refine_weights(weights, buffer, minimum_weight);
 	}
 
 	return results;
@@ -119,6 +122,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
 	MPI_Comm communicator,
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
+	std::size_t min_calls_per_channel = 0,
 	R&& generator = std::mt19937()
 ) {
 	using T = numeric_type_of<I>;
@@ -128,6 +132,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
 		std::forward<I>(integrand),
 		iteration_calls,
 		std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
+		min_calls_per_channel,
 		std::forward<R>(generator)
 	);
 }

@@ -41,13 +41,15 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
-/// Uses `adjustment_data` to from a previous call of
-/// \ref multi_channel_iteration to refine `weights`. The procedure is the one
-/// suggested in Ref. \cite WeightOptimization .
+/// Uses `adjustment_data` from a previous call of \ref multi_channel_iteration
+/// to refine `weights`. The procedure is the one suggested in Ref.
+/// \cite WeightOptimization modified such that the weights are approximately
+/// larger then the given `minimum_weight`.
 template <typename T>
 inline std::vector<T> multi_channel_refine_weights(
 	std::vector<T> const& weights,
-	std::vector<T> const& adjustment_data
+	std::vector<T> const& adjustment_data,
+	T minimum_weight
 ) {
 	std::vector<T> new_weights(weights.size());
 
@@ -59,9 +61,18 @@ inline std::vector<T> multi_channel_refine_weights(
 		sum_of_new_weights += new_weights[i];
 	}
 
-	for (std::size_t i = 0; i != new_weights.size(); ++i)
+	T new_sum = T();
+
+	for (T& weight : new_weights)
 	{
-		new_weights[i] /= sum_of_new_weights;
+		weight /= sum_of_new_weights;
+		weight = std::fmax(weight, minimum_weight);
+		new_sum += weight;
+	}
+
+	for (T& weight : new_weights)
+	{
+		weight /= new_sum;
 	}
 
 	return new_weights;
@@ -163,6 +174,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
 	std::vector<numeric_type_of<I>> const& channel_weights,
+	std::size_t min_calls_per_channel = 0,
 	R&& generator = std::mt19937()
 ) {
 	using T = numeric_type_of<I>;
@@ -184,8 +196,10 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 			break;
 		}
 
+		T const minimum_weight = T(min_calls_per_channel) / calls;
+
 		weights = multi_channel_refine_weights(weights,
-			result.adjustment_data());
+			result.adjustment_data(), minimum_weight);
 	}
 
 	return results;
@@ -201,6 +215,7 @@ template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 	I&& integrand,
 	std::vector<std::size_t> const& iteration_calls,
+	std::size_t min_calls_per_channel = 0,
 	R&& generator = std::mt19937()
 ) {
 	using T = numeric_type_of<I>;
@@ -209,6 +224,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 		std::forward<I>(integrand),
 		iteration_calls,
 		std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
+		min_calls_per_channel,
 		std::forward<R>(generator)
 	);
 }

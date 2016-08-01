@@ -1,6 +1,10 @@
 New in 0.5:
 ===========
 
+- the functions ``multi_channel`` and ``mpi_multi_channel`` now accept an
+  optional parameter ``min_calls_per_channel`` that limits the a-priori weights
+  to a smallest weight determined by a minimum number of calls. If set to zero
+  (the default), this corresponds to the old behavior
 - WARNING: this version introduces many interface changes; if you used previous
   version of this library you must update your code accordingly
 - implemented lazy evaluation of the weight for the multi channel integrator.
