@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015  Christopher Schwan
+ * Copyright (C) 2015-2016  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,62 @@
 
 #include "hep/mc/multi_channel_result.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
+#include "hep/mc/multi_channel_weight_info.hpp"
 
 #include <cmath>
 #include <functional>
 #include <iostream>
+#include <iterator>
+#include <sstream>
+#include <string>
 #include <vector>
+
+namespace
+{
+
+inline std::string make_list_of_ranges(std::vector<std::size_t> const& indices)
+{
+	std::ostringstream ranges;
+	std::size_t a = 0;
+	std::size_t b = 0;
+
+	for (auto i = indices.begin(); i != indices.end(); ++i)
+	{
+		a = *i;
+		b = a;
+
+		if (i != indices.begin())
+		{
+			ranges << ',';
+		}
+
+		for (;;)
+		{
+			auto next = std::next(i);
+
+			if ((next == indices.end()) || (*next != (*i + 1)))
+			{
+				break;
+			}
+
+			b = *next;
+			++i;
+		}
+
+		if (a == b)
+		{
+			ranges << a;
+		}
+		else
+		{
+			ranges << a << '-' << b;
+		}
+	}
+
+	return ranges.str();
+}
+
+}
 
 namespace hep
 {
@@ -54,15 +105,82 @@ inline bool multi_channel_verbose_callback(
 ) {
 	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
+	T const max_difference = multi_channel_max_difference(results.back());
+
+	std::cout << "summary of a-priori weights: D=" << max_difference << '\n';
+
+	multi_channel_weight_info<T> info(results.back());
+
+	std::cout << "wmin=" << info.weights().front() << " (N="
+		<< info.calls().front() << ") in channel";
+
+	std::size_t const count = info.minimal_weight_count();
+
+	if (count > 1)
+	{
+		std::cout << 's';
+	}
+
+	std::cout << " #" << make_list_of_ranges(minimal_weight_channels(info))
+		<< '\n';
+
+	auto weight_printer = [&](std::string prefix, std::size_t index) {
+		std::cout << prefix << info.weights().at(index) << " (N="
+			<< info.calls().at(index) << ") in channel #"
+			<< info.channels().at(index) << '\n';
+	};
+
+	// number of non-minimal weights
+	std::size_t printable_channels = info.channels().size() - count;
+
+	if (printable_channels > 0)
+	{
+		--printable_channels;
+	}
+
+	if (printable_channels > 0)
+	{
+		std::size_t const number = 5;
+
+		if (printable_channels <= 2 * number + 1)
+		{
+			for (std::size_t i = 0; i != printable_channels; ++i)
+			{
+				weight_printer("   w=", count + i);
+			}
+		}
+		else
+		{
+			std::size_t offset = count;
+
+			for (std::size_t i = 0; i != number; ++i)
+			{
+				weight_printer("   w=", offset + i);
+			}
+
+			std::cout << "     ...\n";
+
+			offset = info.channels().size() - number - 1;
+
+			for (std::size_t i = 0; i != number; ++i)
+			{
+				weight_printer("   w=", offset + i);
+			}
+		}
+	}
+
+	if (info.minimal_weight_count() != info.channels().size())
+	{
+		weight_printer("wmax=", info.channels().size() - 1);
+	}
+
 	T const relative_error_percent = (T(100.0) * results.back().error() /
 		std::fabs(results.back().value()));
-
-	T const max_difference = multi_channel_max_difference(results.back());
 
 	// print result for this iteration
 	std::cout << "this iteration: N=" << results.back().calls() << " E="
 		<< results.back().value() << " +- " << results.back().error() << " ("
-		<< relative_error_percent << "%) D=" << max_difference << "\n";
+		<< relative_error_percent << "%) \n";
 
 	// compute cumulative results
 	auto const result = cumulative_result0(results.begin(), results.end());

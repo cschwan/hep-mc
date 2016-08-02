@@ -18,6 +18,7 @@ nobase_include_HEADERS = \
 	hep/mc/multi_channel_max_difference.hpp \
 	hep/mc/multi_channel_point.hpp \
 	hep/mc/multi_channel_result.hpp \
+	hep/mc/multi_channel_weight_info.hpp \
 	hep/mc/mpi_multi_channel.hpp \
 	hep/mc/mpi_multi_channel_callback.hpp \
 	hep/mc/mpi_plain.hpp \

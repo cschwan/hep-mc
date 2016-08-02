@@ -1,6 +1,8 @@
 New in 0.5:
 ===========
 
+- the function ``multi_channel_verbose_callback`` now prints an overview of the
+  smallest and largest a-priori weights
 - the functions ``multi_channel`` and ``mpi_multi_channel`` now accept an
   optional parameter ``min_calls_per_channel`` that limits the a-priori weights
   to a smallest weight determined by a minimum number of calls. If set to zero
