@@ -363,7 +363,7 @@ TYPED_TEST(DistributionResults, CheckPlainIntegration)
 		hep::make_integrand<T>(
 			arctan<T>,
 			1,
-			hep::distribution_parameters<T>(100, T(-5.0), T(5.0))
+			hep::make_dist_params<T>(100, T(-5.0), T(5.0))
 		),
 		calls
 	);

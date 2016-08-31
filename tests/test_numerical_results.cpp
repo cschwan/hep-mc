@@ -278,7 +278,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 			unit_densities,
 			2,
 			2,
-			hep::distribution_parameters<T>(1, T(), T(1.0))
+			hep::make_dist_params<T>(1, T(), T(1.0))
 		),
 		std::vector<std::size_t>(iterations, calls)
 	);

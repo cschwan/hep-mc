@@ -20,6 +20,7 @@
  */
 
 #include <cstddef>
+#include <string>
 
 namespace hep
 {
@@ -33,10 +34,16 @@ class distribution_parameters
 {
 public:
 	/// Constructor.
-	distribution_parameters(std::size_t bins, T x_min, T x_max)
+	distribution_parameters(
+		std::size_t bins,
+		T x_min,
+		T x_max,
+		std::string const& name
+	)
 		: bins_(bins)
 		, x_min_(x_min)
 		, bin_size_((x_max - x_min) / bins)
+		, name_(name)
 	{
 	}
 
@@ -44,6 +51,12 @@ public:
 	std::size_t bins() const
 	{
 		return bins_;
+	}
+
+	/// Name of the distribution.
+	std::string const& name() const
+	{
+		return name_;
 	}
 
 	/// Highest value of the x-axis that is still part of the differential
@@ -70,14 +83,19 @@ private:
 	std::size_t bins_;
 	T x_min_;
 	T bin_size_;
+	std::string name_;
 };
 
 /// Shortcut for calling the constructor that automatically determines the
 /// numeric type.
 template <typename T>
-distribution_parameters<T> make_dist_params(std::size_t bins, T x_min, T x_max)
-{
-	return distribution_parameters<T>(bins, x_min, x_max);
+distribution_parameters<T> make_dist_params(
+	std::size_t bins,
+	T x_min,
+	T x_max,
+	std::string const& name = ""
+) {
+	return distribution_parameters<T>(bins, x_min, x_max, name);
 }
 
 /// @}

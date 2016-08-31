@@ -7,8 +7,6 @@ GENERAL
 - write cumulative functions that accumulate also the distributions
 - remove the globally set callback functions and make them local to every call
   to an integrator?
-- add a string to the ``distribution_parameters`` class to identify different
-  distributions
 - add functionality to capture non-finite numbers of the integrand and report
   how many numbers of the generator need to be discarded to get there: save a
   copy of the generator the integrator obtains, print out the state (with
