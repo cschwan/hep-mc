@@ -25,6 +25,7 @@
 #include "hep/mc/distribution_result.hpp"
 
 #include <array>
+#include <cmath>
 #include <cstddef>
 #include <vector>
 
@@ -74,10 +75,17 @@ public:
 		// are generated here
 		T value = integrand.function()(point, projector);
 
-		if (value != T())
+		if (std::isfinite(value))
 		{
-			value *= point.weight();
-			accumulate(sums_[0], sums_[1], compensations_[0], value);
+			if (value != T())
+			{
+				value *= point.weight();
+				accumulate(sums_[0], sums_[1], compensations_[0], value);
+			}
+		}
+		else
+		{
+			value = T();
 		}
 
 		return value;
@@ -85,6 +93,11 @@ public:
 
 	void add_to_distribution(std::size_t index, T projection, T value)
 	{
+		if (!std::isfinite(value))
+		{
+			return;
+		}
+
 		// TODO: index might be larger than the than allowed; throw?
 
 		T const x = projection - parameters_[index].x_min();
@@ -185,10 +198,17 @@ public:
 		// are generated here
 		T value = integrand.function()(point);
 
-		if (value != T())
+		if (std::isfinite(value))
 		{
-			value *= point.weight();
-			accumulate(sums_[0], sums_[1], sums_[2], value);
+			if (value != T())
+			{
+				value *= point.weight();
+				accumulate(sums_[0], sums_[1], sums_[2], value);
+			}
+		}
+		else
+		{
+			value = T();
 		}
 
 		return value;
