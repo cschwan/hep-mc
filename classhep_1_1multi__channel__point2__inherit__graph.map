@@ -1,4 +1,4 @@
-<map id="hep::multi_channel_point2&lt; T, D &gt;" name="hep::multi_channel_point2&lt; T, D &gt;">
+<map id="hep::multi_channel_point2&lt; T, M &gt;" name="hep::multi_channel_point2&lt; T, M &gt;">
 <area shape="rect" id="node2" href="$classhep_1_1multi__channel__point.html" title="Point in the unit&#45;hypercube for Multi Channel Monte Carlo integration. " alt="" coords="8,80,139,121"/>
 <area shape="rect" id="node3" href="$classhep_1_1mc__point.html" title="hep::mc_point\&lt; T \&gt;" alt="" coords="5,5,141,32"/>
 </map>

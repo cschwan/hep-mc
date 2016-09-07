@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -85,6 +85,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Integrand Functions</div>  </div>
@@ -128,7 +129,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"></div>
 <div class="line">    <span class="keywordflow">return</span> f;</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>Specifying the integrand is not enough for the Monte Carlo integration routines. They also must know how many dimensions, i.e. how many random numbers, the integrand requires and the numeric type with which the operations should be performed. If distribution should be accumulated during the integration the binning (how many bins, upper and lower boundary) must be specified as well. Since this is generic for all algorithms, starting with version 0.5 the complete integrand information is specified by creating an <a class="el" href="classhep_1_1integrand.html">integrand</a>, e.g. for the examples above: </p><div class="fragment"><div class="line"><span class="comment">// the integer specifies the dimension of the integrand `square`, `double`</span></div>
+</div><!-- fragment --><p>Specifying the integrand is not enough for the Monte Carlo integration routines. They also must know how many dimensions, i.e. how many random numbers, the integrand requires and the numeric type with which the operations should be performed. If distribution should be accumulated during the integration the binning (how many bins, upper and lower boundaries) must be specified as well. Since this is generic for all algorithms the complete integrand information is specified by creating an <a class="el" href="classhep_1_1integrand.html">integrand</a>, which looks for the examples above: </p><div class="fragment"><div class="line"><span class="comment">// the integer specifies the dimension of the integrand `square`, `double`</span></div>
 <div class="line"><span class="comment">// specifies the numeric type the integration algorithm should use</span></div>
 <div class="line"><span class="keyword">auto</span> square_integrand = hep::make_integrand&lt;double&gt;(square, 1);</div>
 <div class="line"></div>
@@ -139,7 +140,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="comment">// the third argument specifies the distribution parameters: the x-axis ranges</span></div>
 <div class="line"><span class="comment">// from -10 to 10 and is subdivided into 100 bins</span></div>
 <div class="line"><span class="keyword">auto</span> square_distributions = hep::make_integrand&lt;double&gt;(square, 1,</div>
-<div class="line">    <a class="code" href="group__distributions.html#gad15207a1e70b88e01af77a6b5ec097ae">hep::make_dist_params</a>(-10.0, +10.0, 200));</div>
+<div class="line">    <a class="code" href="group__distributions.html#gaa9dac9fd1ce0a424a049f92107348353">hep::make_dist_params</a>(-10.0, +10.0, 200));</div>
+</div><!-- fragment --><p>An integrand for a multi channel integrator requires even more information because the user PDFs and CDFs must be provided. Both must be calculated in function that we call <code>map</code> and has the following signature: </p><div class="fragment"><div class="line">T map(</div>
+<div class="line">    std::size_t channel,</div>
+<div class="line">    std::vector&lt;T&gt; <span class="keyword">const</span>&amp; random_numbers,</div>
+<div class="line">    std::vector&lt;T&gt;&amp; coordinates,</div>
+<div class="line">    std::vector&lt;T&gt;&amp; densities,</div>
+<div class="line">    <a class="code" href="group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2">hep::multi_channel_map</a> action</div>
+<div class="line">);</div>
+</div><!-- fragment --><p> A <a class="el" href="classhep_1_1multi__channel__integrand.html">multi_channel_integrand</a> is now created e.g. as follows: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> mc_integrand = hep::make_multi_channel_integrand&lt;double&gt;(</div>
+<div class="line">    <span class="keyword">function</span>, <span class="comment">// the integrand function that we wish to integrate</span></div>
+<div class="line">    10,       <span class="comment">// the integration is ten dimensional</span></div>
+<div class="line">    map,      <span class="comment">// the map function providing PDFs and CDFs</span></div>
+<div class="line">    20,       <span class="comment">// `map` maps the ten random numbers to twenty in `coordinates`</span></div>
+<div class="line">    200       <span class="comment">// `map` uses two hundred channels</span></div>
+<div class="line">);</div>
 </div><!-- fragment --> <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -147,11 +162,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html">hep::mc_point&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1multi__channel__integrand.html">hep::multi_channel_integrand&lt; T, F, D, distributions &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1multi__channel__integrand.html">hep::multi_channel_integrand&lt; T, F, M, distributions &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1multi__channel__point.html">hep::multi_channel_point&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1multi__channel__point2.html">hep::multi_channel_point2&lt; T, D &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1multi__channel__point2.html">hep::multi_channel_point2&lt; T, M &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1vegas__point.html">hep::vegas_point&lt; T &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,6 +177,13 @@ Typedefs</h2></td></tr>
 <tr class="memitem:gab6993610267daf446a6ad7d420802b82"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#gab6993610267daf446a6ad7d420802b82">hep::numeric_type_of</a> = typename std::remove_reference&lt; I &gt;::type::numeric_type</td></tr>
 <tr class="separator:gab6993610267daf446a6ad7d420802b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:gadd0057950f5e4375f6fdc21901ea3ca2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2">hep::multi_channel_map</a> { <a class="el" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2a66812b0cfcb8711785bd3dec61c1c8cf">hep::multi_channel_map::calculate_coordinates</a>, 
+<a class="el" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2ae51b60bddd479cbb9ca91bcf17487871">hep::multi_channel_map::calculate_densities</a>
+ }</td></tr>
+<tr class="separator:gadd0057950f5e4375f6fdc21901ea3ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:gaa04af437998d4319b6e0e268079d0e16"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F &gt; </td></tr>
@@ -170,14 +192,14 @@ Functions</h2></td></tr>
 <tr class="memitem:ga858291a90d34ea5e457608b30b54d50a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename... D&gt; </td></tr>
 <tr class="memitem:ga858291a90d34ea5e457608b30b54d50a"><td class="memTemplItemLeft" align="right" valign="top">integrand&lt; T, F, true &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#ga858291a90d34ea5e457608b30b54d50a">hep::make_integrand</a> (F &amp;&amp;function, std::size_t dimensions, D &amp;&amp;...parameters)</td></tr>
 <tr class="separator:ga858291a90d34ea5e457608b30b54d50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga84f15c4476e45b85fcccc8acecd6c598"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename D &gt; </td></tr>
-<tr class="memitem:ga84f15c4476e45b85fcccc8acecd6c598"><td class="memTemplItemLeft" align="right" valign="top">multi_channel_integrand&lt; T, F, <br class="typebreak" />
-D, false &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#ga84f15c4476e45b85fcccc8acecd6c598">hep::make_multi_channel_integrand</a> (F &amp;&amp;function, std::size_t dimensions, D &amp;&amp;densities, std::size_t map_dimensions, std::size_t channels)</td></tr>
-<tr class="separator:ga84f15c4476e45b85fcccc8acecd6c598"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga4a775d1bad801260cd5051d8c473b62e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename D , typename... Ds&gt; </td></tr>
-<tr class="memitem:ga4a775d1bad801260cd5051d8c473b62e"><td class="memTemplItemLeft" align="right" valign="top">multi_channel_integrand&lt; T, F, <br class="typebreak" />
-D, true &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#ga4a775d1bad801260cd5051d8c473b62e">hep::make_multi_channel_integrand</a> (F &amp;&amp;function, std::size_t dimensions, D &amp;&amp;densities, std::size_t map_dimensions, std::size_t channels, Ds &amp;&amp;...parameters)</td></tr>
-<tr class="separator:ga4a775d1bad801260cd5051d8c473b62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5eb12b3dbcd10ea4573bf329e0563ec3"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename M &gt; </td></tr>
+<tr class="memitem:ga5eb12b3dbcd10ea4573bf329e0563ec3"><td class="memTemplItemLeft" align="right" valign="top">multi_channel_integrand&lt; T, F, <br class="typebreak" />
+M, false &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#ga5eb12b3dbcd10ea4573bf329e0563ec3">hep::make_multi_channel_integrand</a> (F &amp;&amp;function, std::size_t dimensions, M &amp;&amp;map, std::size_t map_dimensions, std::size_t channels)</td></tr>
+<tr class="separator:ga5eb12b3dbcd10ea4573bf329e0563ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga433e5e11d7b52dbf28e94c5ea704fc74"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , typename M , typename... Ds&gt; </td></tr>
+<tr class="memitem:ga433e5e11d7b52dbf28e94c5ea704fc74"><td class="memTemplItemLeft" align="right" valign="top">multi_channel_integrand&lt; T, F, <br class="typebreak" />
+M, true &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__integrands.html#ga433e5e11d7b52dbf28e94c5ea704fc74">hep::make_multi_channel_integrand</a> (F &amp;&amp;function, std::size_t dimensions, M &amp;&amp;map, std::size_t map_dimensions, std::size_t channels, Ds &amp;&amp;...parameters)</td></tr>
+<tr class="separator:ga433e5e11d7b52dbf28e94c5ea704fc74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a class="anchor" id="gab6993610267daf446a6ad7d420802b82"></a>
@@ -192,6 +214,36 @@ template&lt;typename I &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Shortcut for accessing the numeric type of an integrand that is possibly a reference. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="gadd0057950f5e4375f6fdc21901ea3ca2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2">hep::multi_channel_map</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Enumeration that specifies which parameters of the user specified map should be calculated. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ggadd0057950f5e4375f6fdc21901ea3ca2a66812b0cfcb8711785bd3dec61c1c8cf"></a>calculate_coordinates&#160;</td><td class="fielddoc">
+<p>Signals the map-function that the parameter <code>coordinates</code> should be calculated. The parameter <code>densities</code> can be calculated at time point. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ggadd0057950f5e4375f6fdc21901ea3ca2ae51b60bddd479cbb9ca91bcf17487871"></a>calculate_densities&#160;</td><td class="fielddoc">
+<p>Signals that the map function is called with the previously calculated <code>coordinates</code> and that the paramter <code>densities</code> now must be calculated. If the integrand does not contribute, i.e. if the user-defined function returned zero, then this step will be skipped because the densities are not needed. </p>
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -290,17 +342,17 @@ template&lt;typename T , typename F , typename... D&gt; </div>
 </div><!-- fragment --> 
 </div>
 </div>
-<a class="anchor" id="ga84f15c4476e45b85fcccc8acecd6c598"></a>
+<a class="anchor" id="ga5eb12b3dbcd10ea4573bf329e0563ec3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename F , typename D &gt; </div>
+template&lt;typename T , typename F , typename M &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">multi_channel_integrand&lt;T, F, D, false&gt; hep::make_multi_channel_integrand </td>
+          <td class="memname">multi_channel_integrand&lt;T, F, M, false&gt; hep::make_multi_channel_integrand </td>
           <td>(</td>
           <td class="paramtype">F &amp;&amp;&#160;</td>
           <td class="paramname"><em>function</em>, </td>
@@ -314,8 +366,8 @@ template&lt;typename T , typename F , typename D &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">D &amp;&amp;&#160;</td>
-          <td class="paramname"><em>densities</em>, </td>
+          <td class="paramtype">M &amp;&amp;&#160;</td>
+          <td class="paramname"><em>map</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -341,34 +393,28 @@ template&lt;typename T , typename F , typename D &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Multi channel integrand constructor. For a description of the parameters see <a class="el" href="group__integrands.html#gaa04af437998d4319b6e0e268079d0e16">make_integrand</a>. In addition, Multi Channel integrators need an additonal function <code>densities</code> that compute the PDFs and the CDFs for a randomly selected channel. This function would look like: </p><div class="fragment"><div class="line">T densities(</div>
+<p>Multi channel integrand constructor. For a description of the parameters see <a class="el" href="group__integrands.html#gaa04af437998d4319b6e0e268079d0e16">make_integrand</a>. In addition, Multi Channel integrators need an additonal function <code>map</code> that computes the PDFs and the CDFs for a randomly selected channel. This function should look like: </p><div class="fragment"><div class="line">T map(</div>
 <div class="line">    std::size_t channel,</div>
 <div class="line">    std::vector&lt;T&gt; <span class="keyword">const</span>&amp; random_numbers,</div>
 <div class="line">    std::vector&lt;T&gt;&amp; coordinates,</div>
-<div class="line">    std::vector&lt;T&gt;&amp; channel_densities</div>
-<div class="line">) {</div>
-<div class="line">    <span class="comment">// for the selected `channel`, which is an integer from the half-open</span></div>
-<div class="line">    <span class="comment">// interval [0, channels) and the given `random_numbers` with </span></div>
-<div class="line">    <span class="comment">// `random_numbers.size() == dimensions` compute the CDFs and store them</span></div>
-<div class="line">    <span class="comment">// in `coordinates` which is large as specified with `map_dimensions`.</span></div>
-<div class="line">    <span class="comment">// Also compute the PDFs and store them in `channel_densities`</span></div>
-<div class="line"></div>
-<div class="line">    <span class="keywordflow">return</span> <span class="comment">/* jacobian */</span>;</div>
-<div class="line">}</div>
-</div><!-- fragment --> 
+<div class="line">    std::vector&lt;T&gt;&amp; densities,</div>
+<div class="line">    <a class="code" href="group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2">hep::multi_channel_map</a> action</div>
+<div class="line">);</div>
+</div><!-- fragment --><p> This function is called by the multi channel integrator, first with the parameter <code>action</code> set to <a class="el" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2a66812b0cfcb8711785bd3dec61c1c8cf">multi_channel_map::calculate_coordinates</a>, which signals that the vector <code>coordinates</code> must be filled using the CDFs. The return value is ignored for this function call. If the integrand returns a non-zero value <code>map</code> is called again with <code>action</code> set to <a class="el" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2ae51b60bddd479cbb9ca91bcf17487871">multi_channel_map::calculate_densities</a>, which means that the vector <code>densities</code> must be populated with all PDFs for the given <code>channel</code> and <code>random_numbers</code>. The return value is the jacobian for the given <code>channel</code>. </p>
+
 </div>
 </div>
-<a class="anchor" id="ga4a775d1bad801260cd5051d8c473b62e"></a>
+<a class="anchor" id="ga433e5e11d7b52dbf28e94c5ea704fc74"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename F , typename D , typename... Ds&gt; </div>
+template&lt;typename T , typename F , typename M , typename... Ds&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">multi_channel_integrand&lt;T, F, D, true&gt; hep::make_multi_channel_integrand </td>
+          <td class="memname">multi_channel_integrand&lt;T, F, M, true&gt; hep::make_multi_channel_integrand </td>
           <td>(</td>
           <td class="paramtype">F &amp;&amp;&#160;</td>
           <td class="paramname"><em>function</em>, </td>
@@ -382,8 +428,8 @@ template&lt;typename T , typename F , typename D , typename... Ds&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">D &amp;&amp;&#160;</td>
-          <td class="paramname"><em>densities</em>, </td>
+          <td class="paramtype">M &amp;&amp;&#160;</td>
+          <td class="paramname"><em>map</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

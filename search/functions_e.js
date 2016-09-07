@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['x_5fmax',['x_max',['../classhep_1_1distribution__parameters.html#a9b199cf6dc2cf404f7b318700fc0d7ca',1,'hep::distribution_parameters']]],
-  ['x_5fmin',['x_min',['../classhep_1_1distribution__parameters.html#a381173cbc990f476d6ac04fb8c1797f6',1,'hep::distribution_parameters']]]
+  ['weight',['weight',['../classhep_1_1mc__point.html#a562aa92d8a20763ee3825e0a083b0c45',1,'hep::mc_point::weight()'],['../classhep_1_1multi__channel__point2.html#a0a9ead9b07ef27aaa3f54267bf44c649',1,'hep::multi_channel_point2::weight()']]],
+  ['weights',['weights',['../classhep_1_1multi__channel__weight__info.html#a70738888bf5311329f010780ffc3afe6',1,'hep::multi_channel_weight_info']]]
 ];

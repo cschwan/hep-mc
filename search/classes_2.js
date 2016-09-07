@@ -5,5 +5,6 @@ var searchData=
   ['multi_5fchannel_5fintegrand',['multi_channel_integrand',['../classhep_1_1multi__channel__integrand.html',1,'hep']]],
   ['multi_5fchannel_5fpoint',['multi_channel_point',['../classhep_1_1multi__channel__point.html',1,'hep']]],
   ['multi_5fchannel_5fpoint2',['multi_channel_point2',['../classhep_1_1multi__channel__point2.html',1,'hep']]],
-  ['multi_5fchannel_5fresult',['multi_channel_result',['../classhep_1_1multi__channel__result.html',1,'hep']]]
+  ['multi_5fchannel_5fresult',['multi_channel_result',['../classhep_1_1multi__channel__result.html',1,'hep']]],
+  ['multi_5fchannel_5fweight_5finfo',['multi_channel_weight_info',['../classhep_1_1multi__channel__weight__info.html',1,'hep']]]
 ];

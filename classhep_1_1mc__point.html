@@ -71,7 +71,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhep_1_1mc__point-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hep::mc_point&lt; T &gt; Class Template Reference<div class="ingroups"><a class="el" href="group__integrands.html">Integrand Functions</a></div></div>  </div>
@@ -109,12 +110,21 @@ Inheritance diagram for hep::mc_point&lt; T &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a34e0cb02b19976958213e9099d9ccbce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a34e0cb02b19976958213e9099d9ccbce">mc_point</a> (std::vector&lt; T &gt; const &amp;<a class="el" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>, T <a class="el" href="classhep_1_1mc__point.html#a32ae4e0b22ee693f01e59089b0f1809f">weight</a>=T(1.0))</td></tr>
+<tr class="memitem:a34e0cb02b19976958213e9099d9ccbce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a34e0cb02b19976958213e9099d9ccbce">mc_point</a> (std::vector&lt; T &gt; const &amp;<a class="el" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a>, T <a class="el" href="classhep_1_1mc__point.html#a562aa92d8a20763ee3825e0a083b0c45">weight</a>=T(1.0))</td></tr>
 <tr class="separator:a34e0cb02b19976958213e9099d9ccbce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32ae4e0b22ee693f01e59089b0f1809f"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a32ae4e0b22ee693f01e59089b0f1809f">weight</a> () const </td></tr>
-<tr class="separator:a32ae4e0b22ee693f01e59089b0f1809f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04a0c0ac85665865d17d72321e4b7833"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a04a0c0ac85665865d17d72321e4b7833">~mc_point</a> ()=default</td></tr>
+<tr class="separator:a04a0c0ac85665865d17d72321e4b7833"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a562aa92d8a20763ee3825e0a083b0c45"><td class="memItemLeft" align="right" valign="top">virtual T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a562aa92d8a20763ee3825e0a083b0c45">weight</a> () const </td></tr>
+<tr class="separator:a562aa92d8a20763ee3825e0a083b0c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3268be931fcd2035888c95b555636aa2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; T &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a3268be931fcd2035888c95b555636aa2">point</a> () const </td></tr>
 <tr class="separator:a3268be931fcd2035888c95b555636aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a34ca462f0eeec7131b7cf47d21daddf0"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a34ca462f0eeec7131b7cf47d21daddf0">weight_</a></td></tr>
+<tr class="separator:a34ca462f0eeec7131b7cf47d21daddf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16a49d2e660454c9a86676a7410a06ac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; T &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1mc__point.html#a16a49d2e660454c9a86676a7410a06ac">point_</a></td></tr>
+<tr class="separator:a16a49d2e660454c9a86676a7410a06ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a34e0cb02b19976958213e9099d9ccbce"></a>
@@ -154,6 +164,33 @@ template&lt;typename T&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a04a0c0ac85665865d17d72321e4b7833"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classhep_1_1mc__point.html">hep::mc_point</a>&lt; T &gt;::~<a class="el" href="classhep_1_1mc__point.html">mc_point</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a3268be931fcd2035888c95b555636aa2"></a>
 <div class="memitem">
@@ -181,7 +218,7 @@ template&lt;typename T&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a32ae4e0b22ee693f01e59089b0f1809f"></a>
+<a class="anchor" id="a562aa92d8a20763ee3825e0a083b0c45"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -191,7 +228,7 @@ template&lt;typename T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T <a class="el" href="classhep_1_1mc__point.html">hep::mc_point</a>&lt; T &gt;::weight </td>
+          <td class="memname">virtual T <a class="el" href="classhep_1_1mc__point.html">hep::mc_point</a>&lt; T &gt;::weight </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -199,11 +236,58 @@ template&lt;typename T&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The weight \( w \) of this point. The PLAIN integrator (<a class="el" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">plain</a>) produces points that have weight equals one, i.e. are constant over the entire unit-hypercube; this also means that weight does not include the averaging factor \( 1 / N \) that is used to produces the expected value. </p>
+<p>The weight \( w \) of this point. The PLAIN integrator (<a class="el" href="group__plain__group.html#ga9158156deb02a89c800f8817c89ef4e3">plain</a>) produces points that have weight equals one, i.e. are constant over the entire unit-hypercube. This also means that weight does not include the averaging factor \( 1 / N \) that is used to produce the expected value. </p>
+
+<p>Reimplemented in <a class="el" href="classhep_1_1multi__channel__point2.html#a0a9ead9b07ef27aaa3f54267bf44c649">hep::multi_channel_point2&lt; T, M &gt;</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a16a49d2e660454c9a86676a7410a06ac"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;T&gt; const&amp; <a class="el" href="classhep_1_1mc__point.html">hep::mc_point</a>&lt; T &gt;::point_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a34ca462f0eeec7131b7cf47d21daddf0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classhep_1_1mc__point.html">hep::mc_point</a>&lt; T &gt;::weight_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

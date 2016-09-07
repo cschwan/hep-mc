@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -93,7 +93,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>In contrast to the VEGAS algorithm, which uses a product of one-dimensional PDFs, the multi channel integration algorithm uses a sum of user-defined PDFs \( p_j ( \vec{y}) \) with automatically adapted weights \( \alpha_j \) in the form </p><p class="formulaDsp">
 \[ p ( \vec{y} ) = \sum_{j=1}^M \alpha_j p_j ( \vec{y} ) \text{,} \qquad \int \mathrm{d}^d y \; p_j \left( \vec{y} \right) = 1 \text{,} \quad \sum_{j=1}^M \alpha_j = 1 \]
 </p>
-<p> that is used to sample the function. Multi channel integration performs better compared to VEGAS if the peak structure of the integrand does not factorize. To avoid explicitly summing over every <em>channel</em> \( j \) for each randomly chosen point \( \vec{x} \in U \equiv [0,1]^d \) the MC integrator also samples over the possible channels. The final formula is </p><p class="formulaDsp">
+<p> that is used to sample the function. Multi channel integration performs better compared to VEGAS if the peak structure of the integrand does not factorize. To avoid explicitly summing over every <em>channel</em> \( j \) for each randomly chosen point \( \vec{x} \in U \equiv [0,1]^d \) the MC integrator also samples over the possible channels. This leads to the final formula </p><p class="formulaDsp">
 \[ I = \int \mathrm{d} i \int_U \mathrm{d}^d x \; J_i ( \vec{x} ) \left. \frac{f (\vec{y})}{p (\vec{y})} \right|_{\vec{y} = \vec{y}_i ( \vec{x} )} \text{,} \qquad i \sim \left\{ \alpha_1, \alpha_2, \ldots, \alpha_M \right\} \]
 </p>
 <p> where the integral over the index \( i \) is understood to be a Monte Carlo summation in which the index \( i \) is randomly chosen according to the specified weights. Since the PDFs \( \left\{ p_j \right\}_{j=1}^M \) are user-defined, the user also has to specify the CDFs \( \left\{ \vec{y}_j ( \vec{x} ) \right\}_{j=1}^M \) for each channel and the jacobian \( J_i \) for the selected channel.</p>
@@ -101,55 +101,49 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li><code>dimensions</code> determines the parameter \( d \),</li>
 <li><code>map_dimensions</code> determines the size of the vector <code>coordinates</code> (see below),</li>
 <li><code>channels</code> determines \( M \), the number of channels,</li>
-<li><code>densitites</code> must be the function that calculates <em>both</em> the PDFs and the CDFs. Its declaration must be as follows: <pre class="fragment">T my_density_functions(
+<li><code>map</code> must be the function that calculates <em>both</em> the PDFs and the CDFs. Its declaration must be as follows: <pre class="fragment">T map(
     std::size_t channel,
     std::vector&lt;T&gt; const&amp; random_numbers,
     std::vector&lt;T&gt;&amp; coordinates,
-    std::vector&lt;T&gt;&amp; channel_densities
+    std::vector&lt;T&gt;&amp; densities,
+    hep::multi_channel_map action
 );
-</pre><ul>
-<li>The parameter <code>channel</code> gives the randomly selected channel and corresponds to the parameter \( i \) above,</li>
-<li><code>random_numbers</code> holds the vector \( \vec{x} \in U \),</li>
-<li><code>coordinates</code> has the size previously specified by <code>map_dimensions</code> and must be filled by <code>my_density_functions</code> with the components of the vector \( \vec{y} \in V \) using the CDF \( \vec{y} = \vec{y}_i ( \vec{x} ) \).</li>
-<li>The last parameter <code>channel_densities</code> has the size specified by <code>channels</code> and must be filled by <code>my_density_functions</code> with all densities \( \left\{ p_j ( \vec{y} ) \right\}_{j=1}^M \) evaluated at \( \vec{y} = \vec{y}_i ( \vec{x} ) \).</li>
-<li>The return value of this function determines the jacobian \( J_i ( \vec{x} ) \) of the map \( U \to V \). If this factor is exactly zero, i.e. <code>T()</code>, this is taken as a hint to skip the evaluation of <code>function</code> which would yield zero.</li>
-</ul>
-</li>
+</pre></li>
 <li><code>function</code> must be the integrand function that is integrated over. Its declaration must be as described in <a class="el" href="group__integrands.html">Integrand Functions</a>. The Monte Carlo point can be captured e.g. using <a class="el" href="classhep_1_1multi__channel__point.html">multi_channel_point</a> or, if <code>function</code> needs access to data that has been computed already in <code>densities</code>, it can be captured using <a class="el" href="classhep_1_1multi__channel__point2.html">multi_channel_point2</a>. </li>
 </ul>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga37f545de3446e6d2045eeac76ff56383"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga37f545de3446e6d2045eeac76ff56383"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
+<tr class="memitem:ga74ed8879c3da9b6d85257ce5c317182d"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:ga74ed8879c3da9b6d85257ce5c317182d"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
 &lt; multi_channel_result<br class="typebreak" />
-&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#ga37f545de3446e6d2045eeac76ff56383">hep::mpi_multi_channel</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::vector&lt; numeric_type_of&lt; I &gt;&gt; const &amp;channel_weights, R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga37f545de3446e6d2045eeac76ff56383"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9adb0d8fe2660be32f0add564f041d9b"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga9adb0d8fe2660be32f0add564f041d9b"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#ga74ed8879c3da9b6d85257ce5c317182d">hep::mpi_multi_channel</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::vector&lt; numeric_type_of&lt; I &gt;&gt; const &amp;channel_weights, std::size_t min_calls_per_channel=0, R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:ga74ed8879c3da9b6d85257ce5c317182d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaed94fca2e66a440018b187b54919e9c2"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:gaed94fca2e66a440018b187b54919e9c2"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
 &lt; multi_channel_result<br class="typebreak" />
-&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#ga9adb0d8fe2660be32f0add564f041d9b">hep::mpi_multi_channel</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga9adb0d8fe2660be32f0add564f041d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadc10a3b328205df850fc3ea98b4113f9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:gadc10a3b328205df850fc3ea98b4113f9"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#gadc10a3b328205df850fc3ea98b4113f9">hep::multi_channel_refine_weights</a> (std::vector&lt; T &gt; const &amp;weights, std::vector&lt; T &gt; const &amp;adjustment_data)</td></tr>
-<tr class="separator:gadc10a3b328205df850fc3ea98b4113f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#gaed94fca2e66a440018b187b54919e9c2">hep::mpi_multi_channel</a> (MPI_Comm communicator, I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t min_calls_per_channel=0, R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:gaed94fca2e66a440018b187b54919e9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac18278edb48e61e2cfa28fd7e0835cec"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:gac18278edb48e61e2cfa28fd7e0835cec"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#gac18278edb48e61e2cfa28fd7e0835cec">hep::multi_channel_refine_weights</a> (std::vector&lt; T &gt; const &amp;weights, std::vector&lt; T &gt; const &amp;adjustment_data, T minimum_weight)</td></tr>
+<tr class="separator:gac18278edb48e61e2cfa28fd7e0835cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac7cd33d313859b3e4b46a8647b20e7c8"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R &gt; </td></tr>
 <tr class="memitem:gac7cd33d313859b3e4b46a8647b20e7c8"><td class="memTemplItemLeft" align="right" valign="top">multi_channel_result<br class="typebreak" />
 &lt; numeric_type_of&lt; I &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">hep::multi_channel_iteration</a> (I &amp;&amp;integrand, std::size_t calls, std::vector&lt; numeric_type_of&lt; I &gt;&gt; const &amp;channel_weights, R &amp;&amp;generator)</td></tr>
 <tr class="separator:gac7cd33d313859b3e4b46a8647b20e7c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga702388703b85a350ac0c477312fcf71c"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga702388703b85a350ac0c477312fcf71c"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
+<tr class="memitem:ga82d8282325fc5e794a2f07a39c7adc2d"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:ga82d8282325fc5e794a2f07a39c7adc2d"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
 &lt; multi_channel_result<br class="typebreak" />
-&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#ga702388703b85a350ac0c477312fcf71c">hep::multi_channel</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::vector&lt; numeric_type_of&lt; I &gt;&gt; const &amp;channel_weights, R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga702388703b85a350ac0c477312fcf71c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1a4200396190a9f68e9714ebf320bf8f"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
-<tr class="memitem:ga1a4200396190a9f68e9714ebf320bf8f"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#ga82d8282325fc5e794a2f07a39c7adc2d">hep::multi_channel</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::vector&lt; numeric_type_of&lt; I &gt;&gt; const &amp;channel_weights, std::size_t min_calls_per_channel=0, R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:ga82d8282325fc5e794a2f07a39c7adc2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae7175bf9cff4fbb4bd4e2b33becbc5a4"><td class="memTemplParams" colspan="2">template&lt;typename I , typename R  = std::mt19937&gt; </td></tr>
+<tr class="memitem:gae7175bf9cff4fbb4bd4e2b33becbc5a4"><td class="memTemplItemLeft" align="right" valign="top">std::vector<br class="typebreak" />
 &lt; multi_channel_result<br class="typebreak" />
-&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#ga1a4200396190a9f68e9714ebf320bf8f">hep::multi_channel</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, R &amp;&amp;generator=std::mt19937())</td></tr>
-<tr class="separator:ga1a4200396190a9f68e9714ebf320bf8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+&lt; numeric_type_of&lt; I &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__multi__channel__group.html#gae7175bf9cff4fbb4bd4e2b33becbc5a4">hep::multi_channel</a> (I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t min_calls_per_channel=0, R &amp;&amp;generator=std::mt19937())</td></tr>
+<tr class="separator:gae7175bf9cff4fbb4bd4e2b33becbc5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga37f545de3446e6d2045eeac76ff56383"></a>
+<a class="anchor" id="ga74ed8879c3da9b6d85257ce5c317182d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -185,6 +179,12 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>min_calls_per_channel</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">R &amp;&amp;&#160;</td>
           <td class="paramname"><em>generator</em> = <code>std::mt19937()</code>&#160;</td>
         </tr>
@@ -201,11 +201,11 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Implements the MPI-parallelized adaptive multi channel algorithm. See <a class="el" href="group__multi__channel__group.html">Multi Channel Integrator</a> for a detailed description of the parameters. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="multi_channel_example_8cpp-example.html#a2">multi_channel_example.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="multi_channel_example_8cpp-example.html#a3">multi_channel_example.cpp</a>.</dd>
 </dl>
 </div>
 </div>
-<a class="anchor" id="ga9adb0d8fe2660be32f0add564f041d9b"></a>
+<a class="anchor" id="gaed94fca2e66a440018b187b54919e9c2"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -231,6 +231,12 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
           <td></td>
           <td class="paramtype">std::vector&lt; std::size_t &gt; const &amp;&#160;</td>
           <td class="paramname"><em>iteration_calls</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>min_calls_per_channel</em> = <code>0</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -254,7 +260,7 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ga702388703b85a350ac0c477312fcf71c"></a>
+<a class="anchor" id="ga82d8282325fc5e794a2f07a39c7adc2d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -284,6 +290,12 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>min_calls_per_channel</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">R &amp;&amp;&#160;</td>
           <td class="paramname"><em>generator</em> = <code>std::mt19937()</code>&#160;</td>
         </tr>
@@ -299,12 +311,12 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Performs <code>iteration_calls.size()</code> multi channel iterations by calling <a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">multi_channel_iteration</a> with the specified parameters and refining the weights after each iteration with <a class="el" href="group__multi__channel__group.html#gadc10a3b328205df850fc3ea98b4113f9">multi_channel_refine_weights</a>. The weights that are used for the first iteration must be given by the parameter <code>channel_weights</code>. See <a class="el" href="group__multi__channel__group.html">Multi Channel Integrator</a> for a description of the remaining parameters. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="multi_channel_example_8cpp-example.html#a1">multi_channel_example.cpp</a>.</dd>
+<p>Performs <code>iteration_calls.size()</code> multi channel iterations by calling <a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">multi_channel_iteration</a> with the specified parameters and refining the weights after each iteration with <a class="el" href="group__multi__channel__group.html#gac18278edb48e61e2cfa28fd7e0835cec">multi_channel_refine_weights</a>. The weights that are used for the first iteration must be given by the parameter <code>channel_weights</code>. See <a class="el" href="group__multi__channel__group.html">Multi Channel Integrator</a> for a description of the remaining parameters. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="multi_channel_example_8cpp-example.html#a2">multi_channel_example.cpp</a>.</dd>
 </dl>
 </div>
 </div>
-<a class="anchor" id="ga1a4200396190a9f68e9714ebf320bf8f"></a>
+<a class="anchor" id="gae7175bf9cff4fbb4bd4e2b33becbc5a4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -328,6 +340,12 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>min_calls_per_channel</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">R &amp;&amp;&#160;</td>
           <td class="paramname"><em>generator</em> = <code>std::mt19937()</code>&#160;</td>
         </tr>
@@ -343,7 +361,7 @@ template&lt;typename I , typename R  = std::mt19937&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Performs <code>iteration_calls.size()</code> multi channel iterations by calling <a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">multi_channel_iteration</a> with the specified parameters and refining the weights after each iteration with <a class="el" href="group__multi__channel__group.html#gadc10a3b328205df850fc3ea98b4113f9">multi_channel_refine_weights</a>. The weights used for the first iteration are \( \alpha = 1 / M \) with \( M \) the number of channels. See <a class="el" href="group__multi__channel__group.html">Multi Channel Integrator</a> for a description of the remaining parameters. </p>
+<p>Performs <code>iteration_calls.size()</code> multi channel iterations by calling <a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">multi_channel_iteration</a> with the specified parameters and refining the weights after each iteration with <a class="el" href="group__multi__channel__group.html#gac18278edb48e61e2cfa28fd7e0835cec">multi_channel_refine_weights</a>. The weights used for the first iteration are \( \alpha = 1 / M \) with \( M \) the number of channels. See <a class="el" href="group__multi__channel__group.html">Multi Channel Integrator</a> for a description of the remaining parameters. </p>
 
 </div>
 </div>
@@ -396,7 +414,7 @@ template&lt;typename I , typename R &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="gadc10a3b328205df850fc3ea98b4113f9"></a>
+<a class="anchor" id="gac18278edb48e61e2cfa28fd7e0835cec"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -415,7 +433,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; T &gt; const &amp;&#160;</td>
-          <td class="paramname"><em>adjustment_data</em>&#160;</td>
+          <td class="paramname"><em>adjustment_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>minimum_weight</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -429,7 +453,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Uses <code>adjustment_data</code> to from a previous call of <a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">multi_channel_iteration</a> to refine <code>weights</code>. The procedure is the one suggested in Ref. <a class="el" href="citelist.html#CITEREF_WeightOptimization">[2]</a> . </p>
+<p>Uses <code>adjustment_data</code> from a previous call of <a class="el" href="group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8">multi_channel_iteration</a> to refine <code>weights</code>. The procedure is the one suggested in Ref. <a class="el" href="citelist.html#CITEREF_WeightOptimization">[2]</a> modified such that the weights are approximately larger then the given <code>minimum_weight</code>. </p>
 
 </div>
 </div>

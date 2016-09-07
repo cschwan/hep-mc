@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['density_5ftype',['density_type',['../classhep_1_1multi__channel__integrand.html#a5b18c271adbf7514836304a600912676',1,'hep::multi_channel_integrand']]]
+  ['function_5ftype',['function_type',['../classhep_1_1integrand.html#a6a996c76cbd91c8f46756ce8d9873bb4',1,'hep::integrand']]]
 ];

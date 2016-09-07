@@ -72,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Modules</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -124,8 +124,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        std::size_t channel,</div>
 <div class="line">        std::vector&lt;double&gt; <span class="keyword">const</span>&amp; random_numbers,</div>
 <div class="line">        std::vector&lt;double&gt;&amp; coordinates,</div>
-<div class="line">        std::vector&lt;double&gt;&amp; channel_densities</div>
+<div class="line">        std::vector&lt;double&gt;&amp; densities,</div>
+<div class="line">        <a class="code" href="group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2">hep::multi_channel_map</a> action</div>
 <div class="line">    ) {</div>
+<div class="line">        <span class="keywordflow">if</span> (action == <a name="a1"></a><a class="code" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2ae51b60bddd479cbb9ca91bcf17487871">hep::multi_channel_map::calculate_densities</a>)</div>
+<div class="line">        {</div>
+<div class="line">            <span class="comment">// we calculated the densities already</span></div>
+<div class="line">            <span class="keywordflow">return</span> 1.0;</div>
+<div class="line">        }</div>
+<div class="line"></div>
 <div class="line">        <span class="keywordtype">double</span> s = std::tan(std::acos(-1.0) * (random_numbers[0] - 0.5));</div>
 <div class="line"></div>
 <div class="line">        <span class="keywordflow">if</span> (channel == 0)</div>
@@ -143,8 +150,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        <span class="keywordtype">double</span> <span class="keyword">const</span> sms1 = s - s1;</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// set the channel densities</span></div>
-<div class="line">        channel_densities[1] = 1.0 / (1.0 + sms1 * sms1) / std::acos(-1.0);</div>
-<div class="line">        channel_densities[0] = 1.0 / (1.0 + sms0 * sms0) / std::acos(-1.0);</div>
+<div class="line">        densities[1] = 1.0 / (1.0 + sms1 * sms1) / std::acos(-1.0);</div>
+<div class="line">        densities[0] = 1.0 / (1.0 + sms0 * sms0) / std::acos(-1.0);</div>
 <div class="line"></div>
 <div class="line">        <span class="comment">// global weight</span></div>
 <div class="line">        <span class="keywordflow">return</span> 1.0;</div>
@@ -159,9 +166,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="preprocessor">#endif</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#ifndef USE_MPI</span></div>
-<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = <a name="a1"></a><a class="code" href="group__multi__channel__group.html#ga702388703b85a350ac0c477312fcf71c">hep::multi_channel</a>(</div>
+<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = <a name="a2"></a><a class="code" href="group__multi__channel__group.html#ga82d8282325fc5e794a2f07a39c7adc2d">hep::multi_channel</a>(</div>
 <div class="line">#<span class="keywordflow">else</span></div>
-<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = <a name="a2"></a><a class="code" href="group__multi__channel__group.html#ga37f545de3446e6d2045eeac76ff56383">hep::mpi_multi_channel</a>(</div>
+<div class="line">    <span class="keyword">auto</span> <span class="keyword">const</span> results = <a name="a3"></a><a class="code" href="group__multi__channel__group.html#ga74ed8879c3da9b6d85257ce5c317182d">hep::mpi_multi_channel</a>(</div>
 <div class="line">        MPI_COMM_WORLD,</div>
 <div class="line">#endif</div>
 <div class="line">        hep::make_multi_channel_integrand&lt;double&gt;(<span class="keyword">function</span>, 1, densities, 1, 2),</div>
