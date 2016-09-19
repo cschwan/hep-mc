@@ -43,13 +43,20 @@ namespace hep
 
 /// Uses `adjustment_data` from a previous call of \ref multi_channel_iteration
 /// to refine `weights`. The procedure is the one suggested in Ref.
-/// \cite WeightOptimization modified such that the weights are approximately
-/// larger then the given `minimum_weight`.
+/// \cite WeightOptimization with the following modifications:
+/// - the weights are check if they are smaller then the given
+///   `minimum_weight`. If this is the case they are set to the value of
+///   `minimum_weight` which, after the normalization of all weights, make
+///   them a little smaller then the given minimum weight,
+/// - `adjustment_data` is raised to the power given by `beta`. The
+///   reference given above suggest `beta = 0.5`, but the default value is
+///   smaller which sometimes gives a more stable convergence.
 template <typename T>
 inline std::vector<T> multi_channel_refine_weights(
 	std::vector<T> const& weights,
 	std::vector<T> const& adjustment_data,
-	T minimum_weight
+	T minimum_weight,
+	T beta = T(0.25)
 ) {
 	std::vector<T> new_weights(weights.size());
 
@@ -57,7 +64,7 @@ inline std::vector<T> multi_channel_refine_weights(
 
 	for (std::size_t i = 0; i != new_weights.size(); ++i)
 	{
-		new_weights[i] = weights[i] * std::sqrt(adjustment_data[i]);
+		new_weights[i] = weights[i] * std::pow(adjustment_data[i], beta);
 		sum_of_new_weights += new_weights[i];
 	}
 
