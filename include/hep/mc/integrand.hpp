@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <type_traits>
 #include <vector>
 
 namespace hep
@@ -84,6 +85,12 @@ private:
 	std::size_t dimensions_;
 };
 
+/// Template alias for an \ref integrand with its type `F` decayed with
+/// `std::decay`.
+template <typename T, typename F, bool distributions>
+using integrand_type = integrand<T, typename std::decay<F>::type,
+	distributions>;
+
 /// PLAIN/VEGAS integrand constructor. This function constructs an \ref
 /// integrand using the given `function` that must accept points from the \f$ d
 /// \f$-dimensional hypercube, where \f$ d \f$ is given by the parameter
@@ -98,11 +105,11 @@ private:
 /// }
 /// \endcode
 template <typename T, typename F>
-inline integrand<T, F, false> make_integrand(
+inline integrand_type<T, F, false> make_integrand(
 	F&& function,
 	std::size_t dimensions
 ) {
-	return integrand<T, F, false>(
+	return integrand_type<T, F, false>(
 		std::forward<F>(function),
 		dimensions,
 		std::vector<distribution_parameters<T>>()
@@ -129,12 +136,12 @@ inline integrand<T, F, false> make_integrand(
 /// }
 /// \endcode
 template <typename T, typename F, typename... D>
-inline integrand<T, F, true> make_integrand(
+inline integrand_type<T, F, true> make_integrand(
 	F&& function,
 	std::size_t dimensions,
 	D&&... parameters
 ) {
-	return integrand<T, F, true>(
+	return integrand_type<T, F, true>(
 		std::forward<F>(function),
 		dimensions,
 		std::vector<distribution_parameters<T>>{std::forward<D>(parameters)...}

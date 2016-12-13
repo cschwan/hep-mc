@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <type_traits>
 #include <vector>
 
 namespace hep
@@ -52,7 +53,7 @@ public:
 		std::size_t channels,
 		std::vector<distribution_parameters<T>> const& parameters
 	)
-		: integrand<T, G, distributions>(std::forward<G>(function), dimensions,
+		: integrand<T, F, distributions>(std::forward<G>(function), dimensions,
 			parameters)
 		, map_(std::forward<N>(map))
 		, map_dimensions_(map_dimensions)
@@ -84,6 +85,12 @@ private:
 	std::size_t channels_;
 };
 
+/// Template alias for a \ref multi_channel_integrand with its types `F` and `M`
+/// decayed with `std::decay`.
+template <typename T, typename F, typename M, bool distributions>
+using multi_channel_integrand_type = multi_channel_integrand<T,
+	typename std::decay<F>::type, typename std::decay<M>::type, distributions>;
+
 /// Multi channel integrand constructor. For a description of the parameters see
 /// \ref make_integrand. In addition, Multi Channel integrators need an
 /// additonal function `map` that computes the PDFs and the CDFs for a
@@ -106,14 +113,15 @@ private:
 /// `densities` must be populated with all PDFs for the given `channel` and
 /// `random_numbers`. The return value is the jacobian for the given `channel`.
 template <typename T, typename F, typename M>
-inline multi_channel_integrand<T, F, M, false> make_multi_channel_integrand(
+inline multi_channel_integrand_type<T, F, M, false>
+make_multi_channel_integrand(
 	F&& function,
 	std::size_t dimensions,
 	M&& map,
 	std::size_t map_dimensions,
 	std::size_t channels
 ) {
-	return multi_channel_integrand<T, F, M, false>(
+	return multi_channel_integrand_type<T, F, M, false>(
 		std::forward<F>(function),
 		dimensions,
 		std::forward<M>(map),
@@ -125,7 +133,7 @@ inline multi_channel_integrand<T, F, M, false> make_multi_channel_integrand(
 
 /// Multi channel integrand constructor for distributions.
 template <typename T, typename F, typename M, typename... Ds>
-inline multi_channel_integrand<T, F, M, true> make_multi_channel_integrand(
+inline multi_channel_integrand_type<T, F, M, true> make_multi_channel_integrand(
 	F&& function,
 	std::size_t dimensions,
 	M&& map,
@@ -133,7 +141,7 @@ inline multi_channel_integrand<T, F, M, true> make_multi_channel_integrand(
 	std::size_t channels,
 	Ds&&... parameters
 ) {
-	return multi_channel_integrand<T, F, M, true>(
+	return multi_channel_integrand_type<T, F, M, true>(
 		std::forward<F>(function),
 		dimensions,
 		std::forward<M>(map),
