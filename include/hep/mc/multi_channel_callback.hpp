@@ -111,18 +111,12 @@ inline bool multi_channel_verbose_callback(
 
 	multi_channel_weight_info<T> info(results.back());
 
-	std::cout << "wmin=" << info.weights().front() << " (N="
-		<< info.calls().front() << ") in channel";
-
 	std::size_t const count = info.minimal_weight_count();
 
-	if (count > 1)
-	{
-		std::cout << 's';
-	}
-
-	std::cout << " #" << make_list_of_ranges(minimal_weight_channels(info))
-		<< '\n';
+	std::cout << "wmin=" << info.weights().front() << " (N="
+		<< info.calls().front() << ") in " << count << " channel"
+		<< (count > 1 ? "s" : "") << ": #"
+		<< make_list_of_ranges(minimal_weight_channels(info)) << '\n';
 
 	auto weight_printer = [&](std::string prefix, std::size_t index) {
 		std::cout << prefix << info.weights().at(index) << " (N="

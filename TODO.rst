@@ -32,7 +32,6 @@ MULTI CHANNEL
 
 - add possibility for the controlled removal of channels?
 - add beta parameter to dampen the weight adjustment for better convergence
-- print the number of channels that have the minimum weight
 
 VEGAS
 =====
