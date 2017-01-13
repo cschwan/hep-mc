@@ -1,6 +1,6 @@
 docpkg = $(PACKAGE_TARNAME)-doc-$(PACKAGE_VERSION).tar
 
-CLEANFILES = $(docpkg)
+CLEANFILES = $(docpkg) doxygen_sqlite3.db
 
 EXTRA_DIST = \
 	callbacks.dox \
