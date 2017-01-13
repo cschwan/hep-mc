@@ -106,16 +106,17 @@ inline bool multi_channel_verbose_callback(
 	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
 	T const max_difference = multi_channel_max_difference(results.back());
-
-	std::cout << "summary of a-priori weights: D=" << max_difference << '\n';
-
 	multi_channel_weight_info<T> info(results.back());
+	std::size_t const channels = info.channels().size();
 
-	std::size_t const count = info.minimal_weight_count();
+	std::cout << "summary of a-priori weights: D=" << max_difference << " for "
+		<< channels << " channel" << (channels > 1 ? "s\n" : "\n");
+
+	std::size_t const min_channels = info.minimal_weight_count();
 
 	std::cout << "wmin=" << info.weights().front() << " (N="
-		<< info.calls().front() << ") in " << count << " channel"
-		<< (count > 1 ? "s" : "") << ": #"
+		<< info.calls().front() << ") in " << min_channels
+		<< " channel" << (min_channels > 1 ? "s" : "") << ": #"
 		<< make_list_of_ranges(minimal_weight_channels(info)) << '\n';
 
 	auto weight_printer = [&](std::string prefix, std::size_t index) {
@@ -125,10 +126,11 @@ inline bool multi_channel_verbose_callback(
 	};
 
 	// number of non-minimal weights
-	std::size_t printable_channels = info.channels().size() - count;
+	std::size_t printable_channels = channels - min_channels;
 
 	if (printable_channels > 0)
 	{
+		// print maximum weight channel separately
 		--printable_channels;
 	}
 
@@ -140,12 +142,12 @@ inline bool multi_channel_verbose_callback(
 		{
 			for (std::size_t i = 0; i != printable_channels; ++i)
 			{
-				weight_printer("   w=", count + i);
+				weight_printer("   w=", min_channels + i);
 			}
 		}
 		else
 		{
-			std::size_t offset = count;
+			std::size_t offset = min_channels;
 
 			for (std::size_t i = 0; i != number; ++i)
 			{
@@ -154,7 +156,7 @@ inline bool multi_channel_verbose_callback(
 
 			std::cout << "     ...\n";
 
-			offset = info.channels().size() - number - 1;
+			offset = channels - number - 1;
 
 			for (std::size_t i = 0; i != number; ++i)
 			{
@@ -163,9 +165,9 @@ inline bool multi_channel_verbose_callback(
 		}
 	}
 
-	if (info.minimal_weight_count() != info.channels().size())
+	if (min_channels != channels)
 	{
-		weight_printer("wmax=", info.channels().size() - 1);
+		weight_printer("wmax=", channels - 1);
 	}
 
 	T const relative_error_percent = (T(100.0) * results.back().error() /
