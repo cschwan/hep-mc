@@ -72,6 +72,13 @@ inline std::vector<T> multi_channel_refine_weights(
 
 	for (T& weight : new_weights)
 	{
+		if (weight == T())
+		{
+			// do not enable disabled channels (with weight zero) by setting
+			// them to the minimum weight
+			continue;
+		}
+
 		weight /= sum_of_new_weights;
 		weight = std::fmax(weight, minimum_weight);
 		new_sum += weight;

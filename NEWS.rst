@@ -1,6 +1,7 @@
 New in 0.5:
 ===========
 
+- it is now possible to disable channels by setting their weight to zero
 - the function ``multi_channel_verbose_callback`` now prints an overview of the
   smallest and largest a-priori weights
 - the functions ``multi_channel`` and ``mpi_multi_channel`` now accept an
