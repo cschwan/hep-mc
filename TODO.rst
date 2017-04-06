@@ -14,6 +14,10 @@ GENERAL
   copy of the generator the integrator obtains, print out the state (with
   ``operator<<``) and the number of discards needed
 - save the ten (n?) largest weights?
+- simplify the handling of integrands by requiring that they must accept a
+  ``hep::projector<T>``?
+- remove the integrand classes; they complicate the use of the integration
+  routines
 
 NEW INTEGRATORS
 ===============
