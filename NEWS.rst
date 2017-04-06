@@ -1,6 +1,8 @@
 New in 0.5:
 ===========
 
+- fixed a bug that caused NaNs to slip through to the integrated result if they
+  were coming from the point's weight
 - it is now possible to disable channels by setting their weight to zero
 - the function ``multi_channel_verbose_callback`` now prints an overview of the
   smallest and largest a-priori weights

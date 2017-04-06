@@ -75,17 +75,18 @@ public:
 		// are generated here
 		T value = integrand.function()(point, projector);
 
-		if (std::isfinite(value))
+		if (value != T())
 		{
-			if (value != T())
+			value *= point.weight();
+
+			if (std::isfinite(value))
 			{
-				value *= point.weight();
 				accumulate(sums_[0], sums_[1], compensations_[0], value);
 			}
-		}
-		else
-		{
-			value = T();
+			else
+			{
+				value = T();
+			}
 		}
 
 		return value;
@@ -198,17 +199,18 @@ public:
 		// are generated here
 		T value = integrand.function()(point);
 
-		if (std::isfinite(value))
+		if (value != T())
 		{
-			if (value != T())
+			value *= point.weight();
+
+			if (std::isfinite(value))
 			{
-				value *= point.weight();
 				accumulate(sums_[0], sums_[1], sums_[2], value);
 			}
-		}
-		else
-		{
-			value = T();
+			else
+			{
+				value = T();
+			}
 		}
 
 		return value;
