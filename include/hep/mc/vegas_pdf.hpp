@@ -118,6 +118,8 @@ inline T vegas_icdf(
 	std::vector<T>& random_numbers,
 	std::vector<std::size_t>& bin
 ) {
+	using std::nexttoward;
+
 	T weight = T(1.0);
 
 	std::size_t const dimensions = pdf.dimensions();
@@ -129,7 +131,7 @@ inline T vegas_icdf(
 		// stackoverflow.com/questions/25668600
 		if (random_numbers[i] == T(1.0))
 		{
-			random_numbers[i] = std::nexttoward(random_numbers[i], T());
+			random_numbers[i] = nexttoward(random_numbers[i], T());
 		}
 
 		T const position = random_numbers[i] * bins;
@@ -169,6 +171,9 @@ inline vegas_pdf<T> vegas_refine_pdf(
 	T alpha,
 	std::vector<T> const& data
 ) {
+	using std::log;
+	using std::pow;
+
 	std::size_t const dimensions = pdf.dimensions();
 	std::size_t const bins       = pdf.bins();
 
@@ -211,7 +216,7 @@ inline vegas_pdf<T> vegas_refine_pdf(
 			if (tmp[bin] != T())
 			{
 				T const r = tmp[bin] / norm;
-				T const impfun = std::pow((r - T(1.0)) / std::log(r), alpha);
+				T const impfun = pow((r - T(1.0)) / log(r), alpha);
 				average_per_bin += impfun;
 				tmp[bin] = impfun;
 			}

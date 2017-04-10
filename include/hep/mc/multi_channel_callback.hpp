@@ -103,6 +103,8 @@ template <typename T>
 inline bool multi_channel_verbose_callback(
 	std::vector<multi_channel_result<T>> const& results
 ) {
+	using std::fabs;
+
 	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
 	T const max_difference = multi_channel_max_difference(results.back());
@@ -171,7 +173,7 @@ inline bool multi_channel_verbose_callback(
 	}
 
 	T const relative_error_percent = (T(100.0) * results.back().error() /
-		std::fabs(results.back().value()));
+		fabs(results.back().value()));
 
 	// print result for this iteration
 	std::cout << "this iteration: N=" << results.back().calls() << " E="
@@ -183,7 +185,7 @@ inline bool multi_channel_verbose_callback(
 	T const chi = chi_square_dof0(results.begin(), results.end());
 
 	T const relative_error_percent_all = (T(100.0) * result.error() /
-		std::fabs(result.value()));
+		fabs(result.value()));
 
 	// print the combined result
 	std::cout << "all iterations: N=" << result.calls() << " E="

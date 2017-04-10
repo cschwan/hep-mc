@@ -55,6 +55,8 @@ template <typename Iterator>
 inline mc_result<get_T<Iterator>> cumulative_result0(
 	Iterator begin, Iterator end
 ) {
+	using std::sqrt;
+
 	typedef get_T<Iterator> T;
 
 	std::size_t calls = 0;
@@ -72,7 +74,7 @@ inline mc_result<get_T<Iterator>> cumulative_result0(
 	variance = T(1.0) / variance;
 	estimate *= variance;
 
-	return create_result(calls, estimate, std::sqrt(variance));
+	return create_result(calls, estimate, sqrt(variance));
 }
 
 /**
@@ -93,6 +95,8 @@ template <typename Iterator>
 inline mc_result<get_T<Iterator>> cumulative_result1(
 	Iterator begin, Iterator end
 ) {
+	using std::sqrt;
+
 	typedef get_T<Iterator> T;
 
 	std::size_t const m = std::distance(begin, end);
@@ -119,7 +123,7 @@ inline mc_result<get_T<Iterator>> cumulative_result1(
 	}
 
 	T const value = sum / m;
-	T const error = std::sqrt((sum_of_squares / m - value * value) / T(m - 1));
+	T const error = sqrt((sum_of_squares / m - value * value) / T(m - 1));
 
 	return create_result(calls, value, error);
 }

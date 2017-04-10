@@ -58,13 +58,16 @@ inline std::vector<T> multi_channel_refine_weights(
 	T minimum_weight,
 	T beta = T(0.25)
 ) {
+	using std::fmax;
+	using std::pow;
+
 	std::vector<T> new_weights(weights.size());
 
 	T sum_of_new_weights = T();
 
 	for (std::size_t i = 0; i != new_weights.size(); ++i)
 	{
-		new_weights[i] = weights[i] * std::pow(adjustment_data[i], beta);
+		new_weights[i] = weights[i] * pow(adjustment_data[i], beta);
 		sum_of_new_weights += new_weights[i];
 	}
 
@@ -80,7 +83,7 @@ inline std::vector<T> multi_channel_refine_weights(
 		}
 
 		weight /= sum_of_new_weights;
-		weight = std::fmax(weight, minimum_weight);
+		weight = fmax(weight, minimum_weight);
 		new_sum += weight;
 	}
 

@@ -69,6 +69,8 @@ public:
 	template <typename I, typename P>
 	T invoke(I& integrand, P const& point)
 	{
+		using std::isfinite;
+
 		hep::projector<T> projector(*this, point);
 
 		// call the integrand function with the supplied point. Distributions
@@ -79,7 +81,7 @@ public:
 		{
 			value *= point.weight();
 
-			if (std::isfinite(value))
+			if (isfinite(value))
 			{
 				accumulate(sums_[0], sums_[1], compensations_[0], value);
 			}
@@ -94,7 +96,9 @@ public:
 
 	void add_to_distribution(std::size_t index, T projection, T value)
 	{
-		if (!std::isfinite(value))
+		using std::isfinite;
+
+		if (!isfinite(value))
 		{
 			return;
 		}

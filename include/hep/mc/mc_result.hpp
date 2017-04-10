@@ -77,7 +77,9 @@ public:
 	/// Standard deviation \f$ S \f$ of the expectation value.
 	T error() const
 	{
-		return std::sqrt(variance());
+		using std::sqrt;
+
+		return sqrt(variance());
 	}
 
 	/// Returns the sum, i.e. \f$ \sum_{i=1}^N f ( \vec{x}_i ) \f$.
