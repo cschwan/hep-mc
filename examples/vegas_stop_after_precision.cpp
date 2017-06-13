@@ -23,7 +23,8 @@ struct stop_after_precision
 		hep::vegas_verbose_callback<double>(r);
 
 		// compute cumulative result ...
-		auto const result = hep::cumulative_result0(r.begin(), r.end());
+		auto const result = hep::accumulate<hep::weighted_with_variance>(
+			r.begin(), r.end());
 
 		// ... and check for the absolute error ...
 		if (result.error() < abs_error)

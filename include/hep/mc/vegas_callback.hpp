@@ -63,8 +63,10 @@ inline bool vegas_verbose_callback(std::vector<vegas_result<T>> const& results)
 		<< relative_error_percent << "%)\n";
 
 	// compute cumulative results
-	auto const result = cumulative_result0(results.begin(), results.end());
-	T const chi = chi_square_dof0(results.begin(), results.end());
+	auto const result = accumulate<weighted_with_variance>(results.begin(),
+		results.end());
+	T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
+		results.end());
 
 	T const relative_error_percent_all = (T(100.0) * result.error() /
 		fabs(result.value()));

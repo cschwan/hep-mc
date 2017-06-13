@@ -18,10 +18,10 @@ int main()
 	for (std::size_t i = 0; i != results.size(); ++i)
 	{
 		// combine results from iterations [0, i]
-		auto result = hep::cumulative_result0(results.begin(),
-			results.begin() + (i+1));
-		auto chi_square_dof = hep::chi_square_dof0(results.begin(),
-			results.begin() + (i+1));
+		auto result = hep::accumulate<hep::weighted_with_variance>(
+			results.begin(), results.begin() + (i+1));
+		auto chi_square_dof = hep::chi_square_dof<hep::weighted_with_variance>(
+			results.begin(), results.begin() + (i+1));
 
 		// print results
 		std::cout << ">> printing cumulative result for results 0 till " << i
@@ -29,10 +29,10 @@ int main()
 			<< " chi^2/dof=" << chi_square_dof << "\n";
 
 		// calculate cumulative results again, this time with a different method
-		result = hep::cumulative_result1(results.begin(),
+		result = hep::accumulate<hep::weighted_equally>(results.begin(),
 			results.begin() + (i+1));
-		chi_square_dof = hep::chi_square_dof1(results.begin(),
-			results.begin() + (i+1));
+		chi_square_dof = hep::chi_square_dof<hep::weighted_equally>(
+			results.begin(), results.begin() + (i+1));
 
 		// print results
 		std::cout << "method 1: E=" << result.value() << " +- "

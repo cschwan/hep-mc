@@ -141,7 +141,8 @@ void check_vegas_integrator(test_data_type data)
 		hep::make_integrand<T>(integrand, dimension),
 		std::vector<std::size_t>(10, calls / 10)
 	);
-	auto result = hep::cumulative_result1(results.begin(), results.end());
+	auto result = hep::accumulate<hep::weighted_equally>(results.begin(),
+		results.end());
 
 	// approximation should lie with the error interval
 	EXPECT_NEAR( integrand.reference_result(), result.value(), deviation *

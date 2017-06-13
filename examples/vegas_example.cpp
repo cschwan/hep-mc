@@ -29,9 +29,10 @@ int main()
 	// results contains the estimations for each iteration. We could take the
 	// result from last iteration, but here we instead choose to combine the
 	// results of all iterations but the first one in a cumulative result
-	auto result = hep::cumulative_result0(results.begin() + 1, results.end());
-	double chi_square_dof = hep::chi_square_dof0(results.begin() + 1,
-		results.end());
+	auto result = hep::accumulate<hep::weighted_with_variance>(
+		results.begin() + 1, results.end());
+	double chi_square_dof = hep::chi_square_dof<hep::weighted_with_variance>(
+		results.begin() + 1, results.end());
 
 	// print the cumulative result
 	std::cout << ">> cumulative result (excluding first iteration):\n>> N="

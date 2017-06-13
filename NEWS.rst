@@ -1,7 +1,7 @@
 New in 0.6:
 ===========
 
-
+- changed the interfaces of functions that return accumulated results
 
 New in 0.5:
 ===========

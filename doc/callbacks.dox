@@ -27,8 +27,8 @@ This library comes with two predefined callback functions for ach integrator,
   - a `_default_callback` function that is set by default and does nothing and
   - a `_verbose_callback` function that prints the result of the recently
 	completed iteration and the cumulative result (using 
-	\ref cumulative_result0) of all iterations and the corresponding chi-square
-    per degree of freedom (using \ref chi_square_dof0).
+	\ref weighted_with_variance) of all iterations and the corresponding
+    chi-square per degree of freedom.
 
 An example on how to use the return value to stop after a certain precision is
 reached is shown in \ref vegas_stop_after_precision.cpp.
