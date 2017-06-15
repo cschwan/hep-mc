@@ -38,7 +38,78 @@ using hep_numeric_type =
 	typename std::iterator_traits<Iterator>::value_type::numeric_type;
 
 template <typename Iterator>
+using hep_plain_result = hep::plain_result<hep_numeric_type<Iterator>>;
+
+template <typename Iterator>
 using hep_mc_result = hep::mc_result<hep_numeric_type<Iterator>>;
+
+template <typename Iterator>
+using hep_plain_result_if = typename std::enable_if<std::is_convertible<
+	typename std::iterator_traits<Iterator>::value_type,
+	hep_plain_result<Iterator>>::value, hep_plain_result<Iterator>>::type;
+
+template <typename Iterator>
+using hep_mc_result_if = typename std::enable_if<!std::is_convertible<
+	typename std::iterator_traits<Iterator>::value_type,
+	hep_plain_result<Iterator>>::value, hep_mc_result<Iterator>>::type;
+
+template <template <typename> class Accumulator, typename Iterator>
+inline hep_plain_result<Iterator> hep_distribution_accumulator(
+	Iterator begin,
+	Iterator end
+) {
+	using T = hep_numeric_type<Iterator>;
+
+	std::size_t n = std::distance(begin, end);
+	std::vector<hep::distribution_result<T>> distributions;
+
+	if (n != 0)
+	{
+		std::size_t const distribution_count = begin->distributions().size();
+		distributions.reserve(distribution_count);
+
+		for (std::size_t j = 0; j != distribution_count; ++j)
+		{
+			std::size_t const bin_count =
+				begin->distributions().at(j).results().size();
+			std::vector<hep::mc_result<T>> distribution_results;
+			distribution_results.reserve(bin_count);
+
+			for (std::size_t k = 0; k != bin_count; ++k)
+			{
+				std::vector<hep::mc_result<T>> bin_results;
+				bin_results.reserve(n);
+
+				for (auto i = begin; i != end; ++i)
+				{
+					bin_results.push_back(i->distributions().at(j).results()
+						.at(k));
+				}
+
+				using BinIterator = typename
+					std::vector<hep::mc_result<T>>::const_iterator;
+
+				distribution_results.push_back(Accumulator<BinIterator>{}(
+					bin_results.cbegin(), bin_results.cend()));
+			}
+
+			distributions.emplace_back(
+				begin->distributions().at(j).parameters(),
+				distribution_results
+			);
+		}
+
+	}
+
+	auto const integrated_result = Accumulator<Iterator>{}(begin, end);
+
+	return hep::plain_result<T>{
+		distributions,
+		integrated_result.calls(),
+		integrated_result.sum(),
+		integrated_result.sum_of_squares()
+	};
+}
 
 }
 
@@ -146,15 +217,31 @@ struct weighted_equally
 };
 
 /// Accumulates the results in the interval [`begin`, `end`) using an instance
-/// of the type `Accumulator`. This type can be \ref weighted_with_variance,
-/// \ref weighted_equally, or a similar type.
+/// of the type `Accumulator`. This function is called if the interval points to
+/// results of the type \ref mc_result, but not \ref plain_result. `Accumulator`
+/// can be \ref weighted_with_variance, \ref weighted_equally, or a similar
+/// type.
 template <template <typename> class Accumulator,
 	typename IteratorOverMcResults>
-inline hep_mc_result<IteratorOverMcResults> accumulate(
+inline hep_mc_result_if<IteratorOverMcResults> accumulate(
 	IteratorOverMcResults begin,
 	IteratorOverMcResults end
 ) {
 	return Accumulator<IteratorOverMcResults>{}(begin, end);
+}
+
+/// Accumulates the results in the interval [`begin`, `end`) using an instance
+/// of the type `Accumulator`. This function is called if the interval points to
+/// results of the type \ref plain_result and therefore also accumulates all
+/// distributions. `Accumulator` can be \ref weighted_with_variance,
+/// \ref weighted_equally, or a similar type.
+template <template <typename> class Accumulator,
+	typename IteratorOverPlainResults>
+inline hep_plain_result_if<IteratorOverPlainResults> accumulate(
+	IteratorOverPlainResults begin,
+	IteratorOverPlainResults end
+) {
+	return hep_distribution_accumulator<Accumulator>(begin, end);
 }
 
 /// Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using

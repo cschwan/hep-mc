@@ -1,7 +1,10 @@
 #include "gtest/gtest.h"
 
+#include "hep/mc/distribution_parameters.hpp"
+#include "hep/mc/distribution_result.hpp"
 #include "hep/mc/mc_helper.hpp"
 
+#include <cmath>
 #include <limits>
 #include <vector>
 
@@ -177,4 +180,70 @@ TYPED_TEST(McHelper, ChiSquareDof1WithTwo)
 		two_results.end());
 
 	EXPECT_NEAR( T() , result , T(1e-10) );
+}
+
+TYPED_TEST(McHelper, DistributionAccumulator)
+{
+	using T = TypeParam;
+	using std::sqrt;
+
+	std::vector<hep::distribution_result<T>> it0 = {
+		hep::distribution_result<T>{
+			hep::make_dist_params(3, T(), T(3.0)),
+			std::vector<hep::mc_result<T>>{
+				hep::create_result<T>(100, T(1.0), T(0.1)),
+				hep::create_result<T>(100, T(2.0), T(0.2)),
+				hep::create_result<T>(100, T(3.0), T(0.3))
+			}
+		},
+		hep::distribution_result<T>{
+			hep::make_dist_params(2, T(), T(2.0)),
+			std::vector<hep::mc_result<T>>{
+				hep::create_result<T>(100, T(4.0), T(0.4)),
+				hep::create_result<T>(100, T(8.0), T(0.8))
+			}
+		}
+	};
+
+	auto const ir = hep::create_result(100, T(5.0), T(0.5));
+
+	std::vector<hep::plain_result<T>> results = {
+		hep::plain_result<T>{it0, ir.calls(), ir.sum(), ir.sum_of_squares()},
+		hep::plain_result<T>{it0, ir.calls(), ir.sum(), ir.sum_of_squares()}
+	};
+
+	auto const result = hep::accumulate<hep::weighted_with_variance>(
+		results.begin(), results.end());
+
+	// check integrated result
+	EXPECT_NEAR( T(5.0), result.value(), T(1e-10) );
+	EXPECT_NEAR( sqrt(T(0.125)), result.error(), T(1e-8) );
+	EXPECT_EQ( result.calls(), 200u );
+
+	// check parameters of both distributions
+	EXPECT_EQ( result.distributions().at(0).parameters().bins(), 3u );
+	EXPECT_EQ( result.distributions().at(0).parameters().x_min(), T() );
+	EXPECT_EQ( result.distributions().at(0).parameters().x_max(), T(3.0) );
+	EXPECT_EQ( result.distributions().at(1).parameters().bins(), 2u );
+	EXPECT_EQ( result.distributions().at(1).parameters().x_min(), T() );
+	EXPECT_EQ( result.distributions().at(1).parameters().x_max(), T(2.0) );
+
+	// check first distribution
+	EXPECT_NEAR( T(1.0), result.distributions().at(0).results().at(0).value(), T(1e-10) );
+	EXPECT_NEAR( sqrt(T(0.005)), result.distributions().at(0).results().at(0).error(), T(1e-10) );
+	EXPECT_EQ( 200u, result.distributions().at(0).results().at(0).calls() );
+	EXPECT_NEAR( T(2.0), result.distributions().at(0).results().at(1).value(), T(1e-10) );
+	EXPECT_NEAR( sqrt(T(0.02)), result.distributions().at(0).results().at(1).error(), T(1e-10) );
+	EXPECT_EQ( 200u, result.distributions().at(0).results().at(1).calls() );
+	EXPECT_NEAR( T(3.0), result.distributions().at(0).results().at(2).value(), T(1e-10) );
+	EXPECT_NEAR( sqrt(T(0.045)), result.distributions().at(0).results().at(2).error(), T(1e-10) );
+	EXPECT_EQ( 200u, result.distributions().at(0).results().at(2).calls() );
+
+	// check second distribution
+	EXPECT_NEAR( T(4.0), result.distributions().at(1).results().at(0).value(), T(1e-10) );
+	EXPECT_NEAR( sqrt(T(0.08)), result.distributions().at(1).results().at(0).error(), T(1e-10) );
+	EXPECT_EQ( 200u, result.distributions().at(1).results().at(0).calls() );
+	EXPECT_NEAR( T(8.0), result.distributions().at(1).results().at(1).value(), T(1e-6) );
+	EXPECT_NEAR( sqrt(T(0.32)), result.distributions().at(1).results().at(1).error(), T(1e-10) );
+	EXPECT_EQ( 200u, result.distributions().at(1).results().at(1).calls() );
 }

@@ -1,6 +1,8 @@
 New in 0.6:
 ===========
 
+- added functionality to accumulate the results of distributions together with
+  the integrated results
 - changed the interfaces of functions that return accumulated results
 
 New in 0.5:

@@ -6,7 +6,6 @@ GENERAL
 - add ``non_zero_calls()`` member function to ``_result`` classes
 - add serialization functions for the ``_result`` classes that are needed to
   exchange and accumulate the results from different MPI processors
-- write cumulative functions that accumulate also the distributions
 - remove the globally set callback functions and make them local to every call
   to an integrator?
 - add functionality to capture non-finite numbers of the integrand and report
