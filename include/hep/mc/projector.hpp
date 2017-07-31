@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
  */
 
 #include "hep/mc/internal/accumulator_fwd.hpp"
-#include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/mc_point.hpp"
 
 #include <cstddef>
@@ -46,13 +45,8 @@ public:
 
 	/// Projects a point for the distribution with the specified `index` to the
 	/// x-axis at the value `projection` and sets the value to `value`. The
-	/// weight of the point is automatically multiplied with `value`. Note that
-	/// index must be smaller than the size of the vector returned by \ref
-	/// parameters.
+	/// weight of the point is automatically multiplied with `value`.
 	void add(std::size_t index, T projection, T value);
-
-	/// Returns the parameters of the distributions.
-	std::vector<distribution_parameters<T>> const& parameters() const;
 
 private:
 	accumulator<T, true>& accumulator_;

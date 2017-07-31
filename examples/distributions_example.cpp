@@ -1,13 +1,13 @@
 #include "hep/mc.hpp"
 
+double x_max =  5.0;
+double x_min = -5.0;
+
 double arctan(
 	hep::mc_point<double> const& point,
 	hep::projector<double>& projector
 ) {
-	auto const params = projector.parameters().at(0);
-
-	double const x_range = params.x_max() - params.x_min();
-	double const x_min = params.x_min();
+	double const x_range = x_max - x_min;
 
 	double const projection = x_range * point.point()[0] + x_min;
 	double const value = std::atan(projection);
@@ -27,7 +27,7 @@ int main()
 	auto integrand = hep::make_integrand<double>(
 		arctan,
 		1,
-		hep::make_dist_params(100, -5.0, 5.0)
+		hep::make_dist_params(100, x_min, x_max)
 	);
 
 	// now integrate and record the differential distributions

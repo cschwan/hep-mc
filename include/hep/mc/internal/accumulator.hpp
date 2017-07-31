@@ -132,11 +132,6 @@ public:
 		);
 	}
 
-	std::vector<hep::distribution_parameters<T>> const& parameters() const
-	{
-		return parameters_;
-	}
-
 	hep::plain_result<T> result(std::size_t calls) const
 	{
 		std::vector<hep::distribution_result<T>> result;
@@ -249,12 +244,6 @@ inline void projector<T>::add(std::size_t index, T projection, T value)
 		projection,
 		value * point_.weight()
 	);
-}
-
-template <typename T>
-inline std::vector<distribution_parameters<T>> const&
-projector<T>::parameters() const {
-	return accumulator_.parameters();
 }
 
 }
