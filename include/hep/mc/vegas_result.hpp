@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2016  Christopher Schwan
+ * Copyright (C) 2014-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,14 +39,11 @@ class vegas_result : public plain_result<T>
 public:
 	/// Constructor.
 	vegas_result(
-		std::vector<distribution_result<T>> const& distributions,
-		std::size_t calls,
-		T sum,
-		T sum_of_squares,
+		plain_result<T> const& result,
 		vegas_pdf<T> const& pdf,
 		std::vector<T> const& adjustment_data
 	)
-		: plain_result<T>(distributions, calls, sum, sum_of_squares)
+		: plain_result<T>(result)
 		, pdf_(pdf)
 		, adjustment_data_(adjustment_data)
 	{

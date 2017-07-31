@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,14 +93,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
 			*i
 		);
 
-		results.emplace_back(
-			new_result.distributions(),
-			new_result.calls(),
-			new_result.sum(),
-			new_result.sum_of_squares(),
-			buffer,
-			weights
-		);
+		results.emplace_back(new_result, buffer, weights);
 
 		if (!mpi_multi_channel_callback<T>()(communicator, results))
 		{

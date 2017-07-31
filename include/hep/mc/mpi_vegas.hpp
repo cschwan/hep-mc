@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2016  Christopher Schwan
+ * Copyright (C) 2013-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,14 +92,7 @@ inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
 			*i
 		);
 
-		results.emplace_back(
-			new_result.distributions(),
-			new_result.calls(),
-			new_result.sum(),
-			new_result.sum_of_squares(),
-			pdf,
-			buffer
-		);
+		results.emplace_back(new_result, pdf, buffer);
 
 		if (!mpi_vegas_callback<T>()(communicator, results))
 		{

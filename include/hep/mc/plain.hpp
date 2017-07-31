@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2016  Christopher Schwan
+ * Copyright (C) 2012-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,12 +71,7 @@ inline plain_result<numeric_type_of<I>> plain(
 		accumulator.invoke(integrand, point);
 	}
 
-	return plain_result<T>(
-		accumulator.distributions(calls),
-		calls,
-		accumulator.sum(),
-		accumulator.sum_of_squares()
-	);
+	return accumulator.result(calls);
 }
 
 /// @}

@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,14 +38,11 @@ public:
 	/// Constructor. The parameter `adjustment_data` must contain two additional
 	/// values, being the sum of the sum of squares of the integration.
 	multi_channel_result(
-		std::vector<distribution_result<T>> const& distributions,
-		std::size_t calls,
-		T sum,
-		T sum_of_squares,
+		plain_result<T> const& result,
 		std::vector<T> const& adjustment_data,
 		std::vector<T> const& channel_weights
 	)
-		: plain_result<T>(distributions, calls, sum, sum_of_squares)
+		: plain_result<T>(result)
 		, adjustment_data_(adjustment_data)
 		, channel_weights_(channel_weights)
 	{

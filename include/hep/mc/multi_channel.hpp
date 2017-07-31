@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -171,10 +171,7 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 	}
 
 	return multi_channel_result<T>(
-		accumulator.distributions(calls),
-		calls,
-		accumulator.sum(),
-		accumulator.sum_of_squares(),
+		accumulator.result(calls),
 		adjustment_data,
 		channel_weights
 	);

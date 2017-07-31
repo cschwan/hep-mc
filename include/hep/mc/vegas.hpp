@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2016  Christopher Schwan
+ * Copyright (C) 2012-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,14 +88,7 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 		}
 	}
 
-	return vegas_result<T>(
-		accumulator.distributions(calls),
-		calls,
-		accumulator.sum(),
-		accumulator.sum_of_squares(),
-		pdf,
-		adjustment_data
-	);
+	return vegas_result<T>(accumulator.result(calls), pdf, adjustment_data);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of

@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "hep/mc/projector.hpp"
 #include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/distribution_result.hpp"
+#include "hep/mc/plain_result.hpp"
 
 #include <array>
 #include <cmath>
@@ -131,9 +132,13 @@ public:
 		);
 	}
 
-	std::vector<hep::distribution_result<T>> distributions(
-		std::size_t calls
-	) const {
+	std::vector<hep::distribution_parameters<T>> const& parameters() const
+	{
+		return parameters_;
+	}
+
+	hep::plain_result<T> result(std::size_t calls) const
+	{
 		std::vector<hep::distribution_result<T>> result;
 		result.reserve(parameters_.size());
 
@@ -162,22 +167,7 @@ public:
 			result.emplace_back(params, bin_results);
 		}
 
-		return result;
-	}
-
-	std::vector<hep::distribution_parameters<T>> const& parameters() const
-	{
-		return parameters_;
-	}
-
-	T sum() const
-	{
-		return sums_[0];
-	}
-
-	T sum_of_squares() const
-	{
-		return sums_[1];
+		return hep::plain_result<T>(result, calls, sums_[0], sums_[1]);
 	}
 
 private:
@@ -220,20 +210,14 @@ public:
 		return value;
 	}
 
-	std::vector<hep::distribution_result<T>> distributions(std::size_t) const
+	hep::plain_result<T> result(std::size_t calls) const
 	{
-		// return empty distributions
-		return std::vector<hep::distribution_result<T>>();
-	}
-
-	T sum() const
-	{
-		return sums_[0];
-	}
-
-	T sum_of_squares() const
-	{
-		return sums_[1];
+		return hep::plain_result<T>(
+			std::vector<hep::distribution_result<T>>{},
+			calls,
+			sums_[0],
+			sums_[1]
+		);
 	}
 
 private:
