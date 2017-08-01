@@ -53,6 +53,8 @@ public:
 		, indices_()
 		, sums_()
 		, compensations_()
+		, non_zero_calls_()
+		, finite_calls_()
 	{
 		std::size_t index = 2;
 		indices_.reserve(parameters.size());
@@ -65,6 +67,8 @@ public:
 
 		sums_.resize(2 + index);
 		compensations_.resize(index / 2);
+		non_zero_calls_.resize(index / 2);
+		finite_calls_.resize(index / 2);
 	}
 
 	template <typename I, typename P>
@@ -85,11 +89,14 @@ public:
 			if (isfinite(value))
 			{
 				accumulate(sums_[0], sums_[1], compensations_[0], value);
+				++finite_calls_[0];
 			}
 			else
 			{
 				value = T();
 			}
+
+			++non_zero_calls_[0];
 		}
 
 		return value;
@@ -130,6 +137,9 @@ public:
 			compensations_[new_index / 2],
 			value
 		);
+
+		++non_zero_calls_[new_index / 2];
+		++finite_calls_[new_index / 2];
 	}
 
 	hep::plain_result<T> result(std::size_t calls) const
@@ -152,6 +162,8 @@ public:
 			{
 				bin_results.emplace_back(
 					calls,
+					non_zero_calls_[index / 2],
+					finite_calls_[index / 2],
 					inv_bin_size                * sums_[index],
 					inv_bin_size * inv_bin_size * sums_[index + 1]
 				);
@@ -162,7 +174,14 @@ public:
 			result.emplace_back(params, bin_results);
 		}
 
-		return hep::plain_result<T>(result, calls, sums_[0], sums_[1]);
+		return hep::plain_result<T>(
+			result,
+			calls,
+			non_zero_calls_[0],
+			finite_calls_[0],
+			sums_[0],
+			sums_[1]
+		);
 	}
 
 private:
@@ -170,6 +189,8 @@ private:
 	std::vector<std::size_t> indices_;
 	std::vector<T> sums_;
 	std::vector<T> compensations_;
+	std::vector<std::size_t> non_zero_calls_;
+	std::vector<std::size_t> finite_calls_;
 };
 
 template <typename T>
@@ -178,6 +199,8 @@ class accumulator<T, false>
 public:
 	accumulator(std::vector<hep::distribution_parameters<T>> const&)
 		: sums_()
+		, non_zero_calls_{}
+		, finite_calls_{}
 	{
 	}
 
@@ -195,11 +218,14 @@ public:
 			if (std::isfinite(value))
 			{
 				accumulate(sums_[0], sums_[1], sums_[2], value);
+				++finite_calls_;
 			}
 			else
 			{
 				value = T();
 			}
+
+			++non_zero_calls_;
 		}
 
 		return value;
@@ -210,6 +236,8 @@ public:
 		return hep::plain_result<T>(
 			std::vector<hep::distribution_result<T>>{},
 			calls,
+			non_zero_calls_,
+			finite_calls_,
 			sums_[0],
 			sums_[1]
 		);
@@ -217,6 +245,8 @@ public:
 
 private:
 	std::array<T, 3> sums_;
+	std::size_t non_zero_calls_;
+	std::size_t finite_calls_;
 };
 
 template <typename I>

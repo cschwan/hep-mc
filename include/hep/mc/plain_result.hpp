@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,10 +40,12 @@ public:
 	plain_result(
 		std::vector<distribution_result<T>> const& distributions,
 		std::size_t calls,
+		std::size_t non_zero_calls,
+		std::size_t finite_calls,
 		T sum,
 		T sum_of_squares
 	)
-		: mc_result<T>(calls, sum, sum_of_squares)
+		: mc_result<T>(calls, non_zero_calls, finite_calls, sum, sum_of_squares)
 		, distributions_(distributions)
 	{
 	}

@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,24 @@ namespace
 
 template <typename T>
 MPI_Datatype mpi_datatype();
+
+template <>
+inline MPI_Datatype mpi_datatype<unsigned int>()
+{
+	return MPI_UNSIGNED;
+}
+
+template <>
+inline MPI_Datatype mpi_datatype<unsigned long int>()
+{
+	return MPI_UNSIGNED_LONG;
+}
+
+template <>
+inline MPI_Datatype mpi_datatype<unsigned long long int>()
+{
+	return MPI_UNSIGNED_LONG_LONG;
+}
 
 template <>
 inline MPI_Datatype mpi_datatype<float>()
@@ -65,12 +83,18 @@ hep::plain_result<T> allreduce_result(
 	buffer.push_back(result.sum());
 	buffer.push_back(result.sum_of_squares());
 
+	std::vector<std::size_t> size_t_buffer;
+	size_t_buffer.push_back(result.non_zero_calls());
+	size_t_buffer.push_back(result.finite_calls());
+
 	for (auto const& distribution : result.distributions())
 	{
 		for (auto const& bin : distribution.results())
 		{
 			buffer.push_back(bin.sum());
 			buffer.push_back(bin.sum_of_squares());
+			size_t_buffer.push_back(bin.non_zero_calls());
+			size_t_buffer.push_back(bin.finite_calls());
 		}
 	}
 
@@ -80,6 +104,15 @@ hep::plain_result<T> allreduce_result(
 		&buffer[0],
 		buffer.size(),
 		mpi_datatype<T>(),
+		MPI_SUM,
+		communicator
+	);
+
+	MPI_Allreduce(
+		MPI_IN_PLACE,
+		&size_t_buffer[0],
+		size_t_buffer.size(),
+		mpi_datatype<std::size_t>(),
 		MPI_SUM,
 		communicator
 	);
@@ -97,7 +130,13 @@ hep::plain_result<T> allreduce_result(
 
 		for (std::size_t i = 0; i != distribution.results().size(); ++i)
 		{
-			bins.emplace_back(total_calls, buffer[index], buffer[index + 1]);
+			bins.emplace_back(
+				total_calls,
+				size_t_buffer[index     - in_buffer.size()],
+				size_t_buffer[index + 1 - in_buffer.size()],
+				buffer[index],
+				buffer[index + 1]
+			);
 			index += 2;
 		}
 
@@ -110,6 +149,8 @@ hep::plain_result<T> allreduce_result(
 	return hep::plain_result<T>(
 		distributions,
 		total_calls,
+		size_t_buffer[0],
+		size_t_buffer[1],
 		sum,
 		sum_of_squares
 	);

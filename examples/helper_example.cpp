@@ -7,12 +7,12 @@ int main()
 {
 	// vector containing the results of five (fictious) iterations
 	std::vector<hep::mc_result<double>> results = {
-		// create mc_results with the tuples (calls, estimate, error)
-		hep::create_result(100000, 0.987449, 0.0165879),
-		hep::create_result(100000, 0.988517, 0.00929261),
-		hep::create_result(100000, 0.999915, 0.00825228),
-		hep::create_result(100000, 1.0012,   0.0120161),
-		hep::create_result(100000, 1.01968,  0.00926521)
+		// create mc_results with the tuples (3 * calls, value, error)
+		hep::create_result(100000, 100000, 100000, 0.987449, 0.0165879),
+		hep::create_result(100000, 100000, 100000, 0.988517, 0.00929261),
+		hep::create_result(100000, 100000, 100000, 0.999915, 0.00825228),
+		hep::create_result(100000, 100000, 100000, 1.0012,   0.0120161),
+		hep::create_result(100000, 100000, 100000, 1.01968,  0.00926521)
 	};
 
 	for (std::size_t i = 0; i != results.size(); ++i)

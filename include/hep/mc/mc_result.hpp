@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2016  Christopher Schwan
+ * Copyright (C) 2012-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,16 @@ public:
 	using numeric_type = T;
 
 	/// Constructor.
-	mc_result(std::size_t calls, T sum, T sum_of_squares)
+	mc_result(
+		std::size_t calls,
+		std::size_t non_zero_calls,
+		std::size_t finite_calls,
+		T sum,
+		T sum_of_squares
+	)
 		: calls_(calls)
+		, non_zero_calls_(non_zero_calls)
+		, finite_calls_(finite_calls)
 		, sum_(sum)
 		, sum_of_squares_(sum_of_squares)
 	{
@@ -82,6 +90,19 @@ public:
 		return sqrt(variance());
 	}
 
+	/// Returns the number integrand evaluations that were finite.
+	std::size_t finite_calls() const
+	{
+		return finite_calls_;
+	}
+
+	/// Returns the number of integrand evaluations that were not zero. This
+	/// includes the both finite and non-finite numbers.
+	std::size_t non_zero_calls() const
+	{
+		return non_zero_calls_;
+	}
+
 	/// Returns the sum, i.e. \f$ \sum_{i=1}^N f ( \vec{x}_i ) \f$.
 	T sum() const
 	{
@@ -96,19 +117,33 @@ public:
 
 private:
 	std::size_t calls_;
+	std::size_t non_zero_calls_;
+	std::size_t finite_calls_;
 	T sum_;
 	T sum_of_squares_;
 };
 
-/// Creates a \ref mc_result using the parameters `calls`, `value` and `error`.
+/// Creates a \ref mc_result using the parameters `calls`, `non_zero_calls`,
+/// `value` and `error`.
 template <typename T>
-inline mc_result<T> create_result(std::size_t calls, T value, T error)
-{
+inline mc_result<T> create_result(
+	std::size_t calls,
+	std::size_t non_zero_calls,
+	std::size_t finite_calls,
+	T value,
+	T error
+) {
 	T sum = T(calls) * value;
 	T sum_of_squares = T(calls) * (value * value +
 		T(calls - 1) * error * error);
 
-	return mc_result<T>(calls, sum, sum_of_squares);
+	return mc_result<T>(
+		calls,
+		non_zero_calls,
+		finite_calls,
+		sum,
+		sum_of_squares
+	);
 }
 
 /// @}

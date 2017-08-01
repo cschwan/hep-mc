@@ -128,6 +128,8 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 	EXPECT_NEAR( result.error() , reference[1] , error_abs_error );
 
 	EXPECT_EQ( result.calls() , calls );
+	EXPECT_EQ( result.non_zero_calls() , calls );
+	EXPECT_EQ( result.finite_calls() , calls );
 
 //	std::printf("%La, %La,\n", static_cast <long double> (result.value()),
 //			static_cast <long double> (result.error()));
@@ -177,6 +179,18 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 	EXPECT_EQ( results[2].calls() , calls );
 	EXPECT_EQ( results[3].calls() , calls );
 	EXPECT_EQ( results[4].calls() , calls );
+
+	EXPECT_EQ( results[0].non_zero_calls() , calls );
+	EXPECT_EQ( results[1].non_zero_calls() , calls );
+	EXPECT_EQ( results[2].non_zero_calls() , calls );
+	EXPECT_EQ( results[3].non_zero_calls() , calls );
+	EXPECT_EQ( results[4].non_zero_calls() , calls );
+
+	EXPECT_EQ( results[0].finite_calls() , calls );
+	EXPECT_EQ( results[1].finite_calls() , calls );
+	EXPECT_EQ( results[2].finite_calls() , calls );
+	EXPECT_EQ( results[3].finite_calls() , calls );
+	EXPECT_EQ( results[4].finite_calls() , calls );
 
 //	for (auto i : results)
 //	{
@@ -260,6 +274,18 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results[3].calls() , calls );
 	EXPECT_EQ( results[4].calls() , calls );
 
+	EXPECT_EQ( results[0].non_zero_calls() , calls );
+	EXPECT_EQ( results[1].non_zero_calls() , calls );
+	EXPECT_EQ( results[2].non_zero_calls() , calls );
+	EXPECT_EQ( results[3].non_zero_calls() , calls );
+	EXPECT_EQ( results[4].non_zero_calls() , calls );
+
+	EXPECT_EQ( results[0].finite_calls() , calls );
+	EXPECT_EQ( results[1].finite_calls() , calls );
+	EXPECT_EQ( results[2].finite_calls() , calls );
+	EXPECT_EQ( results[3].finite_calls() , calls );
+	EXPECT_EQ( results[4].finite_calls() , calls );
+
 //	for (auto i : results)
 //	{
 //		std::printf("%La, %La,\n", static_cast <long double> (i.value()),
@@ -311,12 +337,28 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[4].error() , results[4].error() );
 	EXPECT_EQ( results2[4].calls() , results[4].calls() );
 
+	EXPECT_EQ( results2[0].non_zero_calls() , results[0].calls() );
+	EXPECT_EQ( results2[1].non_zero_calls() , results[1].calls() );
+	EXPECT_EQ( results2[2].non_zero_calls() , results[2].calls() );
+	EXPECT_EQ( results2[3].non_zero_calls() , results[3].calls() );
+	EXPECT_EQ( results2[4].non_zero_calls() , results[4].calls() );
+
+	EXPECT_EQ( results2[0].finite_calls() , results[0].calls() );
+	EXPECT_EQ( results2[1].finite_calls() , results[1].calls() );
+	EXPECT_EQ( results2[2].finite_calls() , results[2].calls() );
+	EXPECT_EQ( results2[3].finite_calls() , results[3].calls() );
+	EXPECT_EQ( results2[4].finite_calls() , results[4].calls() );
+
 	EXPECT_EQ( results2[0].distributions()[0].mid_points()[0] , T(0.5) );
 	EXPECT_EQ( results2[0].distributions()[0].results()[0].value() ,
 		results[0].value() );
 	EXPECT_EQ( results2[0].distributions()[0].results()[0].error() ,
 		results[0].error() );
 	EXPECT_EQ( results2[0].distributions()[0].results()[0].calls() ,
+		results[0].calls() );
+	EXPECT_EQ( results2[0].distributions()[0].results()[0].non_zero_calls() ,
+		results[0].calls() );
+	EXPECT_EQ( results2[0].distributions()[0].results()[0].finite_calls() ,
 		results[0].calls() );
 
 	EXPECT_EQ( results2[1].distributions()[0].mid_points()[0] , T(0.5) );
@@ -326,6 +368,10 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 		results[1].error() );
 	EXPECT_EQ( results2[1].distributions()[0].results()[0].calls() ,
 		results[1].calls() );
+	EXPECT_EQ( results2[1].distributions()[0].results()[0].non_zero_calls() ,
+		results[1].calls() );
+	EXPECT_EQ( results2[1].distributions()[0].results()[0].finite_calls() ,
+		results[1].calls() );
 
 	EXPECT_EQ( results2[2].distributions()[0].mid_points()[0] , T(0.5) );
 	EXPECT_EQ( results2[2].distributions()[0].results()[0].value() ,
@@ -333,6 +379,10 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[2].distributions()[0].results()[0].error() ,
 		results[2].error() );
 	EXPECT_EQ( results2[2].distributions()[0].results()[0].calls() ,
+		results[2].calls() );
+	EXPECT_EQ( results2[2].distributions()[0].results()[0].non_zero_calls() ,
+		results[2].calls() );
+	EXPECT_EQ( results2[2].distributions()[0].results()[0].finite_calls() ,
 		results[2].calls() );
 
 	EXPECT_EQ( results2[3].distributions()[0].mid_points()[0] , T(0.5) );
@@ -342,6 +392,10 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 		results[3].error() );
 	EXPECT_EQ( results2[3].distributions()[0].results()[0].calls() ,
 		results[3].calls() );
+	EXPECT_EQ( results2[3].distributions()[0].results()[0].non_zero_calls() ,
+		results[3].calls() );
+	EXPECT_EQ( results2[3].distributions()[0].results()[0].finite_calls() ,
+		results[3].calls() );
 
 	EXPECT_EQ( results2[4].distributions()[0].mid_points()[0] , T(0.5) );
 	EXPECT_EQ( results2[4].distributions()[0].results()[0].value() ,
@@ -349,5 +403,9 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[4].distributions()[0].results()[0].error() ,
 		results[4].error() );
 	EXPECT_EQ( results2[4].distributions()[0].results()[0].calls() ,
+		results[4].calls() );
+	EXPECT_EQ( results2[4].distributions()[0].results()[0].non_zero_calls() ,
+		results[4].calls() );
+	EXPECT_EQ( results2[4].distributions()[0].results()[0].finite_calls() ,
 		results[4].calls() );
 }

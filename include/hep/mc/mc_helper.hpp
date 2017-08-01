@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2015  Christopher Schwan
+ * Copyright (C) 2013-2017  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,6 +106,8 @@ inline hep_plain_result<Iterator> hep_distribution_accumulator(
 	return hep::plain_result<T>{
 		distributions,
 		integrated_result.calls(),
+		integrated_result.non_zero_calls(),
+		integrated_result.finite_calls(),
 		integrated_result.sum(),
 		integrated_result.sum_of_squares()
 	};
@@ -142,6 +144,8 @@ struct weighted_with_variance
 		using T = hep_numeric_type<IteratorOverMcResults>;
 
 		std::size_t calls = 0;
+		std::size_t non_zero_calls = 0;
+		std::size_t finite_calls = 0;
 		T estimate = T();
 		T variance = T();
 
@@ -149,6 +153,8 @@ struct weighted_with_variance
 		{
 			T const tmp = T(1.0) / i->variance();
 			calls += i->calls();
+			non_zero_calls += i->non_zero_calls();
+			finite_calls += i->finite_calls();
 			variance += tmp;
 			estimate += tmp * i->value();
 		}
@@ -156,7 +162,13 @@ struct weighted_with_variance
 		variance = T(1.0) / variance;
 		estimate *= variance;
 
-		return create_result(calls, estimate, sqrt(variance));
+		return create_result(
+			calls,
+			non_zero_calls,
+			finite_calls,
+			estimate,
+			sqrt(variance)
+		);
 	}
 };
 
@@ -191,13 +203,15 @@ struct weighted_equally
 		switch (m)
 		{
 		case 0:
-			return mc_result<T>(0, T(), T());
+			return mc_result<T>(0, 0, 0, T(), T());
 
 		case 1:
 			return *begin;
 		}
 
 		std::size_t calls = 0;
+		std::size_t non_zero_calls = 0;
+		std::size_t finite_calls = 0;
 		T sum = T();
 		T sum_of_squares = T();
 
@@ -205,6 +219,8 @@ struct weighted_equally
 		{
 			T const tmp = i->value();
 			calls += i->calls();
+			non_zero_calls += i->non_zero_calls();
+			finite_calls += i->finite_calls();
 			sum += tmp;
 			sum_of_squares += tmp * tmp;
 		}
@@ -212,7 +228,7 @@ struct weighted_equally
 		T const value = sum / m;
 		T const error = sqrt((sum_of_squares / m - value * value) / T(m - 1));
 
-		return create_result(calls, value, error);
+		return create_result(calls, non_zero_calls, finite_calls, value, error);
 	}
 };
 
