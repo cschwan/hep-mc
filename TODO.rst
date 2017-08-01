@@ -32,6 +32,7 @@ NEW INTEGRATORS
 MULTI CHANNEL
 =============
 
+- add ``non_zero_calls`` and ``finite_calls`` for each channel?
 - add possibility for the controlled removal of channels?
 - add beta parameter to dampen the weight adjustment for better convergence
 
