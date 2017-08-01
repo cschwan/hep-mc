@@ -175,10 +175,17 @@ inline bool multi_channel_verbose_callback(
 	T const relative_error_percent = (T(100.0) * results.back().error() /
 		fabs(results.back().value()));
 
+	T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
+		T(results.back().calls());
+
+	std::size_t const number_of_non_finite_calls =
+		results.back().non_zero_calls() - results.back().finite_calls();
+
 	// print result for this iteration
 	std::cout << "this iteration: N=" << results.back().calls() << " E="
 		<< results.back().value() << " +- " << results.back().error() << " ("
-		<< relative_error_percent << "%) \n";
+		<< relative_error_percent << "%) eff=" << efficiency << "% nnf="
+		<< number_of_non_finite_calls << "\n";
 
 	// compute cumulative results
 	auto const result = accumulate<weighted_with_variance>(results.begin(),
