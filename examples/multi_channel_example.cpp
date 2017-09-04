@@ -10,29 +10,23 @@
 #include <iostream>
 #include <vector>
 
-int main(int argc, char* argv[])
+constexpr double s0 = -10.0;
+constexpr double s1 = +10.0;
+
+double integrand(hep::multi_channel_point<double> const& x)
 {
-#ifdef USE_MPI
-	MPI_Init(&argc, &argv);
-#else
-	// suppress warning about parameters being unused
-	if (argv[argc]) {}
-#endif
+	double s = x.coordinates()[0];
 
-	constexpr double s0 = -10.0;
-	constexpr double s1 = +10.0;
+	double const sms0 = s - s0;
+	double const sms1 = s - s1;
 
-	auto const function = [](hep::multi_channel_point<double> const& x) {
-		double s = x.coordinates()[0];
+	return (2.0 * std::exp(-sms0 * sms0) + std::exp(-sms1 * sms1))
+		/ std::sqrt(std::acos(-1.0)) / 3.0;
+}
 
-		double const sms0 = s - s0;
-		double const sms1 = s - s1;
-
-		return (2.0 * std::exp(-sms0 * sms0) + std::exp(-sms1 * sms1)) 
-			/ std::sqrt(std::acos(-1.0)) / 3.0;
-	};
-
-	auto const densities = [](
+struct map
+{
+	double operator()(
 		std::size_t channel,
 		std::vector<double> const& random_numbers,
 		std::vector<double>& coordinates,
@@ -67,7 +61,32 @@ int main(int argc, char* argv[])
 
 		// global weight
 		return 1.0;
-	};
+	}
+
+	std::size_t dimensions() const
+	{
+		return 1;
+	}
+
+	std::size_t map_dimensions() const
+	{
+		return 1;
+	}
+
+	std::size_t channels() const
+	{
+		return 2;
+	}
+};
+
+int main(int argc, char* argv[])
+{
+#ifdef USE_MPI
+	MPI_Init(&argc, &argv);
+#else
+	// suppress warning about parameters being unused
+	if (argv[argc]) {}
+#endif
 
 #ifndef USE_MPI
 	hep::multi_channel_callback<double>(
@@ -83,7 +102,7 @@ int main(int argc, char* argv[])
 	auto const results = hep::mpi_multi_channel(
 		MPI_COMM_WORLD,
 #endif
-		hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 2),
+		hep::make_multi_channel_integrand<double>(integrand, map()),
 		std::vector<std::size_t>(10, 10000000)
 	);
 
