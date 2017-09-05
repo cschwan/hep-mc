@@ -176,7 +176,7 @@ make_multi_channel_integrand(
 
 template <typename M>
 using map_t = typename std::enable_if<
-	std::is_function<typename std::remove_reference<M>::type>::value, M>::type;
+	!std::is_integral<typename std::remove_reference<M>::type>::value, M>::type;
 
 /// Multi channel integrand constructor for distributions. The `map` must have
 /// member functions `dimensions`, `map_dimensions`, and `channels` that return
