@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/mc_helper.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
 #include "hep/mc/multi_channel_weight_info.hpp"
