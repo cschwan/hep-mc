@@ -151,58 +151,6 @@ inline multi_channel_integrand_type<T, F, M, true> make_multi_channel_integrand(
 	);
 }
 
-/// Multi channel integrand constructor. The `map` must have member functions
-/// `dimensions`, `map_dimensions`, and `channels` that return the values for
-/// the parameters with the same names in the other \ref
-/// make_multi_channel_integrand functions.
-template <typename T, typename F, typename M>
-inline multi_channel_integrand_type<T, F, M, false>
-make_multi_channel_integrand(
-	F&& function,
-	M&& map
-) {
-	std::size_t const dimensions = map.dimensions();
-	std::size_t const map_dimensions = map.map_dimensions();
-	std::size_t const channels = map.channels();
-
-	return make_multi_channel_integrand<T>(
-		std::forward<F>(function),
-		dimensions,
-		std::forward<M>(map),
-		map_dimensions,
-		channels
-	);
-}
-
-template <typename M>
-using map_t = typename std::enable_if<
-	!std::is_integral<typename std::remove_reference<M>::type>::value, M>::type;
-
-/// Multi channel integrand constructor for distributions. The `map` must have
-/// member functions `dimensions`, `map_dimensions`, and `channels` that return
-/// the values for the parameters with the same names in the other \ref
-/// make_multi_channel_integrand functions. The type `M` is wrapped to help the
-/// compiler choose the right `make_multi_channel_integrand` function.
-template <typename T, typename F, typename M, typename... Ds>
-inline multi_channel_integrand_type<T, F, M, true> make_multi_channel_integrand(
-	F&& function,
-	map_t<M>&& map,
-	Ds&&... parameters
-) {
-	std::size_t const dimensions = map.dimensions();
-	std::size_t const map_dimensions = map.map_dimensions();
-	std::size_t const channels = map.channels();
-
-	return make_multi_channel_integrand<T>(
-		std::forward<F>(function),
-		dimensions,
-		std::forward<M>(map),
-		map_dimensions,
-		channels,
-		std::vector<distribution_parameters<T>>{std::forward<Ds>(parameters)...}
-	);
-}
-
 /// @}
 
 }
