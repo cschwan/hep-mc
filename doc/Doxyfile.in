@@ -11,6 +11,7 @@ GENERATE_LATEX         = NO
 HTML_EXTRA_STYLESHEET  = @srcdir@/extra.css
 HTML_FOOTER            = @srcdir@/footer.html
 HTML_OUTPUT            = @builddir@/html
+INCLUDE_PATH           = @top_srcdir@/include
 INPUT                  = @top_srcdir@/include @top_srcdir@/doc
 INTERNAL_DOCS          = NO
 JAVADOC_AUTOBRIEF      = NO
