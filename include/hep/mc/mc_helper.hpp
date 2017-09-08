@@ -151,16 +151,23 @@ struct weighted_with_variance
 
 		for (IteratorOverMcResults i = begin; i != end; ++i)
 		{
-			T const tmp = T(1.0) / i->variance();
 			calls += i->calls();
 			non_zero_calls += i->non_zero_calls();
 			finite_calls += i->finite_calls();
-			variance += tmp;
-			estimate += tmp * i->value();
+
+			if (i->non_zero_calls() != 0)
+			{
+				T const tmp = T(1.0) / i->variance();
+				variance += tmp;
+				estimate += tmp * i->value();
+			}
 		}
 
-		variance = T(1.0) / variance;
-		estimate *= variance;
+		if (non_zero_calls != 0)
+		{
+			variance = T(1.0) / variance;
+			estimate *= variance;
+		}
 
 		return create_result(
 			calls,
