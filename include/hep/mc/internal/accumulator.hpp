@@ -76,7 +76,7 @@ public:
 	{
 		using std::isfinite;
 
-		hep::projector<T> projector(*this, point);
+		hep::projector<T> projector(this, point);
 
 		// call the integrand function with the supplied point. Distributions
 		// are generated here
@@ -269,7 +269,7 @@ template <typename T>
 inline void projector<T>::add(std::size_t index, T projection, T value)
 {
 	// grant selective access to the following function (only)
-	accumulator_.add_to_distribution(
+	accumulator_->add_to_distribution(
 		index,
 		projection,
 		value * point_.weight()

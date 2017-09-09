@@ -36,20 +36,36 @@ class projector
 {
 public:
 	/// \cond DOXYGEN_IGNORE
-	projector(accumulator<T, true>& accumulator, mc_point<T> const& point)
+	projector(accumulator<T, true>* accumulator, mc_point<T> const& point)
 		: accumulator_(accumulator)
 		, point_(point)
 	{
 	}
 	// \endcond
 
+	/// This class has no copy constructor.
+	projector(projector<T> const&) = delete;
+
+	/// This class has no move constructor.
+	projector(projector<T>&&) = delete;
+
+	/// This class has no assignment operator.
+	projector& operator=(projector<T> const&) = delete;
+
+	/// This class has no move assignment operator.
+	projector& operator=(projector<T>&&) = delete;
+
 	/// Projects a point for the distribution with the specified `index` to the
 	/// x-axis at the value `projection` and sets the value to `value`. The
-	/// weight of the point is automatically multiplied with `value`.
+	/// weight of the point is automatically multiplied with `value`. Note that
+	/// if you call this function multiple times with same values of `index` and
+	/// `projection`, the result is not same as calling this function with the
+	/// sum of the `values` a single time. The difference is due to the standard
+	/// deviation which is calculated with the square of `value`.
 	void add(std::size_t index, T projection, T value);
 
 private:
-	accumulator<T, true>& accumulator_;
+	accumulator<T, true>* accumulator_;
 	mc_point<T> const& point_;
 };
 
