@@ -113,7 +113,7 @@ public:
 
 		// TODO: index might be larger than the than allowed; throw?
 
-		T const x = projection - parameters_[index].x_min();
+		T const x = projection - parameters_.at(index).x_min();
 
 		if (x < T())
 		{
@@ -129,17 +129,19 @@ public:
 			return;
 		}
 
-		std::size_t const new_index = indices_[index] + 2 * bin;
+		std::size_t const new_index = indices_.at(index) + 2 * bin;
 
 		accumulate(
-			sums_[new_index],
-			sums_[new_index + 1],
-			compensations_[new_index / 2],
+			sums_.at(new_index),
+			sums_.at(new_index + 1),
+			compensations_.at(new_index / 2),
 			value
 		);
 
-		++non_zero_calls_[new_index / 2];
-		++finite_calls_[new_index / 2];
+		// FIXME: if this function is called more than once, the values are
+		// incorrect
+		++non_zero_calls_.at(new_index / 2);
+		++finite_calls_.at(new_index / 2);
 	}
 
 	hep::plain_result<T> result(std::size_t calls) const
