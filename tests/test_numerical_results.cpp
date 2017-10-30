@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <cstddef>
-//#include <cstdio>
+//#include <iostream>
 #include <limits>
 #include <vector>
 
@@ -39,19 +39,19 @@ template <>
 std::vector<float> reference_results() {
 	return {
 		// PLAIN
-		0xf.f7d32p-4f, 0x8.2b4edp-12f,
+		9.980040789e-01f, 1.994426595e-03f,
 		// VEGAS
-		0xf.f7d32p-4f, 0x8.2b4edp-12f,
-		0x8.02be3p-3f, 0x9.0497bp-13f,
-		0x8.00063p-3f, 0xc.e6325p-14f,
-		0xf.fe5c6p-4f, 0xb.465fap-14f,
-		0xf.ffadfp-4f, 0xa.c4601p-14f,
+		9.980040789e-01f, 1.994426595e-03f,
+		1.001339316e+00f, 1.100822701e-03f,
+		1.000011802e+00f, 7.872990682e-04f,
+		9.995998144e-01f, 6.881667650e-04f,
+		9.999216199e-01f, 6.571758422e-04f,
 		// MULTI CHANNEL
-		0xf.fca45p-4f, 0x8.2b528p-12f,
-		0x8.00671p-3f, 0x8.34a28p-12f,
-		0xf.fdca4p-4f, 0x8.30b93p-12f,
-		0xf.ffb0dp-4f, 0x8.2c270p-12f,
-		0x8.0206bp-3f, 0x8.2f97ap-12f,
+		9.991801381e-01f, 1.994440332e-03f,
+		1.000196576e+00f, 2.003321424e-03f,
+		9.994604588e-01f, 1.999591244e-03f,
+		9.999244809e-01f, 1.995231956e-03f,
+		1.000989318e+00f, 1.998512540e-03f
 	};
 }
 
@@ -59,19 +59,19 @@ template <>
 std::vector<double> reference_results() {
 	return {
 		// PLAIN
-		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c0p-12,
+		9.99946966830306927e-01, 1.99451738543641663e-03,
 		// VEGAS
-		0xf.ffc86404543c0p-4, 0x8.2b672f116b6c0p-12,
-		0x8.01294905b4cd8p-3, 0x9.03ebf3d5a5328p-13,
-		0x8.00331091e43d8p-3, 0xc.d9e34cb3fbe98p-14,
-		0xf.fe107b0b3d6a0p-4, 0xb.518ce42907288p-14,
-		0xf.ffd9e3eac8cf8p-4, 0xa.d9002081b1b58p-14,
+		9.99946966830306927e-01, 1.99451738543641663e-03,
+		1.00056702660240293e+00, 1.10050281971454359e-03,
+		1.00009739823556631e+00, 7.84370395933593040e-04,
+		9.99527435913331264e-01, 6.90829838859883150e-04,
+		9.99963655759120829e-01, 6.62088512423425978e-04,
 		// MULTI CHANNEL
-		0x8.03dfd55411338p-3, 0x8.3187b223d05d8p-12,
-		0x8.0160eaaa1b870p-3, 0x8.2e3155f6b94f8p-12,
-		0x8.0413e49ae60a8p-3, 0x8.3d83dfe23a5a8p-12,
-		0x8.04a60eeee06f0p-3, 0x8.2e8cbae21e648p-12,
-		0x8.04de1ba046340p-3, 0x8.35c33ae807200p-12,
+		1.00189177191546164e+00, 2.00036054797089529e-03,
+		1.00067313510539035e+00, 1.99717780871673479e-03,
+		1.00199106786454206e+00, 2.01179040426654543e-03,
+		1.00226985613340203e+00, 1.99751827870606581e-03,
+		1.00237676222675454e+00, 2.00439702757806981e-03
 	};
 }
 
@@ -79,19 +79,19 @@ template <>
 std::vector<long double> reference_results() {
 	return {
 		// PLAIN
-		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b780aep-12l,
+		9.999469668303068833263e-01l, 1.994517385436427074006e-03l,
 		// VEGAS
-		0xf.ffc86404543bcdbp-4l, 0x8.2b672f116b780adp-12l,
-		0x8.01294905b4cd55ap-3l, 0x9.03ebf3d5a522088p-13l,
-		0x8.00331091e43d804p-3l, 0xc.d9e34cb3fb9ebafp-14l,
-		0xf.fe107b0b3d69c68p-4l, 0xb.518ce429071b2b8p-14l,
-		0xf.ffd9e3eac8cf7eap-4l, 0xa.d9002081b209a36p-14l,
+		9.999469668303068833263e-01l, 1.994517385436427074006e-03l,
+		1.000567026602402857837e+00l, 1.100502819714536443759e-03l,
+		1.000097398235566315537e+00l, 7.843703959335768267279e-04l,
+		9.995274359133312137328e-01l, 6.908298388598802587929e-04l,
+		9.999636557591208273232e-01l, 6.620885124234442225630e-04l,
 		// MULTI CHANNEL
-		0x8.03dfd5541133341p-3l, 0x8.3187b223d085bf1p-12l,
-		0x8.0160eaaa1b86c96p-3l, 0x8.2e3155f6b942f46p-12l,
-		0x8.0413e49ae60a448p-3l, 0x8.3d83dfe23a78523p-12l,
-		0x8.04a60eeee06f282p-3l, 0x8.2e8cbae21e76261p-12l,
-		0x8.04de1ba04633dd0p-3l, 0x8.35c33ae80726c30p-12l,
+		1.001891771915461505746e+00l, 2.000360547970930202107e-03l,
+		1.000673135105390259723e+00l, 1.997177808716723910491e-03l,
+		1.001991067864541958866e+00l, 2.011790404266571298049e-03l,
+		1.002269856133402095794e+00l, 1.997518278706081122539e-03l,
+		1.002376762226754475585e+00l, 2.004397027578075676893e-03l
 	};
 }
 
@@ -131,8 +131,9 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 	EXPECT_EQ( result.non_zero_calls() , calls );
 	EXPECT_EQ( result.finite_calls() , calls );
 
-//	std::printf("%La, %La,\n", static_cast <long double> (result.value()),
-//			static_cast <long double> (result.error()));
+//	std::cout.precision(std::numeric_limits<T>::max_digits10);
+//	std::cout.setf(std::ios_base::scientific);
+//	std::cout << result.value() << ", " << result.error() << ",\n";
 }
 
 TYPED_TEST(NumericalResults, CheckVegasIntegration)
@@ -192,10 +193,11 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 	EXPECT_EQ( results[3].finite_calls() , calls );
 	EXPECT_EQ( results[4].finite_calls() , calls );
 
+//	std::cout.precision(std::numeric_limits<T>::max_digits10);
+//	std::cout.setf(std::ios_base::scientific);
 //	for (auto i : results)
 //	{
-//		std::printf("%La, %La,\n", static_cast <long double> (i.value()),
-//			static_cast <long double> (i.error()));
+//		std::cout << i.value() << ", " << i.error() << ",\n";
 //	}
 }
 
@@ -286,10 +288,11 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results[3].finite_calls() , calls );
 	EXPECT_EQ( results[4].finite_calls() , calls );
 
+//	std::cout.precision(std::numeric_limits<T>::max_digits10);
+//	std::cout.setf(std::ios_base::scientific);
 //	for (auto i : results)
 //	{
-//		std::printf("%La, %La,\n", static_cast <long double> (i.value()),
-//			static_cast <long double> (i.error()));
+//		std::cout << i.value() << ", " << i.error() << ",\n";
 //	}
 
 #ifndef HEP_USE_MPI
