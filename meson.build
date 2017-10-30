@@ -1,13 +1,13 @@
 project(
 	'hep-mc',
-	'c', 'cpp',
+	'cpp',
 	version : '0.6',
 	license : 'GPL-3',
 	default_options : 'cpp_std=c++11',
 	meson_version : '>=0.42'
 )
 
-mpidep = dependency('mpi', language : 'c')
+mpidep = dependency('mpi', language : 'cpp')
 incdir = include_directories('include')
 
 if get_option('enable-doxygen')
