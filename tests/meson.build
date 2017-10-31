@@ -109,12 +109,9 @@ if get_option('enable-mpi')
 		link_with : [ libgtest, libgtest_mpi_main ]
 	)
 
-	config = configuration_data()
-	config.set('abs_builddir', meson.current_build_dir())
-	shell_script = configure_file(input : 'test_mpi_numerical_results.sh.in',
-		output : 'test_mpi_numerical_results.sh', configuration : config)
-
-	test('test_mpi_numerical_results', shell_script)
+	mpiexec = find_program('mpiexec')
+	test('test_mpi_numerical_results', mpiexec,
+		args : [ '-np', '2', test_mpi_numerical_results])
 endif
 
 test('test_discrete_distribution', test_discrete_distribution)
