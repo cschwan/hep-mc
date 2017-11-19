@@ -20,3 +20,5 @@ endif
 
 subdir('include')
 subdir('tests')
+
+hep_mc_dep = declare_dependency(include_directories : incdir)
