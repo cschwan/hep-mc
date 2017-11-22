@@ -5,6 +5,7 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 noinst_PROGRAMS = \
 	distributions_example \
 	helper_example \
+	multi_channel_disabled_channels \
 	multi_channel_example \
 	vegas_example \
 	vegas_read_pdf \

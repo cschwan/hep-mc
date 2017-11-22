@@ -212,6 +212,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 		std::size_t,
 		std::vector<T> const& random_numbers,
 		std::vector<T>& coordinates,
+		std::vector<std::size_t> const&,
 		std::vector<T>& densities,
 		hep::multi_channel_map action
 	) {

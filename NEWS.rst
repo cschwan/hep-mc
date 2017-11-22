@@ -1,7 +1,8 @@
 New in 0.7:
 ===========
 
-
+- WARNING: changed the multi channel ``map`` function interface. This function
+  must now also accept a vector of enabled channels
 
 New in 0.6:
 ===========

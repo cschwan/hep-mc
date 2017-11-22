@@ -79,11 +79,13 @@ public:
 		std::size_t channel,
 		std::vector<T>& densities,
 		std::vector<T> const& channel_weights,
+		std::vector<std::size_t> const& enabled_channels,
 		M& map
 	)
 		: multi_channel_point<T>(point, T(), coordinates, channel)
 		, densities_(densities)
 		, channel_weights_(channel_weights)
+		, enabled_channels_(enabled_channels)
 		, map_(map)
 	{
 	}
@@ -106,6 +108,7 @@ public:
 				this->channel_,
 				this->point_,
 				this->coordinates_,
+				enabled_channels_,
 				densities_,
 				multi_channel_map::calculate_densities
 			);
@@ -126,6 +129,7 @@ public:
 private:
 	std::vector<T>& densities_;
 	std::vector<T> const& channel_weights_;
+	std::vector<std::size_t> const& enabled_channels_;
 	M& map_;
 };
 

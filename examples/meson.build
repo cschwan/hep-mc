@@ -11,6 +11,12 @@ executable(
 )
 
 executable(
+	'multi_channel_disabled_channels',
+	'multi_channel_disabled_channels.cpp',
+	include_directories : incdir
+)
+
+executable(
 	'multi_channel_example',
 	'multi_channel_example.cpp',
 	include_directories : incdir

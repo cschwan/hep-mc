@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
 		std::size_t channel,
 		std::vector<double> const& random_numbers,
 		std::vector<double>& coordinates,
+		std::vector<std::size_t> const&,
 		std::vector<double>& densities,
 		hep::multi_channel_map action
 	) {

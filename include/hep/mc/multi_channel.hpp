@@ -117,6 +117,17 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 	std::vector<T> densities(channels);
 	std::vector<T> adjustment_data(channels);
 
+	std::vector<std::size_t> enabled_channels;
+	enabled_channels.reserve(channels);
+
+	for (std::size_t i = 0; i != channels; ++i)
+	{
+		if (channel_weights.at(i) != T())
+		{
+			enabled_channels.push_back(i);
+		}
+	}
+
 	// distribution that randomly selects a channel
 	discrete_distribution<std::size_t, T> channel_selector(
 		channel_weights.begin(), channel_weights.end());
@@ -141,6 +152,7 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 			channel,
 			random_numbers,
 			coordinates,
+			enabled_channels,
 			densities,
 			multi_channel_map::calculate_coordinates
 		);
@@ -151,6 +163,7 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 			channel,
 			densities,
 			channel_weights,
+			enabled_channels,
 			integrand.map()
 		);
 
