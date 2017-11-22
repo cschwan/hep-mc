@@ -1,7 +1,7 @@
 project(
 	'hep-mc',
 	'cpp',
-	version : '0.6',
+	version : '0.7',
 	license : 'GPL-3',
 	default_options : 'cpp_std=c++11',
 	meson_version : '>=0.42'
