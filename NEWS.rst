@@ -5,6 +5,9 @@ New in 0.6:
   the integrated results
 - changed the interfaces of functions that return accumulated results
 - WARNING: removed the ``parameters()`` function in ``hep::projector``
+- added the possibility to use Meson_ for building/installing hep-mc
+
+.. _Meson: mesonbuild.com
 
 New in 0.5:
 ===========
