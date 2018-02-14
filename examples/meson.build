@@ -46,13 +46,15 @@ executable(
 	include_directories : incdir
 )
 
-if get_option('enable-mpi')
+if get_option('mpi')
+
+mpi = dependency('mpi', language : 'cpp')
 
 executable(
 	'mpi_vegas_example',
 	'mpi_vegas_example.cpp',
 	include_directories : incdir,
-	dependencies : mpidep
+	dependencies : mpi
 )
 
 executable(
@@ -60,7 +62,7 @@ executable(
 	'multi_channel_example.cpp',
 	cpp_args : '-DUSE_MPI',
 	include_directories : incdir,
-	dependencies : mpidep
+	dependencies : mpi
 )
 
 endif

@@ -1,6 +1,3 @@
-option('enable-doxygen', type : 'boolean', value : false,
-	description : 'Enable building of documentation')
-option('enable-examples', type : 'boolean', value : false,
-	description : 'Enable building of examples')
-option('enable-mpi', type : 'boolean', value : false,
-	description : 'Enable building of MPI examples and unit tests')
+option('doxygen',  type : 'boolean', value : false, description : 'Enable building of documentation (requires Doxygen).')
+option('examples', type : 'boolean', value : false, description : 'Enable building of examples.')
+option('mpi',      type : 'boolean', value : false, description : 'Enable building of MPI examples and unit tests.')

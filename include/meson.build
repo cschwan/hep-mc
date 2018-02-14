@@ -1,13 +1,14 @@
-install_headers(
+incdir = include_directories('.')
+
+headers1 = [
 	'hep/mc/internal/accumulator.hpp',
 	'hep/mc/internal/accumulator_fwd.hpp',
 	'hep/mc/internal/discrete_distribution.hpp',
 	'hep/mc/internal/generator_helper.hpp',
 	'hep/mc/internal/mpi_helper.hpp',
-	subdir : 'hep/mc/internal'
-)
+]
 
-install_headers(
+headers2 = [
 	'hep/mc/distribution_parameters.hpp',
 	'hep/mc/distribution_result.hpp',
 	'hep/mc/global_configuration.hpp',
@@ -36,11 +37,15 @@ install_headers(
 	'hep/mc/vegas_pdf.hpp',
 	'hep/mc/vegas_point.hpp',
 	'hep/mc/vegas_result.hpp',
-	subdir : 'hep/mc'
-)
+]
 
-install_headers(
+headers3 = [
 	'hep/mc.hpp',
 	'hep/mc-mpi.hpp',
-	subdir : 'hep'
-)
+]
+
+headers = files(headers1, headers2, headers3)
+
+install_headers(headers1, subdir : 'hep/mc/internal')
+install_headers(headers2, subdir : 'hep/mc')
+install_headers(headers3, subdir : 'hep')

@@ -91,20 +91,20 @@ test_vegas_pdf = executable(
 	link_with : [ libgtest, libgtest_main ]
 )
 
-if get_option('enable-mpi')
+if get_option('mpi')
 	libgtest_mpi_main = static_library(
 		'gtest-mpi-main',
 		'gtest/gtest.h',
 		'gtest_mpi_main.cpp',
 		cpp_args : '-DGTEST_HAS_PTHREAD=0',
-		dependencies : mpidep
+		dependencies : mpi
 	)
 
 	test_mpi_numerical_results = executable(
 		'test_mpi_numerical_results',
 		'test_numerical_results.cpp',
 		cpp_args : [ '-DGTEST_HAS_THREAD=0', '-DHEP_USE_MPI' ],
-		dependencies : mpidep,
+		dependencies : mpi,
 		include_directories : incdir,
 		link_with : [ libgtest, libgtest_mpi_main ]
 	)
