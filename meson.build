@@ -20,4 +20,11 @@ endif
 
 subdir('tests')
 
+pkg = import('pkgconfig')
+pkg.generate(
+	description : 'A C++ Template Library for Monte Carlo Integration',
+	name : meson.project_name(),
+	version : meson.project_version()
+)
+
 hep_mc_dep = declare_dependency(include_directories : incdir)
