@@ -229,7 +229,7 @@ template&lt;template&lt; typename &gt; class Accumulator, typename IteratorOverM
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns an approximation for the \( \chi^2 \) per degree of freedom using the results \( (E_i, S_i) \) pointed to by the range [<code>begin</code>, <code>end</code>). The cumulative value \( E \) is calculated using an instance of `Accumulator. The \( \chi^2 \) is then computed as: </p><p class="formulaDsp">
+<p>Returns an approximation for the \( \chi^2 \) per degree of freedom using the results \( (E_i, S_i) \) pointed to by the range [<code>begin</code>, <code>end</code>). The cumulative value \( E \) is calculated using an instance of <code>Accumulator</code>. The \( \chi^2 \) is then computed as: </p><p class="formulaDsp">
 \[ \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left( E_i - E \right)^2}{S_i^2} \]
 </p>
 <p> If the range [<code>begin</code>, <code>end</code>) is empty, the result is zero. If it contains one element the result is infinity. </p>

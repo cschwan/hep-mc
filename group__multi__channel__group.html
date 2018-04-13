@@ -75,9 +75,9 @@ $(function() {
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The Multi Channel integration algorithm. </p>
 <p>In contrast to the VEGAS algorithm, which uses a product of one-dimensional PDFs, the multi channel integration algorithm uses a sum of user-defined PDFs \( p_j ( \vec{y}) \) with automatically adapted weights \( \alpha_j \) in the form </p><p class="formulaDsp">
-\[ p ( \vec{y} ) = \sum_{j=1}^M \alpha_j p_j ( \vec{y} ) \text{,} \qquad \int \mathrm{d}^d y \; p_j \left( \vec{y} \right) = 1 \text{,} \quad \sum_{j=1}^M \alpha_j = 1 \]
+\[ p ( \vec{y} ) = \sum_{j=1}^M \alpha_j p_j ( \vec{y} ) \text{,} \qquad \int \mathrm{d}^d y \; p_j \left( \vec{y} \right) = 1 \text{,} \quad \sum_{j=1}^M \alpha_j = 1 \text{,} \]
 </p>
-<p> that is used to sample the function. Multi channel integration performs better compared to VEGAS if the peak structure of the integrand does not factorize. To avoid explicitly summing over every <em>channel</em> \( j \) for each randomly chosen point \( \vec{x} \in U \equiv [0,1]^d \) the MC integrator also samples over the possible channels. This leads to the final formula </p><p class="formulaDsp">
+<p> which is used to sample the function. Multi channel integration performs better compared to VEGAS if the peak structure of the integrand does not factorize. To avoid explicitly summing over every <em>channel</em> \( j \) for each randomly chosen point \( \vec{x} \in U \equiv [0,1]^d \) the MC integrator also samples over the possible channels. This leads to the final formula </p><p class="formulaDsp">
 \[ I = \int \mathrm{d} i \int_U \mathrm{d}^d x \; J_i ( \vec{x} ) \left. \frac{f (\vec{y})}{p (\vec{y})} \right|_{\vec{y} = \vec{y}_i ( \vec{x} )} \text{,} \qquad i \sim \left\{ \alpha_1, \alpha_2, \ldots, \alpha_M \right\} \]
 </p>
 <p> where the integral over the index \( i \) is understood to be a Monte Carlo summation in which the index \( i \) is randomly chosen according to the specified weights. Since the PDFs \( \left\{ p_j \right\}_{j=1}^M \) are user-defined, the user also has to specify the CDFs \( \left\{ \vec{y}_j ( \vec{x} ) \right\}_{j=1}^M \) for each channel and the jacobian \( J_i \) for the selected channel.</p>
@@ -85,14 +85,20 @@ $(function() {
 <li><code>dimensions</code> determines the parameter \( d \),</li>
 <li><code>map_dimensions</code> determines the size of the vector <code>coordinates</code> (see below),</li>
 <li><code>channels</code> determines \( M \), the number of channels,</li>
-<li><code>map</code> must be the function that calculates <em>both</em> the PDFs and the CDFs. Its declaration must be as follows: <pre class="fragment">T map(
+<li><p class="startli"><code>map</code> must be the function that calculates <em>both</em> the PDFs and the CDFs. Its declaration must be as follows: </p><pre class="fragment">T map(
     std::size_t channel,
     std::vector&lt;T&gt; const&amp; random_numbers,
     std::vector&lt;T&gt;&amp; coordinates,
+    std::vector&lt;std::size_t&gt; const&amp; enabled_channels,
     std::vector&lt;T&gt;&amp; densities,
     hep::multi_channel_map action
 );
-</pre></li>
+</pre><p class="startli">The parameter <code>action</code> determines what <code>map</code> should do:</p><ul>
+<li>If <code>action</code> is <a class="el" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2a66812b0cfcb8711785bd3dec61c1c8cf">hep::multi_channel_map::calculate_coordinates</a>, then the function must use <code>random_numbers</code> to generate a point according to the PDF with the index given by <code>channel</code>. The point itself must be written into <code>coordinates</code>, whose size is already set by the parameter <code>map_dimensions</code> (see above).</li>
+<li>If <code>action</code> is <a class="el" href="group__integrands.html#ggadd0057950f5e4375f6fdc21901ea3ca2ae51b60bddd479cbb9ca91bcf17487871">hep::multi_channel_map::calculate_densities</a>, then the <code>map</code> function must generate the PDFs for the previously generated point, which can be read out of <code>coordinates</code>. The PDFs must be written into <code>densities</code>, whose size is determined by <code>channels</code> (see above). The inverse of the return value of the <code>map</code> function is multiplied with every PDF. The vector <code>enabled_channels</code> stores the indices of all channels whose weights are not zero. If a weight is zero, then the PDF for this channel will be ignored; this can be used to speed up the calculation if there are many disabled channels.</li>
+</ul>
+<p class="startli">The reason for the having the parameter <code>action</code> is that for some applications the integrand often evaluates to zero. If this happens, the <code>densities</code> are not needed, and then the multi channels integrator skips the possibly costly call to the <code>map</code> function with <code>calculate_densities</code>.</p>
+</li>
 <li><code>function</code> must be the integrand function that is integrated over. Its declaration must be as described in <a class="el" href="group__integrands.html">Integrand Functions</a>. The Monte Carlo point can be captured e.g. using <a class="el" href="classhep_1_1multi__channel__point.html">multi_channel_point</a> or, if <code>function</code> needs access to data that has been computed already in <code>densities</code>, it can be captured using <a class="el" href="classhep_1_1multi__channel__point2.html">multi_channel_point2</a>. </li>
 </ul>
 <table class="memberdecls">
