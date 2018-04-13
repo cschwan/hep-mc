@@ -16,11 +16,29 @@ doxyfile = configure_file(
 
 datadir = join_paths(get_option('datadir'), 'doc', meson.project_name())
 
+doxygen_files = [
+	'callbacks.dox',
+	'distributions.dox',
+	'DoxygenLayout.xml',
+	'examples.dox',
+	'extra.css',
+	'footer.html',
+	'global_configuration.dox',
+	'integrands.dox',
+	'mainpage.dox',
+	'multi_channel.dox',
+	'plain.dox',
+	'references.bib',
+	'results.dox',
+	'vegas.dox',
+	'vegas_pdf.dox'
+]
+
 custom_target(
 	'html',
 	build_by_default : true,
 	command : [ doxygen, doxyfile ],
-	depend_files : headers,
+	depend_files : [ headers , doxygen_files ],
 	input : doxyfile,
 	install : true,
 	install_dir : datadir,
