@@ -63,12 +63,13 @@ double square_with_distribution(
 \endcode
 
 Specifying the integrand is not enough for the Monte Carlo integration routines.
-They also must know how many dimensions, i.e. how many random numbers, the
-integrand requires and the numeric type with which the operations should be
-performed. If distribution should be accumulated during the integration the
-binning (how many bins, upper and lower boundaries) must be specified as well.
-Since this is generic for all algorithms the complete integrand information is
-specified by creating an \ref integrand, which looks for the examples above:
+They also must know the dimensionsionaly of the integrand, or how many random
+numbers are needed; furthermore, the numeric type with which the operations
+should be performed must be specified. If distributions should be accumulated
+during the integration the binning (how many bins, upper and lower boundaries)
+must be specified as well. Since this is generic for all algorithms the complete
+integrand information is specified by creating an \ref integrand, which, for the
+examples above, would be written as follows:
 \code
 // the integer specifies the dimension of the integrand `square`, `double`
 // specifies the numeric type the integration algorithm should use
@@ -85,8 +86,8 @@ auto square_distributions = hep::make_integrand<double>(square, 1,
 \endcode
 
 An integrand for a multi channel integrator requires even more information
-because the user PDFs and CDFs must be provided. Both must be calculated in
-function that we call `map` and has the following signature:
+because the user must provide PDFs and CDFs. Both must be calculated in a single
+function that has the following signature:
 \code
 T map(
     std::size_t channel,
@@ -97,7 +98,7 @@ T map(
     hep::multi_channel_map action
 );
 \endcode
-A \ref multi_channel_integrand is now created e.g. as follows:
+A \ref multi_channel_integrand is now created as follows:
 \code
 auto mc_integrand = hep::make_multi_channel_integrand<double>(
     function, // the integrand function that we wish to integrate

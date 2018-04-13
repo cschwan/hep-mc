@@ -269,7 +269,7 @@ inline hep_plain_result_if<IteratorOverPlainResults> accumulate(
 
 /// Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using
 /// the results \f$ (E_i, S_i) \f$ pointed to by the range [`begin`, `end`). The
-/// cumulative value \f$ E \f$ is calculated using an instance of `Accumulator.
+/// cumulative value \f$ E \f$ is calculated using an instance of `Accumulator`.
 /// The \f$ \chi^2 \f$ is then computed as:
 /// \f[
 ///     \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left(

@@ -11,9 +11,9 @@ the form
 \f[
     p ( \vec{y} ) = \sum_{j=1}^M \alpha_j p_j ( \vec{y} ) \text{,} \qquad
     \int \mathrm{d}^d y \; p_j \left( \vec{y} \right) = 1 \text{,} \quad
-    \sum_{j=1}^M \alpha_j = 1
+    \sum_{j=1}^M \alpha_j = 1 \text{,}
 \f]
-that is used to sample the function. Multi channel integration performs better
+which is used to sample the function. Multi channel integration performs better
 compared to VEGAS if the peak structure of the integrand does not factorize. To
 avoid explicitly summing over every *channel* \f$ j \f$ for each randomly chosen
 point \f$ \vec{x} \in U \equiv [0,1]^d \f$ the MC integrator also samples over
@@ -44,9 +44,32 @@ the numerical type, e.g. `double`:
               std::size_t channel,
               std::vector<T> const& random_numbers,
               std::vector<T>& coordinates,
+              std::vector<std::size_t> const& enabled_channels,
               std::vector<T>& densities,
               hep::multi_channel_map action
           );
+
+      The parameter `action` determines what `map` should do:
+          - If `action` is \ref hep::multi_channel_map::calculate_coordinates,
+            then the function must use `random_numbers` to generate a point
+            according to the PDF with the index given by `channel`. The point
+            itself must be written into `coordinates`, whose size is already set
+            by the parameter `map_dimensions` (see above).
+          - If `action` is \ref hep::multi_channel_map::calculate_densities,
+            then the `map` function must generate the PDFs for the previously
+            generated point, which can be read out of `coordinates`. The PDFs
+            must be written into `densities`, whose size is determined by
+            `channels` (see above). The inverse of the return value of the `map`
+            function is multiplied with every PDF. The vector `enabled_channels`
+            stores the indices of all channels whose weights are not zero. If a
+            weight is zero, then the PDF for this channel will be ignored; this
+            can be used to speed up the calculation if there are many disabled
+            channels.
+
+      The reason for the having the parameter `action` is that for some
+      applications the integrand often evaluates to zero. If this happens, the
+      `densities` are not needed, and then the multi channels integrator skips
+      the possibly costly call to the `map` function with `calculate_densities`.
 
     - `function` must be the integrand function that is integrated over. Its
       declaration must be as described in \ref integrands. The Monte Carlo point
