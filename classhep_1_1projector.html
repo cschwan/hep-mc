@@ -96,8 +96,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8fa290e65fa25d64d3abfdbd0e6ca92d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec7cb88f25ea134b1af63e62475f93a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1projector.html#aec7cb88f25ea134b1af63e62475f93a6">add</a> (std::size_t index, T projection, T value)</td></tr>
 <tr class="separator:aec7cb88f25ea134b1af63e62475f93a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3efd7e94af6096d669e1cd9f124fe3fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1projector.html#a3efd7e94af6096d669e1cd9f124fe3fc">add_2d</a> (std::size_t index, T proj_x, T proj_y, T value)</td></tr>
-<tr class="separator:a3efd7e94af6096d669e1cd9f124fe3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7fb208633cc9e9699f67332aa24bb7f4"></a>
@@ -203,48 +201,6 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Projects a point for the distribution with the specified <code>index</code> to the x-axis at the value <code>projection</code> and sets the value to <code>value</code>. The weight of the point is automatically multiplied with <code>value</code>. Note that if you call this function multiple times with same values of <code>index</code> and <code>projection</code>, the result is not same as calling this function with the sum of the <code>values</code> a single time. The difference is due to the standard deviation which is calculated with the square of <code>value</code>. </p>
-
-</div>
-</div>
-<a id="a3efd7e94af6096d669e1cd9f124fe3fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3efd7e94af6096d669e1cd9f124fe3fc">&#9670;&nbsp;</a></span>add_2d()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhep_1_1projector.html">hep::projector</a>&lt; T &gt;::add_2d </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>index</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>proj_x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>proj_y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>

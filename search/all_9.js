@@ -28,7 +28,7 @@ var searchData=
   ['multi_5fchannel_5fdefault_5fcallback',['multi_channel_default_callback',['../group__callbacks.html#ga7b0c5d045913730d2434a0ae3b76de7c',1,'hep']]],
   ['multi_20channel_20integrator',['Multi Channel Integrator',['../group__multi__channel__group.html',1,'']]],
   ['multi_5fchannel_5fintegrand',['multi_channel_integrand',['../classhep_1_1multi__channel__integrand.html',1,'hep::multi_channel_integrand&lt; T, F, M, distributions &gt;'],['../classhep_1_1multi__channel__integrand.html#aebd449b19177a555ca65847f09bfcf70',1,'hep::multi_channel_integrand::multi_channel_integrand()']]],
-  ['multi_5fchannel_5fintegrand_5ftype',['multi_channel_integrand_type',['../group__integrands.html#ga03e89fd0f04067280fc6aa64d40d5e5c',1,'hep']]],
+  ['multi_5fchannel_5fintegrand_5ftype',['multi_channel_integrand_type',['../group__integrands.html#ga2d94cad8e866e6f919260f4b93f86efb',1,'hep']]],
   ['multi_5fchannel_5fiteration',['multi_channel_iteration',['../group__multi__channel__group.html#gac7cd33d313859b3e4b46a8647b20e7c8',1,'hep']]],
   ['multi_5fchannel_5fmap',['multi_channel_map',['../group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2',1,'hep']]],
   ['multi_5fchannel_5fmax_5fdifference',['multi_channel_max_difference',['../group__results.html#ga8412cf74e0823a57b37c01f833277dae',1,'hep']]],
