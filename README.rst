@@ -1,8 +1,9 @@
 Project Description
 ===================
 
-``hep-mc`` is a C++11 template library for Monte Carlo integration. The
-following integration algorithms are available:
+``hep-mc`` is a C++11 template library for `Monte Carlo integration
+<https://en.wikipedia.org/wiki/Monte_Carlo_integration>`_. The following
+integration algorithms are available:
 
 - PLAIN,
 - VEGAS [1]_ [2]_, and a
@@ -29,10 +30,27 @@ Features
   library offers many random number generators from which the user can choose.
   If no random number generator is explicitly requested a Mersennne twister
   (MT19937) is used.
-- **Numeric Types**: All functions are templatized in order to support all
+- **Numeric Types**: All functions are templates in order to support all
   floating point types of C++, i.e. ``float``, ``double``, and ``long double``.
-  Kahan summation is used to prevent a loss of numerical accuracy in
-  long-running integrations.
+  Kahan summation is used to prevent loss of numerical accuracy in long-running
+  integrations.
+
+Showcase
+========
+
+The following differential distribution was generated using the MULTI CHANNEL
+integrator from ``hep-mc`` running with 200 processors on the `NEMO cluster
+<https://www.hpc.uni-freiburg.de/nemo>`_ for about 30 hours, for 50 iterations
+each calling the integrand 1'000'000'000 times.
+
+.. image:: doc/ptj1.svg
+   :align: center
+   :width: 80%
+
+The integrands are matrix elements from `OpenLoops
+<https://openloops.hepforge.org/>`_ describing the scattering of W- and
+Z-bosons. The generated distribution describes the transverse momentum of the
+leading jet.
 
 Usage
 =====
@@ -88,6 +106,9 @@ notice that the configure script is missing. In that case run ::
     autoreconf -fiv
 
 inside the project's top-level directory. This will generate the missing files.
+
+NEW: Since version ``v0.6`` you can use `meson <http://mesonbuild.com/>`_ to
+build ``hep-mc``.
 
 References
 ==========
