@@ -209,6 +209,8 @@ public:
 	template <typename I, typename P>
 	T invoke(I& integrand, P const& point)
 	{
+		using std::isfinite;
+
 		// call the integrand function with the supplied point. No distributions
 		// are generated here
 		T value = integrand.function()(point);
@@ -217,7 +219,7 @@ public:
 		{
 			value *= point.weight();
 
-			if (std::isfinite(value))
+			if (isfinite(value))
 			{
 				accumulate(sums_[0], sums_[1], sums_[2], value);
 				++finite_calls_;
