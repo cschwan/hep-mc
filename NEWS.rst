@@ -1,6 +1,8 @@
 New in 0.8:
 ===========
 
+- WARNING: at this point the autotools-based build system is longer supported.
+  Use the meson build system instead
 - added support for two-dimensional distributions
 - WARNING: changed some member functions of the classes
   ``hep::distribution_parameters`` and ``hep::distribution_result``. The changes
