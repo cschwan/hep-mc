@@ -1,3 +1,0 @@
-#!/bin/sh
-
-exec mpirun -n 2 @abs_builddir@/test_mpi_numerical_results
