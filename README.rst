@@ -38,10 +38,11 @@ Features
 Showcase
 ========
 
-The following differential distribution was generated using the MULTI CHANNEL
-integrator from ``hep-mc`` running with 200 processors on the `NEMO cluster
-<https://www.hpc.uni-freiburg.de/nemo>`_ for about 30 hours, for 50 iterations
-each calling the integrand 1'000'000'000 times.
+The following (LO) differential distribution was generated using the MULTI
+CHANNEL integrator from ``hep-mc`` running with 200 processors on the `NEMO
+cluster <https://www.hpc.uni-freiburg.de/nemo>`_ for about 30 hours, for 50
+iterations each calling the integrand 1'000'000'000 times. The plot itself was
+generated with `matplotlib <https://matplotlib.org/>`_
 
 .. image:: doc/ptj1.svg
    :align: center
