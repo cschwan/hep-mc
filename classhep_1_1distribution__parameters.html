@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">hep-mc
-   &#160;<span id="projectnumber">0.7</span>
+   &#160;<span id="projectnumber">0.8</span>
    </div>
   </td>
  </tr>
@@ -81,26 +81,32 @@ $(function() {
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class hep::distribution_parameters&lt; T &gt;</h3>
 
-<p>Defines the parameters of a one-dimensional differential distribution. </p>
+<p>Defines the parameters of a one- or two-dimensional distribution. </p>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a07ed5b9e8454d62cebb2667e5e427089"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a07ed5b9e8454d62cebb2667e5e427089">distribution_parameters</a> (std::size_t <a class="el" href="classhep_1_1distribution__parameters.html#a368b5ebea3809503fc89f43a6e04489a">bins</a>, T <a class="el" href="classhep_1_1distribution__parameters.html#ac2650fd125213ad876ce2fecafa89cb6">x_min</a>, T <a class="el" href="classhep_1_1distribution__parameters.html#aad5f4febd096a16d9518a845b44faf50">x_max</a>, std::string const &amp;<a class="el" href="classhep_1_1distribution__parameters.html#a1dd622a03894cc7eb42c96e4d0c9e1d9">name</a>)</td></tr>
+<tr class="memitem:a07ed5b9e8454d62cebb2667e5e427089"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a07ed5b9e8454d62cebb2667e5e427089">distribution_parameters</a> (std::size_t bins, T <a class="el" href="classhep_1_1distribution__parameters.html#ac2650fd125213ad876ce2fecafa89cb6">x_min</a>, T x_max, std::string const &amp;<a class="el" href="classhep_1_1distribution__parameters.html#a1dd622a03894cc7eb42c96e4d0c9e1d9">name</a>)</td></tr>
 <tr class="separator:a07ed5b9e8454d62cebb2667e5e427089"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a368b5ebea3809503fc89f43a6e04489a"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a368b5ebea3809503fc89f43a6e04489a">bins</a> () const</td></tr>
-<tr class="separator:a368b5ebea3809503fc89f43a6e04489a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af08a69b6b25a78a2fe23f9455538c19f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#af08a69b6b25a78a2fe23f9455538c19f">distribution_parameters</a> (std::size_t <a class="el" href="classhep_1_1distribution__parameters.html#a71547fbbdfebf3f23032819f5287c5f1">bins_x</a>, std::size_t <a class="el" href="classhep_1_1distribution__parameters.html#ac68611b1c8b4dc0ff34792328e26eed9">bins_y</a>, T <a class="el" href="classhep_1_1distribution__parameters.html#ac2650fd125213ad876ce2fecafa89cb6">x_min</a>, T x_max, T <a class="el" href="classhep_1_1distribution__parameters.html#a842eaafe32a92b549f35b31612b41959">y_min</a>, T y_max, std::string const &amp;<a class="el" href="classhep_1_1distribution__parameters.html#a1dd622a03894cc7eb42c96e4d0c9e1d9">name</a>)</td></tr>
+<tr class="separator:af08a69b6b25a78a2fe23f9455538c19f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71547fbbdfebf3f23032819f5287c5f1"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a71547fbbdfebf3f23032819f5287c5f1">bins_x</a> () const</td></tr>
+<tr class="separator:a71547fbbdfebf3f23032819f5287c5f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac68611b1c8b4dc0ff34792328e26eed9"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#ac68611b1c8b4dc0ff34792328e26eed9">bins_y</a> () const</td></tr>
+<tr class="separator:ac68611b1c8b4dc0ff34792328e26eed9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dd622a03894cc7eb42c96e4d0c9e1d9"><td class="memItemLeft" align="right" valign="top">std::string const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a1dd622a03894cc7eb42c96e4d0c9e1d9">name</a> () const</td></tr>
 <tr class="separator:a1dd622a03894cc7eb42c96e4d0c9e1d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad5f4febd096a16d9518a845b44faf50"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#aad5f4febd096a16d9518a845b44faf50">x_max</a> () const</td></tr>
-<tr class="separator:aad5f4febd096a16d9518a845b44faf50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2650fd125213ad876ce2fecafa89cb6"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#ac2650fd125213ad876ce2fecafa89cb6">x_min</a> () const</td></tr>
 <tr class="separator:ac2650fd125213ad876ce2fecafa89cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42a48b2536c0cf8e5d5ee81858a82cbf"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a42a48b2536c0cf8e5d5ee81858a82cbf">bin_size</a> () const</td></tr>
-<tr class="separator:a42a48b2536c0cf8e5d5ee81858a82cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a842eaafe32a92b549f35b31612b41959"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a842eaafe32a92b549f35b31612b41959">y_min</a> () const</td></tr>
+<tr class="separator:a842eaafe32a92b549f35b31612b41959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadae8223da00d3b4289208f704902fc1"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#aadae8223da00d3b4289208f704902fc1">bin_size_x</a> () const</td></tr>
+<tr class="separator:aadae8223da00d3b4289208f704902fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ba61b32396369deb2db0985fc11fbd8"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__parameters.html#a4ba61b32396369deb2db0985fc11fbd8">bin_size_y</a> () const</td></tr>
+<tr class="separator:a4ba61b32396369deb2db0985fc11fbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a07ed5b9e8454d62cebb2667e5e427089"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07ed5b9e8454d62cebb2667e5e427089">&#9670;&nbsp;</a></span>distribution_parameters()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a07ed5b9e8454d62cebb2667e5e427089">&#9670;&nbsp;</a></span>distribution_parameters() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,13 +153,83 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
+<p>Constructor. Constructs a one-dimensional distribution. </p>
+
+</div>
+</div>
+<a id="af08a69b6b25a78a2fe23f9455538c19f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af08a69b6b25a78a2fe23f9455538c19f">&#9670;&nbsp;</a></span>distribution_parameters() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::<a class="el" href="classhep_1_1distribution__parameters.html">distribution_parameters</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>bins_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>bins_y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>x_min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>x_max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>y_min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>y_max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. Constructs a two dimensional distribution. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a42a48b2536c0cf8e5d5ee81858a82cbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42a48b2536c0cf8e5d5ee81858a82cbf">&#9670;&nbsp;</a></span>bin_size()</h2>
+<a id="aadae8223da00d3b4289208f704902fc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadae8223da00d3b4289208f704902fc1">&#9670;&nbsp;</a></span>bin_size_x()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,7 +240,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::bin_size </td>
+          <td class="memname">T <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::bin_size_x </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -177,12 +253,12 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Size of each bin in every distribution. </p>
+<p>Size of the bins in x-direction. </p>
 
 </div>
 </div>
-<a id="a368b5ebea3809503fc89f43a6e04489a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a368b5ebea3809503fc89f43a6e04489a">&#9670;&nbsp;</a></span>bins()</h2>
+<a id="a4ba61b32396369deb2db0985fc11fbd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ba61b32396369deb2db0985fc11fbd8">&#9670;&nbsp;</a></span>bin_size_y()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -193,7 +269,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::bins </td>
+          <td class="memname">T <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::bin_size_y </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -206,7 +282,65 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Number of bins for this distribution. </p>
+<p>Size of the bins in y-direction. </p>
+
+</div>
+</div>
+<a id="a71547fbbdfebf3f23032819f5287c5f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71547fbbdfebf3f23032819f5287c5f1">&#9670;&nbsp;</a></span>bins_x()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::bins_x </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of bins in x-direction. </p>
+
+</div>
+</div>
+<a id="ac68611b1c8b4dc0ff34792328e26eed9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac68611b1c8b4dc0ff34792328e26eed9">&#9670;&nbsp;</a></span>bins_y()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::bins_y </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the number of bins in y-direction. </p>
 
 </div>
 </div>
@@ -239,34 +373,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="aad5f4febd096a16d9518a845b44faf50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad5f4febd096a16d9518a845b44faf50">&#9670;&nbsp;</a></span>x_max()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">T <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::x_max </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Highest value of the x-axis that is still part of the differential distribution. </p>
-
-</div>
-</div>
 <a id="ac2650fd125213ad876ce2fecafa89cb6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac2650fd125213ad876ce2fecafa89cb6">&#9670;&nbsp;</a></span>x_min()</h2>
 
@@ -291,7 +397,35 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Lowest value of the x-axis that is still part of the differential distribution. </p>
+<p>Smallest x-value of a point that would still be accumulated into the distribution. </p>
+
+</div>
+</div>
+<a id="a842eaafe32a92b549f35b31612b41959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a842eaafe32a92b549f35b31612b41959">&#9670;&nbsp;</a></span>y_min()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="classhep_1_1distribution__parameters.html">hep::distribution_parameters</a>&lt; T &gt;::y_min </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Smallest y-value of a point that would still be accumulated into the distribution. </p>
 
 </div>
 </div>

@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">hep-mc
-   &#160;<span id="projectnumber">0.7</span>
+   &#160;<span id="projectnumber">0.8</span>
    </div>
   </td>
  </tr>
@@ -94,8 +94,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab1592e8e04f5da1ceb01a6c7c0ddb92f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fa290e65fa25d64d3abfdbd0e6ca92d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhep_1_1projector.html">projector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1projector.html#a8fa290e65fa25d64d3abfdbd0e6ca92d">operator=</a> (<a class="el" href="classhep_1_1projector.html">projector</a>&lt; T &gt; &amp;&amp;)=delete</td></tr>
 <tr class="separator:a8fa290e65fa25d64d3abfdbd0e6ca92d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec7cb88f25ea134b1af63e62475f93a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1projector.html#aec7cb88f25ea134b1af63e62475f93a6">add</a> (std::size_t index, T projection, T value)</td></tr>
-<tr class="separator:aec7cb88f25ea134b1af63e62475f93a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c610f5158ed3f980498b5a9495f8e94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1projector.html#a0c610f5158ed3f980498b5a9495f8e94">add</a> (std::size_t index, T x, T value)</td></tr>
+<tr class="separator:a0c610f5158ed3f980498b5a9495f8e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa715f7f5d22d701754635e10b49ac14f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1projector.html#aa715f7f5d22d701754635e10b49ac14f">add</a> (std::size_t index, T x, T y, T value)</td></tr>
+<tr class="separator:aa715f7f5d22d701754635e10b49ac14f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7fb208633cc9e9699f67332aa24bb7f4"></a>
@@ -159,8 +161,8 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aec7cb88f25ea134b1af63e62475f93a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec7cb88f25ea134b1af63e62475f93a6">&#9670;&nbsp;</a></span>add()</h2>
+<a id="a0c610f5158ed3f980498b5a9495f8e94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c610f5158ed3f980498b5a9495f8e94">&#9670;&nbsp;</a></span>add() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -180,7 +182,7 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>projection</em>, </td>
+          <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -200,7 +202,58 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Projects a point for the distribution with the specified <code>index</code> to the x-axis at the value <code>projection</code> and sets the value to <code>value</code>. The weight of the point is automatically multiplied with <code>value</code>. Note that if you call this function multiple times with same values of <code>index</code> and <code>projection</code>, the result is not same as calling this function with the sum of the <code>values</code> a single time. The difference is due to the standard deviation which is calculated with the square of <code>value</code>. </p>
+<p>Adds the integrand denoted by <code>value</code> to the one-dimensional distribution with the corresponding <code>index</code> to the bin which is located at the point specified by <code>x</code>. </p>
+
+</div>
+</div>
+<a id="aa715f7f5d22d701754635e10b49ac14f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa715f7f5d22d701754635e10b49ac14f">&#9670;&nbsp;</a></span>add() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhep_1_1projector.html">hep::projector</a>&lt; T &gt;::add </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Adds the integrand denoted by <code>value</code> to the two-dimensional distribution with the corresponding <code>index</code> to the bin which is located at the point specified by <code>x</code> and <code>y</code>. </p>
 
 </div>
 </div>

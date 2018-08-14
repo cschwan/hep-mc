@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">hep-mc
-   &#160;<span id="projectnumber">0.7</span>
+   &#160;<span id="projectnumber">0.8</span>
    </div>
   </td>
  </tr>
@@ -75,7 +75,8 @@ $(function() {
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Generation and interpretation of differential distributions. </p>
-<p>The generation of distributions is done automatically if the integrand accepts a <a class="el" href="classhep_1_1projector.html">projector</a> that specifies how the values of the integrand are binned and, during integrand creation, if the distribution parameters are correctly specified. The result of each integration algorithm will then contain a vector of <a class="el" href="classhep_1_1distribution__result.html">distribution_result</a> entries that each contains the result of a separate distribution. </p>
+<p>The generation of distributions can be done automatically if the integrand accepts a <a class="el" href="classhep_1_1projector.html">projector</a> that specifies how the values of the integrand are binned and, during integrand creation, if the distribution parameters are correctly specified. The result of each integration algorithm (derived from <a class="el" href="classhep_1_1plain__result.html">plain_result</a>) will then contain a vector of <a class="el" href="classhep_1_1distribution__result.html">distribution_result</a> entries that each contain the result of a separate distribution. Since version 0.8 these distributions can be two-dimensional.</p>
+<p>The distributions that are generated are differential distributions, meaning that each bin contains the integral for this bin divided by the bin size. </p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -91,6 +92,12 @@ Functions</h2></td></tr>
 <tr class="memitem:gaa9dac9fd1ce0a424a049f92107348353"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:gaa9dac9fd1ce0a424a049f92107348353"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhep_1_1distribution__parameters.html">distribution_parameters</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__distributions.html#gaa9dac9fd1ce0a424a049f92107348353">hep::make_dist_params</a> (std::size_t bins, T x_min, T x_max, std::string const &amp;name=&quot;&quot;)</td></tr>
 <tr class="separator:gaa9dac9fd1ce0a424a049f92107348353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4d2bfad2796b1764ef919d05575ae67a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga4d2bfad2796b1764ef919d05575ae67a"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__distributions.html#ga4d2bfad2796b1764ef919d05575ae67a">hep::mid_points_x</a> (<a class="el" href="classhep_1_1distribution__result.html">distribution_result</a>&lt; T &gt; const &amp;result)</td></tr>
+<tr class="separator:ga4d2bfad2796b1764ef919d05575ae67a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga035ba9be0b223ca62976cb693a3a4ea0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga035ba9be0b223ca62976cb693a3a4ea0"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__distributions.html#ga035ba9be0b223ca62976cb693a3a4ea0">hep::mid_points_y</a> (<a class="el" href="classhep_1_1distribution__result.html">distribution_result</a>&lt; T &gt; const &amp;result)</td></tr>
+<tr class="separator:ga035ba9be0b223ca62976cb693a3a4ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="gaa9dac9fd1ce0a424a049f92107348353"></a>
@@ -135,6 +142,65 @@ template&lt;typename T &gt; </div>
 <p>Shortcut for calling the constructor that automatically determines the numeric type. </p>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="distributions_example_8cpp-example.html#a4">distributions_example.cpp</a>.</dd>
 </dl>
+</div>
+</div>
+<a id="ga4d2bfad2796b1764ef919d05575ae67a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4d2bfad2796b1764ef919d05575ae67a">&#9670;&nbsp;</a></span>mid_points_x()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;T&gt; hep::mid_points_x </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhep_1_1distribution__result.html">distribution_result</a>&lt; T &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>result</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the middle point of each bin of this distribution in the x-direction. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="distributions_example_8cpp-example.html#a6">distributions_example.cpp</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="ga035ba9be0b223ca62976cb693a3a4ea0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga035ba9be0b223ca62976cb693a3a4ea0">&#9670;&nbsp;</a></span>mid_points_y()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;T&gt; hep::mid_points_y </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhep_1_1distribution__result.html">distribution_result</a>&lt; T &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>result</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the middle point of each bin of this distribution in the y-direction. </p>
+
 </div>
 </div>
 </div><!-- contents -->

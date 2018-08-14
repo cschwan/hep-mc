@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">hep-mc
-   &#160;<span id="projectnumber">0.7</span>
+   &#160;<span id="projectnumber">0.8</span>
    </div>
   </td>
  </tr>
@@ -89,8 +89,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac055495aa82ca7e5a47ba71ad919a9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0625a27b0322c3210412d72d3a355d9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhep_1_1distribution__parameters.html">distribution_parameters</a>&lt; T &gt; const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__result.html#a0625a27b0322c3210412d72d3a355d9f">parameters</a> () const</td></tr>
 <tr class="separator:a0625a27b0322c3210412d72d3a355d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96c24b69a424f653ed332746def61a8b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__result.html#a96c24b69a424f653ed332746def61a8b">mid_points</a> () const</td></tr>
-<tr class="separator:a96c24b69a424f653ed332746def61a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a839fc60f36340708f1ad833f861b9bc2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhep_1_1mc__result.html">mc_result</a>&lt; T &gt; &gt; const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhep_1_1distribution__result.html#a839fc60f36340708f1ad833f861b9bc2">results</a> () const</td></tr>
 <tr class="separator:a839fc60f36340708f1ad833f861b9bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -136,35 +134,6 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a96c24b69a424f653ed332746def61a8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96c24b69a424f653ed332746def61a8b">&#9670;&nbsp;</a></span>mid_points()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;T&gt; <a class="el" href="classhep_1_1distribution__result.html">hep::distribution_result</a>&lt; T &gt;::mid_points </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the middle point of each bin of this distribution. </p>
-
-</div>
-</div>
 <a id="a0625a27b0322c3210412d72d3a355d9f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0625a27b0322c3210412d72d3a355d9f">&#9670;&nbsp;</a></span>parameters()</h2>
 
@@ -218,7 +187,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the result for each bin, corresponding to the bin positions returned by <a class="el" href="classhep_1_1distribution__result.html#a96c24b69a424f653ed332746def61a8b">mid_points</a>. </p>
+<p>Returns the result for each bin, corresponding to the bin positions returned by <a class="el" href="group__distributions.html#ga4d2bfad2796b1764ef919d05575ae67a">mid_points_x</a> and <a class="el" href="group__distributions.html#ga035ba9be0b223ca62976cb693a3a4ea0">mid_points_y</a>. </p>
 
 </div>
 </div>
