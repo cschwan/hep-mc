@@ -38,12 +38,13 @@ int main()
 		<< result.error() << "\n\n";
 
 	auto const& distribution = result.distributions()[0];
+	auto const& mid_points = mid_points_x(distribution);
 
 	// print the distribution - compare this with the plot of the function
 	// 'atan(x)/10.0'
-	for (std::size_t i = 0; i != distribution.mid_points().size(); ++i)
+	for (std::size_t i = 0; i != mid_points.size(); ++i)
 	{
-		std::cout << distribution.mid_points()[i] << "\t"
+		std::cout << mid_points[i] << "\t"
 			<< distribution.results()[i].value() << "\t"
 			<< distribution.results()[i].error() << "\n";
 	}

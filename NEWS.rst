@@ -1,3 +1,11 @@
+New in 0.8:
+===========
+
+- added support for two-dimensional distributions
+- WARNING: changed some member functions of the classes
+  ``hep::distribution_parameters`` and ``hep::distribution_result``. The changes
+  were neccesary to support two-dimensional distributions.
+
 New in 0.7:
 ===========
 

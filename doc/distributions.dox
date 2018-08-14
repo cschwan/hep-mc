@@ -4,11 +4,15 @@
 
 \brief Generation and interpretation of differential distributions
 
-The generation of distributions is done automatically if the integrand accepts a
-\ref projector that specifies how the values of the integrand are binned and,
-during integrand creation, if the distribution parameters are correctly
-specified. The result of each integration algorithm will then contain a vector
-of \ref distribution_result entries that each contains the result of a separate
-distribution.
+The generation of distributions can be done automatically if the integrand
+accepts a \ref projector that specifies how the values of the integrand are
+binned and, during integrand creation, if the distribution parameters are
+correctly specified. The result of each integration algorithm (derived from
+\ref plain_result) will then contain a vector of \ref distribution_result
+entries that each contain the result of a separate distribution. Since version
+0.8 these distributions can be two-dimensional.
+
+The distributions that are generated are differential distributions, meaning
+that each bin contains the integral for this bin divided by the bin size.
 
 */

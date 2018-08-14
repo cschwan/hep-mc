@@ -3,6 +3,7 @@ examples = [
 	'helper_example',
 	'multi_channel_disabled_channels',
 	'multi_channel_example',
+	'two_dimensional_distribution',
 	'vegas_example',
 	'vegas_read_pdf',
 	'vegas_write_pdf',

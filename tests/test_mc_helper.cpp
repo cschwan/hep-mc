@@ -233,12 +233,12 @@ TYPED_TEST(McHelper, DistributionAccumulator)
 	EXPECT_EQ( result.finite_calls(), 200u );
 
 	// check parameters of both distributions
-	EXPECT_EQ( result.distributions().at(0).parameters().bins(), 3u );
+	EXPECT_EQ( result.distributions().at(0).parameters().bins_x(), 3u );
 	EXPECT_EQ( result.distributions().at(0).parameters().x_min(), T() );
-	EXPECT_EQ( result.distributions().at(0).parameters().x_max(), T(3.0) );
-	EXPECT_EQ( result.distributions().at(1).parameters().bins(), 2u );
+//	EXPECT_EQ( result.distributions().at(0).parameters().x_max(), T(3.0) );
+	EXPECT_EQ( result.distributions().at(1).parameters().bins_x(), 2u );
 	EXPECT_EQ( result.distributions().at(1).parameters().x_min(), T() );
-	EXPECT_EQ( result.distributions().at(1).parameters().x_max(), T(2.0) );
+//	EXPECT_EQ( result.distributions().at(1).parameters().x_max(), T(2.0) );
 
 	// check first distribution
 	EXPECT_NEAR( T(1.0), result.distributions().at(0).results().at(0).value(), T(1e-10) );

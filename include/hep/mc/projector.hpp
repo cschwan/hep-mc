@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016-2017  Christopher Schwan
+ * Copyright (C) 2016-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,14 +55,15 @@ public:
 	/// This class has no move assignment operator.
 	projector& operator=(projector<T>&&) = delete;
 
-	/// Projects a point for the distribution with the specified `index` to the
-	/// x-axis at the value `projection` and sets the value to `value`. The
-	/// weight of the point is automatically multiplied with `value`. Note that
-	/// if you call this function multiple times with same values of `index` and
-	/// `projection`, the result is not same as calling this function with the
-	/// sum of the `values` a single time. The difference is due to the standard
-	/// deviation which is calculated with the square of `value`.
-	void add(std::size_t index, T projection, T value);
+	/// Adds the integrand denoted by `value` to the one-dimensional
+	/// distribution with the corresponding `index` to the bin which is located
+	/// at the point specified by `x`.
+	void add(std::size_t index, T x, T value);
+
+	/// Adds the integrand denoted by `value` to the two-dimensional
+	/// distribution with the corresponding `index` to the bin which is located
+	/// at the point specified by `x` and `y`.
+	void add(std::size_t index, T x, T y, T value);
 
 private:
 	accumulator<T, true>* accumulator_;

@@ -353,7 +353,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[3].finite_calls() , results[3].calls() );
 	EXPECT_EQ( results2[4].finite_calls() , results[4].calls() );
 
-	EXPECT_EQ( results2[0].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( mid_points_x(results2[0].distributions()[0])[0] , T(0.5) );
 	EXPECT_EQ( results2[0].distributions()[0].results()[0].value() ,
 		results[0].value() );
 	EXPECT_EQ( results2[0].distributions()[0].results()[0].error() ,
@@ -365,7 +365,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[0].distributions()[0].results()[0].finite_calls() ,
 		results[0].calls() );
 
-	EXPECT_EQ( results2[1].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( mid_points_x(results2[1].distributions()[0])[0] , T(0.5) );
 	EXPECT_EQ( results2[1].distributions()[0].results()[0].value() ,
 		results[1].value() );
 	EXPECT_EQ( results2[1].distributions()[0].results()[0].error() ,
@@ -377,7 +377,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[1].distributions()[0].results()[0].finite_calls() ,
 		results[1].calls() );
 
-	EXPECT_EQ( results2[2].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( mid_points_x(results2[2].distributions()[0])[0] , T(0.5) );
 	EXPECT_EQ( results2[2].distributions()[0].results()[0].value() ,
 		results[2].value() );
 	EXPECT_EQ( results2[2].distributions()[0].results()[0].error() ,
@@ -389,7 +389,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[2].distributions()[0].results()[0].finite_calls() ,
 		results[2].calls() );
 
-	EXPECT_EQ( results2[3].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( mid_points_x(results2[3].distributions()[0])[0] , T(0.5) );
 	EXPECT_EQ( results2[3].distributions()[0].results()[0].value() ,
 		results[3].value() );
 	EXPECT_EQ( results2[3].distributions()[0].results()[0].error() ,
@@ -401,7 +401,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
 	EXPECT_EQ( results2[3].distributions()[0].results()[0].finite_calls() ,
 		results[3].calls() );
 
-	EXPECT_EQ( results2[4].distributions()[0].mid_points()[0] , T(0.5) );
+	EXPECT_EQ( mid_points_x(results2[4].distributions()[0])[0] , T(0.5) );
 	EXPECT_EQ( results2[4].distributions()[0].results()[0].value() ,
 		results[4].value() );
 	EXPECT_EQ( results2[4].distributions()[0].results()[0].error() ,

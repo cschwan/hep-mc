@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2017  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public:
 		for (auto const& params : parameters)
 		{
 			indices_.push_back(index);
-			index += 2 * params.bins();
+			index += 2 * params.bins_x() * params.bins_y();
 		}
 
 		sums_.resize(2 + index);
@@ -102,7 +102,7 @@ public:
 		return value;
 	}
 
-	void add_to_distribution(std::size_t index, T projection, T value)
+	void add_to_1d_distribution(std::size_t index, T x, T value)
 	{
 		using std::isfinite;
 
@@ -112,24 +112,84 @@ public:
 		}
 
 		// TODO: index might be larger than the than allowed; throw?
+		auto const parameters = parameters_.at(index);
 
-		T const x = projection - parameters_.at(index).x_min();
+		T const shifted_x = x - parameters.x_min();
 
-		if (x < T())
+		if (shifted_x < T())
 		{
-			// point is left of the range that we are binning
+			// point is outside the binning range
 			return;
 		}
 
-		std::size_t const bin = x / parameters_[index].bin_size();
+		std::size_t const bin_x = shifted_x / parameters.bin_size_x();
 
-		if (bin >= parameters_[index].bins())
+		if (bin_x >= parameters.bins_x())
 		{
 			// point is right of the range that we are binning
 			return;
 		}
 
-		std::size_t const new_index = indices_.at(index) + 2 * bin;
+		std::size_t const new_index = indices_.at(index) + 2 * bin_x;
+
+		accumulate(
+			sums_.at(new_index),
+			sums_.at(new_index + 1),
+			compensations_.at(new_index / 2),
+			value
+		);
+
+		// FIXME: if this function is called more than once, the values are
+		// incorrect
+		++non_zero_calls_.at(new_index / 2);
+		++finite_calls_.at(new_index / 2);
+	}
+
+	void add_to_2d_distribution(std::size_t index, T x, T y, T value)
+	{
+		using std::isfinite;
+
+		if (!isfinite(value))
+		{
+			return;
+		}
+
+		// TODO: index might be larger than the than allowed; throw?
+		auto const parameters = parameters_.at(index);
+
+		T const shifted_x = x - parameters.x_min();
+
+		if (shifted_x < T())
+		{
+			// point is outside the binning range
+			return;
+		}
+
+		T const shifted_y = y - parameters.y_min();
+
+		if (shifted_y < T())
+		{
+			// point is outside the binning range
+			return;
+		}
+
+		std::size_t const bin_x = shifted_x / parameters.bin_size_x();
+
+		if (bin_x >= parameters.bins_x())
+		{
+			// point is right of the range that we are binning
+			return;
+		}
+
+		std::size_t const bin_y = shifted_y / parameters.bin_size_y();
+
+		if (bin_y >= parameters.bins_y())
+		{
+			return;
+		}
+
+		std::size_t const new_index = indices_.at(index) + 2 * (bin_y *
+			parameters.bins_x() + bin_x);
 
 		accumulate(
 			sums_.at(new_index),
@@ -155,12 +215,14 @@ public:
 		for (auto const& params : parameters_)
 		{
 			std::vector<hep::mc_result<T>> bin_results;
-			bin_results.reserve(params.bins());
+			bin_results.reserve(params.bins_x());
 
-			T const inv_bin_size = T(1.0) / params.bin_size();
+			T const inv_bin_size = T(1.0) / params.bin_size_x() /
+				params.bin_size_y();
+			std::size_t const bins = params.bins_x() * params.bins_y();
 
 			// loop over the bins of the current distribution
-			for (std::size_t bin = 0; bin != params.bins(); ++bin)
+			for (std::size_t bin = 0; bin != bins; ++bin)
 			{
 				bin_results.emplace_back(
 					calls,
@@ -270,14 +332,15 @@ namespace hep
 {
 
 template <typename T>
-inline void projector<T>::add(std::size_t index, T projection, T value)
+inline void projector<T>::add(std::size_t index, T x, T value)
 {
-	// grant selective access to the following function (only)
-	accumulator_->add_to_distribution(
-		index,
-		projection,
-		value * point_.weight()
-	);
+	accumulator_->add_to_1d_distribution(index, x, value * point_.weight());
+}
+
+template <typename T>
+inline void projector<T>::add(std::size_t index, T x, T y, T value)
+{
+	accumulator_->add_to_2d_distribution(index, x, y, value * point_.weight());
 }
 
 }

@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,25 +51,8 @@ public:
 		return parameters_;
 	}
 
-	/// Returns the middle point of each bin of this distribution.
-	std::vector<T> mid_points() const
-	{
-		std::vector<T> result;
-		result.reserve(parameters_.bins());
-
-		T x = parameters_.x_min() + T(0.5) * parameters_.bin_size();
-
-		for (std::size_t bin = 0; bin != parameters_.bins(); ++bin)
-		{
-			result.push_back(x);
-			x += parameters_.bin_size();
-		}
-
-		return result;
-	}
-
 	/// Returns the result for each bin, corresponding to the bin positions
-	/// returned by \ref mid_points.
+	/// returned by \ref mid_points_x and \ref mid_points_y.
 	std::vector<mc_result<T>> const& results() const
 	{
 		return results_;
@@ -79,6 +62,55 @@ private:
 	distribution_parameters<T> parameters_;
 	std::vector<mc_result<T>> results_;
 };
+
+/// Returns the middle point of each bin of this distribution in the
+/// x-direction.
+template <typename T>
+inline std::vector<T> mid_points_x(distribution_result<T> const& result)
+{
+	auto const parameters = result.parameters();
+
+	std::vector<T> mid_points;
+	mid_points.reserve(parameters.bins_x());
+
+	for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
+	{
+		T x = parameters.x_min() + T(0.5) * parameters.bin_size_x();
+
+		for (std::size_t bin = 0; bin != parameters.bins_x(); ++bin)
+		{
+			mid_points.push_back(x);
+			x += parameters.bin_size_x();
+		}
+	}
+
+	return mid_points;
+}
+
+/// Returns the middle point of each bin of this distribution in the
+/// y-direction.
+template <typename T>
+inline std::vector<T> mid_points_y(distribution_result<T> const& result)
+{
+	auto const parameters = result.parameters();
+
+	std::vector<T> mid_points;
+	mid_points.reserve(parameters.bins_y());
+
+	T y = parameters.y_min() + T(0.5) * parameters.bin_size_y();
+
+	for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
+	{
+		for (std::size_t bin = 0; bin != parameters.bins_x(); ++bin)
+		{
+			mid_points.push_back(y);
+		}
+
+		y += parameters.bin_size_y();
+	}
+
+	return mid_points;
+}
 
 /// @}
 
