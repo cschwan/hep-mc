@@ -91,36 +91,36 @@ that needs to be compiled.
 If you want to automatically compile the example programs, generate the
 documentation, and/or install the headers you have to use
 `meson <http://mesonbuild.com/>`_ to build ``hep-mc``. If you have meson
-installed simply type
+installed simply type ::
 
     meson build
     cd build
 
 to generate the build files in ``build`` and to enter the generated directory.
-To enable building the examples, type
+To enable building the examples, type ::
 
     meson configure -Dexamples=true
 
-in the build directory. To enable examples and tests relying on MPI type
+in the build directory. To enable examples and tests relying on MPI type ::
 
     meson configure -Dmpi=true
 
-The `Doxygen <http://doxygen.org/>`_ documentation can be enabled with
+The `Doxygen <http://doxygen.org/>`_ documentation can be enabled with ::
 
     meson configure -Ddoxygen=true
 
-Further options can be viewed by typing
+Further options can be viewed by typing ::
 
     meson configure
 
 which will display all options (including install paths) that can be altered by
-using the ``-Doption-name=value`` shown above.
+using the ``-Doption-name=value`` shown above. ::
 
-To finally build everything type
+To finally build everything type ::
 
     ninja
 
-and/or
+and/or ::
 
     ninja install
 
