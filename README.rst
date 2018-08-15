@@ -60,7 +60,7 @@ This library uses features from the ISO C++11 standard which must be enabled
 with your compiler. For the GCC and clang compilers this can be done by passing
 an additional parameter to the compiler, e.g. ::
 
-    g++ -std=c++0x my_program.cpp
+    g++ -std=c++11 my_program.cpp
 
 The inclusion of the main header, ::
 
@@ -89,27 +89,42 @@ page`_ and point your compiler to the `include directory`_ - there is no library
 that needs to be compiled.
 
 If you want to automatically compile the example programs, generate the
-documentation, and/or install the headers you can also use the usual sequence
-for autotools-based projects, i.e. ::
+documentation, and/or install the headers you have to use
+`meson <http://mesonbuild.com/>`_ to build ``hep-mc``. If you have meson
+installed simply type
 
-    ./configure --prefix=/usr/local
-    make
-    make install
+    meson build
+    cd build
 
-which installs the headers into ``/usr/local/include``. To generate the
-documentation pass ``--enable-doxygen`` to ``./configure``. Example programs are
-compiled when you add ``--enable-examples``. For more options type ``./configure
---help``.
+to generate the build files in ``build`` and to enter the generated directory.
+To enable building the examples, type
 
-If you downloaded the sources with ``git`` or got them as a ZIP file, you will
-notice that the configure script is missing. In that case run ::
+    meson configure -Dexamples=true
 
-    autoreconf -fiv
+in the build directory. To enable examples and tests relying on MPI type
 
-inside the project's top-level directory. This will generate the missing files.
+    meson configure -Dmpi=true
 
-NEW: Since version ``v0.6`` you can use `meson <http://mesonbuild.com/>`_ to
-build ``hep-mc``.
+The `Doxygen <http://doxygen.org/>`_ documentation can be enabled with
+
+    meson configure -Ddoxygen=true
+
+Further options can be viewed by typing
+
+    meson configure
+
+which will display all options (including install paths) that can be altered by
+using the ``-Doption-name=value`` shown above.
+
+To finally build everything type
+
+    ninja
+
+and/or
+
+    ninja install
+
+to install the headers.
 
 References
 ==========
