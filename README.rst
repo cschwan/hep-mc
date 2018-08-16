@@ -42,7 +42,7 @@ The following (LO) differential distribution was generated using the MULTI
 CHANNEL integrator from ``hep-mc`` running with 200 processors on the `NEMO
 cluster <https://www.hpc.uni-freiburg.de/nemo>`_ for about 30 hours, for 50
 iterations each calling the integrand 1'000'000'000 times. The plot itself was
-generated with `matplotlib <https://matplotlib.org/>`_
+generated with `matplotlib <https://matplotlib.org/>`_.
 
 .. image:: doc/ptj1.svg
    :align: center
@@ -90,31 +90,38 @@ that needs to be compiled.
 
 If you want to automatically compile the example programs, generate the
 documentation, and/or install the headers you have to use
-`meson <http://mesonbuild.com/>`_ to build ``hep-mc``. If you have meson
-installed simply type ::
+`meson <http://mesonbuild.com/>`_ to build ``hep-mc``. If meson is installed
+type ::
 
     meson build
     cd build
 
-to generate the build files in ``build`` and to enter the generated directory.
-To enable building the examples, type ::
+to generate the build files in the directory ``build`` and to enter it. Before
+you build anything you can select some options:
 
-    meson configure -Dexamples=true
+1. To enable building the examples, type ::
 
-in the build directory. To enable examples and tests relying on MPI type ::
+       meson configure -Dexamples=true
 
-    meson configure -Dmpi=true
+   in the build directory.
 
-The `Doxygen <http://doxygen.org/>`_ documentation can be enabled with ::
+2. To enable tests and more examples that depend on MPI, enter ::
 
-    meson configure -Ddoxygen=true
+       meson configure -Dmpi=true
 
-Further options can be viewed by typing ::
+3. The `Doxygen <http://doxygen.org/>`_ documentation can be enabled with ::
 
-    meson configure
+       meson configure -Ddoxygen=true
 
-which will display all options (including install paths) that can be altered by
-using the ``-Doption-name=value`` shown above. ::
+   which creates a documentation of all classes and functions in the
+   ``doc/html`` directory.
+
+4. More options can be shown by entering ::
+
+       meson configure
+
+   which will display all options (including install paths) that can be
+   altered by using the syntax ``-Doption-name=value`` as used above.
 
 To finally build everything type ::
 
