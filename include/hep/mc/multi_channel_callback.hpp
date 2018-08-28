@@ -37,44 +37,44 @@ namespace
 
 inline std::string make_list_of_ranges(std::vector<std::size_t> const& indices)
 {
-	std::ostringstream ranges;
-	std::size_t a = 0;
-	std::size_t b = 0;
+    std::ostringstream ranges;
+    std::size_t a = 0;
+    std::size_t b = 0;
 
-	for (auto i = indices.begin(); i != indices.end(); ++i)
-	{
-		a = *i;
-		b = a;
+    for (auto i = indices.begin(); i != indices.end(); ++i)
+    {
+        a = *i;
+        b = a;
 
-		if (i != indices.begin())
-		{
-			ranges << ',';
-		}
+        if (i != indices.begin())
+        {
+            ranges << ',';
+        }
 
-		for (;;)
-		{
-			auto next = std::next(i);
+        for (;;)
+        {
+            auto next = std::next(i);
 
-			if ((next == indices.end()) || (*next != (*i + 1)))
-			{
-				break;
-			}
+            if ((next == indices.end()) || (*next != (*i + 1)))
+            {
+                break;
+            }
 
-			b = *next;
-			++i;
-		}
+            b = *next;
+            ++i;
+        }
 
-		if (a == b)
-		{
-			ranges << a;
-		}
-		else
-		{
-			ranges << a << '-' << b;
-		}
-	}
+        if (a == b)
+        {
+            ranges << a;
+        }
+        else
+        {
+            ranges << a << '-' << b;
+        }
+    }
 
-	return ranges.str();
+    return ranges.str();
 }
 
 }
@@ -91,9 +91,9 @@ namespace hep
 /// \see \ref multi_channel_callback
 template <typename T>
 inline bool multi_channel_default_callback(
-	std::vector<multi_channel_result<T>> const&
+    std::vector<multi_channel_result<T>> const&
 ) {
-	return true;
+    return true;
 }
 
 /// Callback function that prints a detailed summary about every iteration
@@ -102,116 +102,116 @@ inline bool multi_channel_default_callback(
 /// \see \ref multi_channel_callback
 template <typename T>
 inline bool multi_channel_verbose_callback(
-	std::vector<multi_channel_result<T>> const& results
+    std::vector<multi_channel_result<T>> const& results
 ) {
-	using std::fabs;
+    using std::fabs;
 
-	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
+    std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
-	T const max_difference = multi_channel_max_difference(results.back());
-	multi_channel_weight_info<T> info(results.back());
-	std::size_t const channels = info.channels().size();
+    T const max_difference = multi_channel_max_difference(results.back());
+    multi_channel_weight_info<T> info(results.back());
+    std::size_t const channels = info.channels().size();
 
-	std::cout << "summary of a-priori weights: D=" << max_difference << " for "
-		<< channels << " channel" << (channels > 1 ? "s\n" : "\n");
+    std::cout << "summary of a-priori weights: D=" << max_difference << " for "
+        << channels << " channel" << (channels > 1 ? "s\n" : "\n");
 
-	std::size_t const min_channels = info.minimal_weight_count();
+    std::size_t const min_channels = info.minimal_weight_count();
 
-	std::cout << "wmin=" << info.weights().front() << " (N="
-		<< info.calls().front() << ") in " << min_channels
-		<< " channel" << (min_channels > 1 ? "s" : "") << ": #"
-		<< make_list_of_ranges(minimal_weight_channels(info)) << '\n';
+    std::cout << "wmin=" << info.weights().front() << " (N="
+        << info.calls().front() << ") in " << min_channels
+        << " channel" << (min_channels > 1 ? "s" : "") << ": #"
+        << make_list_of_ranges(minimal_weight_channels(info)) << '\n';
 
-	auto weight_printer = [&](std::string prefix, std::size_t index) {
-		std::cout << prefix << info.weights().at(index) << " (N="
-			<< info.calls().at(index) << ") in channel #"
-			<< info.channels().at(index) << '\n';
-	};
+    auto weight_printer = [&](std::string prefix, std::size_t index) {
+        std::cout << prefix << info.weights().at(index) << " (N="
+            << info.calls().at(index) << ") in channel #"
+            << info.channels().at(index) << '\n';
+    };
 
-	// number of non-minimal weights
-	std::size_t printable_channels = channels - min_channels;
+    // number of non-minimal weights
+    std::size_t printable_channels = channels - min_channels;
 
-	if (printable_channels > 0)
-	{
-		// print maximum weight channel separately
-		--printable_channels;
-	}
+    if (printable_channels > 0)
+    {
+        // print maximum weight channel separately
+        --printable_channels;
+    }
 
-	if (printable_channels > 0)
-	{
-		std::size_t const number = 5;
+    if (printable_channels > 0)
+    {
+        std::size_t const number = 5;
 
-		if (printable_channels <= 2 * number + 1)
-		{
-			for (std::size_t i = 0; i != printable_channels; ++i)
-			{
-				weight_printer("   w=", min_channels + i);
-			}
-		}
-		else
-		{
-			std::size_t offset = min_channels;
+        if (printable_channels <= 2 * number + 1)
+        {
+            for (std::size_t i = 0; i != printable_channels; ++i)
+            {
+                weight_printer("   w=", min_channels + i);
+            }
+        }
+        else
+        {
+            std::size_t offset = min_channels;
 
-			for (std::size_t i = 0; i != number; ++i)
-			{
-				weight_printer("   w=", offset + i);
-			}
+            for (std::size_t i = 0; i != number; ++i)
+            {
+                weight_printer("   w=", offset + i);
+            }
 
-			std::cout << "     ...\n";
+            std::cout << "     ...\n";
 
-			offset = channels - number - 1;
+            offset = channels - number - 1;
 
-			for (std::size_t i = 0; i != number; ++i)
-			{
-				weight_printer("   w=", offset + i);
-			}
-		}
-	}
+            for (std::size_t i = 0; i != number; ++i)
+            {
+                weight_printer("   w=", offset + i);
+            }
+        }
+    }
 
-	if (min_channels != channels)
-	{
-		weight_printer("wmax=", channels - 1);
-	}
+    if (min_channels != channels)
+    {
+        weight_printer("wmax=", channels - 1);
+    }
 
-	T const relative_error_percent = (T(100.0) * results.back().error() /
-		fabs(results.back().value()));
+    T const relative_error_percent = (T(100.0) * results.back().error() /
+        fabs(results.back().value()));
 
-	T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
-		T(results.back().calls());
+    T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
+        T(results.back().calls());
 
-	std::size_t const number_of_non_finite_calls =
-		results.back().non_zero_calls() - results.back().finite_calls();
+    std::size_t const number_of_non_finite_calls =
+        results.back().non_zero_calls() - results.back().finite_calls();
 
-	// print result for this iteration
-	std::cout << "this iteration: N=" << results.back().calls() << " E="
-		<< results.back().value() << " +- " << results.back().error() << " ("
-		<< relative_error_percent << "%) eff=" << efficiency << "% nnf="
-		<< number_of_non_finite_calls << "\n";
+    // print result for this iteration
+    std::cout << "this iteration: N=" << results.back().calls() << " E="
+        << results.back().value() << " +- " << results.back().error() << " ("
+        << relative_error_percent << "%) eff=" << efficiency << "% nnf="
+        << number_of_non_finite_calls << "\n";
 
-	// compute cumulative results
-	auto const result = accumulate<weighted_with_variance>(results.begin(),
-		results.end());
-	T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
-		results.end());
+    // compute cumulative results
+    auto const result = accumulate<weighted_with_variance>(results.begin(),
+        results.end());
+    T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
+        results.end());
 
-	T const relative_error_percent_all = (T(100.0) * result.error() /
-		fabs(result.value()));
+    T const relative_error_percent_all = (T(100.0) * result.error() /
+        fabs(result.value()));
 
-	// print the combined result
-	std::cout << "all iterations: N=" << result.calls() << " E="
-		<< result.value() << " +- " << result.error() << " ("
-		<< relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
+    // print the combined result
+    std::cout << "all iterations: N=" << result.calls() << " E="
+        << result.value() << " +- " << result.error() << " ("
+        << relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
 
-	std::cout.flush();
+    std::cout.flush();
 
-	return true;
+    return true;
 }
 
 /// The type of callback function that can be set by the user with
 /// \ref multi_channel_callback.
 template <typename T>
 using multi_channel_callback_type =
-	std::function<bool(std::vector<multi_channel_result<T>>)>;
+    std::function<bool(std::vector<multi_channel_result<T>>)>;
 
 /// Sets the multi channel  `callback` function and returns it. This function is
 /// called after each iteration performed by \ref multi_channel. The default
@@ -224,17 +224,17 @@ using multi_channel_callback_type =
 /// retained.
 template <typename T>
 inline multi_channel_callback_type<T> multi_channel_callback(
-	multi_channel_callback_type<T> callback = nullptr
+    multi_channel_callback_type<T> callback = nullptr
 ) {
-	static multi_channel_callback_type<T> object =
-		multi_channel_default_callback<T>;
+    static multi_channel_callback_type<T> object =
+        multi_channel_default_callback<T>;
 
-	if (callback != nullptr)
-	{
-		object = callback;
-	}
+    if (callback != nullptr)
+    {
+        object = callback;
+    }
 
-	return object;
+    return object;
 }
 
 /// @}

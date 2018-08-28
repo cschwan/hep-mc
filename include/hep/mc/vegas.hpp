@@ -52,43 +52,43 @@ namespace hep
 /// to `total_calls`.
 template <typename I, typename R>
 inline vegas_result<numeric_type_of<I>> vegas_iteration(
-	I&& integrand,
-	std::size_t calls,
-	vegas_pdf<numeric_type_of<I>> const& pdf,
-	R&& generator
+    I&& integrand,
+    std::size_t calls,
+    vegas_pdf<numeric_type_of<I>> const& pdf,
+    R&& generator
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	auto accumulator = make_accumulator(integrand);
+    auto accumulator = make_accumulator(integrand);
 
-	std::size_t const dimensions = pdf.dimensions();
-	std::size_t const bins       = pdf.bins();
+    std::size_t const dimensions = pdf.dimensions();
+    std::size_t const bins       = pdf.bins();
 
-	std::vector<T> adjustment_data(dimensions * bins);
-	std::vector<T> random_numbers(dimensions);
-	std::vector<std::size_t> bin(dimensions);
+    std::vector<T> adjustment_data(dimensions * bins);
+    std::vector<T> random_numbers(dimensions);
+    std::vector<std::size_t> bin(dimensions);
 
-	for (std::size_t i = 0; i != calls; ++i)
-	{
-		for (std::size_t j = 0; j != dimensions; ++j)
-		{
-			random_numbers[j] = std::generate_canonical<T,
-				std::numeric_limits<T>::digits>(generator);
-		}
+    for (std::size_t i = 0; i != calls; ++i)
+    {
+        for (std::size_t j = 0; j != dimensions; ++j)
+        {
+            random_numbers[j] = std::generate_canonical<T,
+                std::numeric_limits<T>::digits>(generator);
+        }
 
-		vegas_point<T> const point(random_numbers, bin, pdf);
+        vegas_point<T> const point(random_numbers, bin, pdf);
 
-		T const value = accumulator.invoke(integrand, point);
-		T const square = value * value;
+        T const value = accumulator.invoke(integrand, point);
+        T const square = value * value;
 
-		// save square for each bin in order to refine the pdf later
-		for (std::size_t j = 0; j != dimensions; ++j)
-		{
-			adjustment_data[j * bins + point.bin()[j]] += square;
-		}
-	}
+        // save square for each bin in order to refine the pdf later
+        for (std::size_t j = 0; j != dimensions; ++j)
+        {
+            adjustment_data[j * bins + point.bin()[j]] += square;
+        }
+    }
 
-	return vegas_result<T>(accumulator.result(calls), pdf, adjustment_data);
+    return vegas_result<T>(accumulator.result(calls), pdf, adjustment_data);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of
@@ -101,35 +101,35 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 /// \ref vegas_result.pdf obtained by a previous \ref vegas call.
 template <typename I, typename R = std::mt19937>
 inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
-	I&& integrand,
-	std::vector<std::size_t> const& iteration_calls,
-	vegas_pdf<numeric_type_of<I>> const& start_pdf,
-	numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
-	R&& generator = std::mt19937()
+    I&& integrand,
+    std::vector<std::size_t> const& iteration_calls,
+    vegas_pdf<numeric_type_of<I>> const& start_pdf,
+    numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
+    R&& generator = std::mt19937()
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	auto pdf = start_pdf;
+    auto pdf = start_pdf;
 
-	// vector holding all iteration results
-	std::vector<vegas_result<T>> results;
-	results.reserve(iteration_calls.size());
+    // vector holding all iteration results
+    std::vector<vegas_result<T>> results;
+    results.reserve(iteration_calls.size());
 
-	// perform iterations
-	for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
-	{
-		auto const result = vegas_iteration(integrand, *i, pdf, generator);
-		results.push_back(result);
+    // perform iterations
+    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    {
+        auto const result = vegas_iteration(integrand, *i, pdf, generator);
+        results.push_back(result);
 
-		if (!vegas_callback<T>()(results))
-		{
-			break;
-		}
+        if (!vegas_callback<T>()(results))
+        {
+            break;
+        }
 
-		pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data());
-	}
+        pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data());
+    }
 
-	return results;
+    return results;
 }
 
 /// Integrates `function` over the unit-hypercube with `dimensions` by
@@ -140,21 +140,21 @@ inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
 /// \f$-parameter given by `alpha`.
 template <typename I, typename R = std::mt19937>
 inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
-	I&& integrand,
-	std::vector<std::size_t> const& iteration_calls,
-	std::size_t bins = 128,
-	numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
-	R&& generator = std::mt19937()
+    I&& integrand,
+    std::vector<std::size_t> const& iteration_calls,
+    std::size_t bins = 128,
+    numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
+    R&& generator = std::mt19937()
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	return vegas(
-		std::forward<I>(integrand),
-		iteration_calls,
-		vegas_pdf<T>(integrand.dimensions(), bins),
-		alpha,
-		std::forward<R>(generator)
-	);
+    return vegas(
+        std::forward<I>(integrand),
+        iteration_calls,
+        vegas_pdf<T>(integrand.dimensions(), bins),
+        alpha,
+        std::forward<R>(generator)
+    );
 }
 
 /// @}

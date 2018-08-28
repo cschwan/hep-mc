@@ -36,34 +36,34 @@ template <typename T>
 class multi_channel_point : public mc_point<T>
 {
 public:
-	/// Constructor.
-	multi_channel_point(
-		std::vector<T> const& point,
-		T weight,
-		std::vector<T>& coordinates,
-		std::size_t channel
-	)
-		: mc_point<T>(point, weight)
-		, channel_(channel)
-		, coordinates_(coordinates)
-	{
-	}
+    /// Constructor.
+    multi_channel_point(
+        std::vector<T> const& point,
+        T weight,
+        std::vector<T>& coordinates,
+        std::size_t channel
+    )
+        : mc_point<T>(point, weight)
+        , channel_(channel)
+        , coordinates_(coordinates)
+    {
+    }
 
-	/// The selected channel for this point.
-	std::size_t channel() const
-	{
-		return channel_;
-	}
+    /// The selected channel for this point.
+    std::size_t channel() const
+    {
+        return channel_;
+    }
 
-	/// The point in the hypercube transformed by the current \ref channel.
-	std::vector<T> const& coordinates() const
-	{
-		return coordinates_;
-	}
+    /// The point in the hypercube transformed by the current \ref channel.
+    std::vector<T> const& coordinates() const
+    {
+        return coordinates_;
+    }
 
 protected:
-	std::size_t channel_;
-	std::vector<T>& coordinates_;
+    std::size_t channel_;
+    std::vector<T>& coordinates_;
 };
 
 /// Point in the unit-hypercube for multi-channel Monte Carlo integration. This
@@ -72,65 +72,65 @@ template <typename T, typename M>
 class multi_channel_point2 : public multi_channel_point<T>
 {
 public:
-	/// Constructor.
-	multi_channel_point2(
-		std::vector<T> const& point,
-		std::vector<T>& coordinates,
-		std::size_t channel,
-		std::vector<T>& densities,
-		std::vector<T> const& channel_weights,
-		std::vector<std::size_t> const& enabled_channels,
-		M& map
-	)
-		: multi_channel_point<T>(point, T(), coordinates, channel)
-		, densities_(densities)
-		, channel_weights_(channel_weights)
-		, enabled_channels_(enabled_channels)
-		, map_(map)
-	{
-	}
+    /// Constructor.
+    multi_channel_point2(
+        std::vector<T> const& point,
+        std::vector<T>& coordinates,
+        std::size_t channel,
+        std::vector<T>& densities,
+        std::vector<T> const& channel_weights,
+        std::vector<std::size_t> const& enabled_channels,
+        M& map
+    )
+        : multi_channel_point<T>(point, T(), coordinates, channel)
+        , densities_(densities)
+        , channel_weights_(channel_weights)
+        , enabled_channels_(enabled_channels)
+        , map_(map)
+    {
+    }
 
-	/// The map function that constructed this point. See
-	/// \ref multi_channel_iteration for reference on the signature of this
-	/// function.
-	M const& map() const
-	{
-		return map_;
-	}
+    /// The map function that constructed this point. See
+    /// \ref multi_channel_iteration for reference on the signature of this
+    /// function.
+    M const& map() const
+    {
+        return map_;
+    }
 
-	/// Returns the weight for this Monte Carlo point.
-	T weight() const override
-	{
-		if (this->weight_ == T())
-		{
-			// lazy evaluation of the jacobian of `map` and `densities`
-			this->weight_ = map_(
-				this->channel_,
-				this->point_,
-				this->coordinates_,
-				enabled_channels_,
-				densities_,
-				multi_channel_map::calculate_densities
-			);
+    /// Returns the weight for this Monte Carlo point.
+    T weight() const override
+    {
+        if (this->weight_ == T())
+        {
+            // lazy evaluation of the jacobian of `map` and `densities`
+            this->weight_ = map_(
+                this->channel_,
+                this->point_,
+                this->coordinates_,
+                enabled_channels_,
+                densities_,
+                multi_channel_map::calculate_densities
+            );
 
-			T total_density = T();
+            T total_density = T();
 
-			for (std::size_t j = 0; j != channel_weights_.size(); ++j)
-			{
-				total_density += channel_weights_[j] * densities_[j];
-			}
+            for (std::size_t j = 0; j != channel_weights_.size(); ++j)
+            {
+                total_density += channel_weights_[j] * densities_[j];
+            }
 
-			this->weight_ /= total_density;
-		}
+            this->weight_ /= total_density;
+        }
 
-		return this->weight_;
-	}
+        return this->weight_;
+    }
 
 private:
-	std::vector<T>& densities_;
-	std::vector<T> const& channel_weights_;
-	std::vector<std::size_t> const& enabled_channels_;
-	M& map_;
+    std::vector<T>& densities_;
+    std::vector<T> const& channel_weights_;
+    std::vector<std::size_t> const& enabled_channels_;
+    M& map_;
 };
 
 /// @}

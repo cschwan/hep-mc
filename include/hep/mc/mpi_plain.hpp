@@ -54,42 +54,42 @@ namespace hep
 ///        random points from the hypercube. This generator is properly seeded.
 template <typename I, typename R = std::mt19937>
 inline mc_result<numeric_type_of<I>> mpi_plain(
-	MPI_Comm communicator,
-	I&& integrand,
-	std::size_t calls,
-	R&& generator = std::mt19937()
+    MPI_Comm communicator,
+    I&& integrand,
+    std::size_t calls,
+    R&& generator = std::mt19937()
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	int rank = 0;
-	MPI_Comm_rank(communicator, &rank);
-	int world = 0;
-	MPI_Comm_size(communicator, &world);
+    int rank = 0;
+    MPI_Comm_rank(communicator, &rank);
+    int world = 0;
+    MPI_Comm_size(communicator, &world);
 
-	// the number of function calls for each MPI process
-	std::size_t const sub_calls = (calls / world) +
-		(static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
+    // the number of function calls for each MPI process
+    std::size_t const sub_calls = (calls / world) +
+        (static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
 
-	std::size_t const usage = integrand.dimensions() *
-		random_number_usage<T, R>();
+    std::size_t const usage = integrand.dimensions() *
+        random_number_usage<T, R>();
 
-	generator.discard(usage * discard_before(calls, rank, world));
+    generator.discard(usage * discard_before(calls, rank, world));
 
-	auto const result = plain(integrand, sub_calls, generator);
+    auto const result = plain(integrand, sub_calls, generator);
 
-	generator.discard(usage * discard_after(calls, sub_calls, rank, world));
+    generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
-	std::vector<T> buffer;
+    std::vector<T> buffer;
 
-	auto const new_result = allreduce_result(
-		communicator,
-		result,
-		buffer,
-		std::vector<T>(),
-		calls
-	);
+    auto const new_result = allreduce_result(
+        communicator,
+        result,
+        buffer,
+        std::vector<T>(),
+        calls
+    );
 
-	return new_result;
+    return new_result;
 }
 
 /// @}

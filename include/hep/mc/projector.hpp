@@ -35,39 +35,39 @@ template <typename T>
 class projector
 {
 public:
-	/// \cond DOXYGEN_IGNORE
-	projector(accumulator<T, true>* accumulator, mc_point<T> const& point)
-		: accumulator_(accumulator)
-		, point_(point)
-	{
-	}
-	// \endcond
+    /// \cond DOXYGEN_IGNORE
+    projector(accumulator<T, true>* accumulator, mc_point<T> const& point)
+        : accumulator_(accumulator)
+        , point_(point)
+    {
+    }
+    // \endcond
 
-	/// This class has no copy constructor.
-	projector(projector<T> const&) = delete;
+    /// This class has no copy constructor.
+    projector(projector<T> const&) = delete;
 
-	/// This class has no move constructor.
-	projector(projector<T>&&) = delete;
+    /// This class has no move constructor.
+    projector(projector<T>&&) = delete;
 
-	/// This class has no assignment operator.
-	projector& operator=(projector<T> const&) = delete;
+    /// This class has no assignment operator.
+    projector& operator=(projector<T> const&) = delete;
 
-	/// This class has no move assignment operator.
-	projector& operator=(projector<T>&&) = delete;
+    /// This class has no move assignment operator.
+    projector& operator=(projector<T>&&) = delete;
 
-	/// Adds the integrand denoted by `value` to the one-dimensional
-	/// distribution with the corresponding `index` to the bin which is located
-	/// at the point specified by `x`.
-	void add(std::size_t index, T x, T value);
+    /// Adds the integrand denoted by `value` to the one-dimensional
+    /// distribution with the corresponding `index` to the bin which is located
+    /// at the point specified by `x`.
+    void add(std::size_t index, T x, T value);
 
-	/// Adds the integrand denoted by `value` to the two-dimensional
-	/// distribution with the corresponding `index` to the bin which is located
-	/// at the point specified by `x` and `y`.
-	void add(std::size_t index, T x, T y, T value);
+    /// Adds the integrand denoted by `value` to the two-dimensional
+    /// distribution with the corresponding `index` to the bin which is located
+    /// at the point specified by `x` and `y`.
+    void add(std::size_t index, T x, T y, T value);
 
 private:
-	accumulator<T, true>* accumulator_;
-	mc_point<T> const& point_;
+    accumulator<T, true>* accumulator_;
+    mc_point<T> const& point_;
 };
 
 /// @}

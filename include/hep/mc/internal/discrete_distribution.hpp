@@ -35,35 +35,35 @@ template <typename I = int, typename T = double>
 class discrete_distribution
 {
 public:
-	template <typename Iterator>
-	discrete_distribution(Iterator begin, Iterator end)
-		: weight_sums(std::distance(begin, end))
-	{
-		std::partial_sum(begin, end, weight_sums.begin());
+    template <typename Iterator>
+    discrete_distribution(Iterator begin, Iterator end)
+        : weight_sums(std::distance(begin, end))
+    {
+        std::partial_sum(begin, end, weight_sums.begin());
 
-		// normalize the sums
-		for (auto& k : weight_sums)
-		{
-			k /= weight_sums.back();
-		}
-	}
+        // normalize the sums
+        for (auto& k : weight_sums)
+        {
+            k /= weight_sums.back();
+        }
+    }
 
-	template <typename R>
-	I operator()(R& generator) const
-	{
-		T const value = std::generate_canonical<T,
-			std::numeric_limits<T>::digits>(generator);
+    template <typename R>
+    I operator()(R& generator) const
+    {
+        T const value = std::generate_canonical<T,
+            std::numeric_limits<T>::digits>(generator);
 
-		auto const iterator = std::lower_bound(weight_sums.begin(),
-			weight_sums.end(), value);
+        auto const iterator = std::lower_bound(weight_sums.begin(),
+            weight_sums.end(), value);
 
-		I const result = std::distance(weight_sums.begin(), iterator);
+        I const result = std::distance(weight_sums.begin(), iterator);
 
-		return result;
-	}
+        return result;
+    }
 
 private:
-	std::vector<T> weight_sums;
+    std::vector<T> weight_sums;
 };
 
 }

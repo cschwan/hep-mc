@@ -29,16 +29,16 @@ namespace hep
 /// be calculated.
 enum class multi_channel_map
 {
-	/// Signals the map-function that the parameter `coordinates` should be
-	/// calculated. The parameter `densities` can be calculated at time point.
-	calculate_coordinates,
+    /// Signals the map-function that the parameter `coordinates` should be
+    /// calculated. The parameter `densities` can be calculated at time point.
+    calculate_coordinates,
 
-	/// Signals that the map function is called with the previously calculated
-	/// `coordinates` and that the paramter `densities` now must be calculated.
-	/// If the integrand does not contribute, i.e. if the user-defined function
-	/// returned zero, then this step will be skipped because the densities are
-	/// not needed.
-	calculate_densities
+    /// Signals that the map function is called with the previously calculated
+    /// `coordinates` and that the paramter `densities` now must be calculated.
+    /// If the integrand does not contribute, i.e. if the user-defined function
+    /// returned zero, then this step will be skipped because the densities are
+    /// not needed.
+    calculate_densities
 };
 
 /// @}

@@ -35,32 +35,32 @@ template <typename T>
 class distribution_result
 {
 public:
-	/// Constructor.
-	distribution_result(
-		distribution_parameters<T> const& parameters,
-		std::vector<mc_result<T>> const& results
-	)
-		: parameters_(parameters)
-		, results_(results)
-	{
-	}
+    /// Constructor.
+    distribution_result(
+        distribution_parameters<T> const& parameters,
+        std::vector<mc_result<T>> const& results
+    )
+        : parameters_(parameters)
+        , results_(results)
+    {
+    }
 
-	/// Returns the parameters associated with this distribution.
-	distribution_parameters<T> const& parameters() const
-	{
-		return parameters_;
-	}
+    /// Returns the parameters associated with this distribution.
+    distribution_parameters<T> const& parameters() const
+    {
+        return parameters_;
+    }
 
-	/// Returns the result for each bin, corresponding to the bin positions
-	/// returned by \ref mid_points_x and \ref mid_points_y.
-	std::vector<mc_result<T>> const& results() const
-	{
-		return results_;
-	}
+    /// Returns the result for each bin, corresponding to the bin positions
+    /// returned by \ref mid_points_x and \ref mid_points_y.
+    std::vector<mc_result<T>> const& results() const
+    {
+        return results_;
+    }
 
 private:
-	distribution_parameters<T> parameters_;
-	std::vector<mc_result<T>> results_;
+    distribution_parameters<T> parameters_;
+    std::vector<mc_result<T>> results_;
 };
 
 /// Returns the middle point of each bin of this distribution in the
@@ -68,23 +68,23 @@ private:
 template <typename T>
 inline std::vector<T> mid_points_x(distribution_result<T> const& result)
 {
-	auto const parameters = result.parameters();
+    auto const parameters = result.parameters();
 
-	std::vector<T> mid_points;
-	mid_points.reserve(parameters.bins_x());
+    std::vector<T> mid_points;
+    mid_points.reserve(parameters.bins_x());
 
-	for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
-	{
-		T x = parameters.x_min() + T(0.5) * parameters.bin_size_x();
+    for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
+    {
+        T x = parameters.x_min() + T(0.5) * parameters.bin_size_x();
 
-		for (std::size_t bin = 0; bin != parameters.bins_x(); ++bin)
-		{
-			mid_points.push_back(x);
-			x += parameters.bin_size_x();
-		}
-	}
+        for (std::size_t bin = 0; bin != parameters.bins_x(); ++bin)
+        {
+            mid_points.push_back(x);
+            x += parameters.bin_size_x();
+        }
+    }
 
-	return mid_points;
+    return mid_points;
 }
 
 /// Returns the middle point of each bin of this distribution in the
@@ -92,24 +92,24 @@ inline std::vector<T> mid_points_x(distribution_result<T> const& result)
 template <typename T>
 inline std::vector<T> mid_points_y(distribution_result<T> const& result)
 {
-	auto const parameters = result.parameters();
+    auto const parameters = result.parameters();
 
-	std::vector<T> mid_points;
-	mid_points.reserve(parameters.bins_y());
+    std::vector<T> mid_points;
+    mid_points.reserve(parameters.bins_y());
 
-	T y = parameters.y_min() + T(0.5) * parameters.bin_size_y();
+    T y = parameters.y_min() + T(0.5) * parameters.bin_size_y();
 
-	for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
-	{
-		for (std::size_t bin = 0; bin != parameters.bins_x(); ++bin)
-		{
-			mid_points.push_back(y);
-		}
+    for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
+    {
+        for (std::size_t bin = 0; bin != parameters.bins_x(); ++bin)
+        {
+            mid_points.push_back(y);
+        }
 
-		y += parameters.bin_size_y();
-	}
+        y += parameters.bin_size_y();
+    }
 
-	return mid_points;
+    return mid_points;
 }
 
 /// @}

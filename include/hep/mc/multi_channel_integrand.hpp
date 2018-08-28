@@ -38,58 +38,58 @@ template <typename T, typename F, typename M, bool distributions>
 class multi_channel_integrand : public integrand<T, F, distributions>
 {
 public:
-	/// Type of the density function.
-	using map_type = M;
+    /// Type of the density function.
+    using map_type = M;
 
-	/// Constructor. Instead of using the constructor directly you should
-	/// consider using one of the helper functions \ref
-	/// make_multi_channel_integrand.
-	template <typename G, typename N>
-	multi_channel_integrand(
-		G&& function,
-		std::size_t dimensions,
-		N&& map,
-		std::size_t map_dimensions,
-		std::size_t channels,
-		std::vector<distribution_parameters<T>> const& parameters
-	)
-		: integrand<T, F, distributions>(std::forward<G>(function), dimensions,
-			parameters)
-		, map_(std::forward<N>(map))
-		, map_dimensions_(map_dimensions)
-		, channels_(channels)
-	{
-	}
+    /// Constructor. Instead of using the constructor directly you should
+    /// consider using one of the helper functions \ref
+    /// make_multi_channel_integrand.
+    template <typename G, typename N>
+    multi_channel_integrand(
+        G&& function,
+        std::size_t dimensions,
+        N&& map,
+        std::size_t map_dimensions,
+        std::size_t channels,
+        std::vector<distribution_parameters<T>> const& parameters
+    )
+        : integrand<T, F, distributions>(std::forward<G>(function), dimensions,
+            parameters)
+        , map_(std::forward<N>(map))
+        , map_dimensions_(map_dimensions)
+        , channels_(channels)
+    {
+    }
 
-	/// Returns the density functions.
-	map_type& map()
-	{
-		return map_;
-	}
+    /// Returns the density functions.
+    map_type& map()
+    {
+        return map_;
+    }
 
-	/// Returns the size of the vector the mappings map onto.
-	std::size_t map_dimensions() const
-	{
-		return map_dimensions_;
-	}
+    /// Returns the size of the vector the mappings map onto.
+    std::size_t map_dimensions() const
+    {
+        return map_dimensions_;
+    }
 
-	/// Returns the number of channels.
-	std::size_t channels() const
-	{
-		return channels_;
-	}
+    /// Returns the number of channels.
+    std::size_t channels() const
+    {
+        return channels_;
+    }
 
 private:
-	M map_;
-	std::size_t map_dimensions_;
-	std::size_t channels_;
+    M map_;
+    std::size_t map_dimensions_;
+    std::size_t channels_;
 };
 
 /// Template alias for a \ref multi_channel_integrand with its types `F` and `M`
 /// decayed with `std::decay`.
 template <typename T, typename F, typename M, bool distributions>
 using multi_channel_integrand_type = multi_channel_integrand<T,
-	typename std::decay<F>::type, typename std::decay<M>::type, distributions>;
+    typename std::decay<F>::type, typename std::decay<M>::type, distributions>;
 
 /// Multi channel integrand constructor. For a description of the parameters see
 /// \ref make_integrand. In addition, Multi Channel integrators need an
@@ -100,7 +100,7 @@ using multi_channel_integrand_type = multi_channel_integrand<T,
 ///     std::size_t channel,
 ///     std::vector<T> const& random_numbers,
 ///     std::vector<T>& coordinates,
-///	    std::vector<T>& densities,
+///        std::vector<T>& densities,
 ///     hep::multi_channel_map action
 /// );
 /// \endcode
@@ -115,40 +115,40 @@ using multi_channel_integrand_type = multi_channel_integrand<T,
 template <typename T, typename F, typename M>
 inline multi_channel_integrand_type<T, F, M, false>
 make_multi_channel_integrand(
-	F&& function,
-	std::size_t dimensions,
-	M&& map,
-	std::size_t map_dimensions,
-	std::size_t channels
+    F&& function,
+    std::size_t dimensions,
+    M&& map,
+    std::size_t map_dimensions,
+    std::size_t channels
 ) {
-	return multi_channel_integrand_type<T, F, M, false>(
-		std::forward<F>(function),
-		dimensions,
-		std::forward<M>(map),
-		map_dimensions,
-		channels,
-		std::vector<distribution_parameters<T>>()
-	);
+    return multi_channel_integrand_type<T, F, M, false>(
+        std::forward<F>(function),
+        dimensions,
+        std::forward<M>(map),
+        map_dimensions,
+        channels,
+        std::vector<distribution_parameters<T>>()
+    );
 }
 
 /// Multi channel integrand constructor for distributions.
 template <typename T, typename F, typename M, typename... Ds>
 inline multi_channel_integrand_type<T, F, M, true> make_multi_channel_integrand(
-	F&& function,
-	std::size_t dimensions,
-	M&& map,
-	std::size_t map_dimensions,
-	std::size_t channels,
-	Ds&&... parameters
+    F&& function,
+    std::size_t dimensions,
+    M&& map,
+    std::size_t map_dimensions,
+    std::size_t channels,
+    Ds&&... parameters
 ) {
-	return multi_channel_integrand_type<T, F, M, true>(
-		std::forward<F>(function),
-		dimensions,
-		std::forward<M>(map),
-		map_dimensions,
-		channels,
-		std::vector<distribution_parameters<T>>{std::forward<Ds>(parameters)...}
-	);
+    return multi_channel_integrand_type<T, F, M, true>(
+        std::forward<F>(function),
+        dimensions,
+        std::forward<M>(map),
+        map_dimensions,
+        channels,
+        std::vector<distribution_parameters<T>>{std::forward<Ds>(parameters)...}
+    );
 }
 
 /// @}

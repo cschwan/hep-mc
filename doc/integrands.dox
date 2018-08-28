@@ -49,16 +49,16 @@ Starting with version 0.5 it is possible to generate differential distributions,
 which can be generated if a second argument is accepted, e.g.
 \code
 double square_with_distribution(
-	hep::mc_point<double> const& x,
-	hep::projector<double>& projector
+    hep::mc_point<double> const& x,
+    hep::projector<double>& projector
 ) {
-	double const x = x.point[0];
-	double const f = x * x;
+    double const x = x.point[0];
+    double const f = x * x;
 
-	// add the the tuple `(x, f)` to the zeroeth distribution
-	projector.add(0, x, f);
+    // add the the tuple `(x, f)` to the zeroeth distribution
+    projector.add(0, x, f);
 
-	return f;
+    return f;
 }
 \endcode
 
@@ -82,7 +82,7 @@ auto power_integrand = hep::make_integrand<double>(power(2.0), 1);
 // the third argument specifies the distribution parameters: the x-axis ranges
 // from -10 to 10 and is subdivided into 100 bins
 auto square_distributions = hep::make_integrand<double>(square, 1,
-	hep::make_dist_params(-10.0, +10.0, 200));
+    hep::make_dist_params(-10.0, +10.0, 200));
 \endcode
 
 An integrand for a multi channel integrator requires even more information

@@ -38,29 +38,29 @@ template <typename T>
 class vegas_point : public mc_point<T>
 {
 public:
-	/// Creates a new point in the unit-hypercube \f$ U \f$ using the
-	/// probability distribution function `pdf` and the random numbers in
-	/// `random_numbers` for a Monte Carlo iteration with sample size specified
-	/// by `total_calls`. For each dimension the point falls into a bin whose
-	/// index is written `bin`.
-	vegas_point(
-		std::vector<T>& random_numbers,
-		std::vector<std::size_t>& bin,
-		vegas_pdf<T> const& pdf
-	)
-		: mc_point<T>(random_numbers, vegas_icdf(pdf, random_numbers, bin))
-		, bin_(bin)
-	{
-	}
+    /// Creates a new point in the unit-hypercube \f$ U \f$ using the
+    /// probability distribution function `pdf` and the random numbers in
+    /// `random_numbers` for a Monte Carlo iteration with sample size specified
+    /// by `total_calls`. For each dimension the point falls into a bin whose
+    /// index is written `bin`.
+    vegas_point(
+        std::vector<T>& random_numbers,
+        std::vector<std::size_t>& bin,
+        vegas_pdf<T> const& pdf
+    )
+        : mc_point<T>(random_numbers, vegas_icdf(pdf, random_numbers, bin))
+        , bin_(bin)
+    {
+    }
 
-	/// The indices that determine the bins of the point in the binned pdf.
-	std::vector<std::size_t> const& bin() const
-	{
-		return bin_;
-	}
+    /// The indices that determine the bins of the point in the binned pdf.
+    std::vector<std::size_t> const& bin() const
+    {
+        return bin_;
+    }
 
 private:
-	std::vector<std::size_t> const& bin_;
+    std::vector<std::size_t> const& bin_;
 };
 
 /// @}

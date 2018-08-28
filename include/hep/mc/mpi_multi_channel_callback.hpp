@@ -39,10 +39,10 @@ namespace hep
 /// \see mpi_multi_channel_callback
 template <typename T>
 inline bool mpi_multi_channel_default_callback(
-	MPI_Comm,
-	std::vector<multi_channel_result<T>> const&
+    MPI_Comm,
+    std::vector<multi_channel_result<T>> const&
 ) {
-	return true;
+    return true;
 }
 
 /// Callback function that prints a detailed summary about every iteration
@@ -53,25 +53,25 @@ inline bool mpi_multi_channel_default_callback(
 /// \see multi_channel_callback
 template <typename T>
 inline bool mpi_multi_channel_verbose_callback(
-	MPI_Comm communicator,
-	std::vector<multi_channel_result<T>> const& results
+    MPI_Comm communicator,
+    std::vector<multi_channel_result<T>> const& results
 ) {
-	int rank = -1;
-	MPI_Comm_rank(communicator, &rank);
+    int rank = -1;
+    MPI_Comm_rank(communicator, &rank);
 
-	if (rank == 0)
-	{
-		multi_channel_verbose_callback<T>(results);
-	}
+    if (rank == 0)
+    {
+        multi_channel_verbose_callback<T>(results);
+    }
 
-	return true;
+    return true;
 }
 
 /// The type of callback function that can be set by the user with
 /// \ref mpi_multi_channel_callback.
 template <typename T>
 using mpi_multi_channel_callback_type =
-	std::function<bool(MPI_Comm, std::vector<multi_channel_result<T>>)>;
+    std::function<bool(MPI_Comm, std::vector<multi_channel_result<T>>)>;
 
 /// Sets the multi channel `callback` function and returns it. This function is
 /// called after each iteration performed by \ref mpi_vegas. The default
@@ -83,17 +83,17 @@ using mpi_multi_channel_callback_type =
 /// function is returned.
 template <typename T>
 inline mpi_multi_channel_callback_type<T> mpi_multi_channel_callback(
-	mpi_multi_channel_callback_type<T> callback = nullptr
+    mpi_multi_channel_callback_type<T> callback = nullptr
 ) {
-	static mpi_multi_channel_callback_type<T> object =
-		mpi_multi_channel_default_callback<T>;
+    static mpi_multi_channel_callback_type<T> object =
+        mpi_multi_channel_default_callback<T>;
 
-	if (callback != nullptr)
-	{
-		object = callback;
-	}
+    if (callback != nullptr)
+    {
+        object = callback;
+    }
 
-	return object;
+    return object;
 }
 
 /// @}

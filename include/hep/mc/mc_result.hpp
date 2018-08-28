@@ -43,107 +43,107 @@ template <typename T>
 class mc_result
 {
 public:
-	/// The numeric type used for member variables.
-	using numeric_type = T;
+    /// The numeric type used for member variables.
+    using numeric_type = T;
 
-	/// Constructor.
-	mc_result(
-		std::size_t calls,
-		std::size_t non_zero_calls,
-		std::size_t finite_calls,
-		T sum,
-		T sum_of_squares
-	)
-		: calls_(calls)
-		, non_zero_calls_(non_zero_calls)
-		, finite_calls_(finite_calls)
-		, sum_(sum)
-		, sum_of_squares_(sum_of_squares)
-	{
-	}
+    /// Constructor.
+    mc_result(
+        std::size_t calls,
+        std::size_t non_zero_calls,
+        std::size_t finite_calls,
+        T sum,
+        T sum_of_squares
+    )
+        : calls_(calls)
+        , non_zero_calls_(non_zero_calls)
+        , finite_calls_(finite_calls)
+        , sum_(sum)
+        , sum_of_squares_(sum_of_squares)
+    {
+    }
 
-	/// The number of function evaluations \f$ N \f$ performed to obtain this
-	/// result.
-	std::size_t calls() const
-	{
-		return calls_;
-	}
+    /// The number of function evaluations \f$ N \f$ performed to obtain this
+    /// result.
+    std::size_t calls() const
+    {
+        return calls_;
+    }
 
-	/// Expectation value \f$ E \f$ of this result.
-	T value() const
-	{
-		return sum_ / T(calls_);
-	}
+    /// Expectation value \f$ E \f$ of this result.
+    T value() const
+    {
+        return sum_ / T(calls_);
+    }
 
-	/// Variance \f$ S^2 \f$ of the expectation value.
-	T variance() const
-	{
-		return (sum_of_squares_ - sum_ * sum_ / T(calls_)) / T(calls_)
-			/ T(calls_ - 1);
-	}
+    /// Variance \f$ S^2 \f$ of the expectation value.
+    T variance() const
+    {
+        return (sum_of_squares_ - sum_ * sum_ / T(calls_)) / T(calls_)
+            / T(calls_ - 1);
+    }
 
-	/// Standard deviation \f$ S \f$ of the expectation value.
-	T error() const
-	{
-		using std::sqrt;
+    /// Standard deviation \f$ S \f$ of the expectation value.
+    T error() const
+    {
+        using std::sqrt;
 
-		return sqrt(variance());
-	}
+        return sqrt(variance());
+    }
 
-	/// Returns the number integrand evaluations that were finite.
-	std::size_t finite_calls() const
-	{
-		return finite_calls_;
-	}
+    /// Returns the number integrand evaluations that were finite.
+    std::size_t finite_calls() const
+    {
+        return finite_calls_;
+    }
 
-	/// Returns the number of integrand evaluations that were not zero. This
-	/// includes the both finite and non-finite numbers.
-	std::size_t non_zero_calls() const
-	{
-		return non_zero_calls_;
-	}
+    /// Returns the number of integrand evaluations that were not zero. This
+    /// includes the both finite and non-finite numbers.
+    std::size_t non_zero_calls() const
+    {
+        return non_zero_calls_;
+    }
 
-	/// Returns the sum, i.e. \f$ \sum_{i=1}^N f ( \vec{x}_i ) \f$.
-	T sum() const
-	{
-		return sum_;
-	}
+    /// Returns the sum, i.e. \f$ \sum_{i=1}^N f ( \vec{x}_i ) \f$.
+    T sum() const
+    {
+        return sum_;
+    }
 
-	/// Returns the sum of squares, i.e. \f$ \sum_{i=1}^N f^2 ( \vec{x}_i ) \f$.
-	T sum_of_squares() const
-	{
-		return sum_of_squares_;
-	}
+    /// Returns the sum of squares, i.e. \f$ \sum_{i=1}^N f^2 ( \vec{x}_i ) \f$.
+    T sum_of_squares() const
+    {
+        return sum_of_squares_;
+    }
 
 private:
-	std::size_t calls_;
-	std::size_t non_zero_calls_;
-	std::size_t finite_calls_;
-	T sum_;
-	T sum_of_squares_;
+    std::size_t calls_;
+    std::size_t non_zero_calls_;
+    std::size_t finite_calls_;
+    T sum_;
+    T sum_of_squares_;
 };
 
 /// Creates a \ref mc_result using the parameters `calls`, `non_zero_calls`,
 /// `value` and `error`.
 template <typename T>
 inline mc_result<T> create_result(
-	std::size_t calls,
-	std::size_t non_zero_calls,
-	std::size_t finite_calls,
-	T value,
-	T error
+    std::size_t calls,
+    std::size_t non_zero_calls,
+    std::size_t finite_calls,
+    T value,
+    T error
 ) {
-	T sum = T(calls) * value;
-	T sum_of_squares = T(calls) * (value * value +
-		T(calls - 1) * error * error);
+    T sum = T(calls) * value;
+    T sum_of_squares = T(calls) * (value * value +
+        T(calls - 1) * error * error);
 
-	return mc_result<T>(
-		calls,
-		non_zero_calls,
-		finite_calls,
-		sum,
-		sum_of_squares
-	);
+    return mc_result<T>(
+        calls,
+        non_zero_calls,
+        finite_calls,
+        sum,
+        sum_of_squares
+    );
 }
 
 /// @}

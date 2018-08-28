@@ -53,46 +53,46 @@ namespace hep
 ///   smaller which sometimes gives a more stable convergence.
 template <typename T>
 inline std::vector<T> multi_channel_refine_weights(
-	std::vector<T> const& weights,
-	std::vector<T> const& adjustment_data,
-	T minimum_weight,
-	T beta = T(0.25)
+    std::vector<T> const& weights,
+    std::vector<T> const& adjustment_data,
+    T minimum_weight,
+    T beta = T(0.25)
 ) {
-	using std::fmax;
-	using std::pow;
+    using std::fmax;
+    using std::pow;
 
-	std::vector<T> new_weights(weights.size());
+    std::vector<T> new_weights(weights.size());
 
-	T sum_of_new_weights = T();
+    T sum_of_new_weights = T();
 
-	for (std::size_t i = 0; i != new_weights.size(); ++i)
-	{
-		new_weights[i] = weights[i] * pow(adjustment_data[i], beta);
-		sum_of_new_weights += new_weights[i];
-	}
+    for (std::size_t i = 0; i != new_weights.size(); ++i)
+    {
+        new_weights[i] = weights[i] * pow(adjustment_data[i], beta);
+        sum_of_new_weights += new_weights[i];
+    }
 
-	T new_sum = T();
+    T new_sum = T();
 
-	for (T& weight : new_weights)
-	{
-		if (weight == T())
-		{
-			// do not enable disabled channels (with weight zero) by setting
-			// them to the minimum weight
-			continue;
-		}
+    for (T& weight : new_weights)
+    {
+        if (weight == T())
+        {
+            // do not enable disabled channels (with weight zero) by setting
+            // them to the minimum weight
+            continue;
+        }
 
-		weight /= sum_of_new_weights;
-		weight = fmax(weight, minimum_weight);
-		new_sum += weight;
-	}
+        weight /= sum_of_new_weights;
+        weight = fmax(weight, minimum_weight);
+        new_sum += weight;
+    }
 
-	for (T& weight : new_weights)
-	{
-		weight /= new_sum;
-	}
+    for (T& weight : new_weights)
+    {
+        weight /= new_sum;
+    }
 
-	return new_weights;
+    return new_weights;
 }
 
 /// Performs exactly one iteration of the multi channel integration. The
@@ -101,93 +101,93 @@ inline std::vector<T> multi_channel_refine_weights(
 /// a description of the remaining parameters.
 template <typename I, typename R>
 inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
-	I&& integrand,
-	std::size_t calls,
-	std::vector<numeric_type_of<I>> const& channel_weights,
-	R&& generator
+    I&& integrand,
+    std::size_t calls,
+    std::vector<numeric_type_of<I>> const& channel_weights,
+    R&& generator
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	auto accumulator = make_accumulator(integrand);
+    auto accumulator = make_accumulator(integrand);
 
-	std::size_t const channels = channel_weights.size();
+    std::size_t const channels = channel_weights.size();
 
-	std::vector<T> random_numbers(integrand.dimensions());
-	std::vector<T> coordinates(integrand.map_dimensions());
-	std::vector<T> densities(channels);
-	std::vector<T> adjustment_data(channels);
+    std::vector<T> random_numbers(integrand.dimensions());
+    std::vector<T> coordinates(integrand.map_dimensions());
+    std::vector<T> densities(channels);
+    std::vector<T> adjustment_data(channels);
 
-	std::vector<std::size_t> enabled_channels;
-	enabled_channels.reserve(channels);
+    std::vector<std::size_t> enabled_channels;
+    enabled_channels.reserve(channels);
 
-	for (std::size_t i = 0; i != channels; ++i)
-	{
-		if (channel_weights.at(i) != T())
-		{
-			enabled_channels.push_back(i);
-		}
-	}
+    for (std::size_t i = 0; i != channels; ++i)
+    {
+        if (channel_weights.at(i) != T())
+        {
+            enabled_channels.push_back(i);
+        }
+    }
 
-	// distribution that randomly selects a channel
-	discrete_distribution<std::size_t, T> channel_selector(
-		channel_weights.begin(), channel_weights.end());
+    // distribution that randomly selects a channel
+    discrete_distribution<std::size_t, T> channel_selector(
+        channel_weights.begin(), channel_weights.end());
 
-	for (std::size_t i = 0; i != calls; ++i)
-	{
-		// generate as many random numbers as we need
-		for (std::size_t j = 0; j != integrand.dimensions(); ++j)
-		{
-			random_numbers[j] = std::generate_canonical<T,
-				std::numeric_limits<T>::digits>(generator);
-		}
+    for (std::size_t i = 0; i != calls; ++i)
+    {
+        // generate as many random numbers as we need
+        for (std::size_t j = 0; j != integrand.dimensions(); ++j)
+        {
+            random_numbers[j] = std::generate_canonical<T,
+                std::numeric_limits<T>::digits>(generator);
+        }
 
-		// randomly select a channel
-		std::size_t const channel = channel_selector(generator);
+        // randomly select a channel
+        std::size_t const channel = channel_selector(generator);
 
-		using map_type = typename std::remove_reference<
-			typename std::remove_reference<I>::type::map_type>::type;
+        using map_type = typename std::remove_reference<
+            typename std::remove_reference<I>::type::map_type>::type;
 
-		// calculate `coordinates` and possibly `densities`
-		integrand.map()(
-			channel,
-			random_numbers,
-			coordinates,
-			enabled_channels,
-			densities,
-			multi_channel_map::calculate_coordinates
-		);
+        // calculate `coordinates` and possibly `densities`
+        integrand.map()(
+            channel,
+            random_numbers,
+            coordinates,
+            enabled_channels,
+            densities,
+            multi_channel_map::calculate_coordinates
+        );
 
-		multi_channel_point2<T, map_type> const point(
-			random_numbers,
-			coordinates,
-			channel,
-			densities,
-			channel_weights,
-			enabled_channels,
-			integrand.map()
-		);
+        multi_channel_point2<T, map_type> const point(
+            random_numbers,
+            coordinates,
+            channel,
+            densities,
+            channel_weights,
+            enabled_channels,
+            integrand.map()
+        );
 
-		T const value = accumulator.invoke(integrand, point);
+        T const value = accumulator.invoke(integrand, point);
 
-		if (value == T())
-		{
-			continue;
-		}
+        if (value == T())
+        {
+            continue;
+        }
 
-		T const square = value * value * point.weight();
+        T const square = value * value * point.weight();
 
-		// these are the values W that are used to update the alphas
-		for (std::size_t j = 0; j != channels; ++j)
-		{
-			adjustment_data[j] += densities[j] * square;
-		}
-	}
+        // these are the values W that are used to update the alphas
+        for (std::size_t j = 0; j != channels; ++j)
+        {
+            adjustment_data[j] += densities[j] * square;
+        }
+    }
 
-	return multi_channel_result<T>(
-		accumulator.result(calls),
-		adjustment_data,
-		channel_weights
-	);
+    return multi_channel_result<T>(
+        accumulator.result(calls),
+        adjustment_data,
+        channel_weights
+    );
 }
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling
@@ -198,38 +198,38 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 /// remaining parameters.
 template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
-	I&& integrand,
-	std::vector<std::size_t> const& iteration_calls,
-	std::vector<numeric_type_of<I>> const& channel_weights,
-	std::size_t min_calls_per_channel = 0,
-	R&& generator = std::mt19937()
+    I&& integrand,
+    std::vector<std::size_t> const& iteration_calls,
+    std::vector<numeric_type_of<I>> const& channel_weights,
+    std::size_t min_calls_per_channel = 0,
+    R&& generator = std::mt19937()
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	auto weights = channel_weights;
+    auto weights = channel_weights;
 
-	std::vector<multi_channel_result<T>> results;
-	results.reserve(iteration_calls.size());
+    std::vector<multi_channel_result<T>> results;
+    results.reserve(iteration_calls.size());
 
-	for (std::size_t const calls : iteration_calls)
-	{
-		auto const result = multi_channel_iteration(integrand, calls, weights,
-			generator);
+    for (std::size_t const calls : iteration_calls)
+    {
+        auto const result = multi_channel_iteration(integrand, calls, weights,
+            generator);
 
-		results.push_back(result);
+        results.push_back(result);
 
-		if (!multi_channel_callback<T>()(results))
-		{
-			break;
-		}
+        if (!multi_channel_callback<T>()(results))
+        {
+            break;
+        }
 
-		T const minimum_weight = T(min_calls_per_channel) / calls;
+        T const minimum_weight = T(min_calls_per_channel) / calls;
 
-		weights = multi_channel_refine_weights(weights,
-			result.adjustment_data(), minimum_weight);
-	}
+        weights = multi_channel_refine_weights(weights,
+            result.adjustment_data(), minimum_weight);
+    }
 
-	return results;
+    return results;
 }
 
 /// Performs `iteration_calls.size()` multi channel iterations by calling
@@ -240,20 +240,20 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 /// of the remaining parameters.
 template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
-	I&& integrand,
-	std::vector<std::size_t> const& iteration_calls,
-	std::size_t min_calls_per_channel = 0,
-	R&& generator = std::mt19937()
+    I&& integrand,
+    std::vector<std::size_t> const& iteration_calls,
+    std::size_t min_calls_per_channel = 0,
+    R&& generator = std::mt19937()
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	return multi_channel(
-		std::forward<I>(integrand),
-		iteration_calls,
-		std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
-		min_calls_per_channel,
-		std::forward<R>(generator)
-	);
+    return multi_channel(
+        std::forward<I>(integrand),
+        iteration_calls,
+        std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
+        min_calls_per_channel,
+        std::forward<R>(generator)
+    );
 }
 
 /// @}

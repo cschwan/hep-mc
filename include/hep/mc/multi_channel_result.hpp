@@ -35,36 +35,36 @@ template <typename T>
 class multi_channel_result : public plain_result<T>
 {
 public:
-	/// Constructor. The parameter `adjustment_data` must contain two additional
-	/// values, being the sum of the sum of squares of the integration.
-	multi_channel_result(
-		plain_result<T> const& result,
-		std::vector<T> const& adjustment_data,
-		std::vector<T> const& channel_weights
-	)
-		: plain_result<T>(result)
-		, adjustment_data_(adjustment_data)
-		, channel_weights_(channel_weights)
-	{
-	}
+    /// Constructor. The parameter `adjustment_data` must contain two additional
+    /// values, being the sum of the sum of squares of the integration.
+    multi_channel_result(
+        plain_result<T> const& result,
+        std::vector<T> const& adjustment_data,
+        std::vector<T> const& channel_weights
+    )
+        : plain_result<T>(result)
+        , adjustment_data_(adjustment_data)
+        , channel_weights_(channel_weights)
+    {
+    }
 
-	/// This is the data used by \ref multi_channel_refine_weights to refine the
-	/// \ref channel_weights used in the same iteration. The refined weights are
-	/// then used in a subsequent iteration.
-	std::vector<T> const& adjustment_data() const
-	{
-		return adjustment_data_;
-	}
+    /// This is the data used by \ref multi_channel_refine_weights to refine the
+    /// \ref channel_weights used in the same iteration. The refined weights are
+    /// then used in a subsequent iteration.
+    std::vector<T> const& adjustment_data() const
+    {
+        return adjustment_data_;
+    }
 
-	/// The weight for each channel.
-	std::vector<T> const& channel_weights() const
-	{
-		return channel_weights_;
-	}
+    /// The weight for each channel.
+    std::vector<T> const& channel_weights() const
+    {
+        return channel_weights_;
+    }
 
 private:
-	std::vector<T> adjustment_data_;
-	std::vector<T> channel_weights_;
+    std::vector<T> adjustment_data_;
+    std::vector<T> channel_weights_;
 };
 
 /// @}

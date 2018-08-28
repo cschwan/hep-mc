@@ -38,58 +38,58 @@ template <typename T, typename F, bool distributions>
 class integrand
 {
 public:
-	/// Numeric type of the integrand.
-	using numeric_type = T;
+    /// Numeric type of the integrand.
+    using numeric_type = T;
 
-	/// The type of the integrand function that is integrated.
-	using function_type = F;
+    /// The type of the integrand function that is integrated.
+    using function_type = F;
 
-	/// Signals whether this integrand wants to generate distributions or not.
-	static constexpr bool has_distributions = distributions;
+    /// Signals whether this integrand wants to generate distributions or not.
+    static constexpr bool has_distributions = distributions;
 
-	/// Constructor. Instead of using the constructor directly you should
-	/// consider using one of the helper functions \ref make_integrand.
-	template <typename G>
-	integrand(
-		G&& function,
-		std::size_t dimensions,
-		std::vector<distribution_parameters<T>> const& parameters
-	)
-		: function_(std::forward<G>(function))
-		, parameters_(parameters)
-		, dimensions_(dimensions)
-	{
-	}
+    /// Constructor. Instead of using the constructor directly you should
+    /// consider using one of the helper functions \ref make_integrand.
+    template <typename G>
+    integrand(
+        G&& function,
+        std::size_t dimensions,
+        std::vector<distribution_parameters<T>> const& parameters
+    )
+        : function_(std::forward<G>(function))
+        , parameters_(parameters)
+        , dimensions_(dimensions)
+    {
+    }
 
-	/// Returns the dimension of the integrand.
-	std::size_t dimensions() const
-	{
-		return dimensions_;
-	}
+    /// Returns the dimension of the integrand.
+    std::size_t dimensions() const
+    {
+        return dimensions_;
+    }
 
-	/// Returns the integrand's function.
-	F& function()
-	{
-		return function_;
-	}
+    /// Returns the integrand's function.
+    F& function()
+    {
+        return function_;
+    }
 
-	/// Returns the parameters of the distribution(s).
-	std::vector<distribution_parameters<T>> const& parameters() const
-	{
-		return parameters_;
-	}
+    /// Returns the parameters of the distribution(s).
+    std::vector<distribution_parameters<T>> const& parameters() const
+    {
+        return parameters_;
+    }
 
 private:
-	F function_;
-	std::vector<distribution_parameters<T>> parameters_;
-	std::size_t dimensions_;
+    F function_;
+    std::vector<distribution_parameters<T>> parameters_;
+    std::size_t dimensions_;
 };
 
 /// Template alias for an \ref integrand with its type `F` decayed with
 /// `std::decay`.
 template <typename T, typename F, bool distributions>
 using integrand_type = integrand<T, typename std::decay<F>::type,
-	distributions>;
+    distributions>;
 
 /// PLAIN/VEGAS integrand constructor. This function constructs an \ref
 /// integrand using the given `function` that must accept points from the \f$ d
@@ -106,14 +106,14 @@ using integrand_type = integrand<T, typename std::decay<F>::type,
 /// \endcode
 template <typename T, typename F>
 inline integrand_type<T, F, false> make_integrand(
-	F&& function,
-	std::size_t dimensions
+    F&& function,
+    std::size_t dimensions
 ) {
-	return integrand_type<T, F, false>(
-		std::forward<F>(function),
-		dimensions,
-		std::vector<distribution_parameters<T>>()
-	);
+    return integrand_type<T, F, false>(
+        std::forward<F>(function),
+        dimensions,
+        std::vector<distribution_parameters<T>>()
+    );
 }
 
 /// PLAIN/VEGAS distributions constructor. This function constructs an \ref
@@ -137,15 +137,15 @@ inline integrand_type<T, F, false> make_integrand(
 /// \endcode
 template <typename T, typename F, typename... D>
 inline integrand_type<T, F, true> make_integrand(
-	F&& function,
-	std::size_t dimensions,
-	D&&... parameters
+    F&& function,
+    std::size_t dimensions,
+    D&&... parameters
 ) {
-	return integrand_type<T, F, true>(
-		std::forward<F>(function),
-		dimensions,
-		std::vector<distribution_parameters<T>>{std::forward<D>(parameters)...}
-	);
+    return integrand_type<T, F, true>(
+        std::forward<F>(function),
+        dimensions,
+        std::vector<distribution_parameters<T>>{std::forward<D>(parameters)...}
+    );
 }
 
 /// Shortcut for accessing the numeric type of an integrand that is possibly a

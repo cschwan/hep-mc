@@ -39,10 +39,10 @@ namespace hep
 /// \see mpi_vegas_callback
 template <typename T>
 inline bool mpi_vegas_default_callback(
-	MPI_Comm,
-	std::vector<vegas_result<T>> const&
+    MPI_Comm,
+    std::vector<vegas_result<T>> const&
 ) {
-	return true;
+    return true;
 }
 
 /// Callback function that prints a detailed summary about every iteration
@@ -53,25 +53,25 @@ inline bool mpi_vegas_default_callback(
 /// \see vegas_callback
 template <typename T>
 inline bool mpi_vegas_verbose_callback(
-	MPI_Comm communicator,
-	std::vector<vegas_result<T>> const& results
+    MPI_Comm communicator,
+    std::vector<vegas_result<T>> const& results
 ) {
-	int rank = -1;
-	MPI_Comm_rank(communicator, &rank);
+    int rank = -1;
+    MPI_Comm_rank(communicator, &rank);
 
-	if (rank == 0)
-	{
-		vegas_verbose_callback<T>(results);
-	}
+    if (rank == 0)
+    {
+        vegas_verbose_callback<T>(results);
+    }
 
-	return true;
+    return true;
 }
 
 /// The type of callback function that can be set by the user with
 /// \ref mpi_vegas_callback.
 template <typename T>
 using mpi_vegas_callback_type =
-	std::function<bool(MPI_Comm, std::vector<vegas_result<T>>)>;
+    std::function<bool(MPI_Comm, std::vector<vegas_result<T>>)>;
 
 /// Sets the vegas `callback` function and returns it. This function is called
 /// after each iteration performed by \ref mpi_vegas. The default callback is
@@ -83,16 +83,16 @@ using mpi_vegas_callback_type =
 /// function is returned.
 template <typename T>
 inline mpi_vegas_callback_type<T> mpi_vegas_callback(
-	mpi_vegas_callback_type<T> callback = nullptr
+    mpi_vegas_callback_type<T> callback = nullptr
 ) {
-	static mpi_vegas_callback_type<T> object = mpi_vegas_default_callback<T>;
+    static mpi_vegas_callback_type<T> object = mpi_vegas_default_callback<T>;
 
-	if (callback != nullptr)
-	{
-		object = callback;
-	}
+    if (callback != nullptr)
+    {
+        object = callback;
+    }
 
-	return object;
+    return object;
 }
 
 /// @}

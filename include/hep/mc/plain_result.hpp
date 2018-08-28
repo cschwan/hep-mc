@@ -36,29 +36,29 @@ template <typename T>
 class plain_result : public mc_result<T>
 {
 public:
-	/// Constructor.
-	plain_result(
-		std::vector<distribution_result<T>> const& distributions,
-		std::size_t calls,
-		std::size_t non_zero_calls,
-		std::size_t finite_calls,
-		T sum,
-		T sum_of_squares
-	)
-		: mc_result<T>(calls, non_zero_calls, finite_calls, sum, sum_of_squares)
-		, distributions_(distributions)
-	{
-	}
+    /// Constructor.
+    plain_result(
+        std::vector<distribution_result<T>> const& distributions,
+        std::size_t calls,
+        std::size_t non_zero_calls,
+        std::size_t finite_calls,
+        T sum,
+        T sum_of_squares
+    )
+        : mc_result<T>(calls, non_zero_calls, finite_calls, sum, sum_of_squares)
+        , distributions_(distributions)
+    {
+    }
 
-	/// Returns the differential distributions accumulated during the
-	/// integration.
-	std::vector<distribution_result<T>> const& distributions() const
-	{
-		return distributions_;
-	}
+    /// Returns the differential distributions accumulated during the
+    /// integration.
+    std::vector<distribution_result<T>> const& distributions() const
+    {
+        return distributions_;
+    }
 
 private:
-	std::vector<distribution_result<T>> distributions_;
+    std::vector<distribution_result<T>> distributions_;
 };
 
 /// @}

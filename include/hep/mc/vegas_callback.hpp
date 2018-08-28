@@ -40,7 +40,7 @@ namespace hep
 template <typename T>
 inline bool vegas_default_callback(std::vector<vegas_result<T>> const&)
 {
-	return true;
+    return true;
 }
 
 /// Callback function that prints a detailed summary about every iteration
@@ -50,42 +50,42 @@ inline bool vegas_default_callback(std::vector<vegas_result<T>> const&)
 template <typename T>
 inline bool vegas_verbose_callback(std::vector<vegas_result<T>> const& results)
 {
-	using std::fabs;
+    using std::fabs;
 
-	std::cout << "iteration " << (results.size() - 1) << " finished.\n";
+    std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
-	T const relative_error_percent = (T(100.0) * results.back().error() /
-		fabs(results.back().value()));
+    T const relative_error_percent = (T(100.0) * results.back().error() /
+        fabs(results.back().value()));
 
-	T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
-		T(results.back().calls());
+    T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
+        T(results.back().calls());
 
-	std::size_t const number_of_non_finite_calls =
-		results.back().non_zero_calls() - results.back().finite_calls();
+    std::size_t const number_of_non_finite_calls =
+        results.back().non_zero_calls() - results.back().finite_calls();
 
-	// print result for this iteration
-	std::cout << "this iteration: N=" << results.back().calls() << " E="
-		<< results.back().value() << " +- " << results.back().error() << " ("
-		<< relative_error_percent << "%) eff=" << efficiency << "% nnf="
-		<< number_of_non_finite_calls << "\n";
+    // print result for this iteration
+    std::cout << "this iteration: N=" << results.back().calls() << " E="
+        << results.back().value() << " +- " << results.back().error() << " ("
+        << relative_error_percent << "%) eff=" << efficiency << "% nnf="
+        << number_of_non_finite_calls << "\n";
 
-	// compute cumulative results
-	auto const result = accumulate<weighted_with_variance>(results.begin(),
-		results.end());
-	T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
-		results.end());
+    // compute cumulative results
+    auto const result = accumulate<weighted_with_variance>(results.begin(),
+        results.end());
+    T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
+        results.end());
 
-	T const relative_error_percent_all = (T(100.0) * result.error() /
-		fabs(result.value()));
+    T const relative_error_percent_all = (T(100.0) * result.error() /
+        fabs(result.value()));
 
-	// print the combined result
-	std::cout << "all iterations: N=" << result.calls() << " E="
-		<< result.value() << " +- " << result.error() << " ("
-		<< relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
+    // print the combined result
+    std::cout << "all iterations: N=" << result.calls() << " E="
+        << result.value() << " +- " << result.error() << " ("
+        << relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
 
-	std::cout.flush();
+    std::cout.flush();
 
-	return true;
+    return true;
 }
 
 /// The type of callback function that can be set by the user with
@@ -103,16 +103,16 @@ using vegas_callback_type = std::function<bool(std::vector<vegas_result<T>>)>;
 /// retained.
 template <typename T>
 inline vegas_callback_type<T> vegas_callback(
-	vegas_callback_type<T> callback = nullptr
+    vegas_callback_type<T> callback = nullptr
 ) {
-	static vegas_callback_type<T> object = vegas_default_callback<T>;
+    static vegas_callback_type<T> object = vegas_default_callback<T>;
 
-	if (callback != nullptr)
-	{
-		object = callback;
-	}
+    if (callback != nullptr)
+    {
+        object = callback;
+    }
 
-	return object;
+    return object;
 }
 
 /// @}

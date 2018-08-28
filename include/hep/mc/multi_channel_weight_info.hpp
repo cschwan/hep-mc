@@ -38,81 +38,81 @@ template <typename T>
 class multi_channel_weight_info
 {
 public:
-	/// Constructor.
-	multi_channel_weight_info(multi_channel_result<T> const& result)
-		: channels_(result.channel_weights().size())
-		, weights_(result.channel_weights().size())
-		, calls_(result.channel_weights().size())
-		, minimal_weight_count_()
-	{
-		std::iota(channels_.begin(), channels_.end(), 0);
-		std::stable_sort(channels_.begin(), channels_.end(),
-			[&](std::size_t a, std::size_t b) {
-				return result.channel_weights().at(a) <
-					result.channel_weights().at(b);
-		});
+    /// Constructor.
+    multi_channel_weight_info(multi_channel_result<T> const& result)
+        : channels_(result.channel_weights().size())
+        , weights_(result.channel_weights().size())
+        , calls_(result.channel_weights().size())
+        , minimal_weight_count_()
+    {
+        std::iota(channels_.begin(), channels_.end(), 0);
+        std::stable_sort(channels_.begin(), channels_.end(),
+            [&](std::size_t a, std::size_t b) {
+                return result.channel_weights().at(a) <
+                    result.channel_weights().at(b);
+        });
 
-		std::transform(channels_.begin(), channels_.end(), weights_.begin(),
-			[&](std::size_t index) {
-				return result.channel_weights().at(index);
-		});
+        std::transform(channels_.begin(), channels_.end(), weights_.begin(),
+            [&](std::size_t index) {
+                return result.channel_weights().at(index);
+        });
 
-		std::transform(weights_.begin(), weights_.end(), calls_.begin(),
-			[&](T weight) {
-				return static_cast <std::size_t> (result.calls() * weight);
-		});
+        std::transform(weights_.begin(), weights_.end(), calls_.begin(),
+            [&](T weight) {
+                return static_cast <std::size_t> (result.calls() * weight);
+        });
 
-		minimal_weight_count_ = std::distance(calls_.begin(),
-			std::upper_bound(calls_.begin(), calls_.end(), calls_.front()));
-	}
+        minimal_weight_count_ = std::distance(calls_.begin(),
+            std::upper_bound(calls_.begin(), calls_.end(), calls_.front()));
+    }
 
-	/// Returns the number of expected calls for each weight in the same order
-	/// as the channel indices returned by \ref channels().
-	std::vector<std::size_t> const& calls() const
-	{
-		return calls_;
-	}
+    /// Returns the number of expected calls for each weight in the same order
+    /// as the channel indices returned by \ref channels().
+    std::vector<std::size_t> const& calls() const
+    {
+        return calls_;
+    }
 
-	/// Returns the channel indices sorted in ascending order of their
-	/// corresponding weight.
-	std::vector<std::size_t> const& channels() const
-	{
-		return channels_;
-	}
+    /// Returns the channel indices sorted in ascending order of their
+    /// corresponding weight.
+    std::vector<std::size_t> const& channels() const
+    {
+        return channels_;
+    }
 
-	/// Returns the number of channels that have a weight that, multiplied with
-	/// the number of calls, corresponds to the minimum number of calls.
-	std::size_t minimal_weight_count() const
-	{
-		return minimal_weight_count_;
-	}
+    /// Returns the number of channels that have a weight that, multiplied with
+    /// the number of calls, corresponds to the minimum number of calls.
+    std::size_t minimal_weight_count() const
+    {
+        return minimal_weight_count_;
+    }
 
-	/// Returns the a-priori weights, starting with the lowest weights up to the
-	/// largest one.
-	std::vector<T> const& weights() const
-	{
-		return weights_;
-	}
+    /// Returns the a-priori weights, starting with the lowest weights up to the
+    /// largest one.
+    std::vector<T> const& weights() const
+    {
+        return weights_;
+    }
 
 private:
-	std::vector<std::size_t> channels_;
-	std::vector<T> weights_;
-	std::vector<std::size_t> calls_;
-	std::size_t minimal_weight_count_;
+    std::vector<std::size_t> channels_;
+    std::vector<T> weights_;
+    std::vector<std::size_t> calls_;
+    std::size_t minimal_weight_count_;
 };
 
 /// Returns a vector containing the indices of the channels with the smallest
 /// weights.
 template <typename T>
 inline std::vector<std::size_t> minimal_weight_channels(
-	multi_channel_weight_info<T> const& info
+    multi_channel_weight_info<T> const& info
 ) {
-	std::vector<std::size_t> result(
-		info.channels().begin(),
-		info.channels().begin() + info.minimal_weight_count()
-	);
+    std::vector<std::size_t> result(
+        info.channels().begin(),
+        info.channels().begin() + info.minimal_weight_count()
+    );
 
-	return result;
+    return result;
 }
 
 /// @}

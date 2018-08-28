@@ -30,9 +30,9 @@ namespace hep
 /// `false` the original method is used. Default is `false`.
 inline bool& vegas_cuba_refinement()
 {
-	static bool use_cuba_refinement = false;
+    static bool use_cuba_refinement = false;
 
-	return use_cuba_refinement;
+    return use_cuba_refinement;
 }
 
 /// If `enabled` is `true` the VEGAS routines use CUBA's grid refinement method.
@@ -40,7 +40,7 @@ inline bool& vegas_cuba_refinement()
 /// \see \ref vegas_cuba_refinement
 inline void vegas_cuba_refinement(bool enabled)
 {
-	vegas_cuba_refinement() = enabled;
+    vegas_cuba_refinement() = enabled;
 }
 
 /// @}

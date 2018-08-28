@@ -40,23 +40,23 @@ namespace hep
 template <typename T>
 inline T multi_channel_max_difference(multi_channel_result<T> const& result)
 {
-	using std::fabs;
-	using std::fmax;
+    using std::fabs;
+    using std::fmax;
 
-	T max = T();
+    T max = T();
 
-	for (std::size_t i = 0; i != result.adjustment_data().size() - 1; ++i)
-	{
-		for (std::size_t j = i + 1; j != result.adjustment_data().size(); ++j)
-		{
-			T const wi = result.adjustment_data()[i];
-			T const wj = result.adjustment_data()[j];
+    for (std::size_t i = 0; i != result.adjustment_data().size() - 1; ++i)
+    {
+        for (std::size_t j = i + 1; j != result.adjustment_data().size(); ++j)
+        {
+            T const wi = result.adjustment_data()[i];
+            T const wj = result.adjustment_data()[j];
 
-			max = fmax(max, fabs(wi - wj));
-		}
-	}
+            max = fmax(max, fabs(wi - wj));
+        }
+    }
 
-	return max;
+    return max;
 }
 
 /// @}

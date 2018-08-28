@@ -37,33 +37,33 @@ template <typename T>
 class vegas_result : public plain_result<T>
 {
 public:
-	/// Constructor.
-	vegas_result(
-		plain_result<T> const& result,
-		vegas_pdf<T> const& pdf,
-		std::vector<T> const& adjustment_data
-	)
-		: plain_result<T>(result)
-		, pdf_(pdf)
-		, adjustment_data_(adjustment_data)
-	{
-	}
+    /// Constructor.
+    vegas_result(
+        plain_result<T> const& result,
+        vegas_pdf<T> const& pdf,
+        std::vector<T> const& adjustment_data
+    )
+        : plain_result<T>(result)
+        , pdf_(pdf)
+        , adjustment_data_(adjustment_data)
+    {
+    }
 
-	/// The pdf used to obtain this result.
-	vegas_pdf<T> const& pdf() const
-	{
-		return pdf_;
-	}
+    /// The pdf used to obtain this result.
+    vegas_pdf<T> const& pdf() const
+    {
+        return pdf_;
+    }
 
-	/// The data used to adjust the \ref pdf for a subsequent iteration.
-	std::vector<T> const& adjustment_data() const
-	{
-		return adjustment_data_;
-	}
+    /// The data used to adjust the \ref pdf for a subsequent iteration.
+    std::vector<T> const& adjustment_data() const
+    {
+        return adjustment_data_;
+    }
 
 private:
-	vegas_pdf<T> pdf_;
-	std::vector<T> adjustment_data_;
+    vegas_pdf<T> pdf_;
+    std::vector<T> adjustment_data_;
 };
 
 /// @}

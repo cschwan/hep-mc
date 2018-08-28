@@ -31,46 +31,46 @@ namespace
 template <typename T, typename R>
 inline std::size_t random_number_usage()
 {
-	using S = typename std::remove_reference<R>::type;
+    using S = typename std::remove_reference<R>::type;
 
-	// the number of random bits
-	std::size_t const b = std::numeric_limits<T>::digits;
+    // the number of random bits
+    std::size_t const b = std::numeric_limits<T>::digits;
 
-	// the number of different numbers the generator can generate
-	long double const r = static_cast <long double> (S::max())
-		- static_cast <long double> (S::min()) + 1.0L;
+    // the number of different numbers the generator can generate
+    long double const r = static_cast <long double> (S::max())
+        - static_cast <long double> (S::min()) + 1.0L;
 
-	// the number of bits needed to hold the value of 'r'
-	std::size_t const log2r = std::log2(r);
+    // the number of bits needed to hold the value of 'r'
+    std::size_t const log2r = std::log2(r);
 
-	std::size_t const k = std::max<std::size_t>(1, (b + log2r - 1UL) / log2r);
+    std::size_t const k = std::max<std::size_t>(1, (b + log2r - 1UL) / log2r);
 
-	return k;
+    return k;
 }
 
 inline std::size_t discard_before(
-	std::size_t total_calls,
-	std::size_t rank,
-	std::size_t world
+    std::size_t total_calls,
+    std::size_t rank,
+    std::size_t world
 ) {
-	std::size_t const before = (total_calls / world) * rank +
-		(((total_calls % world) < rank) ? total_calls % world : rank);
+    std::size_t const before = (total_calls / world) * rank +
+        (((total_calls % world) < rank) ? total_calls % world : rank);
 
-	return before;
+    return before;
 }
 
 inline std::size_t discard_after(
-	std::size_t total_calls,
-	std::size_t calls,
-	std::size_t rank,
-	std::size_t world
+    std::size_t total_calls,
+    std::size_t calls,
+    std::size_t rank,
+    std::size_t world
 ) {
 
-	std::size_t const before = discard_before(total_calls, rank, world);
-	std::size_t const after = ((before + calls) < total_calls) ?
-		(total_calls - before - calls) : 0;
+    std::size_t const before = discard_before(total_calls, rank, world);
+    std::size_t const after = ((before + calls) < total_calls) ?
+        (total_calls - before - calls) : 0;
 
-	return after;
+    return after;
 }
 
 }

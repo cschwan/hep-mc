@@ -34,38 +34,38 @@ template <typename T>
 class mc_point
 {
 public:
-	/// Constructor. The weight is computed using the inverse of `calls`,
-	/// `point` determines the location of this point in the hypercube of
-	/// dimension `point.size()`.
-	mc_point(std::vector<T> const& point, T weight = T(1.0))
-		: weight_(weight)
-		, point_(point)
-	{
-	}
+    /// Constructor. The weight is computed using the inverse of `calls`,
+    /// `point` determines the location of this point in the hypercube of
+    /// dimension `point.size()`.
+    mc_point(std::vector<T> const& point, T weight = T(1.0))
+        : weight_(weight)
+        , point_(point)
+    {
+    }
 
-	/// Destructor.
-	virtual ~mc_point() = default;
+    /// Destructor.
+    virtual ~mc_point() = default;
 
-	/// The weight \f$ w \f$ of this point. The PLAIN integrator (\ref plain)
-	/// produces points that have weight equals one, i.e. are constant over the
-	/// entire unit-hypercube. This also means that weight does not include the
-	/// averaging factor \f$ 1 / N \f$ that is used to produce the expected
-	/// value.
-	virtual T weight() const
-	{
-		return weight_;
-	}
+    /// The weight \f$ w \f$ of this point. The PLAIN integrator (\ref plain)
+    /// produces points that have weight equals one, i.e. are constant over the
+    /// entire unit-hypercube. This also means that weight does not include the
+    /// averaging factor \f$ 1 / N \f$ that is used to produce the expected
+    /// value.
+    virtual T weight() const
+    {
+        return weight_;
+    }
 
-	/// The coordinates of this point of the hypercube. The dimension can be
-	/// obtained using `point.size()`.
-	std::vector<T> const& point() const
-	{
-		return point_;
-	}
+    /// The coordinates of this point of the hypercube. The dimension can be
+    /// obtained using `point.size()`.
+    std::vector<T> const& point() const
+    {
+        return point_;
+    }
 
 protected:
-	T mutable weight_;
-	std::vector<T> const& point_;
+    T mutable weight_;
+    std::vector<T> const& point_;
 };
 
 /// @}

@@ -41,37 +41,37 @@ namespace hep
 /// determined by `generator`.
 template <typename I, typename R = std::mt19937>
 inline plain_result<numeric_type_of<I>> plain(
-	I&& integrand,
-	std::size_t calls,
-	R&& generator = std::mt19937()
+    I&& integrand,
+    std::size_t calls,
+    R&& generator = std::mt19937()
 ) {
-	using T = numeric_type_of<I>;
+    using T = numeric_type_of<I>;
 
-	// the accumulator takes care of the actual evaluation of the integrand and
-	// the generation of possible distribution(s)
-	auto accumulator = make_accumulator(integrand);
+    // the accumulator takes care of the actual evaluation of the integrand and
+    // the generation of possible distribution(s)
+    auto accumulator = make_accumulator(integrand);
 
-	// storage for random numbers
-	std::vector<T> random_numbers(integrand.dimensions());
+    // storage for random numbers
+    std::vector<T> random_numbers(integrand.dimensions());
 
-	// perform as many calls as requested
-	for (std::size_t i = 0; i != calls; ++i)
-	{
-		// fill container with random numbers
-		for (std::size_t j = 0; j != integrand.dimensions(); ++j)
-		{
-			random_numbers[j] = std::generate_canonical<T,
-				std::numeric_limits<T>::digits>(generator);
-		}
+    // perform as many calls as requested
+    for (std::size_t i = 0; i != calls; ++i)
+    {
+        // fill container with random numbers
+        for (std::size_t j = 0; j != integrand.dimensions(); ++j)
+        {
+            random_numbers[j] = std::generate_canonical<T,
+                std::numeric_limits<T>::digits>(generator);
+        }
 
-		mc_point<T> const point(random_numbers);
+        mc_point<T> const point(random_numbers);
 
-		// evaluate the integrand with the specified point and, if there are any
-		// distributions requested, take care of them as well
-		accumulator.invoke(integrand, point);
-	}
+        // evaluate the integrand with the specified point and, if there are any
+        // distributions requested, take care of them as well
+        accumulator.invoke(integrand, point);
+    }
 
-	return accumulator.result(calls);
+    return accumulator.result(calls);
 }
 
 /// @}
