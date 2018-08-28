@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2017  Christopher Schwan
+ * Copyright (C) 2013-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,9 +41,8 @@ namespace hep
 /// \addtogroup vegas_group
 /// @{
 
-/// Implements the MPI-parallelized VEGAS algorithm. This function can be used
-/// to start from an already adapted grid, e.g. one by \ref vegas_result.pdf
-/// obtained by a previous \ref vegas call.
+/// Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an
+/// already adapted grid, e.g. one by \ref vegas_result.pdf obtained by a previous \ref vegas call.
 template <typename I, typename R = std::mt19937>
 inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
     MPI_Comm communicator,
@@ -105,14 +104,13 @@ inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
     return results;
 }
 
-/// Implements the MPI-parallelized VEGAS algorithm. See \ref vegas for a more
-/// detailed description on the VEGAS algorithm. In contrast to the
-/// single-threaded versions this function makes sure that every random number
-/// generator is seeded differently so every MPI process yields an independent
-/// result. After each iteration the intermediate results are passed to the
-/// function set by \ref mpi_vegas_callback which can e.g. be used to print them
-/// out. The callback function is able to stop the integration if it returns
-/// `false`. In this case less iterations are performed than requested.
+/// Implements the MPI-parallelized VEGAS algorithm. See \ref vegas for a more detailed description
+/// on the VEGAS algorithm. In contrast to the single-threaded versions this function makes sure
+/// that every random number generator is seeded differently so every MPI process yields an
+/// independent result. After each iteration the intermediate results are passed to the function set
+/// by \ref mpi_vegas_callback which can e.g. be used to print them out. The callback function is
+/// able to stop the integration if it returns `false`. In this case less iterations are performed
+/// than requested.
 template <typename I, typename R = std::mt19937>
 inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
     MPI_Comm communicator,

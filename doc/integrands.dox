@@ -4,19 +4,17 @@
 
 \brief How integrand functions are written
 
-Functions that can be integrated by the Monte Carlo algorithms must accept a
-single parameter of the type \ref mc_point and return a value of type `T`. For
-example, an integrand of the form \f$ f(x) := x^2 \f$ implemented with double
-precision numbers would look like:
+Functions that can be integrated by the Monte Carlo algorithms must accept a single parameter of the
+type \ref mc_point and return a value of type `T`. For example, an integrand of the form \f$ f(x) :=
+x^2 \f$ implemented with double precision numbers would look like:
 \code
 double square(hep::mc_point<double> const& x)
 {
     return x.point[0] * x.point[0];
 }
 \endcode
-Some integration algorithms, e.g. \ref vegas, supply additional information that
-can be accessed by capturing the argument with a different type, e.g. for VEGAS
-by \ref vegas_point :
+Some integration algorithms, e.g. \ref vegas, supply additional information that can be accessed by
+capturing the argument with a different type, e.g. for VEGAS by \ref vegas_point :
 \code
 double square(hep::vegas_point<double> const& x)
 {
@@ -24,8 +22,8 @@ double square(hep::vegas_point<double> const& x)
 }
 \endcode
 
-If additional variables in the integrand are necessary, they can be supplied by
-global variables or using functors:
+If additional variables in the integrand are necessary, they can be supplied by global variables or
+using functors:
 \code
 class power
 {
@@ -45,8 +43,8 @@ private:
 };
 \endcode
 
-Starting with version 0.5 it is possible to generate differential distributions,
-which can be generated if a second argument is accepted, e.g.
+Starting with version 0.5 it is possible to generate differential distributions, which can be
+generated if a second argument is accepted, e.g.
 \code
 double square_with_distribution(
     hep::mc_point<double> const& x,
@@ -62,14 +60,13 @@ double square_with_distribution(
 }
 \endcode
 
-Specifying the integrand is not enough for the Monte Carlo integration routines.
-They also must know the dimensionsionaly of the integrand, or how many random
-numbers are needed; furthermore, the numeric type with which the operations
-should be performed must be specified. If distributions should be accumulated
-during the integration the binning (how many bins, upper and lower boundaries)
-must be specified as well. Since this is generic for all algorithms the complete
-integrand information is specified by creating an \ref integrand, which, for the
-examples above, would be written as follows:
+Specifying the integrand is not enough for the Monte Carlo integration routines. They also must know
+the dimensionsionaly of the integrand, or how many random numbers are needed; furthermore, the
+numeric type with which the operations should be performed must be specified. If distributions
+should be accumulated during the integration the binning (how many bins, upper and lower boundaries)
+must be specified as well. Since this is generic for all algorithms the complete integrand
+information is specified by creating an \ref integrand, which, for the examples above, would be
+written as follows:
 \code
 // the integer specifies the dimension of the integrand `square`, `double`
 // specifies the numeric type the integration algorithm should use
@@ -85,9 +82,9 @@ auto square_distributions = hep::make_integrand<double>(square, 1,
     hep::make_dist_params(-10.0, +10.0, 200));
 \endcode
 
-An integrand for a multi channel integrator requires even more information
-because the user must provide PDFs and CDFs. Both must be calculated in a single
-function that has the following signature:
+An integrand for a multi channel integrator requires even more information because the user must
+provide PDFs and CDFs. Both must be calculated in a single function that has the following
+signature:
 \code
 T map(
     std::size_t channel,

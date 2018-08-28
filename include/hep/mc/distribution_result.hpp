@@ -51,8 +51,8 @@ public:
         return parameters_;
     }
 
-    /// Returns the result for each bin, corresponding to the bin positions
-    /// returned by \ref mid_points_x and \ref mid_points_y.
+    /// Returns the result for each bin, corresponding to the bin positions returned by \ref
+    /// mid_points_x and \ref mid_points_y.
     std::vector<mc_result<T>> const& results() const
     {
         return results_;
@@ -63,8 +63,7 @@ private:
     std::vector<mc_result<T>> results_;
 };
 
-/// Returns the middle point of each bin of this distribution in the
-/// x-direction.
+/// Returns the middle point of each bin of this distribution in the x-direction.
 template <typename T>
 inline std::vector<T> mid_points_x(distribution_result<T> const& result)
 {
@@ -87,8 +86,7 @@ inline std::vector<T> mid_points_x(distribution_result<T> const& result)
     return mid_points;
 }
 
-/// Returns the middle point of each bin of this distribution in the
-/// y-direction.
+/// Returns the middle point of each bin of this distribution in the y-direction.
 template <typename T>
 inline std::vector<T> mid_points_y(distribution_result<T> const& result)
 {

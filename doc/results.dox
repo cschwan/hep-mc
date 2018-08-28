@@ -4,13 +4,11 @@
 
 \brief Obtaining, combining and checking results
 
-Results can always be obtained by capturing the return-value of the integration
-functions. The types depend on the algorithm used, e.g. \ref plain returns an
-instance of \ref mc_result which stores the estimate of the integral, its error
-and the number of integrand calls used to obtain this result. The \ref vegas and
-\ref vegas_iteration functions return one or a vector of instances of \ref
-vegas_result that gives additional information about the PDF that was used
-during this iteration and the data accumulated that would be used to compute the
-PDF for the next iteration.
+Results can always be obtained by capturing the return-value of the integration functions. The types
+depend on the algorithm used, e.g. \ref plain returns an instance of \ref mc_result which stores the
+estimate of the integral, its error and the number of integrand calls used to obtain this result.
+The \ref vegas and \ref vegas_iteration functions return one or a vector of instances of \ref
+vegas_result that gives additional information about the PDF that was used during this iteration and
+the data accumulated that would be used to compute the PDF for the next iteration.
 
 */

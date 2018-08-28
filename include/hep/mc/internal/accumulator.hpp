@@ -217,8 +217,7 @@ public:
             std::vector<hep::mc_result<T>> bin_results;
             bin_results.reserve(params.bins_x());
 
-            T const inv_bin_size = T(1.0) / params.bin_size_x() /
-                params.bin_size_y();
+            T const inv_bin_size = T(1.0) / params.bin_size_x() / params.bin_size_y();
             std::size_t const bins = params.bins_x() * params.bins_y();
 
             // loop over the bins of the current distribution
@@ -316,8 +315,7 @@ private:
 };
 
 template <typename I>
-inline accumulator<typename I::numeric_type, I::has_distributions>
-make_accumulator(
+inline accumulator<typename I::numeric_type, I::has_distributions> make_accumulator(
     I const& integrand
 ) {
     using T = typename I::numeric_type;

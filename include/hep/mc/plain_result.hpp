@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016-2017  Christopher Schwan
+ * Copyright (C) 2016-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,8 +50,7 @@ public:
     {
     }
 
-    /// Returns the differential distributions accumulated during the
-    /// integration.
+    /// Returns the differential distributions accumulated during the integration.
     std::vector<distribution_result<T>> const& distributions() const
     {
         return distributions_;

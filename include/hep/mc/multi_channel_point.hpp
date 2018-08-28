@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,8 +66,8 @@ protected:
     std::vector<T>& coordinates_;
 };
 
-/// Point in the unit-hypercube for multi-channel Monte Carlo integration. This
-/// type also captures the map that is used to generate `coordinates`.
+/// Point in the unit-hypercube for multi-channel Monte Carlo integration. This type also captures
+/// the map that is used to generate `coordinates`.
 template <typename T, typename M>
 class multi_channel_point2 : public multi_channel_point<T>
 {
@@ -90,9 +90,8 @@ public:
     {
     }
 
-    /// The map function that constructed this point. See
-    /// \ref multi_channel_iteration for reference on the signature of this
-    /// function.
+    /// The map function that constructed this point. See \ref multi_channel_iteration for reference
+    /// on the signature of this function.
     M const& map() const
     {
         return map_;

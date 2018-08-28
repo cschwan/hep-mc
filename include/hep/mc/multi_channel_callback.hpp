@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,25 +85,22 @@ namespace hep
 /// \addtogroup callbacks
 /// @{
 
-/// The default callback function. This function does nothing and always returns
-/// `true`.
+/// The default callback function. This function does nothing and always returns `true`.
 ///
 /// \see \ref multi_channel_callback
 template <typename T>
-inline bool multi_channel_default_callback(
-    std::vector<multi_channel_result<T>> const&
-) {
+inline bool multi_channel_default_callback(std::vector<multi_channel_result<T>> const&)
+{
     return true;
 }
 
-/// Callback function that prints a detailed summary about every iteration
-/// performed so far. This function always returns `true`.
+/// Callback function that prints a detailed summary about every iteration performed so far. This
+/// function always returns `true`.
 ///
 /// \see \ref multi_channel_callback
 template <typename T>
-inline bool multi_channel_verbose_callback(
-    std::vector<multi_channel_result<T>> const& results
-) {
+inline bool multi_channel_verbose_callback(std::vector<multi_channel_result<T>> const& results)
+{
     using std::fabs;
 
     std::cout << "iteration " << (results.size() - 1) << " finished.\n";
@@ -112,20 +109,18 @@ inline bool multi_channel_verbose_callback(
     multi_channel_weight_info<T> info(results.back());
     std::size_t const channels = info.channels().size();
 
-    std::cout << "summary of a-priori weights: D=" << max_difference << " for "
-        << channels << " channel" << (channels > 1 ? "s\n" : "\n");
+    std::cout << "summary of a-priori weights: D=" << max_difference << " for " << channels
+        << " channel" << (channels > 1 ? "s\n" : "\n");
 
     std::size_t const min_channels = info.minimal_weight_count();
 
-    std::cout << "wmin=" << info.weights().front() << " (N="
-        << info.calls().front() << ") in " << min_channels
-        << " channel" << (min_channels > 1 ? "s" : "") << ": #"
+    std::cout << "wmin=" << info.weights().front() << " (N=" << info.calls().front() << ") in "
+        << min_channels << " channel" << (min_channels > 1 ? "s" : "") << ": #"
         << make_list_of_ranges(minimal_weight_channels(info)) << '\n';
 
     auto weight_printer = [&](std::string prefix, std::size_t index) {
-        std::cout << prefix << info.weights().at(index) << " (N="
-            << info.calls().at(index) << ") in channel #"
-            << info.channels().at(index) << '\n';
+        std::cout << prefix << info.weights().at(index) << " (N=" << info.calls().at(index)
+            << ") in channel #" << info.channels().at(index) << '\n';
     };
 
     // number of non-minimal weights
@@ -176,58 +171,47 @@ inline bool multi_channel_verbose_callback(
     T const relative_error_percent = (T(100.0) * results.back().error() /
         fabs(results.back().value()));
 
-    T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
-        T(results.back().calls());
+    T const efficiency = T(100.0) * T(results.back().non_zero_calls()) / T(results.back().calls());
 
-    std::size_t const number_of_non_finite_calls =
-        results.back().non_zero_calls() - results.back().finite_calls();
+    std::size_t const number_of_non_finite_calls = results.back().non_zero_calls() -
+        results.back().finite_calls();
 
     // print result for this iteration
-    std::cout << "this iteration: N=" << results.back().calls() << " E="
-        << results.back().value() << " +- " << results.back().error() << " ("
-        << relative_error_percent << "%) eff=" << efficiency << "% nnf="
-        << number_of_non_finite_calls << "\n";
+    std::cout << "this iteration: N=" << results.back().calls() << " E=" << results.back().value()
+        << " +- " << results.back().error() << " (" << relative_error_percent << "%) eff="
+        << efficiency << "% nnf=" << number_of_non_finite_calls << "\n";
 
     // compute cumulative results
-    auto const result = accumulate<weighted_with_variance>(results.begin(),
-        results.end());
-    T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
-        results.end());
+    auto const result = accumulate<weighted_with_variance>(results.begin(), results.end());
+    T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
 
-    T const relative_error_percent_all = (T(100.0) * result.error() /
-        fabs(result.value()));
+    T const relative_error_percent_all = (T(100.0) * result.error() / fabs(result.value()));
 
     // print the combined result
-    std::cout << "all iterations: N=" << result.calls() << " E="
-        << result.value() << " +- " << result.error() << " ("
-        << relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
+    std::cout << "all iterations: N=" << result.calls() << " E=" << result.value() << " +- "
+        << result.error() << " (" << relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
 
     std::cout.flush();
 
     return true;
 }
 
-/// The type of callback function that can be set by the user with
-/// \ref multi_channel_callback.
+/// The type of callback function that can be set by the user with \ref multi_channel_callback.
 template <typename T>
-using multi_channel_callback_type =
-    std::function<bool(std::vector<multi_channel_result<T>>)>;
+using multi_channel_callback_type = std::function<bool(std::vector<multi_channel_result<T>>)>;
 
-/// Sets the multi channel  `callback` function and returns it. This function is
-/// called after each iteration performed by \ref multi_channel. The default
-/// callback is \ref multi_channel_default_callback. The function can e.g. be
-/// set to \ref multi_channel_verbose_callback which prints after each
-/// iteration. If the callback function returns `false` the integration is
-/// stopped.
+/// Sets the multi channel  `callback` function and returns it. This function is called after each
+/// iteration performed by \ref multi_channel. The default callback is \ref
+/// multi_channel_default_callback. The function can e.g. be set to \ref
+/// multi_channel_verbose_callback which prints after each iteration. If the callback function
+/// returns `false` the integration is stopped.
 ///
-/// If this function is called without any argument, the previous function is
-/// retained.
+/// If this function is called without any argument, the previous function is retained.
 template <typename T>
 inline multi_channel_callback_type<T> multi_channel_callback(
     multi_channel_callback_type<T> callback = nullptr
 ) {
-    static multi_channel_callback_type<T> object =
-        multi_channel_default_callback<T>;
+    static multi_channel_callback_type<T> object = multi_channel_default_callback<T>;
 
     if (callback != nullptr)
     {

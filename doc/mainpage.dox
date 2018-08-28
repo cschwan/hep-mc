@@ -5,8 +5,8 @@
 Description
 ===========
 
-`hep-mc` is a C++11 template library for Monte Carlo integration. The
-following integration algorithms are available:
+`hep-mc` is a C++11 template library for Monte Carlo integration. The following integration
+algorithms are available:
 
 - PLAIN,
 - VEGAS \cite Vegas1 \cite Vegas2, and a

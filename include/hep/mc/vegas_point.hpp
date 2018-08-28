@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2015  Christopher Schwan
+ * Copyright (C) 2014-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,17 +31,15 @@ namespace hep
 /// \addtogroup integrands
 /// @{
 
-/// A point \f$ \vec{x} \in U \f$ within the unit-hypercube \f$ U = [0,1]^d \f$
-/// with the additional information in which bin(s) of a \ref vegas_pdf the
-/// point lies.
+/// A point \f$ \vec{x} \in U \f$ within the unit-hypercube \f$ U = [0,1]^d \f$ with the additional
+/// information in which bin(s) of a \ref vegas_pdf the point lies.
 template <typename T>
 class vegas_point : public mc_point<T>
 {
 public:
-    /// Creates a new point in the unit-hypercube \f$ U \f$ using the
-    /// probability distribution function `pdf` and the random numbers in
-    /// `random_numbers` for a Monte Carlo iteration with sample size specified
-    /// by `total_calls`. For each dimension the point falls into a bin whose
+    /// Creates a new point in the unit-hypercube \f$ U \f$ using the probability distribution
+    /// function `pdf` and the random numbers in `random_numbers` for a Monte Carlo iteration with
+    /// sample size specified by `total_calls`. For each dimension the point falls into a bin whose
     /// index is written `bin`.
     vegas_point(
         std::vector<T>& random_numbers,

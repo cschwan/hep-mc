@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2016  Christopher Schwan
+ * Copyright (C) 2014-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,7 @@ namespace hep
 /// \addtogroup callbacks
 /// @{
 
-/// The default callback function. This function does nothing and always returns
-/// `true`.
+/// The default callback function. This function does nothing and always returns `true`.
 ///
 /// \see \ref vegas_callback
 template <typename T>
@@ -43,8 +42,8 @@ inline bool vegas_default_callback(std::vector<vegas_result<T>> const&)
     return true;
 }
 
-/// Callback function that prints a detailed summary about every iteration
-/// performed so far. This function always returns `true`.
+/// Callback function that prints a detailed summary about every iteration performed so far. This
+/// function always returns `true`.
 ///
 /// \see \ref vegas_callback
 template <typename T>
@@ -57,54 +56,44 @@ inline bool vegas_verbose_callback(std::vector<vegas_result<T>> const& results)
     T const relative_error_percent = (T(100.0) * results.back().error() /
         fabs(results.back().value()));
 
-    T const efficiency = T(100.0) * T(results.back().non_zero_calls()) /
-        T(results.back().calls());
+    T const efficiency = T(100.0) * T(results.back().non_zero_calls()) / T(results.back().calls());
 
-    std::size_t const number_of_non_finite_calls =
-        results.back().non_zero_calls() - results.back().finite_calls();
+    std::size_t const number_of_non_finite_calls = results.back().non_zero_calls() -
+        results.back().finite_calls();
 
     // print result for this iteration
-    std::cout << "this iteration: N=" << results.back().calls() << " E="
-        << results.back().value() << " +- " << results.back().error() << " ("
-        << relative_error_percent << "%) eff=" << efficiency << "% nnf="
-        << number_of_non_finite_calls << "\n";
+    std::cout << "this iteration: N=" << results.back().calls() << " E=" << results.back().value()
+        << " +- " << results.back().error() << " (" << relative_error_percent << "%) eff="
+        << efficiency << "% nnf=" << number_of_non_finite_calls << "\n";
 
     // compute cumulative results
-    auto const result = accumulate<weighted_with_variance>(results.begin(),
-        results.end());
-    T const chi = chi_square_dof<weighted_with_variance>(results.begin(),
-        results.end());
+    auto const result = accumulate<weighted_with_variance>(results.begin(), results.end());
+    T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
 
-    T const relative_error_percent_all = (T(100.0) * result.error() /
-        fabs(result.value()));
+    T const relative_error_percent_all = (T(100.0) * result.error() / fabs(result.value()));
 
     // print the combined result
-    std::cout << "all iterations: N=" << result.calls() << " E="
-        << result.value() << " +- " << result.error() << " ("
-        << relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
+    std::cout << "all iterations: N=" << result.calls() << " E=" << result.value() << " +- "
+        << result.error() << " (" << relative_error_percent_all << "%) chi^2/dof=" << chi << "\n\n";
 
     std::cout.flush();
 
     return true;
 }
 
-/// The type of callback function that can be set by the user with
-/// \ref vegas_callback.
+/// The type of callback function that can be set by the user with \ref vegas_callback.
 template <typename T>
 using vegas_callback_type = std::function<bool(std::vector<vegas_result<T>>)>;
 
-/// Sets the vegas `callback` function and returns it. This function is called
-/// after each iteration performed by \ref vegas. The default callback is
-/// \ref vegas_default_callback. The function can e.g. be set to
-/// \ref vegas_verbose_callback which prints after each iteration. If the
-/// callback function returns `false` the integration is stopped.
+/// Sets the vegas `callback` function and returns it. This function is called after each iteration
+/// performed by \ref vegas. The default callback is \ref vegas_default_callback. The function can
+/// e.g. be set to \ref vegas_verbose_callback which prints after each iteration. If the callback
+/// function returns `false` the integration is stopped.
 ///
-/// If this function is called without any argument, the previous function is
-/// retained.
+/// If this function is called without any argument, the previous function is retained.
 template <typename T>
-inline vegas_callback_type<T> vegas_callback(
-    vegas_callback_type<T> callback = nullptr
-) {
+inline vegas_callback_type<T> vegas_callback(vegas_callback_type<T> callback = nullptr)
+{
     static vegas_callback_type<T> object = vegas_default_callback<T>;
 
     if (callback != nullptr)

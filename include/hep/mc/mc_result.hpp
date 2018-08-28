@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2017  Christopher Schwan
+ * Copyright (C) 2012-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,13 +30,12 @@ namespace hep
 /// @{
 
 /**
- * The estimation of a Monte Carlo integration. Every Monte Carlo integrator
- * returns one or more instances of this class. The PLAIN Monte Carlo
- * integrator, for example, calculates the parameters as follows:
+ * The estimation of a Monte Carlo integration. Every Monte Carlo integrator returns one or more
+ * instances of this class. The PLAIN Monte Carlo integrator, for example, calculates the parameters
+ * as follows:
  * \f{align}{
  *     E &= \frac{1}{N} \sum_{i=1}^N f ( \vec{x}_i ) \\
- *     S^2 &= \frac{1}{N-1} \left[ \frac{1}{N} \sum_{i=1}^N f^2 ( \vec{x}_i )
- *            - E^2  \right]
+ *     S^2 &= \frac{1}{N-1} \left[ \frac{1}{N} \sum_{i=1}^N f^2 ( \vec{x}_i ) - E^2  \right]
  * \f}
  */
 template <typename T>
@@ -78,8 +77,7 @@ public:
     /// Variance \f$ S^2 \f$ of the expectation value.
     T variance() const
     {
-        return (sum_of_squares_ - sum_ * sum_ / T(calls_)) / T(calls_)
-            / T(calls_ - 1);
+        return (sum_of_squares_ - sum_ * sum_ / T(calls_)) / T(calls_) / T(calls_ - 1);
     }
 
     /// Standard deviation \f$ S \f$ of the expectation value.
@@ -96,8 +94,8 @@ public:
         return finite_calls_;
     }
 
-    /// Returns the number of integrand evaluations that were not zero. This
-    /// includes the both finite and non-finite numbers.
+    /// Returns the number of integrand evaluations that were not zero. This includes the both
+    /// finite and non-finite numbers.
     std::size_t non_zero_calls() const
     {
         return non_zero_calls_;
@@ -123,8 +121,7 @@ private:
     T sum_of_squares_;
 };
 
-/// Creates a \ref mc_result using the parameters `calls`, `non_zero_calls`,
-/// `value` and `error`.
+/// Creates a \ref mc_result using the parameters `calls`, `non_zero_calls`, `value` and `error`.
 template <typename T>
 inline mc_result<T> create_result(
     std::size_t calls,
@@ -134,16 +131,9 @@ inline mc_result<T> create_result(
     T error
 ) {
     T sum = T(calls) * value;
-    T sum_of_squares = T(calls) * (value * value +
-        T(calls - 1) * error * error);
+    T sum_of_squares = T(calls) * (value * value + T(calls - 1) * error * error);
 
-    return mc_result<T>(
-        calls,
-        non_zero_calls,
-        finite_calls,
-        sum,
-        sum_of_squares
-    );
+    return mc_result<T>(calls, non_zero_calls, finite_calls, sum, sum_of_squares);
 }
 
 /// @}

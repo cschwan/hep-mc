@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2017  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
-/// Implements the MPI-parallelized adaptive multi channel algorithm. See
-/// \ref multi_channel_group for a detailed description of the parameters.
+/// Implements the MPI-parallelized adaptive multi channel algorithm. See \ref multi_channel_group
+/// for a detailed description of the parameters.
 template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
     MPI_Comm communicator,
@@ -66,8 +66,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
 
     // hep::discrete_distribution consumes as many random numbers as an
     // additional dimension
-    std::size_t const usage = (1 + integrand.dimensions()) *
-        random_number_usage<T, R>();
+    std::size_t const usage = (1 + integrand.dimensions()) * random_number_usage<T, R>();
 
     for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
     {
@@ -76,12 +75,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
         std::size_t const calls = (*i / world) +
             (static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
 
-        auto const result = multi_channel_iteration(
-            integrand,
-            calls,
-            weights,
-            generator
-        );
+        auto const result = multi_channel_iteration(integrand, calls, weights, generator);
 
         generator.discard(usage * discard_after(*i, calls, rank, world));
 
@@ -108,8 +102,8 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
     return results;
 }
 
-/// Implements the MPI-parallelized adaptive multi channel algorithm. See
-/// \ref multi_channel_group for a detailed description of the parameters.
+/// Implements the MPI-parallelized adaptive multi channel algorithm. See \ref multi_channel_group
+/// for a detailed description of the parameters.
 template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
     MPI_Comm communicator,

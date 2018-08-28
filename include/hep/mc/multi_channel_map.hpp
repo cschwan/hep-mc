@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,19 +25,17 @@ namespace hep
 /// \addtogroup integrands
 /// @{
 
-/// Enumeration that specifies which parameters of the user specified map should
-/// be calculated.
+/// Enumeration that specifies which parameters of the user specified map should be calculated.
 enum class multi_channel_map
 {
-    /// Signals the map-function that the parameter `coordinates` should be
-    /// calculated. The parameter `densities` can be calculated at time point.
+    /// Signals the map-function that the parameter `coordinates` should be calculated. The
+    /// parameter `densities` can be calculated at time point.
     calculate_coordinates,
 
-    /// Signals that the map function is called with the previously calculated
-    /// `coordinates` and that the paramter `densities` now must be calculated.
-    /// If the integrand does not contribute, i.e. if the user-defined function
-    /// returned zero, then this step will be skipped because the densities are
-    /// not needed.
+    /// Signals that the map function is called with the previously calculated `coordinates` and
+    /// that the paramter `densities` now must be calculated. If the integrand does not contribute,
+    /// i.e. if the user-defined function returned zero, then this step will be skipped because the
+    /// densities are not needed.
     calculate_densities
 };
 

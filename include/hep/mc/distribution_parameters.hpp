@@ -34,12 +34,7 @@ class distribution_parameters
 {
 public:
     /// Constructor. Constructs a one-dimensional distribution.
-    distribution_parameters(
-        std::size_t bins,
-        T x_min,
-        T x_max,
-        std::string const& name
-    )
+    distribution_parameters(std::size_t bins, T x_min, T x_max, std::string const& name)
         : bins_x_{bins}
         , bins_y_{1}
         , x_min_{x_min}
@@ -88,15 +83,13 @@ public:
         return name_;
     }
 
-    /// Smallest x-value of a point that would still be accumulated into the
-    /// distribution.
+    /// Smallest x-value of a point that would still be accumulated into the distribution.
     T x_min() const
     {
         return x_min_;
     }
 
-    /// Smallest y-value of a point that would still be accumulated into the
-    /// distribution.
+    /// Smallest y-value of a point that would still be accumulated into the distribution.
     T y_min() const
     {
         return x_min_;
@@ -124,8 +117,7 @@ private:
     std::string name_;
 };
 
-/// Shortcut for calling the constructor that automatically determines the
-/// numeric type.
+/// Shortcut for calling the constructor that automatically determines the numeric type.
 template <typename T>
 distribution_parameters<T> make_dist_params(
     std::size_t bins,

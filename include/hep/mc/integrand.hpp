@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ namespace hep
 /// \addtogroup integrands
 /// @{
 
-/// Class representing a function that can be integrated using the PLAIN-like
-/// algorithms, which currently are PLAIN and VEGAS.
+/// Class representing a function that can be integrated using the PLAIN-like algorithms, which
+/// currently are PLAIN and VEGAS.
 template <typename T, typename F, bool distributions>
 class integrand
 {
@@ -47,8 +47,8 @@ public:
     /// Signals whether this integrand wants to generate distributions or not.
     static constexpr bool has_distributions = distributions;
 
-    /// Constructor. Instead of using the constructor directly you should
-    /// consider using one of the helper functions \ref make_integrand.
+    /// Constructor. Instead of using the constructor directly you should consider using one of the
+    /// helper functions \ref make_integrand.
     template <typename G>
     integrand(
         G&& function,
@@ -85,18 +85,15 @@ private:
     std::size_t dimensions_;
 };
 
-/// Template alias for an \ref integrand with its type `F` decayed with
-/// `std::decay`.
+/// Template alias for an \ref integrand with its type `F` decayed with `std::decay`.
 template <typename T, typename F, bool distributions>
-using integrand_type = integrand<T, typename std::decay<F>::type,
-    distributions>;
+using integrand_type = integrand<T, typename std::decay<F>::type, distributions>;
 
-/// PLAIN/VEGAS integrand constructor. This function constructs an \ref
-/// integrand using the given `function` that must accept points from the \f$ d
-/// \f$-dimensional hypercube, where \f$ d \f$ is given by the parameter
-/// `dimensions`. The type of the point is determined by the integration
-/// algorithm later used on the integrand, e.g. for \ref vegas it is \ref
-/// vegas_point. For this case the integrand would look like:
+/// PLAIN/VEGAS integrand constructor. This function constructs an \ref integrand using the given
+/// `function` that must accept points from the \f$ d \f$-dimensional hypercube, where \f$ d \f$ is
+/// given by the parameter `dimensions`. The type of the point is determined by the integration
+/// algorithm later used on the integrand, e.g. for \ref vegas it is \ref vegas_point. For this case
+/// the integrand would look like:
 /// \code
 /// T function(hep::vegas_point<T> const& x)
 /// {
@@ -105,10 +102,8 @@ using integrand_type = integrand<T, typename std::decay<F>::type,
 /// }
 /// \endcode
 template <typename T, typename F>
-inline integrand_type<T, F, false> make_integrand(
-    F&& function,
-    std::size_t dimensions
-) {
+inline integrand_type<T, F, false> make_integrand(F&& function, std::size_t dimensions)
+{
     return integrand_type<T, F, false>(
         std::forward<F>(function),
         dimensions,
@@ -116,11 +111,10 @@ inline integrand_type<T, F, false> make_integrand(
     );
 }
 
-/// PLAIN/VEGAS distributions constructor. This function constructs an \ref
-/// integrand using the given `function` that must accept points from the \f$ d
-/// \f$-dimensional hypercube and a reference to a \ref projector that generates
-/// the distributions. The dimension \f$ d \f$ is given by the parameter
-/// `dimension`, and `parameters` define the number and parameters of the
+/// PLAIN/VEGAS distributions constructor. This function constructs an \ref integrand using the
+/// given `function` that must accept points from the \f$ d \f$-dimensional hypercube and a
+/// reference to a \ref projector that generates the distributions. The dimension \f$ d \f$ is given
+/// by the parameter `dimension`, and `parameters` define the number and parameters of the
 /// distribution(s). For the VEGAS algorithm the function would look like:
 /// \code
 /// T function(hep::vegas_point<T> const& x, hep::projector<T>& projector)

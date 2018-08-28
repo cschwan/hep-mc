@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2017  Christopher Schwan
+ * Copyright (C) 2013-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,7 @@ namespace
 {
 
 template <typename Iterator>
-using hep_numeric_type =
-    typename std::iterator_traits<Iterator>::value_type::numeric_type;
+using hep_numeric_type = typename std::iterator_traits<Iterator>::value_type::numeric_type;
 
 template <typename Iterator>
 using hep_plain_result = hep::plain_result<hep_numeric_type<Iterator>>;
@@ -54,10 +53,8 @@ using hep_mc_result_if = typename std::enable_if<!std::is_convertible<
     hep_plain_result<Iterator>>::value, hep_mc_result<Iterator>>::type;
 
 template <template <typename> class Accumulator, typename Iterator>
-inline hep_plain_result<Iterator> hep_distribution_accumulator(
-    Iterator begin,
-    Iterator end
-) {
+inline hep_plain_result<Iterator> hep_distribution_accumulator(Iterator begin, Iterator end)
+{
     using T = hep_numeric_type<Iterator>;
 
     std::size_t n = std::distance(begin, end);
@@ -70,8 +67,7 @@ inline hep_plain_result<Iterator> hep_distribution_accumulator(
 
         for (std::size_t j = 0; j != distribution_count; ++j)
         {
-            std::size_t const bin_count =
-                begin->distributions().at(j).results().size();
+            std::size_t const bin_count = begin->distributions().at(j).results().size();
             std::vector<hep::mc_result<T>> distribution_results;
             distribution_results.reserve(bin_count);
 
@@ -82,21 +78,17 @@ inline hep_plain_result<Iterator> hep_distribution_accumulator(
 
                 for (auto i = begin; i != end; ++i)
                 {
-                    bin_results.push_back(i->distributions().at(j).results()
-                        .at(k));
+                    bin_results.push_back(i->distributions().at(j).results().at(k));
                 }
 
-                using BinIterator = typename
-                    std::vector<hep::mc_result<T>>::const_iterator;
+                using BinIterator = typename std::vector<hep::mc_result<T>>::const_iterator;
 
-                distribution_results.push_back(Accumulator<BinIterator>{}(
-                    bin_results.cbegin(), bin_results.cend()));
+                distribution_results.push_back(Accumulator<BinIterator>{}(bin_results.cbegin(),
+                    bin_results.cend()));
             }
 
-            distributions.emplace_back(
-                begin->distributions().at(j).parameters(),
-                distribution_results
-            );
+            distributions.emplace_back(begin->distributions().at(j).parameters(),
+                distribution_results);
         }
 
     }
@@ -122,10 +114,9 @@ namespace hep
 /// @{
 
 /**
- * Accumulates results weighted with their inverse variance. If \f$ E_i, S_i,
- * N_i \f$ are the estimate, error and number of calls of each iteration in the
- * range defined by [`begin`, `end`) and \f$ M \f$ the number of results, then
- * the cumulative result is computed as:
+ * Accumulates results weighted with their inverse variance. If \f$ E_i, S_i, N_i \f$ are the
+ * estimate, error and number of calls of each iteration in the range defined by [`begin`, `end`)
+ * and \f$ M \f$ the number of results, then the cumulative result is computed as:
  * \f{align}{
  *     E &= S^2 \sum_{i=1}^M \frac{E_i}{S_i^2} \\
  *     S &= \left( \sum_{i=1}^M \frac{1}{S_i^2} \right)^{-\frac{1}{2}} \\
@@ -169,30 +160,23 @@ struct weighted_with_variance
             estimate *= variance;
         }
 
-        return create_result(
-            calls,
-            non_zero_calls,
-            finite_calls,
-            estimate,
-            sqrt(variance)
-        );
+        return create_result(calls, non_zero_calls, finite_calls, estimate, sqrt(variance));
     }
 };
 
 /**
- * Accumulates results with the same weight. Computes a cumulative result using
- * a range of results pointed to by `begin` and `end`. If \f$ E_i, S_i, N_i \f$
- * are the estimate, error and number of calls of each iteration in the range
- * defined by [`begin`, `end`) and \f$ M \f$ the number of results, then the
- * cumulative result is computed as:
+ * Accumulates results with the same weight. Computes a cumulative result using a range of results
+ * pointed to by `begin` and `end`. If \f$ E_i, S_i, N_i \f$ are the estimate, error and number of
+ * calls of each iteration in the range defined by [`begin`, `end`) and \f$ M \f$ the number of
+ * results, then the cumulative result is computed as:
  * \f{align}{
  *     E &= \frac{1}{M} \sum_{i=1}^M E_i \\
  *     S &= \left( \frac{1}{M} \frac{1}{M-1} \sum_{i=1}^M \left( E_i - E
  *          \right)^2 \right)^{-\frac{1}{2}} \\
  *     N &= \sum_{i=1}^M N_i
  * \f}
- * Note that this function weighs the result of every iteration equally,
- * independent from the sample size \f$ N_i \f$.
+ * Note that this function weighs the result of every iteration equally, independent from the sample
+ * size \f$ N_i \f$.
  */
 template <typename IteratorOverMcResults>
 struct weighted_equally
@@ -239,13 +223,11 @@ struct weighted_equally
     }
 };
 
-/// Accumulates the results in the interval [`begin`, `end`) using an instance
-/// of the type `Accumulator`. This function is called if the interval points to
-/// results of the type \ref mc_result, but not \ref plain_result. `Accumulator`
-/// can be \ref weighted_with_variance, \ref weighted_equally, or a similar
-/// type.
-template <template <typename> class Accumulator,
-    typename IteratorOverMcResults>
+/// Accumulates the results in the interval [`begin`, `end`) using an instance of the type
+/// `Accumulator`. This function is called if the interval points to results of the type \ref
+/// mc_result, but not \ref plain_result. `Accumulator` can be \ref weighted_with_variance, \ref
+/// weighted_equally, or a similar type.
+template <template <typename> class Accumulator, typename IteratorOverMcResults>
 inline hep_mc_result_if<IteratorOverMcResults> accumulate(
     IteratorOverMcResults begin,
     IteratorOverMcResults end
@@ -253,13 +235,11 @@ inline hep_mc_result_if<IteratorOverMcResults> accumulate(
     return Accumulator<IteratorOverMcResults>{}(begin, end);
 }
 
-/// Accumulates the results in the interval [`begin`, `end`) using an instance
-/// of the type `Accumulator`. This function is called if the interval points to
-/// results of the type \ref plain_result and therefore also accumulates all
-/// distributions. `Accumulator` can be \ref weighted_with_variance,
-/// \ref weighted_equally, or a similar type.
-template <template <typename> class Accumulator,
-    typename IteratorOverPlainResults>
+/// Accumulates the results in the interval [`begin`, `end`) using an instance of the type
+/// `Accumulator`. This function is called if the interval points to results of the type \ref
+/// plain_result and therefore also accumulates all distributions. `Accumulator` can be \ref
+/// weighted_with_variance, \ref weighted_equally, or a similar type.
+template <template <typename> class Accumulator, typename IteratorOverPlainResults>
 inline hep_plain_result_if<IteratorOverPlainResults> accumulate(
     IteratorOverPlainResults begin,
     IteratorOverPlainResults end
@@ -267,16 +247,15 @@ inline hep_plain_result_if<IteratorOverPlainResults> accumulate(
     return hep_distribution_accumulator<Accumulator>(begin, end);
 }
 
-/// Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using
-/// the results \f$ (E_i, S_i) \f$ pointed to by the range [`begin`, `end`). The
-/// cumulative value \f$ E \f$ is calculated using an instance of `Accumulator`.
-/// The \f$ \chi^2 \f$ is then computed as:
+/// Returns an approximation for the \f$ \chi^2 \f$ per degree of freedom using the results \f$
+/// (E_i, S_i) \f$ pointed to by the range [`begin`, `end`). The cumulative value \f$ E \f$ is
+/// calculated using an instance of `Accumulator`. The \f$ \chi^2 \f$ is then computed as:
 /// \f[
 ///     \chi^2 / \mathrm{dof} \approx \frac{1}{n-1} \sum_{i=1}^n \frac{\left(
 ///     E_i - E \right)^2}{S_i^2}
 /// \f]
-/// If the range [`begin`, `end`) is empty, the result is zero. If it contains
-/// one element the result is infinity.
+/// If the range [`begin`, `end`) is empty, the result is zero. If it contains one element the
+/// result is infinity.
 template <template <typename> class Accumulator, typename IteratorOverMcResults>
 inline hep_numeric_type<IteratorOverMcResults> chi_square_dof(
     IteratorOverMcResults begin,

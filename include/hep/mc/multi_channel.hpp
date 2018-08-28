@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2017  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,16 +41,15 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
-/// Uses `adjustment_data` from a previous call of \ref multi_channel_iteration
-/// to refine `weights`. The procedure is the one suggested in Ref.
-/// \cite WeightOptimization with the following modifications:
-/// - the weights are check if they are smaller then the given
-///   `minimum_weight`. If this is the case they are set to the value of
-///   `minimum_weight` which, after the normalization of all weights, make
-///   them a little smaller then the given minimum weight,
-/// - `adjustment_data` is raised to the power given by `beta`. The
-///   reference given above suggest `beta = 0.5`, but the default value is
-///   smaller which sometimes gives a more stable convergence.
+/// Uses `adjustment_data` from a previous call of \ref multi_channel_iteration to refine `weights`.
+/// The procedure is the one suggested in Ref. \cite WeightOptimization with the following
+/// modifications:
+/// - the weights are check if they are smaller then the given `minimum_weight`. If this is the case
+///   they are set to the value of `minimum_weight` which, after the normalization of all weights,
+///   make them a little smaller then the given minimum weight,
+/// - `adjustment_data` is raised to the power given by `beta`. The reference given above suggest
+///   `beta = 0.5`, but the default value is smaller which sometimes gives a more stable
+///   convergence.
 template <typename T>
 inline std::vector<T> multi_channel_refine_weights(
     std::vector<T> const& weights,
@@ -77,8 +76,8 @@ inline std::vector<T> multi_channel_refine_weights(
     {
         if (weight == T())
         {
-            // do not enable disabled channels (with weight zero) by setting
-            // them to the minimum weight
+            // do not enable disabled channels (with weight zero) by setting them to the minimum
+            // weight
             continue;
         }
 
@@ -95,10 +94,9 @@ inline std::vector<T> multi_channel_refine_weights(
     return new_weights;
 }
 
-/// Performs exactly one iteration of the multi channel integration. The
-/// parameter `channel_weights` lets the user specify the weights of each
-/// channel. Note that they must add up to one. See \ref multi_channel_group for
-/// a description of the remaining parameters.
+/// Performs exactly one iteration of the multi channel integration. The parameter `channel_weights`
+/// lets the user specify the weights of each channel. Note that they must add up to one. See \ref
+/// multi_channel_group for a description of the remaining parameters.
 template <typename I, typename R>
 inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
     I&& integrand,
@@ -129,8 +127,8 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
     }
 
     // distribution that randomly selects a channel
-    discrete_distribution<std::size_t, T> channel_selector(
-        channel_weights.begin(), channel_weights.end());
+    discrete_distribution<std::size_t, T> channel_selector(channel_weights.begin(),
+        channel_weights.end());
 
     for (std::size_t i = 0; i != calls; ++i)
     {
@@ -183,19 +181,14 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
         }
     }
 
-    return multi_channel_result<T>(
-        accumulator.result(calls),
-        adjustment_data,
-        channel_weights
-    );
+    return multi_channel_result<T>(accumulator.result(calls), adjustment_data, channel_weights);
 }
 
-/// Performs `iteration_calls.size()` multi channel iterations by calling
-/// \ref multi_channel_iteration with the specified parameters and refining
-/// the weights after each iteration with \ref multi_channel_refine_weights. The
-/// weights that are used for the first iteration must be given by the parameter
-/// `channel_weights`. See \ref multi_channel_group for a description of the
-/// remaining parameters.
+/// Performs `iteration_calls.size()` multi channel iterations by calling \ref
+/// multi_channel_iteration with the specified parameters and refining the weights after each
+/// iteration with \ref multi_channel_refine_weights. The weights that are used for the first
+/// iteration must be given by the parameter `channel_weights`. See \ref multi_channel_group for a
+/// description of the remaining parameters.
 template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
     I&& integrand,
@@ -213,8 +206,7 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 
     for (std::size_t const calls : iteration_calls)
     {
-        auto const result = multi_channel_iteration(integrand, calls, weights,
-            generator);
+        auto const result = multi_channel_iteration(integrand, calls, weights, generator);
 
         results.push_back(result);
 
@@ -225,19 +217,17 @@ inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
 
         T const minimum_weight = T(min_calls_per_channel) / calls;
 
-        weights = multi_channel_refine_weights(weights,
-            result.adjustment_data(), minimum_weight);
+        weights = multi_channel_refine_weights(weights, result.adjustment_data(), minimum_weight);
     }
 
     return results;
 }
 
-/// Performs `iteration_calls.size()` multi channel iterations by calling
-/// \ref multi_channel_iteration with the specified parameters and refining
-/// the weights after each iteration with \ref multi_channel_refine_weights. The
-/// weights used for the first iteration are \f$ \alpha = 1 / M \f$ with \f$ M
-/// \f$ the number of channels. See \ref multi_channel_group for a description
-/// of the remaining parameters.
+/// Performs `iteration_calls.size()` multi channel iterations by calling \ref
+/// multi_channel_iteration with the specified parameters and refining the weights after each
+/// iteration with \ref multi_channel_refine_weights. The weights used for the first iteration are
+/// \f$ \alpha = 1 / M \f$ with \f$ M \f$ the number of channels. See \ref multi_channel_group for a
+/// description of the remaining parameters.
 template <typename I, typename R = std::mt19937>
 inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
     I&& integrand,

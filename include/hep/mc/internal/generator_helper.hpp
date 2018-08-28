@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2016  Christopher Schwan
+ * Copyright (C) 2014-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,11 +48,8 @@ inline std::size_t random_number_usage()
     return k;
 }
 
-inline std::size_t discard_before(
-    std::size_t total_calls,
-    std::size_t rank,
-    std::size_t world
-) {
+inline std::size_t discard_before(std::size_t total_calls, std::size_t rank, std::size_t world)
+{
     std::size_t const before = (total_calls / world) * rank +
         (((total_calls % world) < rank) ? total_calls % world : rank);
 
@@ -65,7 +62,6 @@ inline std::size_t discard_after(
     std::size_t rank,
     std::size_t world
 ) {
-
     std::size_t const before = discard_before(total_calls, rank, world);
     std::size_t const after = ((before + calls) < total_calls) ?
         (total_calls - before - calls) : 0;

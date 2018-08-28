@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ namespace hep
 /// \addtogroup results
 /// @{
 
-/// Class that displays the available information about the a-posterioi weights
-/// of a \ref multi_channel_result.
+/// Class that displays the available information about the a-posterioi weights of a \ref
+/// multi_channel_result.
 template <typename T>
 class multi_channel_weight_info
 {
@@ -46,10 +46,8 @@ public:
         , minimal_weight_count_()
     {
         std::iota(channels_.begin(), channels_.end(), 0);
-        std::stable_sort(channels_.begin(), channels_.end(),
-            [&](std::size_t a, std::size_t b) {
-                return result.channel_weights().at(a) <
-                    result.channel_weights().at(b);
+        std::stable_sort(channels_.begin(), channels_.end(), [&](std::size_t a, std::size_t b) {
+            return result.channel_weights().at(a) < result.channel_weights().at(b);
         });
 
         std::transform(channels_.begin(), channels_.end(), weights_.begin(),
@@ -57,38 +55,35 @@ public:
                 return result.channel_weights().at(index);
         });
 
-        std::transform(weights_.begin(), weights_.end(), calls_.begin(),
-            [&](T weight) {
-                return static_cast <std::size_t> (result.calls() * weight);
+        std::transform(weights_.begin(), weights_.end(), calls_.begin(), [&](T weight) {
+            return static_cast <std::size_t> (result.calls() * weight);
         });
 
         minimal_weight_count_ = std::distance(calls_.begin(),
             std::upper_bound(calls_.begin(), calls_.end(), calls_.front()));
     }
 
-    /// Returns the number of expected calls for each weight in the same order
-    /// as the channel indices returned by \ref channels().
+    /// Returns the number of expected calls for each weight in the same order as the channel
+    /// indices returned by \ref channels().
     std::vector<std::size_t> const& calls() const
     {
         return calls_;
     }
 
-    /// Returns the channel indices sorted in ascending order of their
-    /// corresponding weight.
+    /// Returns the channel indices sorted in ascending order of their corresponding weight.
     std::vector<std::size_t> const& channels() const
     {
         return channels_;
     }
 
-    /// Returns the number of channels that have a weight that, multiplied with
-    /// the number of calls, corresponds to the minimum number of calls.
+    /// Returns the number of channels that have a weight that, multiplied with the number of calls,
+    /// corresponds to the minimum number of calls.
     std::size_t minimal_weight_count() const
     {
         return minimal_weight_count_;
     }
 
-    /// Returns the a-priori weights, starting with the lowest weights up to the
-    /// largest one.
+    /// Returns the a-priori weights, starting with the lowest weights up to the largest one.
     std::vector<T> const& weights() const
     {
         return weights_;
@@ -101,12 +96,10 @@ private:
     std::size_t minimal_weight_count_;
 };
 
-/// Returns a vector containing the indices of the channels with the smallest
-/// weights.
+/// Returns a vector containing the indices of the channels with the smallest weights.
 template <typename T>
-inline std::vector<std::size_t> minimal_weight_channels(
-    multi_channel_weight_info<T> const& info
-) {
+inline std::vector<std::size_t> minimal_weight_channels(multi_channel_weight_info<T> const& info)
+{
     std::vector<std::size_t> result(
         info.channels().begin(),
         info.channels().begin() + info.minimal_weight_count()

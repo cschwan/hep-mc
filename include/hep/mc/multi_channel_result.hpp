@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2017  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,8 +35,8 @@ template <typename T>
 class multi_channel_result : public plain_result<T>
 {
 public:
-    /// Constructor. The parameter `adjustment_data` must contain two additional
-    /// values, being the sum of the sum of squares of the integration.
+    /// Constructor. The parameter `adjustment_data` must contain two additional values, being the
+    /// sum of the sum of squares of the integration.
     multi_channel_result(
         plain_result<T> const& result,
         std::vector<T> const& adjustment_data,
@@ -48,9 +48,9 @@ public:
     {
     }
 
-    /// This is the data used by \ref multi_channel_refine_weights to refine the
-    /// \ref channel_weights used in the same iteration. The refined weights are
-    /// then used in a subsequent iteration.
+    /// This is the data used by \ref multi_channel_refine_weights to refine the \ref
+    /// channel_weights used in the same iteration. The refined weights are then used in a
+    /// subsequent iteration.
     std::vector<T> const& adjustment_data() const
     {
         return adjustment_data_;

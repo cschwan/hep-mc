@@ -55,14 +55,12 @@ public:
     /// This class has no move assignment operator.
     projector& operator=(projector<T>&&) = delete;
 
-    /// Adds the integrand denoted by `value` to the one-dimensional
-    /// distribution with the corresponding `index` to the bin which is located
-    /// at the point specified by `x`.
+    /// Adds the integrand denoted by `value` to the one-dimensional distribution with the
+    /// corresponding `index` to the bin which is located at the point specified by `x`.
     void add(std::size_t index, T x, T value);
 
-    /// Adds the integrand denoted by `value` to the two-dimensional
-    /// distribution with the corresponding `index` to the bin which is located
-    /// at the point specified by `x` and `y`.
+    /// Adds the integrand denoted by `value` to the two-dimensional distribution with the
+    /// corresponding `index` to the bin which is located at the point specified by `x` and `y`.
     void add(std::size_t index, T x, T y, T value);
 
 private:

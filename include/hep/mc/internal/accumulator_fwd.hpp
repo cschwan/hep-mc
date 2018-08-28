@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016  Christopher Schwan
+ * Copyright (C) 2016-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,20 +22,19 @@
 namespace
 {
 
-// The accumulator class is where the actual calculation of the total integral
-// and all distributions, if they exist, happens. It serves three purposes:
+// The accumulator class is where the actual calculation of the total integral and all
+// distributions, if they exist, happens. It serves three purposes:
 //
-// 1. If distributions should be generated, then we have to pass the integrand
-//    an additional object that (indirectly) exposes the member function
-//    `add_to_distribution` of the accumulator class that the user needs to
-//    define the distributions. If no distributions should be generated we have
-//    a different implementation of the class, `accumulator<T, false>`, which
-//    passes only the Monte Carlo point to the integrand and completely skips
-//    the potentially time-consuming generation of distributions.
+// 1. If distributions should be generated, then we have to pass the integrand an additional object
+//    that (indirectly) exposes the member function `add_to_distribution` of the accumulator class
+//    that the user needs to define the distributions. If no distributions should be generated we
+//    have a different implementation of the class, `accumulator<T, false>`, which passes only the
+//    Monte Carlo point to the integrand and completely skips the potentially time-consuming
+//    generation of distributions.
 // 2. The accumulation is performed in a central place for all integrators.
-// 3. The intermediate results (sum, sum_of_squars) for all distributions
-//    and the total integral is stored in a single vector that can be easily
-//    distributed when the integration is performed on multiple cores.
+// 3. The intermediate results (sum, sum_of_squars) for all distributions and the total integral is
+//    stored in a single vector that can be easily distributed when the integration is performed on
+//    multiple cores.
 template <typename T, bool distributions>
 class accumulator;
 

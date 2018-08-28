@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@
 namespace
 {
 
-// Implements a subset of the functionality of `std::discrete_distribution`, but
-// it uses `std::generate_canonical<T, ...>()` exactly once per random integer.
+// Implements a subset of the functionality of `std::discrete_distribution`, but it uses
+// `std::generate_canonical<T, ...>()` exactly once per random integer.
 template <typename I = int, typename T = double>
 class discrete_distribution
 {
@@ -51,11 +51,9 @@ public:
     template <typename R>
     I operator()(R& generator) const
     {
-        T const value = std::generate_canonical<T,
-            std::numeric_limits<T>::digits>(generator);
+        T const value = std::generate_canonical<T, std::numeric_limits<T>::digits>(generator);
 
-        auto const iterator = std::lower_bound(weight_sums.begin(),
-            weight_sums.end(), value);
+        auto const iterator = std::lower_bound(weight_sums.begin(), weight_sums.end(), value);
 
         I const result = std::distance(weight_sums.begin(), iterator);
 

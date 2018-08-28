@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2016  Christopher Schwan
+ * Copyright (C) 2015-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,13 +30,11 @@ namespace hep
 /// \addtogroup results
 /// @{
 
-/// Returns the maximum difference \f$ D \f$ defined in Ref.
-/// \cite WeightOptimization as
+/// Returns the maximum difference \f$ D \f$ defined in Ref. \cite WeightOptimization as
 /// \f[
 ///     D = \max_{i,j} | W_i ( \alpha ) - W_j ( \alpha ) |
 /// \f]
-/// with \f$ W_i ( \alpha ) \f$ being stored in `adjustment_data` of of the
-/// given `result`.
+/// with \f$ W_i ( \alpha ) \f$ being stored in `adjustment_data` of of the given `result`.
 template <typename T>
 inline T multi_channel_max_difference(multi_channel_result<T> const& result)
 {

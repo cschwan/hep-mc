@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2015  Christopher Schwan
+ * Copyright (C) 2014-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@ namespace hep
 /// \addtogroup global_configuration
 /// @{
 
-/// Returns `true` if the VEGAS routines should use the grid refinement method
-/// of CUBA \cite Cuba for integrands with sharp edges. If the return value is
-/// `false` the original method is used. Default is `false`.
+/// Returns `true` if the VEGAS routines should use the grid refinement method of CUBA \cite Cuba
+/// for integrands with sharp edges. If the return value is `false` the original method is used.
+/// Default is `false`.
 inline bool& vegas_cuba_refinement()
 {
     static bool use_cuba_refinement = false;

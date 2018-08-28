@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2017  Christopher Schwan
+ * Copyright (C) 2012-2018  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,9 +36,8 @@ namespace hep
 /// \addtogroup plain_group
 /// @{
 
-/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the
-/// unit-hypercube `calls` function evaluations with randomly chosen points
-/// determined by `generator`.
+/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube
+/// `calls` function evaluations with randomly chosen points determined by `generator`.
 template <typename I, typename R = std::mt19937>
 inline plain_result<numeric_type_of<I>> plain(
     I&& integrand,
@@ -47,8 +46,8 @@ inline plain_result<numeric_type_of<I>> plain(
 ) {
     using T = numeric_type_of<I>;
 
-    // the accumulator takes care of the actual evaluation of the integrand and
-    // the generation of possible distribution(s)
+    // the accumulator takes care of the actual evaluation of the integrand and the generation of
+    // possible distribution(s)
     auto accumulator = make_accumulator(integrand);
 
     // storage for random numbers
@@ -66,8 +65,8 @@ inline plain_result<numeric_type_of<I>> plain(
 
         mc_point<T> const point(random_numbers);
 
-        // evaluate the integrand with the specified point and, if there are any
-        // distributions requested, take care of them as well
+        // evaluate the integrand with the specified point and, if there are any distributions
+        // requested, take care of them as well
         accumulator.invoke(integrand, point);
     }
 
