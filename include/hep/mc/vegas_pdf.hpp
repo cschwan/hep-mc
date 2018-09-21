@@ -159,6 +159,7 @@ inline T vegas_icdf(
 template <typename T>
 inline vegas_pdf<T> vegas_refine_pdf(vegas_pdf<T> const& pdf, T alpha, std::vector<T> const& data)
 {
+    using std::fmax;
     using std::log;
     using std::pow;
 
@@ -233,7 +234,7 @@ inline vegas_pdf<T> vegas_refine_pdf(vegas_pdf<T> const& pdf, T alpha, std::vect
             {
                 std::size_t const bin_minus_two = bin != 1 ? bin - 2 : 0;
                 T const average_importance = T(0.5) * (tmp[bin - 1] + tmp[bin_minus_two]);
-                new_left = std::fmax(new_left, current - delta / average_importance);
+                new_left = fmax(new_left, current - delta / average_importance);
             }
             else
             {
