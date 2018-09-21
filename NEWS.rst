@@ -4,6 +4,8 @@ New in 0.8:
 - WARNING: at this point the autotools-based build system is longer supported. Use the meson build
   system instead
 - added support for two-dimensional distributions
+- WARNING: the member function ``mid_points`` is now removed and replaced by the two free-standing
+  functions ``mid_points_x`` and ``mid_points_y``
 - WARNING: changed some member functions of the classes ``hep::distribution_parameters`` and
   ``hep::distribution_result``. The changes were neccesary to support two-dimensional distributions.
 
