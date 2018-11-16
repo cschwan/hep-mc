@@ -4,7 +4,7 @@ project(
     version : '0.8',
     license : 'GPL3',
     default_options : 'cpp_std=c++11',
-    meson_version : '>=0.40'
+    meson_version : '>=0.42'
 )
 
 # must be before `doc` because doxygen depends on the headers
