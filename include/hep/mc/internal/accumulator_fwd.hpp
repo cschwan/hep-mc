@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace
+namespace hep
 {
 
 // The accumulator class is where the actual calculation of the total integral and all

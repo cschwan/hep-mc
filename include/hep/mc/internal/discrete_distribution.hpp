@@ -26,7 +26,7 @@
 #include <random>
 #include <vector>
 
-namespace
+namespace hep
 {
 
 // Implements a subset of the functionality of `std::discrete_distribution`, but it uses

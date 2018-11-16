@@ -32,7 +32,7 @@
 #include <string>
 #include <vector>
 
-namespace
+namespace hep
 {
 
 inline std::string make_list_of_ranges(std::vector<std::size_t> const& indices)
@@ -76,11 +76,6 @@ inline std::string make_list_of_ranges(std::vector<std::size_t> const& indices)
 
     return ranges.str();
 }
-
-}
-
-namespace hep
-{
 
 /// \addtogroup callbacks
 /// @{

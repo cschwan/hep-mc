@@ -25,7 +25,7 @@
 #include <limits>
 #include <type_traits>
 
-namespace
+namespace hep
 {
 
 template <typename T, typename R>

@@ -30,7 +30,7 @@
 #include <cstddef>
 #include <vector>
 
-namespace
+namespace hep
 {
 
 template <typename T>
@@ -323,11 +323,6 @@ inline accumulator<typename I::numeric_type, I::has_distributions> make_accumula
 
     return accumulator<T, has_distributions>(integrand.parameters());
 }
-
-}
-
-namespace hep
-{
 
 template <typename T>
 inline void projector<T>::add(std::size_t index, T x, T value)

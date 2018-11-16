@@ -16,7 +16,7 @@ TYPED_TEST(DiscreteDistribution, DistributionWithOneBin)
 
     std::mt19937 rng;
     std::vector<T> weights = { T(1.0) };
-    discrete_distribution<std::size_t, T> distribution(weights.begin(),
+    hep::discrete_distribution<std::size_t, T> distribution(weights.begin(),
         weights.end());
 
     // distribution with one bin should always give that one bin
@@ -33,7 +33,7 @@ TYPED_TEST(DiscreteDistribution, DistributionWithTwoEqualBins)
 
     std::mt19937 rng;
     std::vector<T> weights = { T(1.0), T(1.0) };
-    discrete_distribution<std::size_t, T> distribution(weights.begin(),
+    hep::discrete_distribution<std::size_t, T> distribution(weights.begin(),
         weights.end());
 
     // distribution with one bin should always give that one bin
@@ -67,7 +67,7 @@ TYPED_TEST(DiscreteDistribution, DistributionWithTwoUnequalBins)
 
     std::mt19937 rng;
     std::vector<T> weights = { T(3.0), T(1.0) };
-    discrete_distribution<std::size_t, T> distribution(weights.begin(),
+    hep::discrete_distribution<std::size_t, T> distribution(weights.begin(),
         weights.end());
 
     // distribution with one bin should always give that one bin
@@ -101,7 +101,7 @@ TYPED_TEST(DiscreteDistribution, DistributionWithOneHundredBins)
 
     std::mt19937 rng;
     std::vector<T> weights(100, T(1.0));
-    discrete_distribution<std::size_t, T> distribution(weights.begin(),
+    hep::discrete_distribution<std::size_t, T> distribution(weights.begin(),
         weights.end());
 
     // distribution with one bin should always give that one bin

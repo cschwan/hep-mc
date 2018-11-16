@@ -30,7 +30,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace
+namespace hep
 {
 
 template <typename Iterator>
@@ -104,11 +104,6 @@ inline hep_plain_result<Iterator> hep_distribution_accumulator(Iterator begin, I
         integrated_result.sum_of_squares()
     };
 }
-
-}
-
-namespace hep
-{
 
 /// \addtogroup results
 /// @{

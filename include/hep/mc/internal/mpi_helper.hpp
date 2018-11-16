@@ -28,7 +28,7 @@
 
 #include <mpi.h>
 
-namespace
+namespace hep
 {
 
 template <typename T>
