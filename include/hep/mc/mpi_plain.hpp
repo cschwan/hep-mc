@@ -19,13 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/internal/generator_helper.hpp"
-#include "hep/mc/internal/mpi_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
+#include "hep/mc/internal/generator_helper.hpp"
+#include "hep/mc/internal/mpi_helper.hpp"
 #include "hep/mc/mc_point.hpp"
-#include "hep/mc/mc_result.hpp"
 #include "hep/mc/plain.hpp"
+#include "hep/mc/plain_result.hpp"
 
 #include <cstddef>
 #include <random>
@@ -51,7 +51,7 @@ namespace hep
 /// \param generator The random number generator that will be used to generate random points from
 /// the hypercube. This generator is properly seeded.
 template <typename I, typename R = std::mt19937>
-inline mc_result<numeric_type_of<I>> mpi_plain(
+inline plain_result<numeric_type_of<I>> mpi_plain(
     MPI_Comm communicator,
     I&& integrand,
     std::size_t calls,
