@@ -1,5 +1,5 @@
-#ifndef HEP_MC_INTERNAL_MPI_HELPER_HPP
-#define HEP_MC_INTERNAL_MPI_HELPER_HPP
+#ifndef HEP_MC_MPI_HELPER_HPP
+#define HEP_MC_MPI_HELPER_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -30,6 +30,8 @@
 
 namespace hep
 {
+
+/// \cond INTERNAL
 
 template <typename T>
 MPI_Datatype mpi_datatype();
@@ -155,6 +157,8 @@ hep::plain_result<T> allreduce_result(
         sum_of_squares
     );
 }
+
+/// \endcond
 
 }
 

@@ -1,5 +1,5 @@
-#ifndef HEP_MC_INTERNAL_GENERATOR_HELPER_HPP
-#define HEP_MC_INTERNAL_GENERATOR_HELPER_HPP
+#ifndef HEP_MC_GENERATOR_HELPER_HPP
+#define HEP_MC_GENERATOR_HELPER_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -27,6 +27,8 @@
 
 namespace hep
 {
+
+/// \cond INTERNAL
 
 template <typename T, typename R>
 inline std::size_t random_number_usage()
@@ -68,6 +70,8 @@ inline std::size_t discard_after(
 
     return after;
 }
+
+/// \endcond
 
 }
 

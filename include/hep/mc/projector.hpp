@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/internal/accumulator_fwd.hpp"
+#include "hep/mc/accumulator_fwd.hpp"
 #include "hep/mc/mc_point.hpp"
 
 #include <cstddef>
@@ -73,6 +73,6 @@ private:
 }
 
 // contains definition of `add` because of circular dependency on `accumulator`
-#include "hep/mc/internal/accumulator.hpp"
+#include "hep/mc/accumulator.hpp"
 
 #endif

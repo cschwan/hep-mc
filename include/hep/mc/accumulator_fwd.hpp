@@ -1,5 +1,5 @@
-#ifndef HEP_MC_INTERNAL_ACCUMULATOR_FWD_HPP
-#define HEP_MC_INTERNAL_ACCUMULATOR_FWD_HPP
+#ifndef HEP_MC_ACCUMULATOR_FWD_HPP
+#define HEP_MC_ACCUMULATOR_FWD_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -22,6 +22,8 @@
 namespace hep
 {
 
+/// \cond internal
+
 // The accumulator class is where the actual calculation of the total integral and all
 // distributions, if they exist, happens. It serves three purposes:
 //
@@ -37,6 +39,8 @@ namespace hep
 //    multiple cores.
 template <typename T, bool distributions>
 class accumulator;
+
+/// \endcond
 
 }
 

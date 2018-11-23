@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
-#include "hep/mc/internal/generator_helper.hpp"
-#include "hep/mc/internal/mpi_helper.hpp"
+#include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/mpi_plain_callback.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/plain_result.hpp"
@@ -47,7 +47,7 @@ namespace hep
 /// processes.
 /// \param integrand The function that will be integrated over the hypercube. See \ref integrands
 /// for further explanation.
-/// \param calls The number of function calls that are used to obtain the result.
+/// \param iteration_calls The number of function calls that are used to obtain the result.
 /// \param generator The random number generator that will be used to generate random points from
 /// the hypercube. This generator is properly seeded.
 template <typename I, typename R = std::mt19937>

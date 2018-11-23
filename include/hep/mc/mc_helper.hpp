@@ -33,6 +33,8 @@
 namespace hep
 {
 
+/// \cond INTERNAL
+
 template <typename Iterator>
 using hep_numeric_type = typename std::iterator_traits<Iterator>::value_type::numeric_type;
 
@@ -104,6 +106,8 @@ inline hep_plain_result<Iterator> hep_distribution_accumulator(Iterator begin, I
         integrated_result.sum_of_squares()
     };
 }
+
+/// \endcond
 
 /// \addtogroup results
 /// @{

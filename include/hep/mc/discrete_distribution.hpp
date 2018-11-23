@@ -1,5 +1,5 @@
-#ifndef HEP_MC_INTERNAL_DISCRETE_DISTRIBUTION_HPP
-#define HEP_MC_INTERNAL_DISCRETE_DISTRIBUTION_HPP
+#ifndef HEP_MC_DISCRETE_DISTRIBUTION_HPP
+#define HEP_MC_DISCRETE_DISTRIBUTION_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -28,6 +28,8 @@
 
 namespace hep
 {
+
+/// \cond INTERNAL
 
 // Implements a subset of the functionality of `std::discrete_distribution`, but it uses
 // `std::generate_canonical<T, ...>()` exactly once per random integer.
@@ -63,6 +65,8 @@ public:
 private:
     std::vector<T> weight_sums;
 };
+
+/// \endcond
 
 }
 

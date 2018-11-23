@@ -1,5 +1,5 @@
-#ifndef HEP_MC_INTERNAL_ACCUMULATOR_HPP
-#define HEP_MC_INTERNAL_ACCUMULATOR_HPP
+#ifndef HEP_MC_ACCUMULATOR_HPP
+#define HEP_MC_ACCUMULATOR_HPP
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/internal/accumulator_fwd.hpp"
-#include "hep/mc/projector.hpp"
+#include "hep/mc/accumulator_fwd.hpp"
 #include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/distribution_result.hpp"
 #include "hep/mc/plain_result.hpp"
+#include "hep/mc/projector.hpp"
 
 #include <array>
 #include <cmath>
@@ -32,6 +32,8 @@
 
 namespace hep
 {
+
+/// \cond INTERNAL
 
 template <typename T>
 inline void accumulate(T& sum, T& sum_of_squares, T& compensation, T value)
@@ -335,6 +337,8 @@ inline void projector<T>::add(std::size_t index, T x, T y, T value)
 {
     accumulator_->add_to_2d_distribution(index, x, y, value * point_.weight());
 }
+
+/// \endcond
 
 }
 
