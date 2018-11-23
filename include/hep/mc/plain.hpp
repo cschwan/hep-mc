@@ -22,6 +22,7 @@
 #include "hep/mc/internal/accumulator.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_point.hpp"
+#include "hep/mc/plain_callback.hpp"
 #include "hep/mc/plain_result.hpp"
 
 #include <cstddef>
@@ -36,13 +37,12 @@ namespace hep
 /// \addtogroup plain_group
 /// @{
 
-/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube
-/// `calls` function evaluations with randomly chosen points determined by `generator`.
-template <typename I, typename R = std::mt19937>
-inline plain_result<numeric_type_of<I>> plain(
+/// Performs exactly one iteration using the PLAIN Monte Carlo integration algorithm.
+template <typename I, typename R>
+inline plain_result<numeric_type_of<I>> plain_iteration(
     I&& integrand,
     std::size_t calls,
-    R&& generator = std::mt19937()
+    R& generator
 ) {
     using T = numeric_type_of<I>;
 
@@ -71,6 +71,35 @@ inline plain_result<numeric_type_of<I>> plain(
     }
 
     return accumulator.result(calls);
+}
+
+/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube
+/// `calls` function evaluations with randomly chosen points determined by `generator`.
+template <typename I, typename R = std::mt19937>
+inline std::vector<plain_result<numeric_type_of<I>>> plain(
+    I&& integrand,
+    std::vector<std::size_t> iteration_calls,
+    R&& generator = std::mt19937()
+) {
+    using T = numeric_type_of<I>;
+
+    // vector holding all iteration results
+    std::vector<plain_result<T>> results;
+    results.reserve(iteration_calls.size());
+
+    // perform iterations
+    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    {
+        auto const result = plain_iteration(integrand, *i, generator);
+        results.push_back(result);
+
+        if (!plain_callback<T>()(results))
+        {
+            break;
+        }
+    }
+
+    return results;
 }
 
 /// @}

@@ -106,13 +106,13 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
     std::size_t const calls = 100000;
 
 #ifndef HEP_USE_MPI
-    auto const result = hep::plain(
+    auto const results = hep::plain(
 #else
-    auto const result = hep::mpi_plain(
+    auto const results = hep::mpi_plain(
         MPI_COMM_WORLD,
 #endif
         hep::make_integrand<T>(function<T>, 2),
-        calls
+        std::vector<std::size_t>(1, calls)
     );
     auto const reference = reference_results<T>();
 
@@ -124,12 +124,12 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
     T const error_abs_error = T(4.0) * std::numeric_limits<T>::epsilon();
 #endif
 
-    EXPECT_NEAR( result.value() , reference[0] , value_abs_error );
-    EXPECT_NEAR( result.error() , reference[1] , error_abs_error );
+    EXPECT_NEAR( results.front().value() , reference[0] , value_abs_error );
+    EXPECT_NEAR( results.front().error() , reference[1] , error_abs_error );
 
-    EXPECT_EQ( result.calls() , calls );
-    EXPECT_EQ( result.non_zero_calls() , calls );
-    EXPECT_EQ( result.finite_calls() , calls );
+    EXPECT_EQ( results.front().calls() , calls );
+    EXPECT_EQ( results.front().non_zero_calls() , calls );
+    EXPECT_EQ( results.front().finite_calls() , calls );
 
 //    std::cout.precision(std::numeric_limits<T>::max_digits10);
 //    std::cout.setf(std::ios_base::scientific);

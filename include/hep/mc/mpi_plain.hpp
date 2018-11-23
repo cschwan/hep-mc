@@ -23,7 +23,7 @@
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/internal/generator_helper.hpp"
 #include "hep/mc/internal/mpi_helper.hpp"
-#include "hep/mc/mc_point.hpp"
+#include "hep/mc/mpi_plain_callback.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/plain_result.hpp"
 
@@ -51,10 +51,10 @@ namespace hep
 /// \param generator The random number generator that will be used to generate random points from
 /// the hypercube. This generator is properly seeded.
 template <typename I, typename R = std::mt19937>
-inline plain_result<numeric_type_of<I>> mpi_plain(
+inline std::vector<plain_result<numeric_type_of<I>>> mpi_plain(
     MPI_Comm communicator,
     I&& integrand,
-    std::size_t calls,
+    std::vector<std::size_t> const& iteration_calls,
     R&& generator = std::mt19937()
 ) {
     using T = numeric_type_of<I>;
@@ -64,23 +64,43 @@ inline plain_result<numeric_type_of<I>> mpi_plain(
     int world = 0;
     MPI_Comm_size(communicator, &world);
 
-    // the number of function calls for each MPI process
-    std::size_t const sub_calls = (calls / world) +
-        (static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
-
-    std::size_t const usage = integrand.dimensions() * random_number_usage<T, R>();
-
-    generator.discard(usage * discard_before(calls, rank, world));
-
-    auto const result = plain(integrand, sub_calls, generator);
-
-    generator.discard(usage * discard_after(calls, sub_calls, rank, world));
+    // vector holding all iteration results
+    std::vector<plain_result<T>> results;
+    results.reserve(iteration_calls.size());
 
     std::vector<T> buffer;
 
-    auto const new_result = allreduce_result(communicator, result, buffer, std::vector<T>(), calls);
+    std::size_t const usage = integrand.dimensions() * random_number_usage<T, R>();
 
-    return new_result;
+    // perform iterations
+    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    {
+        generator.discard(usage * discard_before(*i, rank, world));
+
+        // the number of function calls for each MPI process
+        std::size_t const calls = (*i / world) +
+            (static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
+        auto const result = plain_iteration(integrand, calls, generator);
+
+        generator.discard(usage * discard_after(*i, calls, rank, world));
+
+        auto const& new_result = allreduce_result(
+            communicator,
+            result,
+            buffer,
+            std::vector<T>(),
+            *i
+        );
+
+        results.push_back(new_result);
+
+        if (!mpi_plain_callback<T>()(communicator, results))
+        {
+            break;
+        }
+    }
+
+    return results;
 }
 
 /// @}

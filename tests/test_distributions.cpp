@@ -356,9 +356,9 @@ TYPED_TEST(DistributionResults, CheckPlainIntegration)
     std::size_t const calls = 100000;
 
 #ifndef HEP_USE_MPI
-    auto const result = hep::plain(
+    auto const results = hep::plain(
 #else
-    auto const result = hep::mpi_plain(
+    auto const results = hep::mpi_plain(
         MPI_COMM_WORLD,
 #endif
         hep::make_integrand<T>(
@@ -366,10 +366,10 @@ TYPED_TEST(DistributionResults, CheckPlainIntegration)
             1,
             hep::make_dist_params<T>(100, T(-5.0), T(5.0))
         ),
-        calls
+        std::vector<std::size_t>(1, calls)
     );
 
-    auto const distribution = result.distributions().at(0).results();
+    auto const distribution = results.front().distributions().at(0).results();
     auto const reference = reference_results<T>();
 
 //    std::cout.precision(std::numeric_limits<T>::max_digits10);

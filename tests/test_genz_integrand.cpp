@@ -106,19 +106,19 @@ void check_plain_integrator(test_data_type data)
     auto integrand = genz::integrand<T>(type, params.affective(),
         params.unaffective());
 
-    auto result = hep::plain(
+    auto results = hep::plain(
         hep::make_integrand<T>(integrand, dimension),
-        calls
+        std::vector<std::size_t>(1, calls)
     );
 
     // approximation should lie with the error interval
-    EXPECT_NEAR( integrand.reference_result(), result.value(), deviation *
-        result.error() );
+    EXPECT_NEAR( integrand.reference_result(), results.front().value(), deviation *
+        results.front().error() );
 
     // relative error should not be larger than 5%
-    if (result.value() != T())
+    if (results.front().value() != T())
     {
-        EXPECT_GT( T(0.15) , result.error() / result.value() );
+        EXPECT_GT( T(0.15) , results.front().error() / results.front().value() );
     }
 }
 

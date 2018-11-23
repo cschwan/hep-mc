@@ -1,5 +1,9 @@
 #include "hep/mc.hpp"
 
+#include <cstddef>
+#include <iostream>
+#include <vector>
+
 double x_max =  5.0;
 double x_min = -5.0;
 
@@ -31,11 +35,11 @@ int main()
     );
 
     // now integrate and record the differential distributions
-    auto const result = hep::plain(integrand, 1000000);
+    auto const results = hep::plain(integrand, std::vector<std::size_t>(1, 1000000));
+    auto const result = results.back();
 
     // integral is zero
-    std::cout << "integral is I = " << result.value() << " +- "
-        << result.error() << "\n\n";
+    std::cout << "integral is I = " << result.value() << " +- " << result.error() << "\n\n";
 
     auto const& distribution = result.distributions()[0];
     auto const& mid_points = mid_points_x(distribution);

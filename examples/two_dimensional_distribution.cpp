@@ -1,6 +1,8 @@
 #include "hep/mc.hpp"
 
+#include <cstddef>
 #include <iostream>
+#include <vector>
 
 double const max =  3.0;
 double const min = -3.0;
@@ -35,7 +37,8 @@ int main()
     );
 
     // now integrate and record the differential distributions
-    auto const result = hep::plain(integrand, 10000000);
+    auto const results = hep::plain(integrand, std::vector<std::size_t>(1, 10000000));
+    auto const result = results.back();
 
     // integral is zero
     std::cout << "integral is I = " << result.value() << " +- "

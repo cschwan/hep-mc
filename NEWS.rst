@@ -1,6 +1,9 @@
 New in 0.8:
 ===========
 
+- WARNING: changed the interface of ``hep::plain`` and ``hep::mpi_plain`` to perform multiple
+  iterations rather than a single big one. Between two iterations a callback function is invoked,
+  like with any other algorithm as well
 - WARNING: at this point the autotools-based build system is longer supported. Use the meson build
   system instead
 - added support for two-dimensional distributions
