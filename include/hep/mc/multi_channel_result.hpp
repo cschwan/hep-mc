@@ -22,6 +22,11 @@
 #include "hep/mc/plain_result.hpp"
 
 #include <cstddef>
+#include <iomanip>
+#include <ios>
+#include <istream>
+#include <limits>
+#include <ostream>
 #include <vector>
 
 namespace hep
@@ -48,6 +53,21 @@ public:
     {
     }
 
+    /// Deserialization constructor.
+    multi_channel_result(std::istream& in)
+        : plain_result<T>(in)
+    {
+        std::size_t channels;
+        in >> channels;
+        adjustment_data_.resize(channels);
+        channel_weights_.resize(channels);
+
+        for (std::size_t i = 0; i != channels; ++i)
+        {
+            in >> adjustment_data_.at(i) >> channel_weights_.at(i);
+        }
+    }
+
     /// This is the data used by \ref multi_channel_refine_weights to refine the \ref
     /// channel_weights used in the same iteration. The refined weights are then used in a
     /// subsequent iteration.
@@ -60,6 +80,20 @@ public:
     std::vector<T> const& channel_weights() const
     {
         return channel_weights_;
+    }
+
+    /// Serializes this object.
+    virtual void serialize(std::ostream& out) const override
+    {
+        plain_result<T>::serialize(out);
+        out << '\n' << channel_weights_.size();
+
+        for (std::size_t i = 0; i != channel_weights_.size(); ++i)
+        {
+            out << '\n' << std::scientific
+                << std::setprecision(std::numeric_limits<T>::max_digits10 - 1)
+                << adjustment_data_.at(i) << ' ' << channel_weights_.at(i);
+        }
     }
 
 private:

@@ -21,6 +21,11 @@
 
 #include <cmath>
 #include <cstddef>
+#include <iomanip>
+#include <ios>
+#include <istream>
+#include <limits>
+#include <ostream>
 #include <vector>
 
 namespace hep
@@ -59,6 +64,15 @@ public:
         , sum_(sum)
         , sum_of_squares_(sum_of_squares)
     {
+    }
+
+    /// Destructor.
+    virtual ~mc_result() = default;
+
+    /// Deserialization constructor.
+    mc_result(std::istream& in)
+    {
+        in >> calls_ >> non_zero_calls_ >> finite_calls_ >> sum_ >> sum_of_squares_;
     }
 
     /// The number of function evaluations \f$ N \f$ performed to obtain this
@@ -111,6 +125,14 @@ public:
     T sum_of_squares() const
     {
         return sum_of_squares_;
+    }
+
+    /// Serializes this object.
+    virtual void serialize(std::ostream& out) const
+    {
+        out << calls_ << ' ' << non_zero_calls_ << ' ' << finite_calls_ << ' ' << std::scientific
+            << std::setprecision(std::numeric_limits<T>::max_digits10 - 1) << sum_ << ' '
+            << sum_of_squares_;
     }
 
 private:

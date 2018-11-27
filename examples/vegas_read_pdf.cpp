@@ -1,7 +1,6 @@
 #include "hep/mc.hpp"
 
 #include <fstream>
-#include <ios>
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -11,14 +10,12 @@ int main(int argc, char* argv[])
         // open file
         std::ifstream input(argv[1]);
 
-        // we need to know the dimensions and bins beforehand!
-        hep::vegas_pdf<double> grid(1, 5);
-
-        // read the pdf from the file
-        input >> grid;
+        // we don't need to know the dimensions and bins beforehand!
+        hep::vegas_pdf<double> grid(input);
 
         // print the (left bin) boundaries of the pdf in scientific format
-        std::cout << std::scientific << grid << "\n";
+        grid.serialize(std::cout);
+        std::cout << '\n';
     }
     else
     {

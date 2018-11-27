@@ -24,8 +24,11 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
-#include <iosfwd>
-#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <istream>
+#include <limits>
+#include <ostream>
 #include <vector>
 
 namespace hep
@@ -71,6 +74,18 @@ public:
         }
     }
 
+    /// Deserialization constructor.
+    vegas_pdf(std::istream& in)
+    {
+        in >> bins_ >> dimensions_;
+        x.resize((bins_ + 1) * dimensions_);
+
+        for (std::size_t i = 0; i != x.size(); ++i)
+        {
+            in >> x.at(i);
+        }
+    }
+
     /// Returns the left bin boundary of `bin` in `dimension`.
     T bin_left(std::size_t dimension, std::size_t bin) const
     {
@@ -95,6 +110,18 @@ public:
     std::size_t dimensions() const
     {
         return dimensions_;
+    }
+
+    /// Serializes this object.
+    void serialize(std::ostream& out) const
+    {
+        out << bins_ << ' ' << dimensions_;
+
+        for (std::size_t i = 0; i != x.size(); ++i)
+        {
+            out << '\n' << std::scientific
+                << std::setprecision(std::numeric_limits<T>::max_digits10 - 1) << x.at(i);
+        }
     }
 
 private:
@@ -246,45 +273,6 @@ inline vegas_pdf<T> vegas_refine_pdf(vegas_pdf<T> const& pdf, T alpha, std::vect
     }
 
     return new_pdf;
-}
-
-/// Output operator for \ref vegas_pdf.
-template <typename T>
-inline std::ostream& operator<<(std::ostream& out, vegas_pdf<T> const& pdf)
-{
-    for (std::size_t i = 0; i != pdf.dimensions(); ++i)
-    {
-        for (std::size_t j = 0; j != pdf.bins(); ++j)
-        {
-            out << pdf.bin_left(i, j) << " ";
-        }
-        out << pdf.bin_left(i, pdf.bins());
-
-        if (i < pdf.dimensions() - 1)
-        {
-            out << "\n";
-        }
-    }
-
-    return out;
-}
-
-/// Input operator for \ref vegas_pdf. Note that the PDF is not resized and therefore must have
-/// correct `dimensions` and `bins` before calling this function.
-template <typename T>
-inline std::istream& operator>>(std::istream& in, vegas_pdf<T>& pdf)
-{
-    for (std::size_t i = 0; i != pdf.dimensions(); ++i)
-    {
-        for (std::size_t j = 0; j != pdf.bins() + 1; ++j)
-        {
-            T tmp;
-            in >> tmp;
-            pdf.set_bin_left(i, j, tmp);
-        }
-    }
-
-    return in;
 }
 
 /// @}

@@ -22,6 +22,8 @@
 #include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/mc_result.hpp"
 
+#include <istream>
+#include <ostream>
 #include <vector>
 
 namespace hep
@@ -45,6 +47,19 @@ public:
     {
     }
 
+    /// Deserialization constructor.
+    distribution_result(std::istream& in)
+        : parameters_{in}
+    {
+        std::size_t const size = parameters_.bins_x() * parameters_.bins_y();
+        results_.reserve(size);
+
+        for (std::size_t i = 0; i != size; ++i)
+        {
+            results_.emplace_back(in);
+        }
+    }
+
     /// Returns the parameters associated with this distribution.
     distribution_parameters<T> const& parameters() const
     {
@@ -56,6 +71,18 @@ public:
     std::vector<mc_result<T>> const& results() const
     {
         return results_;
+    }
+
+    /// Serializes this object.
+    void serialize(std::ostream& out) const
+    {
+        parameters_.serialize(out);
+
+        for (std::size_t i = 0; i != results_.size(); ++i)
+        {
+            out << '\n';
+            results_.at(i).serialize(out);
+        }
     }
 
 private:

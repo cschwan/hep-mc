@@ -23,6 +23,8 @@
 #include "hep/mc/mc_result.hpp"
 
 #include <cstddef>
+#include <istream>
+#include <ostream>
 #include <vector>
 
 namespace hep
@@ -50,10 +52,38 @@ public:
     {
     }
 
+    /// Deserialization constructor.
+    plain_result(std::istream& in)
+        : mc_result<T>(in)
+    {
+        std::size_t size;
+        in >> size;
+
+        distributions_.reserve(size);
+
+        for (std::size_t i = 0; i != size; ++i)
+        {
+            distributions_.emplace_back(in);
+        }
+    }
+
     /// Returns the differential distributions accumulated during the integration.
     std::vector<distribution_result<T>> const& distributions() const
     {
         return distributions_;
+    }
+
+    /// Serializes this object.
+    virtual void serialize(std::ostream& out) const override
+    {
+        mc_result<T>::serialize(out);
+        out << '\n' << distributions_.size();
+
+        for (auto const& distribution : distributions_)
+        {
+            out << '\n';
+            distribution.serialize(out);
+        }
     }
 
 private:

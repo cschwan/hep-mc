@@ -24,6 +24,11 @@
 #include "hep/mc/vegas_pdf.hpp"
 
 #include <cstddef>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <limits>
+#include <ostream>
 #include <vector>
 
 namespace hep
@@ -49,6 +54,19 @@ public:
     {
     }
 
+    /// Deserialization constructor.
+    vegas_result(std::istream& in)
+        : plain_result<T>(in)
+        , pdf_(in)
+    {
+        adjustment_data_.resize(pdf_.bins() * pdf_.dimensions());
+
+        for (std::size_t i = 0; i != adjustment_data_.size(); ++i)
+        {
+            in >> adjustment_data_.at(i);
+        }
+    }
+
     /// The pdf used to obtain this result.
     vegas_pdf<T> const& pdf() const
     {
@@ -59,6 +77,21 @@ public:
     std::vector<T> const& adjustment_data() const
     {
         return adjustment_data_;
+    }
+
+    /// Serializes this object.
+    virtual void serialize(std::ostream& out) const override
+    {
+        plain_result<T>::serialize(out);
+        out << '\n';
+        pdf_.serialize(out);
+        out << '\n';
+
+        for (std::size_t i = 0; i != adjustment_data_.size(); ++i)
+        {
+            out << std::scientific << std::setprecision(std::numeric_limits<T>::max_digits10 - 1)
+                << adjustment_data_.at(i) << ' ';
+        }
     }
 
 private:

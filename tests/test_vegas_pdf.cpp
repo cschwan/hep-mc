@@ -139,9 +139,8 @@ TYPED_TEST(VegasPdf, StreamOperators)
 
     std::stringstream iostream;
 
-    iostream << pdf1;
-    hep::vegas_pdf<T> pdf2(2, 3);
-    iostream >> pdf2;
+    pdf1.serialize(iostream);
+    hep::vegas_pdf<T> pdf2(iostream);
 
     EXPECT_FLOAT_EQ( T(0.0) , pdf2.bin_left(0, 0) );
     EXPECT_FLOAT_EQ( T(0.1) , pdf2.bin_left(0, 1) );

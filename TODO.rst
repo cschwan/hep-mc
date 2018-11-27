@@ -2,7 +2,6 @@ GENERAL
 =======
 
 - get rid of the ``create_result`` function
-- string serialization of ``_result`` classes
 - add serialization functions for the ``_result`` classes that are needed to exchange and accumulate
   the results from different MPI processors
 - remove the globally set callback functions and make them local to every call to an integrator?

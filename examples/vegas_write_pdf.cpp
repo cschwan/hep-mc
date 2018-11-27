@@ -1,6 +1,5 @@
 #include "hep/mc.hpp"
 
-#include <ios>
 #include <iostream>
 
 double square(hep::mc_point<double> const& x)
@@ -18,7 +17,8 @@ int main()
     );
 
     // write the pdf that was used to generate the last iteration
-    std::cout << std::scientific << results.back().pdf() << "\n";
+    results.back().pdf().serialize(std::cout);
+    std::cout << '\n';
 
     return 0;
 }

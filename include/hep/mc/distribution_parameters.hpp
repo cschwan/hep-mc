@@ -20,6 +20,11 @@
  */
 
 #include <cstddef>
+#include <iomanip>
+#include <ios>
+#include <istream>
+#include <limits>
+#include <ostream>
 #include <string>
 
 namespace hep
@@ -65,6 +70,15 @@ public:
     {
     }
 
+    /// Deserialization constructor.
+    distribution_parameters(std::istream& in)
+    {
+        // consume newline character and read name
+        std::getline(in >> std::ws, name_);
+
+        in >> bins_x_ >> x_min_ >> bin_size_x_ >> bins_y_ >> y_min_ >> bin_size_y_;
+    }
+
     /// Returns the number of bins in x-direction.
     std::size_t bins_x() const
     {
@@ -105,6 +119,17 @@ public:
     T bin_size_y() const
     {
         return bin_size_y_;
+    }
+
+    /// Serializes this object.
+    void serialize(std::ostream& out) const
+    {
+        // TODO: replace newlines in `name_` or don't permit them
+        out << name_ << '\n';
+
+        out << bins_x_ << ' ' << std::scientific
+            << std::setprecision(std::numeric_limits<T>::max_digits10 - 1) << x_min_ << ' '
+            << bin_size_x_ << ' ' << bins_y_ << ' ' << y_min_ << ' ' << bin_size_y_;
     }
 
 private:
