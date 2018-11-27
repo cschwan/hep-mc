@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 {
     constexpr double s[] = { -10.0, +10.0, 0.0 };
 
-    auto const function = [](hep::multi_channel_point<double> const& x) {
+    auto const function = [&](hep::multi_channel_point<double> const& x) {
         double t = x.coordinates()[0];
 
         double const tms0 = t - s[0];
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
         return (value0 + value1 + value2) / std::sqrt(std::acos(-1.0)) / 3.1;
     };
 
-    auto const densities = [](
+    auto const densities = [&](
         std::size_t channel,
         std::vector<double> const& random_numbers,
         std::vector<double>& coordinates,
