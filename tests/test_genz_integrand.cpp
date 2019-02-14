@@ -103,8 +103,7 @@ void check_plain_integrator(test_data_type data)
     int calls     = 100000;
 
     auto params    = genz::parameters<T>(dimension, diff, comp, limit);
-    auto integrand = genz::integrand<T>(type, params.affective(),
-        params.unaffective());
+    auto integrand = genz::integrand<T>(type, params.affective(), params.unaffective());
 
     auto results = hep::plain(
         hep::make_integrand<T>(integrand, dimension),
@@ -134,19 +133,16 @@ void check_vegas_integrator(test_data_type data)
     int calls     = 100000;
 
     auto params    = genz::parameters<T>(dimension, diff, comp, limit);
-    auto integrand = genz::integrand<T>(type, params.affective(),
-        params.unaffective());
+    auto integrand = genz::integrand<T>(type, params.affective(), params.unaffective());
 
     auto results = hep::vegas(
         hep::make_integrand<T>(integrand, dimension),
         std::vector<std::size_t>(10, calls / 10)
     );
-    auto result = hep::accumulate<hep::weighted_equally>(results.begin(),
-        results.end());
+    auto result = hep::accumulate<hep::weighted_equally>(results.begin(), results.end());
 
     // approximation should lie with the error interval
-    EXPECT_NEAR( integrand.reference_result(), result.value(), deviation *
-        result.error() );
+    EXPECT_NEAR( integrand.reference_result(), result.value(), deviation * result.error() );
 
     // relative error should not be larger than 5%
     if (result.value() != T())

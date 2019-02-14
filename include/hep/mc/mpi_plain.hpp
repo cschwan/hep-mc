@@ -70,7 +70,8 @@ inline std::vector<plain_result<numeric_type_of<I>>> mpi_plain(
 
     std::vector<T> buffer;
 
-    std::size_t const usage = integrand.dimensions() * random_number_usage<T, R>();
+    std::size_t const usage = integrand.dimensions() *
+        random_number_usage<T, decltype (generator)>();
 
     // perform iterations
     for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)

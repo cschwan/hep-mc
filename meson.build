@@ -26,7 +26,7 @@ hep_mc_dep = declare_dependency(include_directories : incdir)
 if get_option('mpi')
     mpi_dep = dependency('mpi', language : 'cpp')
 endif
-    
+
 if get_option('examples')
     subdir('examples')
 endif

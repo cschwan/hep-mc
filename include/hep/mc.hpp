@@ -19,8 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/accumulator.hpp"
+#include "hep/mc/accumulator_fwd.hpp"
+#include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/distribution_result.hpp"
+#include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_helper.hpp"

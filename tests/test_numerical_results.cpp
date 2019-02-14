@@ -15,8 +15,7 @@
 template <typename T>
 T function(hep::mc_point<T> const& x)
 {
-    return T(3.0) / T(2.0) *
-        (x.point()[0] * x.point()[0] + x.point()[1] * x.point()[1]);
+    return T(3.0) / T(2.0) * (x.point()[0] * x.point()[0] + x.point()[1] * x.point()[1]);
 }
 
 template <typename T>
@@ -24,8 +23,7 @@ T function_with_distribution(
     hep::mc_point<T> const& x,
     hep::projector<T>& projector
 ) {
-    T const value = T(3.0) / T(2.0) * (x.point()[0] * x.point()[0] +
-        x.point()[1] * x.point()[1]);
+    T const value = T(3.0) / T(2.0) * (x.point()[0] * x.point()[0] + x.point()[1] * x.point()[1]);
 
     projector.add(0, T(0.5), value);
 
@@ -354,62 +352,37 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
     EXPECT_EQ( results2[4].finite_calls() , results[4].calls() );
 
     EXPECT_EQ( mid_points_x(results2[0].distributions()[0])[0] , T(0.5) );
-    EXPECT_EQ( results2[0].distributions()[0].results()[0].value() ,
-        results[0].value() );
-    EXPECT_EQ( results2[0].distributions()[0].results()[0].error() ,
-        results[0].error() );
-    EXPECT_EQ( results2[0].distributions()[0].results()[0].calls() ,
-        results[0].calls() );
-    EXPECT_EQ( results2[0].distributions()[0].results()[0].non_zero_calls() ,
-        results[0].calls() );
-    EXPECT_EQ( results2[0].distributions()[0].results()[0].finite_calls() ,
-        results[0].calls() );
+    EXPECT_EQ( results2[0].distributions()[0].results()[0].value() , results[0].value() );
+    EXPECT_EQ( results2[0].distributions()[0].results()[0].error() , results[0].error() );
+    EXPECT_EQ( results2[0].distributions()[0].results()[0].calls() , results[0].calls() );
+    EXPECT_EQ( results2[0].distributions()[0].results()[0].non_zero_calls() , results[0].calls() );
+    EXPECT_EQ( results2[0].distributions()[0].results()[0].finite_calls() , results[0].calls() );
 
     EXPECT_EQ( mid_points_x(results2[1].distributions()[0])[0] , T(0.5) );
-    EXPECT_EQ( results2[1].distributions()[0].results()[0].value() ,
-        results[1].value() );
-    EXPECT_EQ( results2[1].distributions()[0].results()[0].error() ,
-        results[1].error() );
-    EXPECT_EQ( results2[1].distributions()[0].results()[0].calls() ,
-        results[1].calls() );
-    EXPECT_EQ( results2[1].distributions()[0].results()[0].non_zero_calls() ,
-        results[1].calls() );
-    EXPECT_EQ( results2[1].distributions()[0].results()[0].finite_calls() ,
-        results[1].calls() );
+    EXPECT_EQ( results2[1].distributions()[0].results()[0].value() , results[1].value() );
+    EXPECT_EQ( results2[1].distributions()[0].results()[0].error() , results[1].error() );
+    EXPECT_EQ( results2[1].distributions()[0].results()[0].calls() , results[1].calls() );
+    EXPECT_EQ( results2[1].distributions()[0].results()[0].non_zero_calls() , results[1].calls() );
+    EXPECT_EQ( results2[1].distributions()[0].results()[0].finite_calls() , results[1].calls() );
 
     EXPECT_EQ( mid_points_x(results2[2].distributions()[0])[0] , T(0.5) );
-    EXPECT_EQ( results2[2].distributions()[0].results()[0].value() ,
-        results[2].value() );
-    EXPECT_EQ( results2[2].distributions()[0].results()[0].error() ,
-        results[2].error() );
-    EXPECT_EQ( results2[2].distributions()[0].results()[0].calls() ,
-        results[2].calls() );
-    EXPECT_EQ( results2[2].distributions()[0].results()[0].non_zero_calls() ,
-        results[2].calls() );
-    EXPECT_EQ( results2[2].distributions()[0].results()[0].finite_calls() ,
-        results[2].calls() );
+    EXPECT_EQ( results2[2].distributions()[0].results()[0].value() , results[2].value() );
+    EXPECT_EQ( results2[2].distributions()[0].results()[0].error() , results[2].error() );
+    EXPECT_EQ( results2[2].distributions()[0].results()[0].calls() , results[2].calls() );
+    EXPECT_EQ( results2[2].distributions()[0].results()[0].non_zero_calls() , results[2].calls() );
+    EXPECT_EQ( results2[2].distributions()[0].results()[0].finite_calls() , results[2].calls() );
 
     EXPECT_EQ( mid_points_x(results2[3].distributions()[0])[0] , T(0.5) );
-    EXPECT_EQ( results2[3].distributions()[0].results()[0].value() ,
-        results[3].value() );
-    EXPECT_EQ( results2[3].distributions()[0].results()[0].error() ,
-        results[3].error() );
-    EXPECT_EQ( results2[3].distributions()[0].results()[0].calls() ,
-        results[3].calls() );
-    EXPECT_EQ( results2[3].distributions()[0].results()[0].non_zero_calls() ,
-        results[3].calls() );
-    EXPECT_EQ( results2[3].distributions()[0].results()[0].finite_calls() ,
-        results[3].calls() );
+    EXPECT_EQ( results2[3].distributions()[0].results()[0].value() , results[3].value() );
+    EXPECT_EQ( results2[3].distributions()[0].results()[0].error() , results[3].error() );
+    EXPECT_EQ( results2[3].distributions()[0].results()[0].calls() , results[3].calls() );
+    EXPECT_EQ( results2[3].distributions()[0].results()[0].non_zero_calls() , results[3].calls() );
+    EXPECT_EQ( results2[3].distributions()[0].results()[0].finite_calls() , results[3].calls() );
 
     EXPECT_EQ( mid_points_x(results2[4].distributions()[0])[0] , T(0.5) );
-    EXPECT_EQ( results2[4].distributions()[0].results()[0].value() ,
-        results[4].value() );
-    EXPECT_EQ( results2[4].distributions()[0].results()[0].error() ,
-        results[4].error() );
-    EXPECT_EQ( results2[4].distributions()[0].results()[0].calls() ,
-        results[4].calls() );
-    EXPECT_EQ( results2[4].distributions()[0].results()[0].non_zero_calls() ,
-        results[4].calls() );
-    EXPECT_EQ( results2[4].distributions()[0].results()[0].finite_calls() ,
-        results[4].calls() );
+    EXPECT_EQ( results2[4].distributions()[0].results()[0].value() , results[4].value() );
+    EXPECT_EQ( results2[4].distributions()[0].results()[0].error() , results[4].error() );
+    EXPECT_EQ( results2[4].distributions()[0].results()[0].calls() , results[4].calls() );
+    EXPECT_EQ( results2[4].distributions()[0].results()[0].non_zero_calls() , results[4].calls() );
+    EXPECT_EQ( results2[4].distributions()[0].results()[0].finite_calls() , results[4].calls() );
 }
