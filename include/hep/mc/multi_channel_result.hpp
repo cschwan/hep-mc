@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2018  Christopher Schwan
+ * Copyright (C) 2015-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include "hep/mc/plain_result.hpp"
 
+#include <cassert>
 #include <cstddef>
 #include <iomanip>
 #include <ios>
@@ -40,8 +41,7 @@ template <typename T>
 class multi_channel_result : public plain_result<T>
 {
 public:
-    /// Constructor. The parameter `adjustment_data` must contain two additional values, being the
-    /// sum of the sum of squares of the integration.
+    /// Constructor.
     multi_channel_result(
         plain_result<T> const& result,
         std::vector<T> const& adjustment_data,
@@ -51,6 +51,7 @@ public:
         , adjustment_data_(adjustment_data)
         , channel_weights_(channel_weights)
     {
+        assert( adjustment_data.size() == channel_weights.size() );
     }
 
     /// Deserialization constructor.
