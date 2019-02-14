@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2018  Christopher Schwan
+ * Copyright (C) 2013-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "hep/mc/mpi_plain_callback.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/plain_result.hpp"
+#include "hep/mc/plain_chkpt.hpp"
 
 #include <cstddef>
 #include <random>
@@ -48,14 +49,13 @@ namespace hep
 /// \param integrand The function that will be integrated over the hypercube. See \ref integrands
 /// for further explanation.
 /// \param iteration_calls The number of function calls that are used to obtain the result.
-/// \param generator The random number generator that will be used to generate random points from
-/// the hypercube. This generator is properly seeded.
-template <typename I, typename R = std::mt19937>
-inline std::vector<plain_result<numeric_type_of<I>>> mpi_plain(
+/// \param chkpt The checkpoint used to start the integration.
+template <typename I, typename Checkpoint = plain_chkpt_with_mt19937<numeric_type_of<I>>>
+inline Checkpoint mpi_plain(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
-    R&& generator = std::mt19937()
+    Checkpoint chkpt = plain_chkpt_with_mt19937<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
 
@@ -64,9 +64,7 @@ inline std::vector<plain_result<numeric_type_of<I>>> mpi_plain(
     int world = 0;
     MPI_Comm_size(communicator, &world);
 
-    // vector holding all iteration results
-    std::vector<plain_result<T>> results;
-    results.reserve(iteration_calls.size());
+    auto generator = chkpt.generator();
 
     std::vector<T> buffer;
 
@@ -93,15 +91,15 @@ inline std::vector<plain_result<numeric_type_of<I>>> mpi_plain(
             *i
         );
 
-        results.push_back(new_result);
+        chkpt.add(new_result, generator);
 
-        if (!mpi_plain_callback<T>()(communicator, results))
+        if (!mpi_plain_callback<T>()(communicator, chkpt))
         {
             break;
         }
     }
 
-    return results;
+    return chkpt;
 }
 
 /// @}

@@ -20,6 +20,7 @@ libgtest_main = static_library(
 )
 
 programs = [
+    'test_plain_chkpt',
     'test_discrete_distribution',
     'test_distributions',
     'test_mc_helper',

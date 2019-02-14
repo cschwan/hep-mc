@@ -35,8 +35,8 @@ int main()
     );
 
     // now integrate and record the differential distributions
-    auto const results = hep::plain(integrand, std::vector<std::size_t>(1, 1000000));
-    auto const result = results.back();
+    auto const chkpt = hep::plain(integrand, std::vector<std::size_t>(1, 1000000));
+    auto const result = chkpt.results().back();
 
     // integral is zero
     std::cout << "integral is I = " << result.value() << " +- " << result.error() << "\n\n";

@@ -3,6 +3,7 @@ incdir = include_directories('.')
 headers1 = [
     'hep/mc/accumulator.hpp',
     'hep/mc/accumulator_fwd.hpp',
+    'hep/mc/chkpt.hpp',
     'hep/mc/discrete_distribution.hpp',
     'hep/mc/distribution_parameters.hpp',
     'hep/mc/distribution_result.hpp',
@@ -29,6 +30,7 @@ headers1 = [
     'hep/mc/multi_channel_weight_info.hpp',
     'hep/mc/plain.hpp',
     'hep/mc/plain_callback.hpp',
+    'hep/mc/plain_chkpt.hpp',
     'hep/mc/plain_result.hpp',
     'hep/mc/projector.hpp',
     'hep/mc/vegas.hpp',

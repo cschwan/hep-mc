@@ -23,6 +23,9 @@ Features
 - **Intermediate results**: Callback functions can be used to print intermediate results as soon as
   they are available. After the integration is finished each intermediate result can be extracted
   separately if the automatically weighted average does not suit the user.
+- **Checkpointing system**: A problem in long-running integrations is that sometimes the program is
+  killed before it is finished. In that case the checkpointing system can be used to continue the
+  integration starting from the last unfinished iteration.
 - **Random numbers**: Random numbers are generated using the C++ standard library `random
   <http://en.cppreference.com/w/cpp/numeric/random>`_. This library offers many random number
   generators from which the user can choose. If no random number generator is explicitly requested a

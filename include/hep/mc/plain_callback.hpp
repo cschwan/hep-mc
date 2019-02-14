@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2018  Christopher Schwan
+ * Copyright (C) 2018-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/mc_helper.hpp"
-#include "hep/mc/plain_result.hpp"
+#include "hep/mc/plain_chkpt.hpp"
 
 #include <cmath>
 #include <functional>
@@ -37,7 +37,7 @@ namespace hep
 ///
 /// \see \ref plain_callback
 template <typename T>
-inline bool plain_default_callback(std::vector<plain_result<T>> const&)
+inline bool plain_default_callback(plain_chkpt<T> const&)
 {
     return true;
 }
@@ -47,9 +47,11 @@ inline bool plain_default_callback(std::vector<plain_result<T>> const&)
 ///
 /// \see \ref plain_callback
 template <typename T>
-inline bool plain_verbose_callback(std::vector<plain_result<T>> const& results)
+inline bool plain_verbose_callback(plain_chkpt<T> const& chkpt)
 {
     using std::fabs;
+
+    auto const& results = chkpt.results();
 
     std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
@@ -83,7 +85,7 @@ inline bool plain_verbose_callback(std::vector<plain_result<T>> const& results)
 
 /// The type of callback function that can be set by the user with \ref plain_callback.
 template <typename T>
-using plain_callback_type = std::function<bool(std::vector<plain_result<T>>)>;
+using plain_callback_type = std::function<bool(plain_chkpt<T> const&)>;
 
 /// Sets the plain `callback` function and returns it. This function is called after each iteration
 /// performed by \ref plain. The default callback is \ref plain_default_callback. The function can

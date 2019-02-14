@@ -108,7 +108,7 @@ void check_plain_integrator(test_data_type data)
     auto results = hep::plain(
         hep::make_integrand<T>(integrand, dimension),
         std::vector<std::size_t>(1, calls)
-    );
+    ).results();
 
     // approximation should lie with the error interval
     EXPECT_NEAR( integrand.reference_result(), results.front().value(), deviation *

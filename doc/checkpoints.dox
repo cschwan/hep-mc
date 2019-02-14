@@ -1,0 +1,18 @@
+namespace hep
+{
+
+/**
+
+\defgroup checkpoints Checkpointing system
+
+\brief Saving the state of integrators
+
+A problem in long running integrations with many processors is that sometimes jobs are being killed,
+for example by the batch system of the computer cluster, because the run-time either wasn't properly
+estimated or because of a temporary hardware problem. Instead of restarting the entire integration,
+one can use previously stored checkpoints and continue the integration starting from last unfinished
+iteration.
+
+*/
+
+}

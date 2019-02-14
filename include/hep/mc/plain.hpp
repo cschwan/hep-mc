@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2018  Christopher Schwan
+ * Copyright (C) 2012-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/plain_callback.hpp"
+#include "hep/mc/plain_chkpt.hpp"
 #include "hep/mc/plain_result.hpp"
 
 #include <cstddef>
@@ -75,31 +76,30 @@ inline plain_result<numeric_type_of<I>> plain_iteration(
 
 /// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube
 /// `calls` function evaluations with randomly chosen points determined by `generator`.
-template <typename I, typename R = std::mt19937>
-inline std::vector<plain_result<numeric_type_of<I>>> plain(
+template <typename I, typename Checkpoint = plain_chkpt_with_mt19937<numeric_type_of<I>>>
+inline Checkpoint plain(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
-    R&& generator = std::mt19937()
+    Checkpoint chkpt = plain_chkpt_with_mt19937<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
 
-    // vector holding all iteration results
-    std::vector<plain_result<T>> results;
-    results.reserve(iteration_calls.size());
+    auto generator = chkpt.generator();
 
     // perform iterations
-    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    for (auto const calls : iteration_calls)
     {
-        auto const result = plain_iteration(integrand, *i, generator);
-        results.push_back(result);
+        auto const result = plain_iteration(integrand, calls, generator);
 
-        if (!plain_callback<T>()(results))
+        chkpt.add(result, generator);
+
+        if (!plain_callback<T>()(chkpt))
         {
             break;
         }
     }
 
-    return results;
+    return chkpt;
 }
 
 /// @}

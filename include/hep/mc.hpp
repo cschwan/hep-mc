@@ -40,6 +40,7 @@
 #include "hep/mc/multi_channel_weight_info.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/plain_callback.hpp"
+#include "hep/mc/plain_chkpt.hpp"
 #include "hep/mc/plain_result.hpp"
 #include "hep/mc/projector.hpp"
 #include "hep/mc/vegas.hpp"

@@ -367,7 +367,7 @@ TYPED_TEST(DistributionResults, CheckPlainIntegration)
             hep::make_dist_params<T>(100, T(-5.0), T(5.0))
         ),
         std::vector<std::size_t>(1, calls)
-    );
+    ).results();
 
     auto const distribution = results.front().distributions().at(0).results();
     auto const reference = reference_results<T>();

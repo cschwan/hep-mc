@@ -18,6 +18,7 @@ datadir = join_paths(get_option('datadir'), 'doc', meson.project_name())
 
 doxygen_files = [
     'callbacks.dox',
+    'checkpoints.dox',
     'distributions.dox',
     'DoxygenLayout.xml',
     'examples.dox',

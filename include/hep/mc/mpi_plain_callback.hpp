@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "hep/mc/chkpt.hpp"
 #include "hep/mc/plain_callback.hpp"
-#include "hep/mc/plain_result.hpp"
 
 #include <functional>
 #include <vector>
@@ -38,7 +38,7 @@ namespace hep
 ///
 /// \see mpi_plain_callback
 template <typename T>
-inline bool mpi_plain_default_callback(MPI_Comm, std::vector<plain_result<T>> const&)
+inline bool mpi_plain_default_callback(MPI_Comm, plain_chkpt<T> const&)
 {
     return true;
 }
@@ -49,16 +49,14 @@ inline bool mpi_plain_default_callback(MPI_Comm, std::vector<plain_result<T>> co
 ///
 /// \see plain_callback
 template <typename T>
-inline bool mpi_plain_verbose_callback(
-    MPI_Comm communicator,
-    std::vector<plain_result<T>> const& results
-) {
+inline bool mpi_plain_verbose_callback(MPI_Comm communicator, plain_chkpt<T> const& chkpt)
+{
     int rank = -1;
     MPI_Comm_rank(communicator, &rank);
 
     if (rank == 0)
     {
-        plain_verbose_callback<T>(results);
+        plain_verbose_callback<T>(chkpt);
     }
 
     return true;
@@ -66,7 +64,7 @@ inline bool mpi_plain_verbose_callback(
 
 /// The type of callback function that can be set by the user with \ref mpi_plain_callback.
 template <typename T>
-using mpi_plain_callback_type = std::function<bool(MPI_Comm, std::vector<plain_result<T>>)>;
+using mpi_plain_callback_type = std::function<bool(MPI_Comm, plain_chkpt<T> const&)>;
 
 /// Sets the plain `callback` function and returns it. This function is called after each iteration
 /// performed by \ref mpi_plain. The default callback is \ref mpi_plain_default_callback which does

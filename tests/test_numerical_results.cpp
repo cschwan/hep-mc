@@ -111,7 +111,7 @@ TYPED_TEST(NumericalResults, CheckPlainIntegration)
 #endif
         hep::make_integrand<T>(function<T>, 2),
         std::vector<std::size_t>(1, calls)
-    );
+    ).results();
     auto const reference = reference_results<T>();
 
 #ifndef HEP_USE_MPI
