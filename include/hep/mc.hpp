@@ -21,6 +21,7 @@
 
 #include "hep/mc/accumulator.hpp"
 #include "hep/mc/accumulator_fwd.hpp"
+#include "hep/mc/chkpt.hpp"
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/distribution_result.hpp"
