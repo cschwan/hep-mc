@@ -35,9 +35,16 @@ using plain_chkpt = chkpt<plain_result<T>>;
 template <typename RandomNumberEngine, typename T>
 using plain_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, plain_chkpt<T>>;
 
+template <typename T, typename RandomNumberEngine = std::mt19937>
+plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
+    RandomNumberEngine const& generator = std::mt19937()
+) {
+    return plain_chkpt_with_rng<RandomNumberEngine, T>{generator};
+}
+
 ///
 template <typename T>
-using plain_chkpt_with_mt19937 = chkpt_with_rng<std::mt19937, plain_chkpt<T>>;
+using default_plain_chkpt = decltype (make_plain_chkpt<T>());
 
 }
 

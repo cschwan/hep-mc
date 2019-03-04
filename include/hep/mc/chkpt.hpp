@@ -20,8 +20,8 @@
  */
 
 #include <cassert>
-#include <istream>
-#include <ostream>
+#include <iosfwd>
+#include <utility>
 #include <vector>
 
 namespace hep

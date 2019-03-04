@@ -76,11 +76,11 @@ inline plain_result<numeric_type_of<I>> plain_iteration(
 
 /// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube
 /// `calls` function evaluations with randomly chosen points determined by `generator`.
-template <typename I, typename Checkpoint = plain_chkpt_with_mt19937<numeric_type_of<I>>>
+template <typename I, typename Checkpoint = default_plain_chkpt<numeric_type_of<I>>>
 inline Checkpoint plain(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
-    Checkpoint chkpt = plain_chkpt_with_mt19937<numeric_type_of<I>>()
+    Checkpoint chkpt = make_plain_chkpt<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
 

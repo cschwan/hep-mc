@@ -23,8 +23,7 @@
 #include "hep/mc/mc_result.hpp"
 
 #include <cstddef>
-#include <istream>
-#include <ostream>
+#include <iosfwd>
 #include <vector>
 
 namespace hep
