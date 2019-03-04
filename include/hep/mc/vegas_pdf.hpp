@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2018  Christopher Schwan
+ * Copyright (C) 2014-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ public:
 
         for (std::size_t i = 0; i != x.size(); ++i)
         {
-            out << '\n' << std::scientific
+            out << ' ' << std::scientific
                 << std::setprecision(std::numeric_limits<T>::max_digits10 - 1) << x.at(i);
         }
     }
