@@ -76,14 +76,9 @@ public:
             out << '\n';
             results_.at(i).serialize(out);
         }
-
-        serialize_generators(out);
     }
 
 protected:
-    /// Writes a textual representation of all the generators to `out`.
-    virtual void serialize_generators(std::ostream& out) const = 0;
-
     std::vector<Result> results_;
 };
 
@@ -121,9 +116,10 @@ public:
         return generators_.back();
     }
 
-protected:
-    void serialize_generators(std::ostream& out) const override
+    void serialize(std::ostream& out) const override
     {
+        Checkpoint::serialize(out);
+
         assert( generators_.size() == (this->results().size() + 1) );
 
         for (auto const& generator : generators_)
