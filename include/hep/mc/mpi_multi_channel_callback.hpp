@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/multi_channel_callback.hpp"
-#include "hep/mc/multi_channel_result.hpp"
+#include "hep/mc/multi_channel_chkpt.hpp"
 
 #include <functional>
 #include <vector>
@@ -38,10 +38,8 @@ namespace hep
 ///
 /// \see mpi_multi_channel_callback
 template <typename T>
-inline bool mpi_multi_channel_default_callback(
-    MPI_Comm,
-    std::vector<multi_channel_result<T>> const&
-) {
+inline bool mpi_multi_channel_default_callback(MPI_Comm, multi_channel_chkpt<T> const&)
+{
     return true;
 }
 
@@ -53,7 +51,7 @@ inline bool mpi_multi_channel_default_callback(
 template <typename T>
 inline bool mpi_multi_channel_verbose_callback(
     MPI_Comm communicator,
-    std::vector<multi_channel_result<T>> const& results
+    multi_channel_chkpt<T> const& results
 ) {
     int rank = -1;
     MPI_Comm_rank(communicator, &rank);
@@ -69,7 +67,7 @@ inline bool mpi_multi_channel_verbose_callback(
 /// The type of callback function that can be set by the user with \ref mpi_multi_channel_callback.
 template <typename T>
 using mpi_multi_channel_callback_type =
-    std::function<bool(MPI_Comm, std::vector<multi_channel_result<T>>)>;
+    std::function<bool(MPI_Comm, multi_channel_chkpt<T> const&)>;
 
 /// Sets the multi channel `callback` function and returns it. This function is called after each
 /// iteration performed by \ref mpi_vegas. The default callback is \ref

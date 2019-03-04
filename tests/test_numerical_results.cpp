@@ -245,7 +245,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
             2
         ),
         std::vector<std::size_t>(iterations, calls)
-    );
+    ).results();
     auto const reference = reference_results<T>();
 
 #ifndef HEP_USE_MPI
@@ -309,7 +309,7 @@ TYPED_TEST(NumericalResults, CheckMultiChannelIntegration)
             hep::make_dist_params<T>(1, T(), T(1.0))
         ),
         std::vector<std::size_t>(iterations, calls)
-    );
+    ).results();
 
     ASSERT_EQ( results2.size() , iterations );
     ASSERT_EQ( results2[0].distributions().size() , 1u );

@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     auto results = hep::multi_channel(
         hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 3),
         std::vector<std::size_t>(10, 1000000)
-    );
+    ).results();
 
     std::cout << ">>> Disabling channel #2\n";
 
@@ -78,8 +78,8 @@ int main(int argc, char* argv[])
     hep::multi_channel(
         hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 3),
         std::vector<std::size_t>(10, 1000000),
-        weights
-    );
+        hep::make_multi_channel_chkpt<double>(weights)
+    ).results();
 
     return 0;
 }

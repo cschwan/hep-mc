@@ -26,6 +26,7 @@ programs = [
     'test_mc_helper',
     'test_mc_point',
     'test_mc_result',
+    'test_multi_channel_chkpt',
     'test_numerical_results',
     'test_vegas_chkpt',
     'test_vegas_icdf_bug',

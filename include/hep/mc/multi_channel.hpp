@@ -23,6 +23,7 @@
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
+#include "hep/mc/multi_channel_chkpt.hpp"
 #include "hep/mc/multi_channel_map.hpp"
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -102,7 +103,7 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
     I&& integrand,
     std::size_t calls,
     std::vector<numeric_type_of<I>> const& channel_weights,
-    R&& generator
+    R& generator
 ) {
     using T = numeric_type_of<I>;
 
@@ -184,66 +185,36 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
     return multi_channel_result<T>(accumulator.result(calls), adjustment_data, channel_weights);
 }
 
-/// Performs `iteration_calls.size()` multi channel iterations by calling \ref
-/// multi_channel_iteration with the specified parameters and refining the weights after each
-/// iteration with \ref multi_channel_refine_weights. The weights that are used for the first
-/// iteration must be given by the parameter `channel_weights`. See \ref multi_channel_group for a
-/// description of the remaining parameters.
-template <typename I, typename R = std::mt19937>
-inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
+///
+template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>>
+inline Checkpoint multi_channel(
     I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    std::vector<numeric_type_of<I>> const& channel_weights,
-    std::size_t min_calls_per_channel = 0,
-    R&& generator = std::mt19937()
+    std::vector<std::size_t> iteration_calls,
+    Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
 
-    auto weights = channel_weights;
+    chkpt.channels(integrand.channels());
 
-    std::vector<multi_channel_result<T>> results;
-    results.reserve(iteration_calls.size());
+    auto generator = chkpt.generator();
+    auto weights = chkpt.channel_weights();
 
-    for (std::size_t const calls : iteration_calls)
+    for (auto const calls : iteration_calls)
     {
         auto const result = multi_channel_iteration(integrand, calls, weights, generator);
 
-        results.push_back(result);
+        chkpt.add(result, generator);
 
-        if (!multi_channel_callback<T>()(results))
+        if (!multi_channel_callback<T>()(chkpt))
         {
             break;
         }
 
-        T const minimum_weight = T(min_calls_per_channel) / calls;
-
-        weights = multi_channel_refine_weights(weights, result.adjustment_data(), minimum_weight);
+        weights = multi_channel_refine_weights(weights, result.adjustment_data(),
+            chkpt.min_weight(), chkpt.beta());
     }
 
-    return results;
-}
-
-/// Performs `iteration_calls.size()` multi channel iterations by calling \ref
-/// multi_channel_iteration with the specified parameters and refining the weights after each
-/// iteration with \ref multi_channel_refine_weights. The weights used for the first iteration are
-/// \f$ \alpha = 1 / M \f$ with \f$ M \f$ the number of channels. See \ref multi_channel_group for a
-/// description of the remaining parameters.
-template <typename I, typename R = std::mt19937>
-inline std::vector<multi_channel_result<numeric_type_of<I>>> multi_channel(
-    I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    std::size_t min_calls_per_channel = 0,
-    R&& generator = std::mt19937()
-) {
-    using T = numeric_type_of<I>;
-
-    return multi_channel(
-        std::forward<I>(integrand),
-        iteration_calls,
-        std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
-        min_calls_per_channel,
-        std::forward<R>(generator)
-    );
+    return chkpt;
 }
 
 /// @}

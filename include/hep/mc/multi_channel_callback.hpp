@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2018  Christopher Schwan
+ * Copyright (C) 2015-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/mc_helper.hpp"
-#include "hep/mc/multi_channel_result.hpp"
+#include "hep/mc/multi_channel_chkpt.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
 #include "hep/mc/multi_channel_weight_info.hpp"
 
@@ -84,7 +84,7 @@ inline std::string make_list_of_ranges(std::vector<std::size_t> const& indices)
 ///
 /// \see \ref multi_channel_callback
 template <typename T>
-inline bool multi_channel_default_callback(std::vector<multi_channel_result<T>> const&)
+inline bool multi_channel_default_callback(multi_channel_chkpt<T> const&)
 {
     return true;
 }
@@ -94,9 +94,11 @@ inline bool multi_channel_default_callback(std::vector<multi_channel_result<T>> 
 ///
 /// \see \ref multi_channel_callback
 template <typename T>
-inline bool multi_channel_verbose_callback(std::vector<multi_channel_result<T>> const& results)
+inline bool multi_channel_verbose_callback(multi_channel_chkpt<T> const& chkpt)
 {
     using std::fabs;
+
+    auto const& results = chkpt.results();
 
     std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
@@ -193,7 +195,7 @@ inline bool multi_channel_verbose_callback(std::vector<multi_channel_result<T>> 
 
 /// The type of callback function that can be set by the user with \ref multi_channel_callback.
 template <typename T>
-using multi_channel_callback_type = std::function<bool(std::vector<multi_channel_result<T>>)>;
+using multi_channel_callback_type = std::function<bool(multi_channel_chkpt<T> const&)>;
 
 /// Sets the multi channel  `callback` function and returns it. This function is called after each
 /// iteration performed by \ref multi_channel. The default callback is \ref

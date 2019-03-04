@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 #endif
         hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 2),
         std::vector<std::size_t>(10, 10000000)
-    );
+    ).results();
 
 #ifdef USE_MPI
     int rank = 0;

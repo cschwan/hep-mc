@@ -39,89 +39,59 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
-/// Implements the MPI-parallelized adaptive multi channel algorithm. See \ref multi_channel_group
-/// for a detailed description of the parameters.
-template <typename I, typename R = std::mt19937>
-inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
+///
+template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>>
+inline Checkpoint mpi_multi_channel(
     MPI_Comm communicator,
     I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    std::vector<numeric_type_of<I>> const& channel_weights,
-    std::size_t min_calls_per_channel = 0,
-    R&& generator = std::mt19937()
+    std::vector<std::size_t> iteration_calls,
+    Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
+
+    chkpt.channels(integrand.channels());
 
     int rank = 0;
     MPI_Comm_rank(communicator, &rank);
     int world = 0;
     MPI_Comm_size(communicator, &world);
 
-    auto weights = channel_weights;
-
-    std::vector<multi_channel_result<T>> results;
-    results.reserve(iteration_calls.size());
+    auto generator = chkpt.generator();
+    auto weights = chkpt.channel_weights();
 
     std::vector<T> buffer;
 
     // hep::discrete_distribution consumes as many random numbers as an
     // additional dimension
-    std::size_t const usage = (1 + integrand.dimensions()) * random_number_usage<T, R>();
+    std::size_t const usage = (1 + integrand.dimensions()) *
+        random_number_usage<T, decltype (generator)>();
 
-    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    for (auto const calls : iteration_calls)
     {
-        generator.discard(usage * discard_before(*i, rank, world));
+        generator.discard(usage * discard_before(calls, rank, world));
 
-        std::size_t const calls = (*i / world) +
-            (static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
+        std::size_t const sub_calls = (calls / world) +
+            (static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
 
-        auto const result = multi_channel_iteration(integrand, calls, weights, generator);
+        auto const sub_result = multi_channel_iteration(integrand, sub_calls, weights, generator);
 
-        generator.discard(usage * discard_after(*i, calls, rank, world));
+        generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
-        auto const new_result = allreduce_result(
-            communicator,
-            result,
-            buffer,
-            result.adjustment_data(),
-            *i
-        );
+        auto const result = multi_channel_result<T>{allreduce_result(communicator, sub_result,
+            buffer, sub_result.adjustment_data(), calls), buffer, weights};
 
-        results.emplace_back(new_result, buffer, weights);
+        chkpt.add(result, generator);
 
-        if (!mpi_multi_channel_callback<T>()(communicator, results))
+        if (!multi_channel_callback<T>()(chkpt))
         {
             break;
         }
 
-        T const minimum_weight = T(min_calls_per_channel) / *i;
-
-        weights = multi_channel_refine_weights(weights, buffer, minimum_weight);
+        weights = multi_channel_refine_weights(weights, result.adjustment_data(),
+            chkpt.min_weight(), chkpt.beta());
     }
 
-    return results;
-}
-
-/// Implements the MPI-parallelized adaptive multi channel algorithm. See \ref multi_channel_group
-/// for a detailed description of the parameters.
-template <typename I, typename R = std::mt19937>
-inline std::vector<multi_channel_result<numeric_type_of<I>>> mpi_multi_channel(
-    MPI_Comm communicator,
-    I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    std::size_t min_calls_per_channel = 0,
-    R&& generator = std::mt19937()
-) {
-    using T = numeric_type_of<I>;
-
-    return mpi_multi_channel(
-        communicator,
-        std::forward<I>(integrand),
-        iteration_calls,
-        std::vector<T>(integrand.channels(), T(1.0) / T(integrand.channels())),
-        min_calls_per_channel,
-        std::forward<R>(generator)
-    );
+    return chkpt;
 }
 
 /// @}

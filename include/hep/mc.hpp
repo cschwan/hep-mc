@@ -33,6 +33,7 @@
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/multi_channel.hpp"
 #include "hep/mc/multi_channel_callback.hpp"
+#include "hep/mc/multi_channel_chkpt.hpp"
 #include "hep/mc/multi_channel_integrand.hpp"
 #include "hep/mc/multi_channel_map.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
