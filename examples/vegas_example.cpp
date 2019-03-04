@@ -24,7 +24,7 @@ int main()
     auto results = hep::vegas(
         hep::make_integrand<double>(square, 1),
         std::vector<std::size_t>(5, 1000)
-    );
+    ).results();
 
     // results contains the estimations for each iteration. We could take the
     // result from last iteration, but here we instead choose to combine the

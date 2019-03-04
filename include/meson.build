@@ -35,6 +35,7 @@ headers1 = [
     'hep/mc/projector.hpp',
     'hep/mc/vegas.hpp',
     'hep/mc/vegas_callback.hpp',
+    'hep/mc/vegas_chkpt.hpp',
     'hep/mc/vegas_pdf.hpp',
     'hep/mc/vegas_point.hpp',
     'hep/mc/vegas_result.hpp',

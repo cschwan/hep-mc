@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2013-2018  Christopher Schwan
+ * Copyright (C) 2013-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include "hep/mc/mpi_vegas_callback.hpp"
 #include "hep/mc/vegas.hpp"
 #include "hep/mc/vegas_pdf.hpp"
-#include "hep/mc/vegas_result.hpp"
+#include "hep/mc/vegas_chkpt.hpp"
 
 #include <cstddef>
 #include <random>
@@ -41,16 +41,13 @@ namespace hep
 /// \addtogroup vegas_group
 /// @{
 
-/// Implements the MPI-parallelized VEGAS algorithm. This function can be used to start from an
-/// already adapted grid, e.g. one by \ref vegas_result.pdf obtained by a previous \ref vegas call.
-template <typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
+///
+template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>>
+inline Checkpoint mpi_vegas(
     MPI_Comm communicator,
     I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    vegas_pdf<numeric_type_of<I>> const& start_pdf,
-    numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
-    R&& generator = std::mt19937()
+    std::vector<std::size_t> iteration_calls,
+    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
 
@@ -59,77 +56,42 @@ inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
     int world = 0;
     MPI_Comm_size(communicator, &world);
 
-    // create a fresh grid
-    auto pdf = start_pdf;
+    chkpt.dimensions(integrand.dimensions());
 
-    // vector holding all iteration results
-    std::vector<vegas_result<T>> results;
-    results.reserve(iteration_calls.size());
+    auto generator = chkpt.generator();
+    auto pdf = chkpt.pdf();
 
     // reserve a buffer for the MPI call to sum `adjustment_data`, `sum`, and
     // `sum_of_squares`
     std::vector<T> buffer(pdf.dimensions() * pdf.bins() + 2);
 
-    std::size_t const usage = pdf.dimensions() * random_number_usage<T, R>();
+    std::size_t const usage = pdf.dimensions() * random_number_usage<T, decltype (generator)>();
 
     // perform iterations
-    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    for (auto const calls : iteration_calls)
     {
-        generator.discard(usage * discard_before(*i, rank, world));
+        generator.discard(usage * discard_before(calls, rank, world));
 
-        std::size_t const calls = (*i / world) +
-            (static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
-        auto const result = vegas_iteration(integrand, calls, pdf, generator);
+        std::size_t const sub_calls = (calls / world) +
+            (static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
+        auto const sub_result = vegas_iteration(integrand, sub_calls, pdf, generator);
 
-        generator.discard(usage * discard_after(*i, calls, rank, world));
+        generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
-        auto const& new_result = allreduce_result(
-            communicator,
-            result,
-            buffer,
-            result.adjustment_data(),
-            *i
-        );
+        auto const result = vegas_result<T>{allreduce_result(communicator, sub_result, buffer,
+            sub_result.adjustment_data(), calls), pdf, buffer};
 
-        results.emplace_back(new_result, pdf, buffer);
+        chkpt.add(result, generator);
 
-        if (!mpi_vegas_callback<T>()(communicator, results))
+        if (!mpi_vegas_callback<T>()(communicator, chkpt))
         {
             break;
         }
 
-        pdf = vegas_refine_pdf(pdf, alpha, buffer);
+        pdf = vegas_refine_pdf(pdf, chkpt.alpha(), result.adjustment_data());
     }
 
-    return results;
-}
-
-/// Implements the MPI-parallelized VEGAS algorithm. See \ref vegas for a more detailed description
-/// on the VEGAS algorithm. In contrast to the single-threaded versions this function makes sure
-/// that every random number generator is seeded differently so every MPI process yields an
-/// independent result. After each iteration the intermediate results are passed to the function set
-/// by \ref mpi_vegas_callback which can e.g. be used to print them out. The callback function is
-/// able to stop the integration if it returns `false`. In this case less iterations are performed
-/// than requested.
-template <typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<numeric_type_of<I>>> mpi_vegas(
-    MPI_Comm communicator,
-    I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    std::size_t bins = 128,
-    numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
-    R&& generator = std::mt19937()
-) {
-    using T = numeric_type_of<I>;
-
-    return mpi_vegas(
-        communicator,
-        std::forward<I>(integrand),
-        iteration_calls,
-        vegas_pdf<T>(integrand.dimensions(), bins),
-        alpha,
-        std::forward<R>(generator)
-    );
+    return chkpt;
 }
 
 /// @}

@@ -17,10 +17,12 @@ struct stop_after_precision
     {
     }
 
-    bool operator()(std::vector<hep::vegas_result<double>> const& r)
+    bool operator()(hep::vegas_chkpt<double> const& chkpt)
     {
         // print the results obtained so far
-        hep::vegas_verbose_callback<double>(r);
+        hep::vegas_verbose_callback<double>(chkpt);
+
+        auto const& r = chkpt.results();
 
         // compute cumulative result ...
         auto const result = hep::accumulate<hep::weighted_with_variance>(

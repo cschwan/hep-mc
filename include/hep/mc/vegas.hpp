@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2018  Christopher Schwan
+ * Copyright (C) 2012-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "hep/mc/accumulator.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/vegas_callback.hpp"
+#include "hep/mc/vegas_chkpt.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
 #include "hep/mc/vegas_result.hpp"
@@ -53,7 +54,7 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
     I&& integrand,
     std::size_t calls,
     vegas_pdf<numeric_type_of<I>> const& pdf,
-    R&& generator
+    R& generator
 ) {
     using T = numeric_type_of<I>;
 
@@ -96,61 +97,35 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by \ref
 /// vegas_result.pdf obtained by a previous \ref vegas call.
-template <typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
+template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>>
+inline Checkpoint vegas(
     I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    vegas_pdf<numeric_type_of<I>> const& start_pdf,
-    numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
-    R&& generator = std::mt19937()
+    std::vector<std::size_t> iteration_calls,
+    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>()
 ) {
     using T = numeric_type_of<I>;
 
-    auto pdf = start_pdf;
+    chkpt.dimensions(integrand.dimensions());
 
-    // vector holding all iteration results
-    std::vector<vegas_result<T>> results;
-    results.reserve(iteration_calls.size());
+    auto generator = chkpt.generator();
+    auto pdf = chkpt.pdf();
 
     // perform iterations
-    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    for (auto const calls : iteration_calls)
     {
-        auto const result = vegas_iteration(integrand, *i, pdf, generator);
-        results.push_back(result);
+        auto const result = vegas_iteration(integrand, calls, pdf, generator);
 
-        if (!vegas_callback<T>()(results))
+        chkpt.add(result, generator);
+
+        if (!vegas_callback<T>()(chkpt))
         {
             break;
         }
 
-        pdf = vegas_refine_pdf(pdf, alpha, result.adjustment_data());
+        pdf = vegas_refine_pdf(pdf, chkpt.alpha(), result.adjustment_data());
     }
 
-    return results;
-}
-
-/// Integrates `function` over the unit-hypercube with `dimensions` by performing
-/// `iteration_calls.size()` iterations of the VEGAS algorithm, with as many function calls for each
-/// iteration specified by the corresponding value in `iteration_calls`. The pdf that is sampled
-/// from has `bins` for each dimension as is refined \ref vegas_refine_pdf using the\f$ \alpha
-/// \f$-parameter given by `alpha`.
-template <typename I, typename R = std::mt19937>
-inline std::vector<vegas_result<numeric_type_of<I>>> vegas(
-    I&& integrand,
-    std::vector<std::size_t> const& iteration_calls,
-    std::size_t bins = 128,
-    numeric_type_of<I> alpha = numeric_type_of<I>(1.5),
-    R&& generator = std::mt19937()
-) {
-    using T = numeric_type_of<I>;
-
-    return vegas(
-        std::forward<I>(integrand),
-        iteration_calls,
-        vegas_pdf<T>(integrand.dimensions(), bins),
-        alpha,
-        std::forward<R>(generator)
-    );
+    return chkpt;
 }
 
 /// @}

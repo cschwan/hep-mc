@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2018  Christopher Schwan
+ * Copyright (C) 2014-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/mc_helper.hpp"
-#include "hep/mc/vegas_result.hpp"
+#include "hep/mc/vegas_chkpt.hpp"
 
 #include <cmath>
 #include <functional>
@@ -37,7 +37,7 @@ namespace hep
 ///
 /// \see \ref vegas_callback
 template <typename T>
-inline bool vegas_default_callback(std::vector<vegas_result<T>> const&)
+inline bool vegas_default_callback(vegas_chkpt<T> const&)
 {
     return true;
 }
@@ -47,9 +47,11 @@ inline bool vegas_default_callback(std::vector<vegas_result<T>> const&)
 ///
 /// \see \ref vegas_callback
 template <typename T>
-inline bool vegas_verbose_callback(std::vector<vegas_result<T>> const& results)
+inline bool vegas_verbose_callback(vegas_chkpt<T> const& chkpt)
 {
     using std::fabs;
+
+    auto const& results = chkpt.results();
 
     std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
@@ -83,7 +85,7 @@ inline bool vegas_verbose_callback(std::vector<vegas_result<T>> const& results)
 
 /// The type of callback function that can be set by the user with \ref vegas_callback.
 template <typename T>
-using vegas_callback_type = std::function<bool(std::vector<vegas_result<T>>)>;
+using vegas_callback_type = std::function<bool(vegas_chkpt<T> const&)>;
 
 /// Sets the vegas `callback` function and returns it. This function is called after each iteration
 /// performed by \ref vegas. The default callback is \ref vegas_default_callback. The function can

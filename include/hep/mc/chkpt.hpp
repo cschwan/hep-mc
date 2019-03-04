@@ -86,8 +86,9 @@ template <typename RandomNumberEngine, typename Checkpoint>
 class chkpt_with_rng : public Checkpoint
 {
 public:
-    chkpt_with_rng(RandomNumberEngine generator = RandomNumberEngine())
-        : Checkpoint()
+    template <typename... Args>
+    chkpt_with_rng(RandomNumberEngine const& generator, Args&&... args)
+        : Checkpoint(std::forward<Args>(args)...)
         , generators_{generator}
     {
     }

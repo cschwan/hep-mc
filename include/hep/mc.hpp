@@ -46,6 +46,7 @@
 #include "hep/mc/projector.hpp"
 #include "hep/mc/vegas.hpp"
 #include "hep/mc/vegas_callback.hpp"
+#include "hep/mc/vegas_chkpt.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
 #include "hep/mc/vegas_result.hpp"

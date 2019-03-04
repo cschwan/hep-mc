@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2014-2018  Christopher Schwan
+ * Copyright (C) 2014-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
  */
 
 #include "hep/mc/vegas_callback.hpp"
-#include "hep/mc/vegas_result.hpp"
+#include "hep/mc/vegas_chkpt.hpp"
 
 #include <functional>
 #include <vector>
@@ -38,7 +38,7 @@ namespace hep
 ///
 /// \see mpi_vegas_callback
 template <typename T>
-inline bool mpi_vegas_default_callback(MPI_Comm, std::vector<vegas_result<T>> const&)
+inline bool mpi_vegas_default_callback(MPI_Comm, vegas_chkpt<T> const&)
 {
     return true;
 }
@@ -49,16 +49,14 @@ inline bool mpi_vegas_default_callback(MPI_Comm, std::vector<vegas_result<T>> co
 ///
 /// \see vegas_callback
 template <typename T>
-inline bool mpi_vegas_verbose_callback(
-    MPI_Comm communicator,
-    std::vector<vegas_result<T>> const& results
-) {
+inline bool mpi_vegas_verbose_callback(MPI_Comm communicator, vegas_chkpt<T> const& chkpt)
+{
     int rank = -1;
     MPI_Comm_rank(communicator, &rank);
 
     if (rank == 0)
     {
-        vegas_verbose_callback<T>(results);
+        vegas_verbose_callback<T>(chkpt);
     }
 
     return true;
@@ -66,7 +64,7 @@ inline bool mpi_vegas_verbose_callback(
 
 /// The type of callback function that can be set by the user with \ref mpi_vegas_callback.
 template <typename T>
-using mpi_vegas_callback_type = std::function<bool(MPI_Comm, std::vector<vegas_result<T>>)>;
+using mpi_vegas_callback_type = std::function<bool(MPI_Comm, vegas_chkpt<T> const&)>;
 
 /// Sets the vegas `callback` function and returns it. This function is called after each iteration
 /// performed by \ref mpi_vegas. The default callback is \ref mpi_vegas_default_callback which does

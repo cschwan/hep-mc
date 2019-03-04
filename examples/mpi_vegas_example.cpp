@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
         MPI_COMM_WORLD,
         hep::make_integrand<double>(square, 1),
         std::vector<std::size_t>(5, 10000000)
-    );
+    ).results();
 
     // results contains the estimations for each iteration. We could take the
     // result from last iteration, but here we instead choose to combine the

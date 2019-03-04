@@ -13,8 +13,8 @@ int main()
     auto results = hep::vegas(
         hep::make_integrand<double>(square, 1),
         std::vector<std::size_t>(2, 100),
-        5
-    );
+        hep::make_vegas_chkpt<double>(5)
+    ).results();
 
     // write the pdf that was used to generate the last iteration
     results.back().pdf().serialize(std::cout);

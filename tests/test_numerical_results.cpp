@@ -149,7 +149,7 @@ TYPED_TEST(NumericalResults, CheckVegasIntegration)
 #endif
         hep::make_integrand<T>(function<T>, 2),
         std::vector<std::size_t>(iterations, calls)
-    );
+    ).results();
     auto const reference = reference_results<T>();
 
 #ifndef HEP_USE_MPI
