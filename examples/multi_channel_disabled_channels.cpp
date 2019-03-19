@@ -70,7 +70,8 @@ int main(int argc, char* argv[])
     auto const weights = hep::multi_channel_refine_weights(
         results.back().channel_weights(),
         adjustment_data,
-        0.0
+        0.0,
+        0.25
     );
 
     std::cout << ">>> Starting new run without channel #2\n\n";

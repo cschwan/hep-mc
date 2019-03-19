@@ -27,6 +27,7 @@ headers1 = [
     'hep/mc/multi_channel_map.hpp',
     'hep/mc/multi_channel_max_difference.hpp',
     'hep/mc/multi_channel_point.hpp',
+    'hep/mc/multi_channel_refine_weights.hpp',
     'hep/mc/multi_channel_result.hpp',
     'hep/mc/multi_channel_weight_info.hpp',
     'hep/mc/plain.hpp',

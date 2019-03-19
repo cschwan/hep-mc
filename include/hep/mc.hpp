@@ -38,6 +38,7 @@
 #include "hep/mc/multi_channel_map.hpp"
 #include "hep/mc/multi_channel_max_difference.hpp"
 #include "hep/mc/multi_channel_point.hpp"
+#include "hep/mc/multi_channel_refine_weights.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 #include "hep/mc/multi_channel_weight_info.hpp"
 #include "hep/mc/plain.hpp"
