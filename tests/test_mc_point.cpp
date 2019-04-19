@@ -1,24 +1,27 @@
-#include "gtest/gtest.h"
-
 #include "hep/mc/mc_point.hpp"
+
+#include "catch2/catch.hpp"
 
 #include <vector>
 
-typedef testing::Types<float, double, long double> MyT;
-template <typename T> class McPoint : public testing::Test { };
-TYPED_TEST_CASE(McPoint, MyT);
-
-TYPED_TEST(McPoint, ConstructorAndMemberVariables)
+TEMPLATE_TEST_CASE("mc_point<T> creation", "", float, double, long double)
 {
-    typedef TypeParam T;
+    using T = TestType;
 
-    std::vector<T> point{ T(0.1), T(0.9), T(0.133), T(0.4) };
-    hep::mc_point<T> result(point);
+    std::vector<T> vector{ T(1.0), T(2.0), T(3.0), T(4.0) };
 
-    EXPECT_EQ( T(1.0) , result.weight() );
+    hep::mc_point<T> point1{vector};
 
-    EXPECT_NEAR( T(0.1)   , result.point()[0] , T(1e-10) );
-    EXPECT_NEAR( T(0.9)   , result.point()[1] , T(1e-10) );
-    EXPECT_NEAR( T(0.133) , result.point()[2] , T(1e-10) );
-    EXPECT_NEAR( T(0.4)   , result.point()[3] , T(1e-10) );
+    // check default argument value
+    CHECK( point1.weight() == T(1.0) );
+
+    CHECK( point1.point().at(0) == T(1.0) );
+    CHECK( point1.point().at(1) == T(2.0) );
+    CHECK( point1.point().at(2) == T(3.0) );
+    CHECK( point1.point().at(3) == T(4.0) );
+
+    hep::mc_point<T> point2{vector, T(2.0)};
+
+    // check custom weight instead of the default argument
+    CHECK( point2.weight() == T(2.0) );
 }

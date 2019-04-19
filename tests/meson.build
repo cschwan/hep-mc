@@ -1,3 +1,11 @@
+catch_subproj = subproject('catch2')
+catch_dep = catch_subproj.get_variable('catch2_dep')
+
+# make it a static library because `catch.cpp` contains `main`
+libcatch = static_library('catch', 'catch.cpp', dependencies : catch_dep)
+
+libcatch_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch)
+
 libgenz = static_library(
     'genz',
     'genz_integrand.hpp',
@@ -24,7 +32,6 @@ programs = [
     'test_discrete_distribution',
     'test_distributions',
     'test_mc_helper',
-    'test_mc_point',
     'test_mc_result',
     'test_multi_channel_chkpt',
     'test_numerical_results',
@@ -43,6 +50,15 @@ foreach p : programs
     )
 
     test(p, exe)
+endforeach
+
+tests = [
+    'test_mc_point'
+]
+
+foreach t : tests
+    exe = executable(t, t + '.cpp', dependencies : [ libcatch_dep, hep_mc_dep ])
+    test(t, exe)
 endforeach
 
 test_genz_integrand = executable(
