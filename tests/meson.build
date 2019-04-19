@@ -29,7 +29,6 @@ libgtest_main = static_library(
 
 programs = [
     'test_plain_chkpt',
-    'test_discrete_distribution',
     'test_distributions',
     'test_mc_helper',
     'test_multi_channel_chkpt',
@@ -52,6 +51,7 @@ foreach p : programs
 endforeach
 
 tests = [
+    'test_discrete_distribution',
     'test_mc_point',
     'test_mc_result'
 ]
