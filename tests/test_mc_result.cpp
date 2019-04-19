@@ -1,33 +1,62 @@
-#include "gtest/gtest.h"
-
 #include "hep/mc/mc_result.hpp"
 
-typedef testing::Types<float, double, long double> MyT;
-template <typename T> class McResult : public testing::Test { };
-TYPED_TEST_CASE(McResult, MyT);
+#include "catch2/catch.hpp"
 
-TYPED_TEST(McResult, ConstructorAndMemberVariables)
+#include <sstream>
+
+TEMPLATE_TEST_CASE("mc_result<T> construction", "", float, double, long double)
 {
-    typedef TypeParam T;
+    using T = TestType;
 
-    hep::mc_result<T> result1(100, 100, 100, T(100.0), T(100.0));
+    hep::mc_result<T> result{100, 99, 98, T(100.0), T(100.0)};
 
-    EXPECT_EQ( 100U , result1.calls() );
-    EXPECT_EQ( 100U , result1.non_zero_calls() );
-    EXPECT_EQ( 100U , result1.finite_calls() );
-    EXPECT_NEAR( T(1.0) , result1.value() , T(1e-10) );
-    EXPECT_NEAR( T()    , result1.error() , T(1e-10) );
+    CHECK( result.calls()          == 100u );
+    CHECK( result.non_zero_calls() ==  99u );
+    CHECK( result.finite_calls()   ==  98u );
+    CHECK( result.sum()            == T(100.0) );
+    CHECK( result.sum_of_squares() == T(100.0) );
+
+    CHECK( result.value()          == T(1.0) );
+    CHECK( result.variance()       == T() );
+    CHECK( result.error()          == T() );
 }
 
-TYPED_TEST(McResult, CreateResult)
+TEMPLATE_TEST_CASE("mc_result<T> serialization", "", float, double, long double)
 {
-    typedef TypeParam T;
+    using T = TestType;
 
-    auto const result = hep::create_result(100, 100, 100, T(1.0), T());
+    std::stringstream stream;
 
-    EXPECT_EQ( 100U , result.calls() );
-    EXPECT_EQ( 100U , result.non_zero_calls() );
-    EXPECT_EQ( 100U , result.finite_calls() );
-    EXPECT_NEAR( T(1.0) , result.value() , T(1e-10) );
-    EXPECT_NEAR( T()    , result.error() , T(1e-10) );
+    // write a result to a stream read it back in
+    hep::mc_result<T>{100, 99, 98, T(100.0), T(100.0)}.serialize(stream);
+    hep::mc_result<T> result{stream};
+
+    // Is it the same result?
+
+    CHECK( result.calls()          == 100u );
+    CHECK( result.non_zero_calls() ==  99u );
+    CHECK( result.finite_calls()   ==  98u );
+    CHECK( result.sum()            == T(100.0) );
+    CHECK( result.sum_of_squares() == T(100.0) );
+
+    CHECK( result.value()          == T(1.0) );
+    CHECK( result.variance()       == T() );
+    CHECK( result.error()          == T() );
+}
+
+TEMPLATE_TEST_CASE("create_result function", "", float, double, long double)
+{
+    using T = TestType;
+
+    auto result = hep::create_result(100, 99, 98, T(1.0), T());
+
+    CHECK( result.calls()          == 100u );
+    CHECK( result.non_zero_calls() ==  99u );
+    CHECK( result.finite_calls()   ==  98u );
+    CHECK( result.sum()            == T(100.0) );
+    CHECK( result.sum_of_squares() == T(100.0) );
+
+    CHECK( result.value()          == T(1.0) );
+    CHECK( result.variance()       == T() );
+    CHECK( result.error()          == T() );
 }
