@@ -148,7 +148,7 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     T min_fraction = T(),
     RandomNumberEngine const& rng = std::mt19937()
 ) {
-    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, beta, min_fraction};
+    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, min_fraction, beta};
 }
 
 ///
@@ -159,8 +159,8 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     T min_fraction = T(),
     RandomNumberEngine const& rng = std::mt19937()
 ) {
-    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, channel_weights, beta,
-        min_fraction};
+    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, channel_weights, min_fraction,
+        beta};
 }
 
 ///
