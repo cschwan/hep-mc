@@ -28,7 +28,6 @@ libgtest_main = static_library(
 )
 
 programs = [
-    'test_distributions',
     'test_mc_helper',
     'test_numerical_results',
     'test_vegas_icdf_bug',
@@ -49,6 +48,7 @@ endforeach
 
 tests = [
     'test_discrete_distribution',
+    'test_distributions_with_plain',
     'test_mc_point',
     'test_mc_result',
     'test_multi_channel_chkpt',
@@ -92,4 +92,19 @@ if get_option('mpi')
     mpiexec = find_program('mpiexec')
     test('test_mpi_numerical_results', mpiexec,
         args : [ '-np', '2', test_mpi_numerical_results])
+
+    # make it a static library because `catch.cpp` contains `main`
+    libcatch_mpi = static_library('catch_mpi', 'catch_mpi.cpp', dependencies : catch_dep)
+    libcatch_mpi_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch_mpi)
+
+    mpi_tests = [
+        'test_distributions_with_plain'
+    ]
+
+    foreach t : mpi_tests
+        exe = executable(t + '_mpi', t + '.cpp', cpp_args : [ '-DHEP_USE_MPI' ],
+            dependencies : [ hep_mc_dep, libcatch_mpi_dep, mpi_dep ])
+
+        test(t + '_mpi', mpiexec, args : [ '-np', '2', exe ])
+    endforeach
 endif
