@@ -37,26 +37,28 @@ namespace hep
 /// \addtogroup checkpoints
 /// @{
 
-///
+/// Checkpoints created by the \ref vegas_group.
 template <typename T>
 class vegas_chkpt : public chkpt<vegas_result<T>>
 {
 public:
-    ///
+    /// Constructor. Creates an empty checkpoint with a uniform \ref vegas_pdf with the specified
+    /// number of `bins`. The argument `alpha` will be used to adapt the grids after each iteration.
     vegas_chkpt(std::size_t bins, T alpha)
         : alpha_{alpha}
         , bins_{bins}
     {
     }
 
-    ///
+    /// Constructor. Creates an empty checkpoint with the user-defined \ref vegas_pdf which can be
+    /// used to integrate using a PDF different from a uniform one.
     vegas_chkpt(vegas_pdf<T> const& pdf, T alpha)
         : alpha_{alpha}
         , pdf_{pdf}
     {
     }
 
-    ///
+    /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
     vegas_chkpt(std::istream& in)
         : chkpt<vegas_result<T>>{in}
     {
@@ -68,13 +70,14 @@ public:
         }
     }
 
-    ///
+    /// Returns the parameter `alpha`, which is used to refine the PDF of VEGAS after each
+    /// iteration.
     T alpha() const
     {
         return alpha_;
     }
 
-    ///
+    /// Sets the number of dimensions which is a parameter needed for the VEGAS integration
     void dimensions(std::size_t dimensions)
     {
         if (pdf_.empty())
@@ -86,18 +89,19 @@ public:
             (this->results().back().pdf().dimensions() == dimensions) );
     }
 
-    ///
+    /// Returns the PDF which is used for the next iteration.
     vegas_pdf<T> const pdf() const
     {
-        if (this->results().empty())
+        auto const& results = this->results();
+
+        if (results.empty())
         {
             return pdf_.front();
         }
 
-        return this->results().back().pdf();
+        return vegas_refine_pdf(results.back().pdf(), alpha_, results.back().adjustment_data());
     }
 
-    ///
     void serialize(std::ostream& out) const override
     {
         chkpt<vegas_result<T>>::serialize(out);
@@ -118,11 +122,11 @@ private:
     std::vector<vegas_pdf<T>> pdf_;
 };
 
-///
+/// Checkpoint with random number generators created by using the \ref plain_group.
 template <typename RandomNumberEngine, typename T>
 using vegas_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, vegas_chkpt<T>>;
 
-///
+/// Helper function to create an initial checkpoint to start the \ref vegas_group.
 template <typename T, typename RandomNumberEngine = std::mt19937>
 vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     std::size_t bins = 128,
@@ -132,7 +136,7 @@ vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, bins, alpha};
 }
 
-///
+/// Helper function to create an initial checkpoint to start the \ref vegas_group.
 template <typename T, typename RandomNumberEngine = std::mt19937>
 vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     vegas_pdf<T> const& pdf,
@@ -142,7 +146,7 @@ vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, pdf, alpha};
 }
 
-///
+/// Return type of \ref make_vegas_chkpt with default arguments.
 template <typename T>
 using default_vegas_chkpt = decltype (make_vegas_chkpt<T>());
 

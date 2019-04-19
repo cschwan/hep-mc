@@ -144,11 +144,11 @@ inline Checkpoint multi_channel(
     chkpt.channels(integrand.channels());
 
     auto generator = chkpt.generator();
-    auto weights = chkpt.channel_weights();
 
     for (auto const calls : iteration_calls)
     {
-        auto const result = multi_channel_iteration(integrand, calls, weights, generator);
+        auto const& weights = chkpt.channel_weights();
+        auto const& result = multi_channel_iteration(integrand, calls, weights, generator);
 
         chkpt.add(result, generator);
 
@@ -156,9 +156,6 @@ inline Checkpoint multi_channel(
         {
             break;
         }
-
-        weights = multi_channel_refine_weights(weights, result.adjustment_data(),
-            chkpt.min_weight(), chkpt.beta());
     }
 
     return chkpt;

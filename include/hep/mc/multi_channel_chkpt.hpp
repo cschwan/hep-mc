@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/chkpt.hpp"
+#include "hep/mc/multi_channel_refine_weights.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 
 #include <cassert>
@@ -53,6 +54,7 @@ public:
     {
     }
 
+    /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
     multi_channel_chkpt(std::istream& in)
         : chkpt<multi_channel_result<T>>{in}
     {
@@ -73,16 +75,21 @@ public:
         }
     }
 
+    /// Returns the channel weights for the next iteration.
     std::vector<T> const channel_weights() const
     {
-        if (this->results().empty())
+        auto const& results = this->results();
+
+        if (results.empty())
         {
             return first_channel_weights_;
         }
 
-        return this->results().back().channel_weights();
+        return multi_channel_refine_weights(results.back().channel_weights(),
+            results.back().adjustment_data(), min_weight_, beta_);
     }
 
+    /// Sets the number of channels.
     void channels(std::size_t channels)
     {
         if (first_channel_weights_.empty())

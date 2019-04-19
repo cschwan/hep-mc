@@ -12,20 +12,22 @@ integration algorithms are available:
 Features
 ========
 
-- **Parallelization**: For each integrator a function prefixed with ``mpi_`` is available that uses
+- **Parallelization**: For each integrator a function prefixed with ``mpi_`` is available which uses
   the `Message Passing Interface (MPI) <http://www.mpi-forum.org/>`_ to run the integration in
-  parallel (locally or on a cluster). The parallel integration is designed in such a way that it
-  returns the numerically same result as its non-parallel counterpart. In particular this means that
-  the result is independent from the number of processors used and only dependent on the seed of the
-  random number generator.
-- **Distributions**: Arbitrary many differential distributions can be generated during the
+  parallel (locally or on a cluster). The parallel integration is designed so that the functions
+  return the numerically same result as their non-parallel counterpart. This means that the result
+  is independent from the number of processors and only dependent on the seed of the random number
+  generator.
+- **Distributions**: Arbitrarily many differential distributions can be generated during the
   integration.
 - **Intermediate results**: Callback functions can be used to print intermediate results as soon as
   they are available. After the integration is finished each intermediate result can be extracted
   separately if the automatically weighted average does not suit the user.
-- **Checkpointing system**: A problem in long-running integrations is that sometimes the program is
-  killed before it is finished. In that case the checkpointing system can be used to continue the
-  integration starting from the last unfinished iteration.
+- **Checkpointing system**: Checkpoints allow the state of integrators to be saved, allowing to stop
+  and restart integrations. This is especially useful if the integration is running for several days
+  and if resources are limited: On computing clusters the CPU-time is usually restricted so that
+  jobs are killed if they running too long. In this case, by saving checkpoints to disk, one can
+  recover partial results and restart the integration from the last checkpoint.
 - **Random numbers**: Random numbers are generated using the C++ standard library `random
   <http://en.cppreference.com/w/cpp/numeric/random>`_. This library offers many random number
   generators from which the user can choose. If no random number generator is explicitly requested a
@@ -55,7 +57,7 @@ Usage
 
 This library uses features from the ISO C++11 standard which must be enabled with your compiler. For
 the GCC and clang compilers this can be done by passing an additional parameter to the compiler,
-e.g. ::
+for example ::
 
     g++ -std=c++11 my_program.cpp
 

@@ -27,14 +27,18 @@
 namespace hep
 {
 
-///
+/// \addtogroup checkpoints
+/// @{
+
+/// Checkpoint created by using the \ref plain_group.
 template <typename T>
 using plain_chkpt = chkpt<plain_result<T>>;
 
-///
+/// Checkpoint with random number generators created by using the \ref plain_group.
 template <typename RandomNumberEngine, typename T>
 using plain_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, plain_chkpt<T>>;
 
+/// Helper function to create an initial checkpoint to start the \ref plain_group.
 template <typename T, typename RandomNumberEngine = std::mt19937>
 plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
     RandomNumberEngine const& generator = std::mt19937()
@@ -42,9 +46,11 @@ plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
     return plain_chkpt_with_rng<RandomNumberEngine, T>{generator};
 }
 
-///
+/// Return type of \ref make_plain_chkpt with default arguments.
 template <typename T>
 using default_plain_chkpt = decltype (make_plain_chkpt<T>());
+
+/// @}
 
 }
 

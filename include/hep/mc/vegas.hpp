@@ -108,12 +108,12 @@ inline Checkpoint vegas(
     chkpt.dimensions(integrand.dimensions());
 
     auto generator = chkpt.generator();
-    auto pdf = chkpt.pdf();
 
     // perform iterations
     for (auto const calls : iteration_calls)
     {
-        auto const result = vegas_iteration(integrand, calls, pdf, generator);
+        auto const& pdf = chkpt.pdf();
+        auto const& result = vegas_iteration(integrand, calls, pdf, generator);
 
         chkpt.add(result, generator);
 
@@ -121,8 +121,6 @@ inline Checkpoint vegas(
         {
             break;
         }
-
-        pdf = vegas_refine_pdf(pdf, chkpt.alpha(), result.adjustment_data());
     }
 
     return chkpt;

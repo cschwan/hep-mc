@@ -36,6 +36,7 @@ template <typename Result>
 class chkpt
 {
 public:
+    /// The type of results this class stores. See \ref results for the different result types.
     using result_type = Result;
 
     /// Default constructor.
@@ -44,7 +45,7 @@ public:
     /// Destructor.
     virtual ~chkpt() = default;
 
-    /// Deserialization constructor.
+    /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
     chkpt(std::istream& in)
     {
         std::size_t size = 0;
@@ -64,7 +65,8 @@ public:
         return results_;
     }
 
-    /// Serializes this object.
+    /// Serializes this object. This writes a textual representation of this class to the stream
+    /// `out`.
     virtual void serialize(std::ostream& out) const
     {
         std::size_t const size = results_.size();
@@ -82,10 +84,13 @@ protected:
     std::vector<Result> results_;
 };
 
+/// Class representing a checkpoint together with a random number generators which were used to
+/// generate the results.
 template <typename RandomNumberEngine, typename Checkpoint>
 class chkpt_with_rng : public Checkpoint
 {
 public:
+    /// Constructor.
     template <typename... Args>
     chkpt_with_rng(RandomNumberEngine const& generator, Args&&... args)
         : Checkpoint(std::forward<Args>(args)...)
@@ -93,6 +98,7 @@ public:
     {
     }
 
+    /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
     chkpt_with_rng(std::istream& in)
         : Checkpoint(in)
     {
@@ -106,12 +112,17 @@ public:
         }
     }
 
+    /// Adds a result and a random number generator to this checkpoint. The argument `result` must
+    /// correspond to the result created with the random number generator returned previously with
+    /// \ref generator. The argument `generator` will be random number generator for the next
+    /// iteration.
     void add(typename Checkpoint::result_type const& result, RandomNumberEngine const& generator)
     {
         this->results_.push_back(result);
         generators_.push_back(generator);
     }
 
+    /// Returns the random number generator which will be used in the next iteration.
     RandomNumberEngine generator() const
     {
         return generators_.back();
