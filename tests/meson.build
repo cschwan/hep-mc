@@ -32,7 +32,6 @@ programs = [
     'test_mc_helper',
     'test_multi_channel_chkpt',
     'test_numerical_results',
-    'test_vegas_chkpt',
     'test_vegas_icdf_bug',
     'test_vegas_pdf'
 ]
@@ -53,7 +52,8 @@ tests = [
     'test_discrete_distribution',
     'test_mc_point',
     'test_mc_result',
-    'test_plain_chkpt'
+    'test_plain_chkpt',
+    'test_vegas_chkpt'
 ]
 
 foreach t : tests
