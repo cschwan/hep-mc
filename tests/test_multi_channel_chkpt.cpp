@@ -1,13 +1,13 @@
-#include "gtest/gtest.h"
+#include "hep/mc/multi_channel_integrand.hpp"
+#include "hep/mc/multi_channel.hpp"
 
-#include "hep/mc.hpp"
+#include "catch2/catch.hpp"
 
 #include <cstddef>
-#include <fstream>
+#include <sstream>
 #include <vector>
 
-using T = double;
-
+template <typename T>
 T linear_function(hep::mc_point<T> const& point, hep::projector<T>& projector)
 {
     T const x = point.point().at(0);
@@ -18,6 +18,7 @@ T linear_function(hep::mc_point<T> const& point, hep::projector<T>& projector)
     return v;
 }
 
+template <typename T>
 T map(
     std::size_t channel,
     std::vector<T> const& random_numbers,
@@ -35,12 +36,17 @@ T map(
     return T(1.0);
 }
 
-TEST(TestMultiChannelCheckpoint, test_empty_checkpoint)
+TEMPLATE_TEST_CASE("multi_channel_chkpt<T> empty serialization", "", float, double, long double)
 {
+    using T = TestType;
+
     // create a checkpoint using five iterations with PLAIN
-    auto chkpt1 = hep::make_multi_channel_chkpt<double>();
+    auto chkpt1 = hep::make_multi_channel_chkpt<T>();
 
     chkpt1.channels(1);
+
+    CHECK( chkpt1.beta()       == T(0.25) );
+    CHECK( chkpt1.min_weight() == T() );
 
     // serialize checkpoint
     std::ostringstream stream1;
@@ -55,17 +61,19 @@ TEST(TestMultiChannelCheckpoint, test_empty_checkpoint)
     chkpt2.serialize(stream2);
 
     // string representation should be the same
-    ASSERT_STREQ( stream1.str().c_str() , stream2.str().c_str() );
+    CHECK( stream1.str() == stream2.str() );
 }
 
-TEST(TestMultiChannelCheckpoint, test_non_empty_checkpoint)
+TEMPLATE_TEST_CASE("multi_channel_chkpt<T> serialization", "", float, double, long double)
 {
+    using T = TestType;
+
     // create a checkpoint using five iterations with PLAIN
     auto const chkpt1 = hep::multi_channel(
         hep::make_multi_channel_integrand<T>(
-            linear_function,
+            linear_function<T>,
             1,
-            map,
+            map<T>,
             1,
             1,
             hep::make_dist_params<T>(10, T(0.0), T(1.0), "distribution name")
@@ -86,5 +94,5 @@ TEST(TestMultiChannelCheckpoint, test_non_empty_checkpoint)
     chkpt2.serialize(stream2);
 
     // string representation should be the same
-    ASSERT_STREQ( stream1.str().c_str() , stream2.str().c_str() );
+    CHECK( stream1.str() == stream2.str() );
 }
