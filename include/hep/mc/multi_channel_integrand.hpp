@@ -20,6 +20,7 @@
  */
 
 #include "hep/mc/distribution_parameters.hpp"
+#include "hep/mc/integrand.hpp"
 
 #include <cstddef>
 #include <utility>
