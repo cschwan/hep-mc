@@ -1,5 +1,4 @@
-catch_subproj = subproject('catch2')
-catch_dep = catch_subproj.get_variable('catch2_dep')
+catch_dep = dependency('catch2', fallback : [ 'catch2', 'catch2_dep' ])
 
 # make it a static library because `catch.cpp` contains `main`
 libcatch = static_library('catch', 'catch.cpp', dependencies : catch_dep)
