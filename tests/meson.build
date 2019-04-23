@@ -45,13 +45,13 @@ endforeach
 
 tests = [
     'test_discrete_distribution',
-    'test_distributions_with_plain',
     'test_mc_point',
     'test_mc_result',
     'test_multi_channel',
     'test_multi_channel_chkpt',
     'test_plain',
     'test_plain_chkpt',
+    'test_plain_with_distributions',
     'test_vegas',
     'test_vegas_chkpt',
     'test_vegas_pdf'
@@ -78,9 +78,9 @@ if get_option('mpi')
     libcatch_mpi_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch_mpi)
 
     mpi_tests = [
-        'test_distributions_with_plain',
         'test_multi_channel',
         'test_plain',
+        'test_plain_with_distributions',
         'test_vegas'
     ]
 
