@@ -24,7 +24,7 @@ tests = [
 
 foreach t : tests
     exe = executable(t, t + '.cpp', dependencies : [ libcatch_dep, hep_mc_dep ])
-    test(t, exe)
+    test(t, exe, timeout : 60)
 endforeach
 
 if get_option('mpi')
