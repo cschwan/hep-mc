@@ -30,8 +30,7 @@ libgtest_main = static_library(
 programs = [
     'test_mc_helper',
     'test_numerical_results',
-    'test_vegas_icdf_bug',
-    'test_vegas_pdf'
+    'test_vegas_icdf_bug'
 ]
 
 foreach p : programs
@@ -53,7 +52,8 @@ tests = [
     'test_mc_result',
     'test_multi_channel_chkpt',
     'test_plain_chkpt',
-    'test_vegas_chkpt'
+    'test_vegas_chkpt',
+    'test_vegas_pdf'
 ]
 
 foreach t : tests
