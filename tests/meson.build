@@ -5,35 +5,6 @@ catch_dep = catch_subproj.get_variable('catch2_dep')
 libcatch = static_library('catch', 'catch.cpp', dependencies : catch_dep)
 libcatch_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch)
 
-libgtest = static_library(
-    'gtest',
-    'gtest/gtest.h',
-    'gtest-all.cpp',
-    cpp_args : '-DGTEST_HAS_PTHREAD=0'
-)
-
-libgtest_main = static_library(
-    'gtest-main',
-    'gtest/gtest.h',
-    'gtest_main.cpp',
-    cpp_args : '-DGTEST_HAS_PTHREAD=0'
-)
-
-programs = [
-]
-
-foreach p : programs
-    exe = executable(
-        p,
-        p + '.cpp',
-        cpp_args : '-DGTEST_HAS_THREAD=0',
-        include_directories : incdir,
-        link_with : [ libgtest, libgtest_main ]
-    )
-
-    test(p, exe)
-endforeach
-
 tests = [
     'test_discrete_distribution',
     'test_mc_helper',
