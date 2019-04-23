@@ -29,8 +29,7 @@ libgtest_main = static_library(
 
 programs = [
     'test_mc_helper',
-    'test_numerical_results',
-    'test_vegas_icdf_bug'
+    'test_numerical_results'
 ]
 
 foreach p : programs
