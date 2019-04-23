@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-int main(int argc, char* argv[])
+int main()
 {
     constexpr double s[] = { -10.0, +10.0, 0.0 };
 
