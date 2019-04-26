@@ -81,8 +81,6 @@ inline std::string make_list_of_ranges(std::vector<std::size_t> const& indices)
 /// @{
 
 /// The default callback function. This function does nothing and always returns `true`.
-///
-/// \see \ref multi_channel_callback
 template <typename T>
 inline bool multi_channel_default_callback(multi_channel_chkpt<T> const&)
 {
@@ -91,8 +89,6 @@ inline bool multi_channel_default_callback(multi_channel_chkpt<T> const&)
 
 /// Callback function that prints a detailed summary about every iteration performed so far. This
 /// function always returns `true`.
-///
-/// \see \ref multi_channel_callback
 template <typename T>
 inline bool multi_channel_verbose_callback(multi_channel_chkpt<T> const& chkpt)
 {
@@ -191,31 +187,6 @@ inline bool multi_channel_verbose_callback(multi_channel_chkpt<T> const& chkpt)
     std::cout.flush();
 
     return true;
-}
-
-/// The type of callback function that can be set by the user with \ref multi_channel_callback.
-template <typename T>
-using multi_channel_callback_type = std::function<bool(multi_channel_chkpt<T> const&)>;
-
-/// Sets the multi channel  `callback` function and returns it. This function is called after each
-/// iteration performed by \ref multi_channel. The default callback is \ref
-/// multi_channel_default_callback. The function can e.g. be set to \ref
-/// multi_channel_verbose_callback which prints after each iteration. If the callback function
-/// returns `false` the integration is stopped.
-///
-/// If this function is called without any argument, the previous function is retained.
-template <typename T>
-inline multi_channel_callback_type<T> multi_channel_callback(
-    multi_channel_callback_type<T> callback = nullptr
-) {
-    static multi_channel_callback_type<T> object = multi_channel_default_callback<T>;
-
-    if (callback != nullptr)
-    {
-        object = callback;
-    }
-
-    return object;
 }
 
 /// @}

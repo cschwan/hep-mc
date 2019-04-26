@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2018  Christopher Schwan
+ * Copyright (C) 2015-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,12 +40,14 @@ namespace hep
 /// @{
 
 ///
-template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>>
+template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>,
+    typename Callback = decltype (mpi_multi_channel_verbose_callback<numeric_type_of<I>>)>
 inline Checkpoint mpi_multi_channel(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
-    Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>()
+    Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>(),
+    Callback callback = mpi_multi_channel_verbose_callback<numeric_type_of<I>>
 ) {
     using T = numeric_type_of<I>;
 
@@ -82,7 +84,7 @@ inline Checkpoint mpi_multi_channel(
 
         chkpt.add(result, generator);
 
-        if (!multi_channel_callback<T>()(chkpt))
+        if (!callback(communicator, chkpt))
         {
             break;
         }

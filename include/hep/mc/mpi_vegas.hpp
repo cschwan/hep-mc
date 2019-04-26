@@ -42,12 +42,14 @@ namespace hep
 /// @{
 
 ///
-template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>>
+template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>,
+    typename Callback = decltype (mpi_vegas_verbose_callback<numeric_type_of<I>>)>
 inline Checkpoint mpi_vegas(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
-    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>()
+    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
+    Callback callback = mpi_vegas_verbose_callback<numeric_type_of<I>>
 ) {
     using T = numeric_type_of<I>;
 
@@ -83,7 +85,7 @@ inline Checkpoint mpi_vegas(
 
         chkpt.add(result, generator);
 
-        if (!mpi_vegas_callback<T>()(communicator, chkpt))
+        if (!callback(communicator, chkpt))
         {
             break;
         }

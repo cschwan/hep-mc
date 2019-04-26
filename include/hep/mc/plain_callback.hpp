@@ -23,7 +23,6 @@
 #include "hep/mc/plain_chkpt.hpp"
 
 #include <cmath>
-#include <functional>
 #include <iostream>
 #include <vector>
 
@@ -34,18 +33,14 @@ namespace hep
 /// @{
 
 /// The default callback function. This function does nothing and always returns `true`.
-///
-/// \see \ref plain_callback
 template <typename T>
-inline bool plain_default_callback(plain_chkpt<T> const&)
+inline bool plain_silent_callback(plain_chkpt<T> const&)
 {
     return true;
 }
 
 /// Callback function that prints a detailed summary about every iteration performed so far. This
 /// function always returns `true`.
-///
-/// \see \ref plain_callback
 template <typename T>
 inline bool plain_verbose_callback(plain_chkpt<T> const& chkpt)
 {
@@ -81,29 +76,6 @@ inline bool plain_verbose_callback(plain_chkpt<T> const& chkpt)
     std::cout.flush();
 
     return true;
-}
-
-/// The type of callback function that can be set by the user with \ref plain_callback.
-template <typename T>
-using plain_callback_type = std::function<bool(plain_chkpt<T> const&)>;
-
-/// Sets the plain `callback` function and returns it. This function is called after each iteration
-/// performed by \ref plain. The default callback is \ref plain_default_callback. The function can
-/// e.g. be set to \ref plain_verbose_callback which prints after each iteration. If the callback
-/// function returns `false` the integration is stopped.
-///
-/// If this function is called without any argument, the previous function is retained.
-template <typename T>
-inline plain_callback_type<T> plain_callback(plain_callback_type<T> callback = nullptr)
-{
-    static plain_callback_type<T> object = plain_default_callback<T>;
-
-    if (callback != nullptr)
-    {
-        object = callback;
-    }
-
-    return object;
 }
 
 /// @}

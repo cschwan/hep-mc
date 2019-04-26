@@ -58,16 +58,16 @@ struct stop_after_precision
 
 int main()
 {
-    // stop if error is better than lower than 0.0001 or better than 1% (=0.01)
-    hep::vegas_callback<double>(stop_after_precision(0.0001, 0.01));
-
     // print only 3 digits
     std::cout.precision(3);
 
     // perform 100 iterations with 1000 calls each _at maximum_
     auto results = hep::vegas(
         hep::make_integrand<double>(square, 1),
-        std::vector<std::size_t>(100, 1000)
+        std::vector<std::size_t>(100, 1000),
+        hep::make_vegas_chkpt<double>(),
+        // stop if error is better than lower than 0.0001 or better than 1% (=0.01)
+        stop_after_precision(0.0001, 0.01)
     );
 
     return 0;

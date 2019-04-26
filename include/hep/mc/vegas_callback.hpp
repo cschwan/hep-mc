@@ -23,9 +23,8 @@
 #include "hep/mc/vegas_chkpt.hpp"
 
 #include <cmath>
-#include <functional>
+#include <cstddef>
 #include <iostream>
-#include <vector>
 
 namespace hep
 {
@@ -34,18 +33,14 @@ namespace hep
 /// @{
 
 /// The default callback function. This function does nothing and always returns `true`.
-///
-/// \see \ref vegas_callback
 template <typename T>
-inline bool vegas_default_callback(vegas_chkpt<T> const&)
+inline bool vegas_silent_callback(vegas_chkpt<T> const&)
 {
     return true;
 }
 
 /// Callback function that prints a detailed summary about every iteration performed so far. This
 /// function always returns `true`.
-///
-/// \see \ref vegas_callback
 template <typename T>
 inline bool vegas_verbose_callback(vegas_chkpt<T> const& chkpt)
 {
@@ -81,29 +76,6 @@ inline bool vegas_verbose_callback(vegas_chkpt<T> const& chkpt)
     std::cout.flush();
 
     return true;
-}
-
-/// The type of callback function that can be set by the user with \ref vegas_callback.
-template <typename T>
-using vegas_callback_type = std::function<bool(vegas_chkpt<T> const&)>;
-
-/// Sets the vegas `callback` function and returns it. This function is called after each iteration
-/// performed by \ref vegas. The default callback is \ref vegas_default_callback. The function can
-/// e.g. be set to \ref vegas_verbose_callback which prints after each iteration. If the callback
-/// function returns `false` the integration is stopped.
-///
-/// If this function is called without any argument, the previous function is retained.
-template <typename T>
-inline vegas_callback_type<T> vegas_callback(vegas_callback_type<T> callback = nullptr)
-{
-    static vegas_callback_type<T> object = vegas_default_callback<T>;
-
-    if (callback != nullptr)
-    {
-        object = callback;
-    }
-
-    return object;
 }
 
 /// @}

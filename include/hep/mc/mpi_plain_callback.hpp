@@ -22,9 +22,6 @@
 #include "hep/mc/chkpt.hpp"
 #include "hep/mc/plain_callback.hpp"
 
-#include <functional>
-#include <vector>
-
 #include <mpi.h>
 
 namespace hep
@@ -34,11 +31,9 @@ namespace hep
 /// @{
 
 /// The default callback function. This function does nothing and always returns `true`. It is the
-/// MPI equivalent of \ref plain_default_callback.
-///
-/// \see mpi_plain_callback
+/// MPI equivalent of \ref plain_silent_callback.
 template <typename T>
-inline bool mpi_plain_default_callback(MPI_Comm, plain_chkpt<T> const&)
+inline bool mpi_plain_silent_callback(MPI_Comm, plain_chkpt<T> const&)
 {
     return true;
 }
@@ -46,8 +41,6 @@ inline bool mpi_plain_default_callback(MPI_Comm, plain_chkpt<T> const&)
 /// Callback function that prints a detailed summary about every iteration performed so far. This
 /// function always returns `true`. It is the equivalent of \ref plain_verbose_callback and only
 /// writes an output if it was called from rank zero to avoid duplicated output.
-///
-/// \see plain_callback
 template <typename T>
 inline bool mpi_plain_verbose_callback(MPI_Comm communicator, plain_chkpt<T> const& chkpt)
 {
@@ -60,29 +53,6 @@ inline bool mpi_plain_verbose_callback(MPI_Comm communicator, plain_chkpt<T> con
     }
 
     return true;
-}
-
-/// The type of callback function that can be set by the user with \ref mpi_plain_callback.
-template <typename T>
-using mpi_plain_callback_type = std::function<bool(MPI_Comm, plain_chkpt<T> const&)>;
-
-/// Sets the plain `callback` function and returns it. This function is called after each iteration
-/// performed by \ref mpi_plain. The default callback is \ref mpi_plain_default_callback which does
-/// nothing. The callback function can e.g. be set to \ref mpi_plain_verbose_callback which prints
-/// detailed results after each iteration.
-///
-/// If this function is called without any argument, the current callback function is returned.
-template <typename T>
-inline mpi_plain_callback_type<T> mpi_plain_callback(mpi_plain_callback_type<T> callback = nullptr)
-{
-    static mpi_plain_callback_type<T> object = mpi_plain_default_callback<T>;
-
-    if (callback != nullptr)
-    {
-        object = callback;
-    }
-
-    return object;
 }
 
 /// @}

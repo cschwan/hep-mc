@@ -15,9 +15,6 @@ int main()
     // print reference result
     std::cout << ">> computing integral of 3*x^2 from 0 to 1 which is 1.0\n\n";
 
-    // set the verbose vegas callback function
-    hep::vegas_callback<double>(hep::vegas_verbose_callback<double>);
-
     // perform 5 iteration with 1000 calls each; this function will also call
     // vegas_verbose_callback after each iteration which in turn prints the
     // individual iterations

@@ -29,7 +29,6 @@
 #include <cstddef>
 #include <limits>
 #include <random>
-#include <utility>
 #include <vector>
 
 namespace hep
@@ -74,16 +73,16 @@ inline plain_result<numeric_type_of<I>> plain_iteration(
     return accumulator.result(calls);
 }
 
-/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube
+/// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube using
 /// `calls` function evaluations with randomly chosen points determined by `generator`.
-template <typename I, typename Checkpoint = default_plain_chkpt<numeric_type_of<I>>>
+template <typename I, typename Checkpoint = default_plain_chkpt<numeric_type_of<I>>,
+    typename Callback = decltype (plain_verbose_callback<numeric_type_of<I>>)>
 inline Checkpoint plain(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
-    Checkpoint chkpt = make_plain_chkpt<numeric_type_of<I>>()
+    Checkpoint chkpt = make_plain_chkpt<numeric_type_of<I>>(),
+    Callback callback = plain_verbose_callback<numeric_type_of<I>>
 ) {
-    using T = numeric_type_of<I>;
-
     auto generator = chkpt.generator();
 
     // perform iterations
@@ -93,7 +92,7 @@ inline Checkpoint plain(
 
         chkpt.add(result, generator);
 
-        if (!plain_callback<T>()(chkpt))
+        if (!callback(chkpt))
         {
             break;
         }

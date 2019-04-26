@@ -34,9 +34,6 @@ int main(int argc, char* argv[])
             "\n\n";
     }
 
-    // set the verbose vegas callback function
-    hep::mpi_vegas_callback<double>(hep::mpi_vegas_verbose_callback<double>);
-
     // perform 5 iteration with 1000 calls each; this function will also call
     // vegas_verbose_callback after each iteration which in turn prints the
     // individual iterations

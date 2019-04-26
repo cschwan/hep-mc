@@ -30,7 +30,6 @@
 #include <cstddef>
 #include <limits>
 #include <random>
-#include <utility>
 #include <vector>
 
 namespace hep
@@ -97,14 +96,14 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by \ref
 /// vegas_result.pdf obtained by a previous \ref vegas call.
-template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>>
+template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>,
+    typename Callback = decltype (vegas_verbose_callback<numeric_type_of<I>>)>
 inline Checkpoint vegas(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
-    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>()
+    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
+    Callback callback = vegas_verbose_callback<numeric_type_of<I>>
 ) {
-    using T = numeric_type_of<I>;
-
     chkpt.dimensions(integrand.dimensions());
 
     auto generator = chkpt.generator();
@@ -117,7 +116,7 @@ inline Checkpoint vegas(
 
         chkpt.add(result, generator);
 
-        if (!vegas_callback<T>()(chkpt))
+        if (!callback(chkpt))
         {
             break;
         }

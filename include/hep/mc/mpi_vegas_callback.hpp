@@ -22,9 +22,6 @@
 #include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_chkpt.hpp"
 
-#include <functional>
-#include <vector>
-
 #include <mpi.h>
 
 namespace hep
@@ -34,11 +31,9 @@ namespace hep
 /// @{
 
 /// The default callback function. This function does nothing and always returns `true`. It is the
-/// MPI equivalent of \ref vegas_default_callback.
-///
-/// \see mpi_vegas_callback
+/// MPI equivalent of \ref vegas_silent_callback.
 template <typename T>
-inline bool mpi_vegas_default_callback(MPI_Comm, vegas_chkpt<T> const&)
+inline bool mpi_vegas_silent_callback(MPI_Comm, vegas_chkpt<T> const&)
 {
     return true;
 }
@@ -60,29 +55,6 @@ inline bool mpi_vegas_verbose_callback(MPI_Comm communicator, vegas_chkpt<T> con
     }
 
     return true;
-}
-
-/// The type of callback function that can be set by the user with \ref mpi_vegas_callback.
-template <typename T>
-using mpi_vegas_callback_type = std::function<bool(MPI_Comm, vegas_chkpt<T> const&)>;
-
-/// Sets the vegas `callback` function and returns it. This function is called after each iteration
-/// performed by \ref mpi_vegas. The default callback is \ref mpi_vegas_default_callback which does
-/// nothing. The callback function can e.g. be set to \ref mpi_vegas_verbose_callback which prints
-/// detailed results after each iteration.
-///
-/// If this function is called without any argument, the current callback function is returned.
-template <typename T>
-inline mpi_vegas_callback_type<T> mpi_vegas_callback(mpi_vegas_callback_type<T> callback = nullptr)
-{
-    static mpi_vegas_callback_type<T> object = mpi_vegas_default_callback<T>;
-
-    if (callback != nullptr)
-    {
-        object = callback;
-    }
-
-    return object;
 }
 
 /// @}
