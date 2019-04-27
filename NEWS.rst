@@ -1,6 +1,16 @@
 New in 0.8:
 ===========
 
+- WARNING: removed global callback functions; each integrator now takes an optional fourth argument
+  which must be the callback function. The default callback function is the verbose one. Also
+  the function names of the previously called ``_default_callback`` functions to
+  ``_silent_callback``
+- WARNING: changed the interfaces of the integrators ``hep::plain``, ``hep::vegas``, and
+  ``hep::multi_channel`` in order to support the new checkpointing system (see below)
+- added checkpointing system: It is now possible to seamlessly resume an integration starting from a
+  previously generated checkpoint. Checkpoints are the new return type of every integrator and can
+  be easily saved to and read from text files; see ``examples/checkpoints.cpp``
+- removed Google Test by Catch2; this dependency should automatically downloaded
 - WARNING: changed the interface of ``hep::plain`` and ``hep::mpi_plain`` to perform multiple
   iterations rather than a single big one. Between two iterations a callback function is invoked,
   like with any other algorithm as well
