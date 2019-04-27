@@ -22,6 +22,7 @@
 #include "hep/mc/chkpt.hpp"
 #include "hep/mc/plain_result.hpp"
 
+#include <iosfwd>
 #include <random>
 
 namespace hep
@@ -44,6 +45,15 @@ plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
     RandomNumberEngine const& generator = std::mt19937()
 ) {
     return plain_chkpt_with_rng<RandomNumberEngine, T>{generator};
+}
+
+/// Helper function create a checkpoint reading from the stream `in`. Note the the numeric type `T`
+/// as well as the type of the random number generator, `RandomNumberEngine` have to explicitly
+/// stated.
+template <typename T, typename RandomNumberEngine>
+plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(std::istream& in)
+{
+    return plain_chkpt_with_rng<RandomNumberEngine, T>{in};
 }
 
 /// Return type of \ref make_plain_chkpt with default arguments.

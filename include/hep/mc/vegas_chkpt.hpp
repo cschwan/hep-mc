@@ -146,6 +146,15 @@ vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, pdf, alpha};
 }
 
+/// Helper function create a checkpoint reading from the stream `in`. Note the the numeric type `T`
+/// as well as the type of the random number generator, `RandomNumberEngine` have to explicitly
+/// stated.
+template <typename T, typename RandomNumberEngine>
+vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(std::istream& in)
+{
+    return vegas_chkpt_with_rng<RandomNumberEngine, T>{in};
+}
+
 /// Return type of \ref make_vegas_chkpt with default arguments.
 template <typename T>
 using default_vegas_chkpt = decltype (make_vegas_chkpt<T>());

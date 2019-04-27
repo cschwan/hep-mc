@@ -163,6 +163,15 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
         beta};
 }
 
+/// Helper function create a checkpoint reading from the stream `in`. Note the the numeric type `T`
+/// as well as the type of the random number generator, `RandomNumberEngine` have to explicitly
+/// stated.
+template <typename T, typename RandomNumberEngine>
+multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(std::istream& in)
+{
+    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{in};
+}
+
 ///
 template <typename T>
 using default_multi_channel_chkpt = decltype (make_multi_channel_chkpt<T>());
