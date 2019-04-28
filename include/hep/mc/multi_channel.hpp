@@ -20,9 +20,9 @@
  */
 
 #include "hep/mc/accumulator.hpp"
+#include "hep/mc/callback.hpp"
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/integrand.hpp"
-#include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_chkpt.hpp"
 #include "hep/mc/multi_channel_map.hpp"
 #include "hep/mc/multi_channel_point.hpp"
@@ -134,12 +134,12 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
 
 ///
 template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (multi_channel_verbose_callback<numeric_type_of<I>>)>
+    typename Callback = decltype (verbose_callback<Checkpoint>)>
 inline Checkpoint multi_channel(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
     Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>(),
-    Callback callback = multi_channel_verbose_callback<numeric_type_of<I>>
+    Callback callback = verbose_callback<Checkpoint>
 ) {
     chkpt.channels(integrand.channels());
 

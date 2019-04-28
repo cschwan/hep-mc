@@ -20,8 +20,8 @@
  */
 
 #include "hep/mc/accumulator.hpp"
+#include "hep/mc/callback.hpp"
 #include "hep/mc/integrand.hpp"
-#include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_chkpt.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
@@ -97,12 +97,12 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 /// This function can be used to start from an already adapted pdf, e.g. one by \ref
 /// vegas_result.pdf obtained by a previous \ref vegas call.
 template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (vegas_verbose_callback<numeric_type_of<I>>)>
+    typename Callback = decltype (verbose_callback<Checkpoint>)>
 inline Checkpoint vegas(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
     Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
-    Callback callback = vegas_verbose_callback<numeric_type_of<I>>
+    Callback callback = verbose_callback<Checkpoint>
 ) {
     chkpt.dimensions(integrand.dimensions());
 

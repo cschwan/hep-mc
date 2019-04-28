@@ -21,8 +21,8 @@
 
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/integrand.hpp"
+#include "hep/mc/mpi_callback.hpp"
 #include "hep/mc/mpi_helper.hpp"
-#include "hep/mc/mpi_multi_channel_callback.hpp"
 #include "hep/mc/multi_channel.hpp"
 #include "hep/mc/multi_channel_result.hpp"
 
@@ -41,13 +41,13 @@ namespace hep
 
 ///
 template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (mpi_multi_channel_verbose_callback<numeric_type_of<I>>)>
+    typename Callback = decltype (mpi_verbose_callback<Checkpoint>)>
 inline Checkpoint mpi_multi_channel(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
     Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>(),
-    Callback callback = mpi_multi_channel_verbose_callback<numeric_type_of<I>>
+    Callback callback = mpi_verbose_callback<Checkpoint>
 ) {
     using T = numeric_type_of<I>;
 

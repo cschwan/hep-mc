@@ -20,9 +20,9 @@
  */
 
 #include "hep/mc/accumulator.hpp"
+#include "hep/mc/callback.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_point.hpp"
-#include "hep/mc/plain_callback.hpp"
 #include "hep/mc/plain_chkpt.hpp"
 #include "hep/mc/plain_result.hpp"
 
@@ -76,12 +76,12 @@ inline plain_result<numeric_type_of<I>> plain_iteration(
 /// PLAIN Monte Carlo integrator. This function integrates `integrand` over the unit-hypercube using
 /// `calls` function evaluations with randomly chosen points determined by `generator`.
 template <typename I, typename Checkpoint = default_plain_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (plain_verbose_callback<numeric_type_of<I>>)>
+    typename Callback = decltype (verbose_callback<Checkpoint>)>
 inline Checkpoint plain(
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
     Checkpoint chkpt = make_plain_chkpt<numeric_type_of<I>>(),
-    Callback callback = plain_verbose_callback<numeric_type_of<I>>
+    Callback callback = verbose_callback<Checkpoint>
 ) {
     auto generator = chkpt.generator();
 

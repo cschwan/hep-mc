@@ -22,8 +22,8 @@
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
+#include "hep/mc/mpi_callback.hpp"
 #include "hep/mc/mpi_helper.hpp"
-#include "hep/mc/mpi_plain_callback.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/plain_result.hpp"
 #include "hep/mc/plain_chkpt.hpp"
@@ -51,13 +51,13 @@ namespace hep
 /// \param iteration_calls The number of function calls that are used to obtain the result.
 /// \param chkpt The checkpoint used to start the integration.
 template <typename I, typename Checkpoint = default_plain_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (mpi_plain_verbose_callback<numeric_type_of<I>>)>
+    typename Callback = decltype (mpi_verbose_callback<Checkpoint>)>
 inline Checkpoint mpi_plain(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_plain_chkpt<numeric_type_of<I>>(),
-    Callback callback = mpi_plain_verbose_callback<numeric_type_of<I>>
+    Callback callback = mpi_verbose_callback<Checkpoint>
 ) {
     using T = numeric_type_of<I>;
 

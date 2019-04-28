@@ -22,8 +22,8 @@
 #include "hep/mc/generator_helper.hpp"
 #include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
+#include "hep/mc/mpi_callback.hpp"
 #include "hep/mc/mpi_helper.hpp"
-#include "hep/mc/mpi_vegas_callback.hpp"
 #include "hep/mc/vegas.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_chkpt.hpp"
@@ -43,13 +43,13 @@ namespace hep
 
 ///
 template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (mpi_vegas_verbose_callback<numeric_type_of<I>>)>
+    typename Callback = decltype (mpi_verbose_callback<Checkpoint>)>
 inline Checkpoint mpi_vegas(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> iteration_calls,
     Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
-    Callback callback = mpi_vegas_verbose_callback<numeric_type_of<I>>
+    Callback callback = mpi_verbose_callback<Checkpoint>
 ) {
     using T = numeric_type_of<I>;
 

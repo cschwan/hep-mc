@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2012-2016  Christopher Schwan
+ * Copyright (C) 2012-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include "hep/mc/accumulator.hpp"
 #include "hep/mc/accumulator_fwd.hpp"
+#include "hep/mc/callback.hpp"
 #include "hep/mc/chkpt.hpp"
 #include "hep/mc/discrete_distribution.hpp"
 #include "hep/mc/distribution_parameters.hpp"
@@ -32,7 +33,6 @@
 #include "hep/mc/mc_point.hpp"
 #include "hep/mc/mc_result.hpp"
 #include "hep/mc/multi_channel.hpp"
-#include "hep/mc/multi_channel_callback.hpp"
 #include "hep/mc/multi_channel_chkpt.hpp"
 #include "hep/mc/multi_channel_integrand.hpp"
 #include "hep/mc/multi_channel_map.hpp"
@@ -40,14 +40,13 @@
 #include "hep/mc/multi_channel_point.hpp"
 #include "hep/mc/multi_channel_refine_weights.hpp"
 #include "hep/mc/multi_channel_result.hpp"
+#include "hep/mc/multi_channel_summary.hpp"
 #include "hep/mc/multi_channel_weight_info.hpp"
 #include "hep/mc/plain.hpp"
-#include "hep/mc/plain_callback.hpp"
 #include "hep/mc/plain_chkpt.hpp"
 #include "hep/mc/plain_result.hpp"
 #include "hep/mc/projector.hpp"
 #include "hep/mc/vegas.hpp"
-#include "hep/mc/vegas_callback.hpp"
 #include "hep/mc/vegas_chkpt.hpp"
 #include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_point.hpp"
