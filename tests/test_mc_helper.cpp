@@ -2,7 +2,7 @@
 #include "hep/mc/distribution_result.hpp"
 #include "hep/mc/mc_helper.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <cmath>
 #include <limits>

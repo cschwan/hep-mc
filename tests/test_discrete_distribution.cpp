@@ -1,6 +1,6 @@
 #include "hep/mc/discrete_distribution.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <cstddef>
 #include <limits>

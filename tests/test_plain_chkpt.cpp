@@ -1,7 +1,7 @@
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/plain.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <cstddef>
 #include <sstream>

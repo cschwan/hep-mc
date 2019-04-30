@@ -1,6 +1,6 @@
 #include "hep/mc/mc_result.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <sstream>
 

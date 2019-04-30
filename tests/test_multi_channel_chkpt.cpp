@@ -1,7 +1,7 @@
 #include "hep/mc/multi_channel_integrand.hpp"
 #include "hep/mc/multi_channel.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <cstddef>
 #include <sstream>

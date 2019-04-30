@@ -1,6 +1,6 @@
 #include "hep/mc/vegas_pdf.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <array>
 #include <cmath>

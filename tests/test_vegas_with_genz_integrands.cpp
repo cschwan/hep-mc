@@ -1,9 +1,10 @@
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/plain.hpp"
 #include "hep/mc/vegas.hpp"
+
 #include "genz_integrand.hpp"
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 #include <cmath>
 #include <cstddef>
