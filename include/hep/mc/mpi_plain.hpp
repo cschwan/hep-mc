@@ -25,14 +25,14 @@
 #include "hep/mc/mpi_callback.hpp"
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/plain.hpp"
-#include "hep/mc/plain_result.hpp"
 #include "hep/mc/plain_chkpt.hpp"
+#include "hep/mc/plain_result.hpp"
+
+#include <mpi.h>
 
 #include <cstddef>
 #include <random>
 #include <vector>
-
-#include <mpi.h>
 
 namespace hep
 {
@@ -74,23 +74,23 @@ inline Checkpoint mpi_plain(
         random_number_usage<T, decltype (generator)>();
 
     // perform iterations
-    for (auto i = iteration_calls.begin(); i != iteration_calls.end(); ++i)
+    for (auto calls : iteration_calls)
     {
-        generator.discard(usage * discard_before(*i, rank, world));
+        generator.discard(usage * discard_before(calls, rank, world));
 
         // the number of function calls for each MPI process
-        std::size_t const calls = (*i / world) +
-            (static_cast <std::size_t> (rank) < (*i % world) ? 1 : 0);
-        auto const result = plain_iteration(integrand, calls, generator);
+        std::size_t const sub_calls = (calls / world) +
+            (static_cast <std::size_t> (rank) < (calls % world) ? 1 : 0);
+        auto const result = plain_iteration(integrand, sub_calls, generator);
 
-        generator.discard(usage * discard_after(*i, calls, rank, world));
+        generator.discard(usage * discard_after(calls, sub_calls, rank, world));
 
         auto const& new_result = allreduce_result(
             communicator,
             result,
             buffer,
             std::vector<T>(),
-            *i
+            calls
         );
 
         chkpt.add(new_result, generator);

@@ -23,8 +23,8 @@
 #include "hep/mc/integrand.hpp"
 
 #include <cstddef>
-#include <utility>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 namespace hep

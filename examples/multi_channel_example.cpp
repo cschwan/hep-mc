@@ -10,13 +10,13 @@
 #include <iostream>
 #include <vector>
 
-int main(int argc, char* argv[])
-{
+int main(
 #ifdef USE_MPI
+    int argc, char* argv[]
+) {
     MPI_Init(&argc, &argv);
 #else
-    // suppress warning about parameters being unused
-    if (argv[argc]) {}
+) {
 #endif
 
     constexpr double s0 = -10.0;
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
         std::size_t channel,
         std::vector<double> const& random_numbers,
         std::vector<double>& coordinates,
-        std::vector<std::size_t> const&,
+        std::vector<std::size_t> const& /*enabled_channels*/,
         std::vector<double>& densities,
         hep::multi_channel_map action
     ) {
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
     {
 #endif
 
-    for (auto const result : results)
+    for (auto const& result : results)
     {
         std::cout << result.value() << " +- " << result.error() << "\t"
             << result.channel_weights()[0];

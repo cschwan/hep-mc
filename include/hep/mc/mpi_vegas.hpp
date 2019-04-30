@@ -25,8 +25,8 @@
 #include "hep/mc/mpi_callback.hpp"
 #include "hep/mc/mpi_helper.hpp"
 #include "hep/mc/vegas.hpp"
-#include "hep/mc/vegas_pdf.hpp"
 #include "hep/mc/vegas_chkpt.hpp"
+#include "hep/mc/vegas_pdf.hpp"
 
 #include <cstddef>
 #include <random>
@@ -47,7 +47,7 @@ template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<
 inline Checkpoint mpi_vegas(
     MPI_Comm communicator,
     I&& integrand,
-    std::vector<std::size_t> iteration_calls,
+    std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
     Callback callback = mpi_verbose_callback<Checkpoint>
 ) {

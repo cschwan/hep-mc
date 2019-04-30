@@ -55,7 +55,7 @@ public:
     }
 
     /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
-    multi_channel_chkpt(std::istream& in)
+    explicit multi_channel_chkpt(std::istream& in)
         : chkpt<multi_channel_result<T>>{in}
     {
         in >> beta_ >> min_weight_;
@@ -76,7 +76,7 @@ public:
     }
 
     /// Returns the channel weights for the next iteration.
-    std::vector<T> const channel_weights() const
+    std::vector<T> channel_weights() const
     {
         auto const& results = this->results();
 
@@ -111,7 +111,7 @@ public:
         return min_weight_;
     }
 
-    virtual void serialize(std::ostream& out) const override
+    void serialize(std::ostream& out) const override
     {
         chkpt<multi_channel_result<T>>::serialize(out);
 

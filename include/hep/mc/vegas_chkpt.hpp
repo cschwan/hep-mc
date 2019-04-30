@@ -59,7 +59,7 @@ public:
     }
 
     /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
-    vegas_chkpt(std::istream& in)
+    explicit vegas_chkpt(std::istream& in)
         : chkpt<vegas_result<T>>{in}
     {
         in >> alpha_;
@@ -90,7 +90,7 @@ public:
     }
 
     /// Returns the PDF which is used for the next iteration.
-    vegas_pdf<T> const pdf() const
+    vegas_pdf<T> pdf() const
     {
         auto const& results = this->results();
 

@@ -197,6 +197,10 @@ struct weighted_equally
 
         case 1:
             return *begin;
+
+        default:
+            // we cover the default case below
+            break;
         }
 
         std::size_t calls = 0;

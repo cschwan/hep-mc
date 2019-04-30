@@ -55,7 +55,7 @@ public:
     }
 
     /// Deserialization constructor.
-    multi_channel_result(std::istream& in)
+    explicit multi_channel_result(std::istream& in)
         : plain_result<T>(in)
     {
         std::size_t channels;
@@ -68,6 +68,21 @@ public:
             in >> adjustment_data_.at(i) >> channel_weights_.at(i);
         }
     }
+
+    /// Copy constructor.
+    multi_channel_result(multi_channel_result<T> const&) = default;
+
+    /// Move constructor.
+    multi_channel_result(multi_channel_result<T>&&) noexcept = default;
+
+    /// Assignment operator.
+    multi_channel_result& operator=(multi_channel_result<T> const&) = default;
+
+    /// Move assignment operator.
+    multi_channel_result& operator=(multi_channel_result<T>&&) noexcept = default;
+
+    /// Destructor.
+    ~multi_channel_result() override = default;
 
     /// This is the data used by \ref multi_channel_refine_weights to refine the \ref
     /// channel_weights used in the same iteration. The refined weights are then used in a
@@ -84,7 +99,7 @@ public:
     }
 
     /// Serializes this object.
-    virtual void serialize(std::ostream& out) const override
+    void serialize(std::ostream& out) const override
     {
         plain_result<T>::serialize(out);
         out << '\n' << channel_weights_.size();

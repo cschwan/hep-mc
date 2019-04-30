@@ -49,6 +49,21 @@ public:
     {
     }
 
+    /// There is no copy constructor.
+    multi_channel_point(multi_channel_point<T> const&) = delete;
+
+    /// There is no move constructor.
+    multi_channel_point(multi_channel_point<T>&&) = delete;
+
+    /// There is no copy assignment operator.
+    multi_channel_point& operator=(multi_channel_point<T> const&) = delete;
+
+    /// There is no move assignment operator.
+    multi_channel_point& operator=(multi_channel_point<T>&&) = delete;
+
+    /// Destructor.
+    ~multi_channel_point() override = default;
+
     /// The selected channel for this point.
     std::size_t channel() const
     {

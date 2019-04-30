@@ -48,7 +48,7 @@ public:
     }
 
     /// Deserialization constructor.
-    distribution_result(std::istream& in)
+    explicit distribution_result(std::istream& in)
         : parameters_{in}
     {
         std::size_t const size = parameters_.bins_x() * parameters_.bins_y();
@@ -94,7 +94,7 @@ private:
 template <typename T>
 inline std::vector<T> mid_points_x(distribution_result<T> const& result)
 {
-    auto const parameters = result.parameters();
+    auto const& parameters = result.parameters();
 
     std::vector<T> mid_points;
     mid_points.reserve(parameters.bins_x());
@@ -117,7 +117,7 @@ inline std::vector<T> mid_points_x(distribution_result<T> const& result)
 template <typename T>
 inline std::vector<T> mid_points_y(distribution_result<T> const& result)
 {
-    auto const parameters = result.parameters();
+    auto const& parameters = result.parameters();
 
     std::vector<T> mid_points;
     mid_points.reserve(parameters.bins_y());

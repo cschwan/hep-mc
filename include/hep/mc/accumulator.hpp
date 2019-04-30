@@ -50,13 +50,10 @@ template <typename T>
 class accumulator<T, true>
 {
 public:
-    accumulator(std::vector<hep::distribution_parameters<T>> const& parameters)
+    explicit accumulator(std::vector<hep::distribution_parameters<T>> const& parameters)
         : parameters_(parameters)
-        , indices_()
         , sums_()
         , compensations_()
-        , non_zero_calls_()
-        , finite_calls_()
     {
         std::size_t index = 2;
         indices_.reserve(parameters.size());
@@ -262,7 +259,7 @@ template <typename T>
 class accumulator<T, false>
 {
 public:
-    accumulator(std::vector<hep::distribution_parameters<T>> const&)
+    explicit accumulator(std::vector<hep::distribution_parameters<T>> const& /*parameters*/)
         : sums_()
         , non_zero_calls_{}
         , finite_calls_{}

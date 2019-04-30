@@ -42,11 +42,8 @@ public:
     /// Default constructor.
     chkpt() = default;
 
-    /// Destructor.
-    virtual ~chkpt() = default;
-
     /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
-    chkpt(std::istream& in)
+    explicit chkpt(std::istream& in)
     {
         std::size_t size = 0;
         in >> size;
@@ -59,11 +56,26 @@ public:
         }
     }
 
+    /// Copy constructor.
+    chkpt(chkpt<Result> const&) = default;
+
+    /// Move constructor.
+    chkpt(chkpt<Result>&&) noexcept = default;
+
+    /// Assignment operator.
+    chkpt& operator=(chkpt<Result> const&) = default;
+
+    /// Move assignment operator.
+    chkpt& operator=(chkpt<Result>&&) noexcept = default;
+
     /// Returns all results.
     std::vector<Result> const& results() const
     {
         return results_;
     }
+
+    /// Destructor.
+    virtual ~chkpt() = default;
 
     /// Serializes this object. This writes a textual representation of this class to the stream
     /// `out`.
@@ -92,14 +104,14 @@ class chkpt_with_rng : public Checkpoint
 public:
     /// Constructor.
     template <typename... Args>
-    chkpt_with_rng(RandomNumberEngine const& generator, Args&&... args)
+    explicit chkpt_with_rng(RandomNumberEngine const& generator, Args&&... args)
         : Checkpoint(std::forward<Args>(args)...)
         , generators_{generator}
     {
     }
 
     /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
-    chkpt_with_rng(std::istream& in)
+    explicit chkpt_with_rng(std::istream& in)
         : Checkpoint(in)
     {
         std::size_t const size = this->results().size() + 1;

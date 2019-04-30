@@ -1,5 +1,6 @@
 #include "hep/mc.hpp"
 
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <iostream>
@@ -7,7 +8,7 @@
 
 int main()
 {
-    constexpr double s[] = { -10.0, +10.0, 0.0 };
+    constexpr std::array<double, 3> s = { -10.0, +10.0, 0.0 };
 
     auto const function = [&](hep::multi_channel_point<double> const& x) {
         double t = x.coordinates()[0];
@@ -39,15 +40,15 @@ int main()
 
         double t = std::tan(std::acos(-1.0) * (random_numbers[0] - 0.5));
 
-        t += s[channel];
+        t += s.at(channel);
         coordinates[0] = t;
 
-        double const tms[] = { t - s[0], t - s[1], t - s[2] };
+        std::array<double, 3> const tms = { t - s[0], t - s[1], t - s[2] };
 
         // set the channel densities
         for (auto const i : enabled_channels)
         {
-            densities[i] = 1.0 / (1.0 + tms[i] * tms[i]) / std::acos(-1.0);
+            densities[i] = 1.0 / (1.0 + tms.at(i) * tms.at(i)) / std::acos(-1.0);
         }
 
         // global weight

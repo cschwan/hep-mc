@@ -137,7 +137,7 @@ template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_
     typename Callback = decltype (verbose_callback<Checkpoint>)>
 inline Checkpoint multi_channel(
     I&& integrand,
-    std::vector<std::size_t> iteration_calls,
+    std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>(),
     Callback callback = verbose_callback<Checkpoint>
 ) {

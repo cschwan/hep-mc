@@ -66,14 +66,26 @@ public:
     {
     }
 
-    /// Destructor.
-    virtual ~mc_result() = default;
-
     /// Deserialization constructor.
-    mc_result(std::istream& in)
+    explicit mc_result(std::istream& in)
     {
         in >> calls_ >> non_zero_calls_ >> finite_calls_ >> sum_ >> sum_of_squares_;
     }
+
+    /// Copy constructor.
+    mc_result(mc_result<T> const&) = default;
+
+    /// Move constructor.
+    mc_result(mc_result<T>&&) noexcept = default;
+
+    /// Assignment operator.
+    mc_result& operator=(mc_result<T> const&) = default;
+
+    /// Move assignment operator.
+    mc_result& operator=(mc_result<T>&&) noexcept = default;
+
+    /// Destructor.
+    virtual ~mc_result() = default;
 
     /// The number of function evaluations \f$ N \f$ performed to obtain this
     /// result.

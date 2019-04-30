@@ -34,7 +34,7 @@ namespace hep
 
 /// The default MPI callback function. This function does nothing and always returns `true`.
 template <typename Checkpoint>
-inline bool mpi_silent_callback(MPI_Comm, Checkpoint const&)
+inline bool mpi_silent_callback(MPI_Comm /*communicator*/, Checkpoint const& /*chkpt*/)
 {
     return true;
 }

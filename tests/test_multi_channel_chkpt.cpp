@@ -25,7 +25,7 @@ T map(
     std::vector<T>& coordinates,
     std::vector<std::size_t> const& enabled_channels,
     std::vector<T>& densities,
-    hep::multi_channel_map
+    hep::multi_channel_map /*action*/
 ) {
     assert( channel == 0 );
     assert( enabled_channels.at(0) == 0 );

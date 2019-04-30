@@ -36,7 +36,7 @@ namespace hep
 
 /// The default callback function. This function does nothing and always returns `true`.
 template <typename Checkpoint>
-inline bool silent_callback(Checkpoint const&)
+inline bool silent_callback(Checkpoint const& /*chkpt*/)
 {
     return true;
 }

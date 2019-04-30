@@ -100,7 +100,7 @@ template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<
     typename Callback = decltype (verbose_callback<Checkpoint>)>
 inline Checkpoint vegas(
     I&& integrand,
-    std::vector<std::size_t> iteration_calls,
+    std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
     Callback callback = verbose_callback<Checkpoint>
 ) {

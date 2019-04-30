@@ -52,7 +52,7 @@ public:
     }
 
     /// Deserialization constructor.
-    plain_result(std::istream& in)
+    explicit plain_result(std::istream& in)
         : mc_result<T>(in)
     {
         std::size_t size;
@@ -66,6 +66,21 @@ public:
         }
     }
 
+    /// Copy constructor.
+    plain_result(plain_result<T> const&) = default;
+
+    /// Move constructor.
+    plain_result(plain_result<T>&&) noexcept = default;
+
+    /// Assignment operator.
+    plain_result& operator=(plain_result<T> const&) = default;
+
+    /// Move assignment operator.
+    plain_result& operator=(plain_result<T>&&) noexcept = default;
+
+    /// Destructor.
+    ~plain_result() override = default;
+
     /// Returns the differential distributions accumulated during the integration.
     std::vector<distribution_result<T>> const& distributions() const
     {
@@ -73,7 +88,7 @@ public:
     }
 
     /// Serializes this object.
-    virtual void serialize(std::ostream& out) const override
+    void serialize(std::ostream& out) const override
     {
         mc_result<T>::serialize(out);
         out << '\n' << distributions_.size();

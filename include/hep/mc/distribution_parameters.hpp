@@ -71,7 +71,7 @@ public:
     }
 
     /// Deserialization constructor.
-    distribution_parameters(std::istream& in)
+    explicit distribution_parameters(std::istream& in)
     {
         // consume newline character and read name
         std::getline(in >> std::ws, name_);

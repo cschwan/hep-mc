@@ -36,11 +36,23 @@ class mc_point
 public:
     /// Constructor. The weight is computed using the inverse of `calls`, `point` determines the
     /// location of this point in the hypercube of dimension `point.size()`.
-    mc_point(std::vector<T> const& point, T weight = T(1.0))
+    explicit mc_point(std::vector<T> const& point, T weight = T(1.0))
         : weight_(weight)
         , point_(point)
     {
     }
+
+    /// There is no copy constructor.
+    mc_point(mc_point<T> const&) = delete;
+
+    /// There is no move constructor.
+    mc_point(mc_point<T>&&) = delete;
+
+    /// There is no copy assignment operator.
+    mc_point& operator=(mc_point<T> const&) = delete;
+
+    /// There is no move assignment operator.
+    mc_point& operator=(mc_point<T>&&) = delete;
 
     /// Destructor.
     virtual ~mc_point() = default;

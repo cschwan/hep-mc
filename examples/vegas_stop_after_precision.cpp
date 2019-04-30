@@ -52,6 +52,7 @@ struct stop_after_precision
         return true;
     }
 
+private:
     double abs_error;
     double rel_error;
 };

@@ -39,7 +39,7 @@ class multi_channel_weight_info
 {
 public:
     /// Constructor.
-    multi_channel_weight_info(multi_channel_result<T> const& result)
+    explicit multi_channel_weight_info(multi_channel_result<T> const& result)
         : channels_(result.channel_weights().size())
         , weights_(result.channel_weights().size())
         , calls_(result.channel_weights().size())

@@ -75,7 +75,7 @@ public:
     }
 
     /// Deserialization constructor.
-    vegas_pdf(std::istream& in)
+    explicit vegas_pdf(std::istream& in)
     {
         in >> bins_ >> dimensions_;
         x.resize((bins_ + 1) * dimensions_);

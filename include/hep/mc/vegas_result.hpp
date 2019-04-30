@@ -55,7 +55,7 @@ public:
     }
 
     /// Deserialization constructor.
-    vegas_result(std::istream& in)
+    explicit vegas_result(std::istream& in)
         : plain_result<T>(in)
         , pdf_(in)
     {
@@ -66,6 +66,21 @@ public:
             in >> adjustment_data_.at(i);
         }
     }
+
+    /// Copy constructor.
+    vegas_result(vegas_result<T> const&) = default;
+
+    /// Move constructor.
+    vegas_result(vegas_result<T>&&) noexcept = default;
+
+    /// Assignment operator.
+    vegas_result& operator=(vegas_result<T> const&) = default;
+
+    /// Move assignment operator.
+    vegas_result& operator=(vegas_result<T>&&) noexcept = default;
+
+    /// Destructor.
+    ~vegas_result() override = default;
 
     /// The pdf used to obtain this result.
     vegas_pdf<T> const& pdf() const
@@ -80,7 +95,7 @@ public:
     }
 
     /// Serializes this object.
-    virtual void serialize(std::ostream& out) const override
+    void serialize(std::ostream& out) const override
     {
         plain_result<T>::serialize(out);
         out << '\n';

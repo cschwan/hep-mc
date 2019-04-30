@@ -51,6 +51,21 @@ public:
     {
     }
 
+    /// There is no copy constructor.
+    vegas_point(vegas_point<T> const&) = delete;
+
+    /// There is no move constructor.
+    vegas_point(vegas_point<T>&&) = delete;
+
+    /// There is no copy assignment operator.
+    vegas_point operator=(vegas_point<T> const&) = delete;
+
+    /// There is no move assignment operator.
+    vegas_point operator=(vegas_point<T>&&) = delete;
+
+    /// Destructor.
+    ~vegas_point() override = default;
+
     /// The indices that determine the bins of the point in the binned pdf.
     std::vector<std::size_t> const& bin() const
     {
