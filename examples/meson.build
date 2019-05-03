@@ -1,5 +1,6 @@
 examples = [
     'checkpoints',
+    'checkpoints2',
     'distributions_example',
     'helper_example',
     'multi_channel_disabled_channels',
