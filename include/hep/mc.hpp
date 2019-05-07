@@ -27,7 +27,6 @@
 #include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/distribution_result.hpp"
 #include "hep/mc/generator_helper.hpp"
-#include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mc_helper.hpp"
 #include "hep/mc/mc_point.hpp"

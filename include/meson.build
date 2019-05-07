@@ -9,7 +9,6 @@ headers1 = [
     'hep/mc/distribution_parameters.hpp',
     'hep/mc/distribution_result.hpp',
     'hep/mc/generator_helper.hpp',
-    'hep/mc/global_configuration.hpp',
     'hep/mc/integrand.hpp',
     'hep/mc/mc_helper.hpp',
     'hep/mc/mc_point.hpp',

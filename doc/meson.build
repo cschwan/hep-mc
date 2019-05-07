@@ -24,7 +24,6 @@ doxygen_files = [
     'examples.dox',
     'extra.css',
     'footer.html',
-    'global_configuration.dox',
     'integrands.dox',
     'mainpage.dox',
     'multi_channel.dox',

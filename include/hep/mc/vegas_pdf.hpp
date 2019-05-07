@@ -19,8 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "hep/mc/global_configuration.hpp"
-
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
@@ -254,19 +252,7 @@ inline vegas_pdf<T> vegas_refine_pdf(vegas_pdf<T> const& pdf, T alpha, std::vect
             T const current  = pdf.bin_left(i, bin);
             this_bin -= average_per_bin;
             T const delta = (current - previous) * this_bin;
-
-            T new_left = T();
-
-            if (vegas_cuba_refinement())
-            {
-                std::size_t const bin_minus_two = bin != 1 ? bin - 2 : 0;
-                T const average_importance = T(0.5) * (tmp[bin - 1] + tmp[bin_minus_two]);
-                new_left = fmax(new_left, current - delta / average_importance);
-            }
-            else
-            {
-                new_left = current - delta / tmp[bin - 1];
-            }
+            T const new_left = current - delta / tmp[bin - 1];
 
             new_pdf.set_bin_left(i, new_bin, new_left);
         }

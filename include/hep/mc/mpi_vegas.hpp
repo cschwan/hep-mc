@@ -20,7 +20,6 @@
  */
 
 #include "hep/mc/generator_helper.hpp"
-#include "hep/mc/global_configuration.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/mpi_callback.hpp"
 #include "hep/mc/mpi_helper.hpp"
