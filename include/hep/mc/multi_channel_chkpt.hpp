@@ -50,7 +50,8 @@ public:
     multi_channel_chkpt(std::vector<T> const& channel_weights, T beta, T min_weight)
         : beta_{beta}
         , min_weight_{min_weight}
-        , first_channel_weights_(channel_weights)
+        , first_channel_weights_(multi_channel_refine_weights(channel_weights,
+            std::vector<T>(channel_weights.size(), T(1.0)), min_weight_, beta_))
     {
     }
 
