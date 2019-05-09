@@ -170,6 +170,11 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
 template <typename T, typename RandomNumberEngine>
 multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(std::istream& in)
 {
+    if (in.peek() == std::istream::traits_type::eof())
+    {
+        return make_multi_channel_chkpt<T>();
+    }
+
     return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{in};
 }
 

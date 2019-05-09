@@ -53,6 +53,11 @@ plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
 template <typename T, typename RandomNumberEngine>
 plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(std::istream& in)
 {
+    if (in.peek() == std::istream::traits_type::eof())
+    {
+        return make_plain_chkpt<T>();
+    }
+
     return plain_chkpt_with_rng<RandomNumberEngine, T>{in};
 }
 

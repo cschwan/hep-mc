@@ -152,6 +152,11 @@ vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
 template <typename T, typename RandomNumberEngine>
 vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(std::istream& in)
 {
+    if (in.peek() == std::istream::traits_type::eof())
+    {
+        return make_vegas_chkpt<T>();
+    }
+
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{in};
 }
 
