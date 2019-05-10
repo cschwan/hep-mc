@@ -60,7 +60,7 @@ TEMPLATE_TEST_CASE("multi_channel integration", "", float, double /*, long doubl
 #endif
         hep::make_multi_channel_integrand<T>(function<T>, 2, densities<T>, 2, 2),
         std::vector<std::size_t>(5, 10000),
-        hep::make_multi_channel_chkpt<T>(T(0.25), T(), std::mt19937_64())
+        hep::make_multi_channel_chkpt<T>(T(), T(0.25), std::mt19937_64())
     ).results();
 
     for (auto const& result : results)

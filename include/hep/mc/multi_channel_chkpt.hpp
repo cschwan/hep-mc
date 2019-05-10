@@ -41,13 +41,13 @@ template <typename T>
 class multi_channel_chkpt : public chkpt<multi_channel_result<T>>
 {
 public:
-    multi_channel_chkpt(T beta, T min_weight)
+    multi_channel_chkpt(T min_weight, T beta)
         : beta_{beta}
         , min_weight_{min_weight}
     {
     }
 
-    multi_channel_chkpt(std::vector<T> const& channel_weights, T beta, T min_weight)
+    multi_channel_chkpt(std::vector<T> const& channel_weights, T min_weight, T beta)
         : beta_{beta}
         , min_weight_{min_weight}
         , first_channel_weights_(multi_channel_refine_weights(channel_weights,
@@ -145,23 +145,23 @@ using multi_channel_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, multi_ch
 ///
 template <typename T, typename RandomNumberEngine = std::mt19937>
 multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
-    T beta = T(0.25),
     T min_weight = T(),
+    T beta = T(0.25),
     RandomNumberEngine const& rng = std::mt19937()
 ) {
-    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, beta, min_weight};
+    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, min_weight, beta};
 }
 
 ///
 template <typename T, typename RandomNumberEngine = std::mt19937>
 multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     std::vector<T> const& channel_weights,
-    T beta = T(0.25),
     T min_weight = T(),
+    T beta = T(0.25),
     RandomNumberEngine const& rng = std::mt19937()
 ) {
-    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, channel_weights, beta,
-        min_weight};
+    return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, channel_weights, min_weight,
+         beta};
 }
 
 /// Helper function create a checkpoint reading from the stream `in`. Note the the numeric type `T`
