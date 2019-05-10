@@ -20,7 +20,7 @@ struct stop_after_precision
     bool operator()(hep::vegas_chkpt<double> const& chkpt)
     {
         // print the results obtained so far
-        hep::verbose_callback(chkpt);
+        hep::callback<hep::vegas_chkpt<double>>()(chkpt);
 
         auto const& r = chkpt.results();
 

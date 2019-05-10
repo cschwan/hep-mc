@@ -21,10 +21,9 @@
 
 #include "hep/mc/callback.hpp"
 
-#include <mpi.h>
+#include <string>
 
-#include <cmath>
-#include <iostream>
+#include <mpi.h>
 
 namespace hep
 {
@@ -32,28 +31,31 @@ namespace hep
 /// \addtogroup callbacks
 /// @{
 
-/// The default MPI callback function. This function does nothing and always returns `true`.
 template <typename Checkpoint>
-inline bool mpi_silent_callback(MPI_Comm /*communicator*/, Checkpoint const& /*chkpt*/)
+class mpi_callback
 {
-    return true;
-}
-
-/// MPI Callback function that prints a detailed summary about every iteration performed so far.
-/// This function always returns `true`.
-template <typename Checkpoint>
-inline bool mpi_verbose_callback(MPI_Comm communicator, Checkpoint const& chkpt)
-{
-    int rank = -1;
-    MPI_Comm_rank(communicator, &rank);
-
-    if (rank == 0)
+public:
+    mpi_callback(callback_mode mode = callback_mode::verbose, std::string const& filename = "")
+        : callback_{mode, filename}
     {
-        verbose_callback(chkpt);
     }
 
-    return true;
-}
+    bool operator()(MPI_Comm communicator, Checkpoint const& chkpt)
+    {
+        int rank;
+        MPI_Comm_rank(communicator, &rank);
+
+        if (rank == 0)
+        {
+            callback_(chkpt);
+        }
+
+        return true;
+    }
+
+private:
+    callback<Checkpoint> callback_;
+};
 
 /// @}
 

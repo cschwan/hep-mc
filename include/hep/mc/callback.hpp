@@ -25,7 +25,9 @@
 #include "hep/mc/multi_channel_summary.hpp"
 
 #include <cmath>
+#include <fstream>
 #include <iostream>
+#include <string>
 #include <type_traits>
 
 namespace hep
@@ -34,59 +36,91 @@ namespace hep
 /// \addtogroup callbacks
 /// @{
 
-/// The default callback function. This function does nothing and always returns `true`.
-template <typename Checkpoint>
-inline bool silent_callback(Checkpoint const& /*chkpt*/)
+///
+enum class callback_mode
 {
-    return true;
-}
+    /// Do not print any message after an iteration.
+    silent,
 
-/// Callback function that prints a detailed summary about every iteration performed so far. This
-/// function always returns `true`.
+    /// Print a detailed message after each iteration.
+    verbose,
+
+    /// Same as \ref callback_mode::verbose, but also writes a checkpoint to disk.
+    verbose_and_write_chkpt
+};
+
 template <typename Checkpoint>
-inline bool verbose_callback(Checkpoint const& chkpt)
+class callback
 {
-    using std::fabs;
-    using T = typename Checkpoint::result_type::numeric_type;
-
-    auto const& results = chkpt.results();
-
-    std::cout << "iteration " << (results.size() - 1) << " finished.\n";
-
-//    if constexpr (std::is_base_of_v<multi_channel_chkpt<T>, Checkpoint>)
-    if (std::is_base_of<multi_channel_chkpt<T>, Checkpoint>::value)
+public:
+    /// Constructor.
+    callback(callback_mode mode = callback_mode::verbose, std::string const& filename = "")
+        : mode_{mode}
+        , filename_{filename}
     {
-//        multi_channel_summary(chkpt, std::cout);
-        multi_channel_summary(dynamic_cast <multi_channel_chkpt<T> const&> (chkpt), std::cout);
     }
 
-    // print result for this iteration
+    /// Callback function that prints a detailed summary about every iteration performed so far.
+    /// This function always returns `true`.
+    bool operator()(Checkpoint const& chkpt)
+    {
+        if (mode_ == callback_mode::silent)
+        {
+            return true;
+        }
 
-    std::size_t const nnf = results.back().non_zero_calls() - results.back().finite_calls();
-    std::size_t const num = results.back().calls();
-    T const val = results.back().value();
-    T const err = results.back().error();
-    T const eff = T(100.0) * T(results.back().non_zero_calls()) / T(num);
-    T const rel_err = T(100.0) * err / fabs(val);
+        using std::fabs;
+        using T = typename Checkpoint::result_type::numeric_type;
 
-    std::cout << "this iteration: N=" << num << " E=" << val << " +- " << err << " (" << rel_err
-        << "%) eff=" << eff << "% nnf=" << nnf << '\n';
+        auto const& results = chkpt.results();
 
-    // print result for all iterations
+        std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
-    auto const result = accumulate<weighted_with_variance>(results.begin(), results.end());
+//        if constexpr (std::is_base_of_v<multi_channel_chkpt<T>, Checkpoint>)
+        if (std::is_base_of<multi_channel_chkpt<T>, Checkpoint>::value)
+        {
+//            multi_channel_summary(chkpt, std::cout);
+            multi_channel_summary(dynamic_cast <multi_channel_chkpt<T> const&> (chkpt), std::cout);
+        }
 
-    std::size_t const num_all = result.calls();
-    T const val_all = result.value();
-    T const err_all = result.error();
-    T const rel_err_all = (T(100.0) * result.error() / fabs(result.value()));
-    T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
+        // print result for this iteration
 
-    std::cout << "all iterations: N=" << num_all << " E=" << val_all << " +- " << err_all << " ("
-        << rel_err_all << "%) chi^2/dof=" << chi << '\n' << std::endl;
+        std::size_t const nnf = results.back().non_zero_calls() - results.back().finite_calls();
+        std::size_t const num = results.back().calls();
+        T const val = results.back().value();
+        T const err = results.back().error();
+        T const eff = T(100.0) * T(results.back().non_zero_calls()) / T(num);
+        T const rel_err = T(100.0) * err / fabs(val);
 
-    return true;
-}
+        std::cout << "this iteration: N=" << num << " E=" << val << " +- " << err << " (" << rel_err
+            << "%) eff=" << eff << "% nnf=" << nnf << '\n';
+
+        // print result for all iterations
+
+        auto const result = accumulate<weighted_with_variance>(results.begin(), results.end());
+
+        std::size_t const num_all = result.calls();
+        T const val_all = result.value();
+        T const err_all = result.error();
+        T const rel_err_all = (T(100.0) * result.error() / fabs(result.value()));
+        T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
+
+        std::cout << "all iterations: N=" << num_all << " E=" << val_all << " +- " << err_all
+            << " (" << rel_err_all << "%) chi^2/dof=" << chi << '\n' << std::endl;
+
+        if (mode_ == callback_mode::verbose_and_write_chkpt)
+        {
+            std::ofstream out(filename_);
+            chkpt.serialize(out);
+        }
+
+        return true;
+    }
+
+private:
+    callback_mode mode_;
+    std::string filename_;
+};
 
 /// @}
 

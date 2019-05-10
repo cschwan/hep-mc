@@ -41,13 +41,13 @@ namespace hep
 
 ///
 template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>,
-    typename Callback = decltype (mpi_verbose_callback<Checkpoint>)>
+    typename Callback = mpi_callback<Checkpoint>>
 inline Checkpoint mpi_multi_channel(
     MPI_Comm communicator,
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>(),
-    Callback callback = mpi_verbose_callback<Checkpoint>
+    Callback callback = mpi_callback<Checkpoint>()
 ) {
     using T = numeric_type_of<I>;
 
