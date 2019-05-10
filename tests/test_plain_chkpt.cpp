@@ -1,9 +1,11 @@
+#include "hep/mc/distribution_parameters.hpp"
 #include "hep/mc/integrand.hpp"
 #include "hep/mc/plain.hpp"
 
 #include <catch2/catch.hpp>
 
 #include <cstddef>
+#include <random>
 #include <sstream>
 #include <vector>
 
@@ -18,7 +20,7 @@ T linear_function(hep::mc_point<T> const& point, hep::projector<T>& projector)
     return v;
 }
 
-TEMPLATE_TEST_CASE("plain_chkpt serialization", "", float, double, long double)
+TEMPLATE_TEST_CASE("serialization", "[plain_chkpt]", float, double, long double)
 {
     using T = TestType;
 
@@ -38,7 +40,7 @@ TEMPLATE_TEST_CASE("plain_chkpt serialization", "", float, double, long double)
 
     // unserialize checkpoint
     auto in = std::istringstream(stream1.str());
-    auto const chkpt2 = decltype (chkpt1) {in};
+    auto const chkpt2 = hep::make_plain_chkpt<T, std::mt19937>(in);
 
     // serialize previous checkpoint
     std::ostringstream stream2;
@@ -46,6 +48,26 @@ TEMPLATE_TEST_CASE("plain_chkpt serialization", "", float, double, long double)
 
     // string representation should be the same
     CHECK( stream1.str() == stream2.str() );
+}
+
+TEMPLATE_TEST_CASE("plain_chkpt empty stream construction", "", float, double, long double)
+{
+    using T = TestType;
+
+    // empty stream
+    std::istringstream in;
+
+    // construct using an empty stream
+    auto const chkpt1 = hep::make_plain_chkpt<T, std::mt19937>(in);
+    // construct using the default construction values
+    auto const chkpt2 = hep::make_plain_chkpt<T>();
+
+    std::ostringstream out1;
+    chkpt1.serialize(out1);
+    std::ostringstream out2;
+    chkpt2.serialize(out2);
+
+    CHECK( out1.str() == out2.str() );
 }
 
 TEMPLATE_TEST_CASE("plain_chkpt series", "", float, double, long double)

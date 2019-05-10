@@ -13,11 +13,15 @@
 #include <vector>
 
 template <typename T>
-T function(hep::mc_point<T> const& point)
+T function(hep::multi_channel_point<T> const& point)
 {
     T const x = point.point().at(0);
     T const y = point.point().at(1);
     T const f = T(3.0) / T(2.0) * (x * x + y * y);
+
+    // check that channel zero is always disabled
+    CHECK( point.channel() != 0 );
+    CHECK( point.point().at(0) == point.coordinates().at(0) );
 
     return f;
 }
@@ -27,13 +31,18 @@ T densities(
     std::size_t /*channel*/,
     std::vector<T> const& random_numbers,
     std::vector<T>& coordinates,
-    std::vector<std::size_t> const& /*enabled_channels*/,
+    std::vector<std::size_t> const& enabled_channels,
     std::vector<T>& densities,
     hep::multi_channel_map action
 ) {
     if (action == hep::multi_channel_map::calculate_densities)
     {
-        std::fill(densities.begin(), densities.end(), T(1.0));
+        for (std::size_t channel : enabled_channels)
+        {
+            CHECK( channel != 0 );
+
+            densities[channel] = T(1.0);
+        }
 
         return T(1.0);
     }
@@ -52,15 +61,18 @@ TEMPLATE_TEST_CASE("multi_channel integration", "", float, double /*, long doubl
     REQUIRE( std::numeric_limits<std::mt19937_64::result_type>::digits >=
         std::numeric_limits<T>::digits );
 
+    // check with unnormalized weights
+    std::vector<T> const weights = { T(), T(1.0), T(1.0), T(1.0) };
+
 #ifndef HEP_USE_MPI
     auto const results = hep::multi_channel(
 #else
     auto const results = hep::mpi_multi_channel(
         MPI_COMM_WORLD,
 #endif
-        hep::make_multi_channel_integrand<T>(function<T>, 2, densities<T>, 2, 2),
+        hep::make_multi_channel_integrand<T>(function<T>, 2, densities<T>, 2, 4),
         std::vector<std::size_t>(5, 10000),
-        hep::make_multi_channel_chkpt<T>(T(), T(0.25), std::mt19937_64())
+        hep::make_multi_channel_chkpt<T>(weights, T(0.01), T(0.25), std::mt19937_64())
     ).results();
 
     for (auto const& result : results)
