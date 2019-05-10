@@ -11,6 +11,7 @@ tests = [
     'test_mc_result',
     'test_multi_channel',
     'test_multi_channel_chkpt',
+    'test_non_finite_integrand',
     'test_plain',
     'test_plain_chkpt',
     'test_plain_with_distributions',
