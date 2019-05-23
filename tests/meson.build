@@ -6,6 +6,7 @@ libcatch_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch
 
 tests = [
     'test_discrete_distribution',
+    'test_distribution_parameters',
     'test_mc_helper',
     'test_mc_point',
     'test_mc_result',

@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2018  Christopher Schwan
+ * Copyright (C) 2015-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,7 +106,7 @@ public:
     /// Smallest y-value of a point that would still be accumulated into the distribution.
     T y_min() const
     {
-        return x_min_;
+        return y_min_;
     }
 
     /// Size of the bins in x-direction.
