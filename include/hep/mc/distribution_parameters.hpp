@@ -38,18 +38,6 @@ template <typename T>
 class distribution_parameters
 {
 public:
-    /// Constructor. Constructs a one-dimensional distribution.
-    distribution_parameters(std::size_t bins, T x_min, T x_max, std::string const& name)
-        : bins_x_{bins}
-        , bins_y_{1}
-        , x_min_{x_min}
-        , y_min_{T()}
-        , bin_size_x_{(x_max - x_min) / T(bins)}
-        , bin_size_y_{T(1.0)}
-        , name_{name}
-    {
-    }
-
     /// Constructor. Constructs a two dimensional distribution.
     distribution_parameters(
         std::size_t bins_x,
@@ -67,6 +55,12 @@ public:
         , bin_size_x_{(x_max - x_min) / T(bins_x)}
         , bin_size_y_{(y_max - y_min) / T(bins_y)}
         , name_{name}
+    {
+    }
+
+    /// Constructor. Constructs a one-dimensional distribution.
+    distribution_parameters(std::size_t bins, T x_min, T x_max, std::string const& name)
+        : distribution_parameters(bins, 1, x_min, x_max, T(), T(1.0), name)
     {
     }
 
