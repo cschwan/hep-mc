@@ -9,54 +9,6 @@ double square(hep::mc_point<double> const& x)
     return 3.0 * x.point()[0] * x.point()[0];
 }
 
-struct stop_after_precision
-{
-    stop_after_precision(double abs_error, double rel_error)
-        : abs_error(abs_error)
-        , rel_error(rel_error)
-    {
-    }
-
-    bool operator()(hep::vegas_chkpt<double> const& chkpt)
-    {
-        // print the results obtained so far
-        hep::callback<hep::vegas_chkpt<double>>()(chkpt);
-
-        auto const& r = chkpt.results();
-
-        // compute cumulative result ...
-        auto const result = hep::accumulate<hep::weighted_with_variance>(
-            r.begin(), r.end());
-
-        // ... and check for the absolute error ...
-        if (result.error() < abs_error)
-        {
-            std::cout << ">> absolute error " << result.error()
-                << " is smaller than the limit " << abs_error << "\n";
-
-            // returning false stops all remaining iterations
-            return false;
-        }
-
-        // ... and the relative error
-        if (result.error() < rel_error * result.value())
-        {
-            std::cout << ">> relative error "
-                << (result.error() / result.value())
-                << " is smaller than the limit " << rel_error << "\n";
-
-            // returning false stops all remaining iterations
-            return false;
-        }
-
-        return true;
-    }
-
-private:
-    double abs_error;
-    double rel_error;
-};
-
 int main()
 {
     // print only 3 digits
@@ -67,8 +19,8 @@ int main()
         hep::make_integrand<double>(square, 1),
         std::vector<std::size_t>(100, 1000),
         hep::make_vegas_chkpt<double>(),
-        // stop if error is better than lower than 0.0001 or better than 1% (=0.01)
-        stop_after_precision(0.0001, 0.01)
+        // stop if error is better than 1% (=0.01)
+        hep::callback<hep::vegas_chkpt<double>>(hep::callback_mode::verbose, "", 0.01)
     );
 
     return 0;

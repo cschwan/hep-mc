@@ -1,6 +1,7 @@
 New in 0.8:
 ===========
 
+- added the possibility to stop remaining iterations based on the reached level of precision
 - WARNING: removed global callback functions; each integrator now takes an optional fourth argument
   which must be the callback function. The default callback function is the verbose one. Also
   the function names of the previously called ``_default_callback`` functions to

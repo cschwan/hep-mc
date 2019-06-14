@@ -35,22 +35,31 @@ template <typename Checkpoint>
 class mpi_callback
 {
 public:
-    mpi_callback(callback_mode mode = callback_mode::verbose, std::string const& filename = "")
-        : callback_{mode, filename}
+    using numeric_type = typename Checkpoint::result_type::numeric_type;
+
+    mpi_callback(
+        callback_mode mode = callback_mode::verbose,
+        std::string const& filename = "",
+        numeric_type target_rel_err = numeric_type()
+    )
+        : callback_{mode, filename, target_rel_err}
     {
     }
 
     bool operator()(MPI_Comm communicator, Checkpoint const& chkpt)
     {
-        int rank;
-        MPI_Comm_rank(communicator, &rank);
-
-        if (rank == 0)
+        if (callback_.mode() != callback_mode::silent)
         {
-            callback_(chkpt);
+            int rank;
+            MPI_Comm_rank(communicator, &rank);
+
+            if (rank != 0)
+            {
+                callback_.mode(callback_mode::silent);
+            }
         }
 
-        return true;
+        return callback_(chkpt);
     }
 
 private:

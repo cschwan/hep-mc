@@ -53,10 +53,17 @@ template <typename Checkpoint>
 class callback
 {
 public:
+    using numeric_type = typename Checkpoint::result_type::numeric_type;
+
     /// Constructor.
-    callback(callback_mode mode = callback_mode::verbose, std::string const& filename = "")
+    callback(
+        callback_mode mode = callback_mode::verbose,
+        std::string const& filename = "",
+        numeric_type target_rel_err = numeric_type()
+    )
         : mode_{mode}
         , filename_{filename}
+        , target_rel_err_{target_rel_err}
     {
     }
 
@@ -64,15 +71,21 @@ public:
     /// This function always returns `true`.
     bool operator()(Checkpoint const& chkpt)
     {
-        if (mode_ == callback_mode::silent)
-        {
-            return true;
-        }
-
         using std::fabs;
-        using T = typename Checkpoint::result_type::numeric_type;
+        using T = numeric_type;
 
         auto const& results = chkpt.results();
+        auto const result = accumulate<weighted_with_variance>(results.begin(), results.end());
+
+        std::size_t const num_all = result.calls();
+        T const val_all = result.value();
+        T const err_all = result.error();
+        T const rel_err_all = err_all / fabs(val_all);
+
+        if (mode_ == callback_mode::silent)
+        {
+            return rel_err_all > target_rel_err_;
+        }
 
         std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
@@ -90,23 +103,17 @@ public:
         T const val = results.back().value();
         T const err = results.back().error();
         T const eff = T(100.0) * T(results.back().non_zero_calls()) / T(num);
-        T const rel_err = T(100.0) * err / fabs(val);
+        T const rel_err = err / fabs(val);
 
-        std::cout << "this iteration: N=" << num << " E=" << val << " +- " << err << " (" << rel_err
-            << "%) eff=" << eff << "% nnf=" << nnf << '\n';
+        std::cout << "this iteration: N=" << num << " E=" << val << " +- " << err << " ("
+            << (T(100.0) * rel_err) << "%) eff=" << eff << "% nnf=" << nnf << '\n';
 
         // print result for all iterations
 
-        auto const result = accumulate<weighted_with_variance>(results.begin(), results.end());
-
-        std::size_t const num_all = result.calls();
-        T const val_all = result.value();
-        T const err_all = result.error();
-        T const rel_err_all = (T(100.0) * result.error() / fabs(result.value()));
         T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
 
         std::cout << "all iterations: N=" << num_all << " E=" << val_all << " +- " << err_all
-            << " (" << rel_err_all << "%) chi^2/dof=" << chi << '\n' << std::endl;
+            << " (" << (T(100.0) * rel_err_all) << "%) chi^2/dof=" << chi << '\n' << std::endl;
 
         if (mode_ == callback_mode::verbose_and_write_chkpt)
         {
@@ -114,12 +121,25 @@ public:
             chkpt.serialize(out);
         }
 
-        return true;
+        return rel_err_all > target_rel_err_;
+    }
+
+    /// Sets the mode of this callback function.
+    void mode(callback_mode mode)
+    {
+        mode_ = mode;
+    }
+
+    /// Returns the mode of this callback function.
+    callback_mode mode() const
+    {
+        return mode_;
     }
 
 private:
     callback_mode mode_;
     std::string filename_;
+    numeric_type target_rel_err_;
 };
 
 /// @}
