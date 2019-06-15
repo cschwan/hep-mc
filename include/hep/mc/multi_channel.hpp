@@ -42,9 +42,10 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
-/// Performs exactly one iteration of the multi channel integration. The parameter `channel_weights`
-/// lets the user specify the weights of each channel. Note that they must add up to one. See \ref
-/// multi_channel_group for a description of the remaining parameters.
+/// Performs exactly one iteration using with multi channel integrator of `integrand` using exactly
+/// `calls` number of integrand evaluations. The parameter `channel_weights` must specify the
+/// weights of each channel. Note that the weights must be normalized, i.e. their sum must be one.
+/// Random numbers are drawn from `generator`.
 template <typename I, typename R>
 inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
     I&& integrand,
@@ -132,7 +133,14 @@ inline multi_channel_result<numeric_type_of<I>> multi_channel_iteration(
     return multi_channel_result<T>(accumulator.result(calls), adjustment_data, channel_weights);
 }
 
+/// Multi channel integrator. Integrates `integrand` using `iteration_calls.size()` iterations, with
+/// the number of calls for each iteration given in `iteration_calls`. The integration starts from
+/// the default (empty) checkpoint, unless one is explicitly given in `chkpt`. After each successful
+/// iteration the `callback` function is invoked.
 ///
+/// \see checkpoints
+/// \see integrands
+/// \see callbacks
 template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>,
     typename Callback = callback<Checkpoint>>
 inline Checkpoint multi_channel(

@@ -37,16 +37,19 @@ namespace hep
 /// \addtogroup checkpoints
 /// @{
 
+/// Class capturing the complete internal state of the \ref multi_channel_group.
 template <typename T>
 class multi_channel_chkpt : public chkpt<multi_channel_result<T>>
 {
 public:
+    /// Constructor. Do not use directly, but instead use \ref make_multi_channel_chkpt.
     multi_channel_chkpt(T min_weight, T beta)
         : beta_{beta}
         , min_weight_{min_weight}
     {
     }
 
+    /// Constructor. Do not use directly, but instead use \ref make_multi_channel_chkpt.
     multi_channel_chkpt(std::vector<T> const& channel_weights, T min_weight, T beta)
         : beta_{beta}
         , min_weight_{min_weight}
@@ -55,7 +58,8 @@ public:
     {
     }
 
-    /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
+    /// Deserialization constructor. Do not use directly, but instead use \ref
+    /// make_multi_channel_chkpt.
     explicit multi_channel_chkpt(std::istream& in)
         : chkpt<multi_channel_result<T>>{in}
     {
@@ -102,11 +106,15 @@ public:
             (this->results().back().channel_weights().size() == channels) );
     }
 
+    /// Returns the parameter \f$ \beta \f$ used to refine the weights with \ref
+    /// multi_channel_refine_weights.
     T beta() const
     {
         return beta_;
     }
 
+    /// The smallest weight allowed for each channel. This does not concern weights which are
+    /// exactly zero, which disable channels.
     T min_weight() const
     {
         return min_weight_;
@@ -138,11 +146,11 @@ private:
     std::vector<T> first_channel_weights_;
 };
 
-///
+/// Multi channel checkpoint with random number generators.
 template <typename RandomNumberEngine, typename T>
 using multi_channel_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, multi_channel_chkpt<T>>;
 
-///
+/// Creates a checkpoint that can be used to start a multi channel integration.
 template <typename T, typename RandomNumberEngine = std::mt19937>
 multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     T min_weight = T(),
@@ -152,7 +160,7 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, min_weight, beta};
 }
 
-///
+/// Creates a checkpoint that can be used to start a multi channel integration.
 template <typename T, typename RandomNumberEngine = std::mt19937>
 multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     std::vector<T> const& channel_weights,
@@ -178,7 +186,7 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(std
     return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{in};
 }
 
-///
+/// Return type of \ref make_multi_channel_chkpt with default parameters.
 template <typename T>
 using default_multi_channel_chkpt = decltype (make_multi_channel_chkpt<T>());
 

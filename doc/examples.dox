@@ -1,9 +1,14 @@
 /**
 
+\example checkpoints.cpp
+\example checkpoints2.cpp
 \example distributions_example.cpp
 \example helper_example.cpp
-\example multi_channel_example.cpp
 \example mpi_vegas_example.cpp
+\example multi_channel_disabled_channels.cpp
+\example multi_channel_example.cpp
+\example multi_channel_vegas_example.cpp
+\example two_dimensional_distribution.cpp
 \example vegas_example.cpp
 \example vegas_read_pdf.cpp
 \example vegas_stop_after_precision.cpp

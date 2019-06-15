@@ -2,8 +2,8 @@ Project Description
 ===================
 
 ``hep-mc`` is a C++11 template library for `Monte Carlo integration
-<https://en.wikipedia.org/wiki/Monte_Carlo_integration>`_. The following
-integration algorithms are available:
+<https://en.wikipedia.org/wiki/Monte_Carlo_integration>`_. The following integration algorithms are
+implemented:
 
 - PLAIN,
 - VEGAS [1]_ [2]_, and a
@@ -14,20 +14,23 @@ Features
 
 - **Parallelization**: For each integrator a function prefixed with ``mpi_`` is available which uses
   the `Message Passing Interface (MPI) <http://www.mpi-forum.org/>`_ to run the integration in
-  parallel (locally or on a cluster). The parallel integration is designed so that the functions
-  return the numerically same result as their non-parallel counterpart. This means that the result
-  is independent from the number of processors and only dependent on the seed of the random number
-  generator.
+  parallel. The parallel integration is designed such that the functions return the numerically same
+  result as their non-parallel counterpart. This means that the result is independent from the
+  number of processors and only dependent on the seed of the random number generator.
 - **Distributions**: Arbitrarily many differential distributions can be generated during the
-  integration.
+  integration (see below).
 - **Intermediate results**: Callback functions can be used to print intermediate results as soon as
   they are available. After the integration is finished each intermediate result can be extracted
-  separately if the automatically weighted average does not suit the user.
-- **Checkpointing system**: Checkpoints allow the state of integrators to be saved, allowing to stop
-  and restart integrations. This is especially useful if the integration is running for several days
-  and if resources are limited: On computing clusters the CPU-time is usually restricted so that
-  jobs are killed if they running too long. In this case, by saving checkpoints to disk, one can
-  recover partial results and restart the integration from the last checkpoint.
+  separately if the weighted average that automatically calculated does not suit the user.
+- **Checkpointing system**: A checkpoint allows to convert the state of an integrator into a textual
+  format, which can, for example, be written into a file. The checkpoint contains the complete
+  information neccessary to restart an integration seemlessly: The result of the restarted
+  integration do not depend where the checkpoint was created, only on the integration parameters
+  (iterations, calls, seed). This is useful, for example, when an integration takes very long and
+  one has to work around resource limitations of a computer cluster. In this case one can leverage
+  the maximum run time of the cluster and save a checkpoint, restart from the checkpoint and run
+  again for the maximum run time, and so on and so forth, until the integration yields satisfactory
+  results.
 - **Random numbers**: Random numbers are generated using the C++ standard library `random
   <http://en.cppreference.com/w/cpp/numeric/random>`_. This library offers many random number
   generators from which the user can choose. If no random number generator is explicitly requested a

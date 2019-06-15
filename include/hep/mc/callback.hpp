@@ -36,26 +36,31 @@ namespace hep
 /// \addtogroup callbacks
 /// @{
 
-///
+/// Enumeration determining the behaviour of \ref callback::operator()().
 enum class callback_mode
 {
-    /// Do not print any message after an iteration.
+    /// Do not print any messages after each iteration and do not save checkpoints to disk.
     silent,
 
-    /// Print a detailed message after each iteration.
+    /// Print a detailed message after each iteration, but do not write checkpoints to disk.
     verbose,
 
-    /// Same as \ref callback_mode::verbose, but also writes a checkpoint to disk.
+    /// Same as \ref callback_mode::verbose, but also writes checkpoints to disk.
     verbose_and_write_chkpt
 };
 
+/// Default callback type used by all integration algorithms.
 template <typename Checkpoint>
 class callback
 {
 public:
+    /// Numeric type used by the checkpoint.
     using numeric_type = typename Checkpoint::result_type::numeric_type;
 
-    /// Constructor.
+    /// Constructor. The parameter `mode` determines the behaviour of \ref operator()(). If `mode`
+    /// is \ref callback_mode::verbose_and_write_chkpt, then `filename` is the file the checkpoint
+    /// is written to. If `target_rel_err` is strictly larger than zero, the integration is stopped
+    /// if the accumulated result has a relative precision which is better than `target_rel_err`.
     callback(
         callback_mode mode = callback_mode::verbose,
         std::string const& filename = "",
@@ -67,8 +72,8 @@ public:
     {
     }
 
-    /// Callback function that prints a detailed summary about every iteration performed so far.
-    /// This function always returns `true`.
+    /// Callback function whose behaviour is determined by `mode` given in the constructor. This
+    /// function always returns `true`.
     bool operator()(Checkpoint const& chkpt)
     {
         using std::fabs;

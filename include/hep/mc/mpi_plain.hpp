@@ -39,16 +39,7 @@ namespace hep
 /// \addtogroup plain_group
 /// @{
 
-/// MPI-parallelized PLAIN Monte Carlo integrator. This function integrates `function` over the
-/// unit-hypercube with the specified `dimensions` using `calls` function evaluations at randomly
-/// chosen points determined by `generator`. The generator is not seeded.
-///
-/// \param communicator The MPI communicator that is used to communicate between the different MPI
-/// processes.
-/// \param integrand The function that will be integrated over the hypercube. See \ref integrands
-/// for further explanation.
-/// \param iteration_calls The number of function calls that are used to obtain the result.
-/// \param chkpt The checkpoint used to start the integration.
+/// MPI version of the plain Monte Carlo integrator.
 template <typename I, typename Checkpoint = default_plain_chkpt<numeric_type_of<I>>,
     typename Callback = mpi_callback<Checkpoint>>
 inline Checkpoint mpi_plain(

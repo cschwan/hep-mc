@@ -40,7 +40,7 @@ namespace hep
 /// \addtogroup vegas_group
 /// @{
 
-///
+/// MPI version of \ref vegas.
 template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>,
     typename Callback = mpi_callback<Checkpoint>>
 inline Checkpoint mpi_vegas(

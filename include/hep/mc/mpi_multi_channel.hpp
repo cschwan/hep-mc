@@ -39,7 +39,7 @@ namespace hep
 /// \addtogroup multi_channel_group
 /// @{
 
-///
+/// MPI version of \ref multi_channel.
 template <typename I, typename Checkpoint = default_multi_channel_chkpt<numeric_type_of<I>>,
     typename Callback = mpi_callback<Checkpoint>>
 inline Checkpoint mpi_multi_channel(

@@ -11,7 +11,8 @@ New in 0.8:
 - added checkpointing system: It is now possible to seamlessly resume an integration starting from a
   previously generated checkpoint. Checkpoints are the new return type of every integrator and can
   be easily saved to and read from text files; see ``examples/checkpoints.cpp``
-- removed Google Test by Catch2; this dependency should automatically downloaded
+- removed Google Test and replaced it by Catch2; this dependency should be downloaded automatically
+  in the meson configuration step if it isn't present already
 - WARNING: changed the interface of ``hep::plain`` and ``hep::mpi_plain`` to perform multiple
   iterations rather than a single big one. Between two iterations a callback function is invoked,
   like with any other algorithm as well

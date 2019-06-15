@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2016-2018  Christopher Schwan
+ * Copyright (C) 2016-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 namespace hep
 {
 
-/// \cond internal
+/// \cond INTERNAL
 
 // The accumulator class is where the actual calculation of the total integral and all
 // distributions, if they exist, happens. It serves three purposes:

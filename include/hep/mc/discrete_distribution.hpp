@@ -3,7 +3,7 @@
 
 /*
  * hep-mc - A Template Library for Monte Carlo Integration
- * Copyright (C) 2015-2018  Christopher Schwan
+ * Copyright (C) 2015-2019  Christopher Schwan
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@ template <typename I = int, typename T = double>
 class discrete_distribution
 {
 public:
+    /// Constructor. Creates a new object using the weights pointed to by the range given with
+    /// `begin` and `end`.
     template <typename Iterator>
     discrete_distribution(Iterator begin, Iterator end)
         : weight_sums(std::distance(begin, end))
@@ -50,6 +52,8 @@ public:
         }
     }
 
+    /// Creates a new random integer using the specified random number generator. The integer is
+    /// generated using exactly one call to `std::generate_canonical`.
     template <typename R>
     I operator()(R& generator) const
     {

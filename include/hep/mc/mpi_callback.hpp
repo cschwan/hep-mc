@@ -31,12 +31,15 @@ namespace hep
 /// \addtogroup callbacks
 /// @{
 
+/// Default callback type used in all MPI integration algorithms.
 template <typename Checkpoint>
 class mpi_callback
 {
 public:
+    /// Numeric type used by the checkpoint.
     using numeric_type = typename Checkpoint::result_type::numeric_type;
 
+    /// Constructor.
     mpi_callback(
         callback_mode mode = callback_mode::verbose,
         std::string const& filename = "",
@@ -46,6 +49,8 @@ public:
     {
     }
 
+    /// Callback function. Calls the corresponding non-MPI function if the rank of the process is
+    /// `0`.
     bool operator()(MPI_Comm communicator, Checkpoint const& chkpt)
     {
         if (callback_.mode() != callback_mode::silent)

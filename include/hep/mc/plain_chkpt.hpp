@@ -31,7 +31,7 @@ namespace hep
 /// \addtogroup checkpoints
 /// @{
 
-/// Checkpoint created by using the \ref plain_group.
+/// Checkpoint created and used by the \ref plain_group.
 template <typename T>
 using plain_chkpt = chkpt<plain_result<T>>;
 
@@ -47,9 +47,7 @@ plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
     return plain_chkpt_with_rng<RandomNumberEngine, T>{generator};
 }
 
-/// Helper function create a checkpoint reading from the stream `in`. Note the the numeric type `T`
-/// as well as the type of the random number generator, `RandomNumberEngine` have to explicitly
-/// stated.
+/// Helper function to create a checkpoint by reading from the stream `in`.
 template <typename T, typename RandomNumberEngine>
 plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(std::istream& in)
 {
