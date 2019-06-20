@@ -12,15 +12,18 @@ tests = [
     'test_mc_result',
     'test_multi_channel',
     'test_multi_channel_chkpt',
+    'test_multi_channel_with_relative_precision',
     'test_non_finite_integrand',
     'test_plain',
     'test_plain_chkpt',
     'test_plain_with_distributions',
     'test_plain_with_genz_integrands',
+    'test_plain_with_relative_precision',
     'test_vegas',
     'test_vegas_chkpt',
     'test_vegas_pdf',
-    'test_vegas_with_genz_integrands'
+    'test_vegas_with_genz_integrands',
+    'test_vegas_with_relative_precision'
 ]
 
 foreach t : tests
@@ -35,9 +38,12 @@ if get_option('mpi')
 
     mpi_tests = [
         'test_multi_channel',
+        'test_multi_channel_with_relative_precision',
         'test_plain',
         'test_plain_with_distributions',
-        'test_vegas'
+        'test_plain_with_relative_precision',
+        'test_vegas',
+        'test_vegas_with_relative_precision'
     ]
 
     mpiexec = find_program('mpiexec')
