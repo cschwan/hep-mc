@@ -1,31 +1,34 @@
 Project Description
 ===================
 
-``hep-mc`` is a C++11 template library for `Monte Carlo integration
+``hep-mc`` is a C++ library for `Monte Carlo integration
 <https://en.wikipedia.org/wiki/Monte_Carlo_integration>`_. The following integration algorithms are
 implemented:
 
-- PLAIN,
-- VEGAS [1]_ [2]_, and a
-- MULTI CHANNEL integrator with adaptive weight optimization [3]_.
+- PLAIN (naive Monte Carlo integration),
+- `VEGAS <https://en.wikipedia.org/wiki/VEGAS_algorithm>`_ [1]_ [2]_, and
+- MULTI CHANNEL with adaptive weight optimization [3]_.
 
 Features
 ========
 
-- **Parallelization**: For each integrator a function prefixed with ``mpi_`` is available which uses
+- **Parallelization**: For each integrator a function prefixed with ``mpi_`` is available that uses
   the `Message Passing Interface (MPI) <http://www.mpi-forum.org/>`_ to run the integration in
-  parallel. The parallel integration is designed such that the functions return the numerically same
+  parallel. The parallel integration is designed so that the functions return the numerically same
   result as their non-parallel counterpart. This means that the result is independent from the
-  number of processors and only dependent on the seed of the random number generator.
+  number of processors and only dependend on the seed of the random number generator. The parallel
+  integrators divide the work equally among all processors and use ``MPI_Accumulate`` to exchange
+  data after each iteration.
 - **Distributions**: Arbitrarily many differential distributions can be generated during the
-  integration (see below).
+  integration (see below). This feature can also be used to integrate many integrands in the same
+  run.
 - **Intermediate results**: Callback functions can be used to print intermediate results as soon as
   they are available. After the integration is finished each intermediate result can be extracted
-  separately if the weighted average that automatically calculated does not suit the user.
+  separately if the automatically weighted average does not suit the user.
 - **Checkpointing system**: A checkpoint allows to convert the state of an integrator into a textual
   format, which can, for example, be written into a file. The checkpoint contains the complete
   information neccessary to restart an integration seemlessly: The result of the restarted
-  integration do not depend where the checkpoint was created, only on the integration parameters
+  integration does not depend where the checkpoint was created, only on the integration parameters
   (iterations, calls, seed). This is useful, for example, when an integration takes very long and
   one has to work around resource limitations of a computer cluster. In this case one can leverage
   the maximum run time of the cluster and save a checkpoint, restart from the checkpoint and run
@@ -52,8 +55,8 @@ itself was generated with `matplotlib <https://matplotlib.org/>`_.
    :width: 80%
 
 The integrands are matrix elements from `OpenLoops <https://openloops.hepforge.org/>`_ describing
-the scattering of W- and Z-bosons. The generated distribution describes the transverse momentum of
-the leading jet.
+the scattering of W and Z bosons. The generated distribution describes the transverse momentum of
+the leading jet. For more plots see `arXiv:1904.00882 <https://arxiv.org/abs/1904.00882>`_.
 
 Usage
 =====
@@ -95,8 +98,8 @@ is installed type ::
     meson build
     cd build
 
-to generate the build files in the directory ``build`` and to enter it. Before you build anything
-you can select some options:
+to generate the build files in the directory ``build`` and to enter it. Before you build you can
+select a few options:
 
 1. To enable building the examples, type ::
 
@@ -114,11 +117,11 @@ you can select some options:
 
    which creates a documentation of all classes and functions in the ``doc/html`` directory.
 
-4. More options can be shown by entering ::
+4. More options are shown when entering ::
 
        meson configure
 
-   which will display all options (including install paths) that can be altered by using the syntax
+   which will display all options (including install paths) that can be changed by using the syntax
    ``-Doption-name=value`` as used above.
 
 To finally build everything type ::
@@ -130,6 +133,32 @@ and/or ::
     ninja install
 
 to install the headers.
+
+Support
+=======
+
+If you spot a problem or a bug, or if you have a feature request, please use the Issues page to let
+me know. If you have any question concerning this library don't hesitate to write an `email to me
+<christopher.schwan@mi.infn.it>`_. If you prefix your subject line with a ``[hep-mc]`` you'll
+increase the chance of getting an answer quickly :).
+
+Name
+====
+
+The ``hep`` in the project name stands for high-energy physics (see the showcase above), which is
+the area in which I use this library myself, but in fact it is completely general in terms of
+applications. Unfortunately, when I named this library, I wasn't aware of another project with a
+similar name: `HepMC <http://hepmc.web.cern.ch/hepmc>`_.
+
+Similar Libraries
+=================
+
+A few other libraries offering Monte Carlo integration routines are:
+
+- `BOOST <https://www.boost.org>`_
+- `CUBA <http://www.feynarts.de/cuba>`_
+- `DVEGAS <https://dvegas.hepforge.org>`_
+- `GSL <https://www.gnu.org/software/gsl>`_
 
 References
 ==========
