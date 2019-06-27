@@ -5,10 +5,10 @@
 \brief The Multi Channel integration algorithm
 
 In contrast to the VEGAS algorithm, which uses a product of one-dimensional PDFs, the multi channel
-integration algorithm uses a sum of user-defined PDFs \f$ p_j ( \vec{y}) \f$ with automatically
-adapted weights \f$ \alpha_j \f$ in the form
+integration algorithm uses a sum of \f$ M \f$ user-defined PDFs \f$ p_j ( \vec{y}) \f$ with
+automatically adapted weights \f$ \alpha_j \f$ in the form
 \f[
-    p ( \vec{y} ) = \sum_{j=1}^M \alpha_j p_j ( \vec{y} ) \text{,} \qquad
+    p ( \vec{y} ) = \sum_{j=1}^M \alpha_j p_j ( \vec{y} ) \text{,} \quad
     \int \mathrm{d}^d y \; p_j \left( \vec{y} \right) = 1 \text{,} \quad
     \sum_{j=1}^M \alpha_j = 1 \text{,}
 \f]
@@ -17,7 +17,7 @@ the peak structure of the integrand does not factorize. To avoid explicitly summ
 *channel* \f$ j \f$ for each randomly chosen point \f$ \vec{x} \in U \equiv [0,1]^d \f$ the MC
 integrator also samples over the possible channels. This leads to the final formula
 \f[
-    I = \int \mathrm{d} i \int_U \mathrm{d}^d x \; J_i ( \vec{x} ) \left.
+    I = \int \mathrm{d} i \int_U \mathrm{d}^d x \; \left.
         \frac{f (\vec{y})}{p (\vec{y})} \right|_{\vec{y} = \vec{y}_i ( \vec{x}
         )} \text{,} \qquad
     i \sim \left\{ \alpha_1, \alpha_2, \ldots, \alpha_M \right\}
@@ -25,8 +25,7 @@ integrator also samples over the possible channels. This leads to the final form
 where the integral over the index \f$ i \f$ is understood to be a Monte Carlo summation in which the
 index \f$ i \f$ is randomly chosen according to the specified weights. Since the PDFs \f$ \left\{
 p_j \right\}_{j=1}^M \f$ are user-defined, the user also has to specify the CDFs \f$ \left\{
-\vec{y}_j ( \vec{x} ) \right\}_{j=1}^M \f$ for each channel and the jacobian \f$ J_i \f$ for the
-selected channel.
+\vec{y}_j ( \vec{x} ) \right\}_{j=1}^M \f$ for each channel.
 
 The multi channel integration uses the following parameters, where `T` denotes the numerical type,
 e.g. `double`:
@@ -49,7 +48,7 @@ e.g. `double`:
           - If `action` is \ref hep::multi_channel_map::calculate_coordinates, then the function
             must use `random_numbers` to generate a point according to the PDF with the index given
             by `channel`. The point itself must be written into `coordinates`, whose size is already
-            set by the parameter `map_dimensions` (see above).
+            set by the parameter `map_dimensions` (see above). The return value of `map` is ignored.
           - If `action` is \ref hep::multi_channel_map::calculate_densities, then the `map` function
             must generate the PDFs for the previously generated point, which can be read out of
             `coordinates`. The PDFs must be written into `densities`, whose size is determined by
