@@ -42,6 +42,9 @@ enum class callback_mode
     /// Do not print any messages after each iteration and do not save checkpoints to disk.
     silent,
 
+    /// Do not print any messages after each iteration, but save checkpoints to disk.
+    silent_and_write_chkpt,
+
     /// Print a detailed message after each iteration, but do not write checkpoints to disk.
     verbose,
 
@@ -87,46 +90,48 @@ public:
         T const err_all = result.error();
         T const rel_err_all = err_all / fabs(val_all);
 
-        if (mode_ == callback_mode::silent)
+        bool const perform_more_iterations = rel_err_all > target_rel_err_;
+
+        if ((mode_ == callback_mode::silent) || (mode_ == callback_mode::silent_and_write_chkpt))
         {
-            return rel_err_all > target_rel_err_;
+            std::cout << "iteration " << (results.size() - 1) << " finished.\n";
+
+//            if constexpr (std::is_base_of_v<multi_channel_chkpt<T>, Checkpoint>)
+            if (std::is_base_of<multi_channel_chkpt<T>, Checkpoint>::value)
+            {
+//                multi_channel_summary(chkpt, std::cout);
+                multi_channel_summary(dynamic_cast <multi_channel_chkpt<T> const&> (chkpt),
+                    std::cout);
+            }
+
+            // print result for this iteration
+
+            std::size_t const nnf = results.back().non_zero_calls() - results.back().finite_calls();
+            std::size_t const num = results.back().calls();
+            T const val = results.back().value();
+            T const err = results.back().error();
+            T const eff = T(100.0) * T(results.back().non_zero_calls()) / T(num);
+            T const rel_err = err / fabs(val);
+
+            std::cout << "this iteration: N=" << num << " E=" << val << " +- " << err << " ("
+                << (T(100.0) * rel_err) << "%) eff=" << eff << "% nnf=" << nnf << '\n';
+
+            // print result for all iterations
+
+            T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
+
+            std::cout << "all iterations: N=" << num_all << " E=" << val_all << " +- " << err_all
+                << " (" << (T(100.0) * rel_err_all) << "%) chi^2/dof=" << chi << '\n' << std::endl;
         }
 
-        std::cout << "iteration " << (results.size() - 1) << " finished.\n";
-
-//        if constexpr (std::is_base_of_v<multi_channel_chkpt<T>, Checkpoint>)
-        if (std::is_base_of<multi_channel_chkpt<T>, Checkpoint>::value)
-        {
-//            multi_channel_summary(chkpt, std::cout);
-            multi_channel_summary(dynamic_cast <multi_channel_chkpt<T> const&> (chkpt), std::cout);
-        }
-
-        // print result for this iteration
-
-        std::size_t const nnf = results.back().non_zero_calls() - results.back().finite_calls();
-        std::size_t const num = results.back().calls();
-        T const val = results.back().value();
-        T const err = results.back().error();
-        T const eff = T(100.0) * T(results.back().non_zero_calls()) / T(num);
-        T const rel_err = err / fabs(val);
-
-        std::cout << "this iteration: N=" << num << " E=" << val << " +- " << err << " ("
-            << (T(100.0) * rel_err) << "%) eff=" << eff << "% nnf=" << nnf << '\n';
-
-        // print result for all iterations
-
-        T const chi = chi_square_dof<weighted_with_variance>(results.begin(), results.end());
-
-        std::cout << "all iterations: N=" << num_all << " E=" << val_all << " +- " << err_all
-            << " (" << (T(100.0) * rel_err_all) << "%) chi^2/dof=" << chi << '\n' << std::endl;
-
-        if (mode_ == callback_mode::verbose_and_write_chkpt)
+        if ((mode_ == callback_mode::silent_and_write_chkpt) ||
+            (mode_ == callback_mode::verbose_and_write_chkpt))
         {
             std::ofstream out(filename_);
             chkpt.serialize(out);
         }
 
-        return rel_err_all > target_rel_err_;
+        return perform_more_iterations;
     }
 
     /// Sets the mode of this callback function.
