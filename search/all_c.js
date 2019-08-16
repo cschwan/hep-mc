@@ -2,7 +2,6 @@ var searchData=
 [
   ['parameters',['parameters',['../classhep_1_1distribution__result.html#a0625a27b0322c3210412d72d3a355d9f',1,'hep::distribution_result::parameters()'],['../classhep_1_1integrand.html#a9f854a6db4dc8d4b02bbfd15aec2c33d',1,'hep::integrand::parameters()']]],
   ['pdf',['pdf',['../classhep_1_1vegas__chkpt.html#aa92b3bf76e2d9a10f01c7492c9d0cacb',1,'hep::vegas_chkpt::pdf()'],['../classhep_1_1vegas__result.html#a8216c83f6c80e6efd7109c95a77e5118',1,'hep::vegas_result::pdf()']]],
-  ['pdfs',['pdfs',['../classhep_1_1multi__channel__vegas__result.html#a5de4516224cdcfa7d2897cf6688f3d02',1,'hep::multi_channel_vegas_result']]],
   ['plain',['plain',['../group__plain__group.html#gae31057fe1bdf3fa30ef83c60181609d1',1,'hep']]],
   ['plain_5fchkpt',['plain_chkpt',['../group__checkpoints.html#ga4852cede568fe38dce730f2737c208dd',1,'hep']]],
   ['plain_5fchkpt_5fwith_5frng',['plain_chkpt_with_rng',['../group__checkpoints.html#ga17232cab025f3414d1af481c3844d16a',1,'hep']]],
