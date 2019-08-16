@@ -7,7 +7,6 @@
 \example mpi_vegas_example.cpp
 \example multi_channel_disabled_channels.cpp
 \example multi_channel_example.cpp
-\example multi_channel_vegas_example.cpp
 \example two_dimensional_distribution.cpp
 \example vegas_example.cpp
 \example vegas_read_pdf.cpp
