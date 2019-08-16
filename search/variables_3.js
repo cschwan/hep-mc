@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weight_5f',['weight_',['../classhep_1_1mc__point.html#a34ca462f0eeec7131b7cf47d21daddf0',1,'hep::mc_point']]]
+  ['has_5fdistributions',['has_distributions',['../classhep_1_1integrand.html#ab47943342e26619f0ac3c2a55e188626',1,'hep::integrand']]]
 ];

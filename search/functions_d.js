@@ -1,16 +1,7 @@
 var searchData=
 [
-  ['value',['value',['../classhep_1_1mc__result.html#aac6ec96bd3e08f1685e332cc411cfe50',1,'hep::mc_result']]],
-  ['variance',['variance',['../classhep_1_1mc__result.html#a3b8a620815c89166db2ec1b2c0cfd0da',1,'hep::mc_result']]],
-  ['vegas',['vegas',['../group__vegas__group.html#gadeec73e19658d11a4fc99776cc92c1f6',1,'hep::vegas(I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, vegas_pdf&lt; numeric_type_of&lt; I &gt;&gt; const &amp;start_pdf, numeric_type_of&lt; I &gt; alpha=numeric_type_of&lt; I &gt;(1.5), R &amp;&amp;generator=std::mt19937())'],['../group__vegas__group.html#ga19fcfe8b93a04f58b3aa9f39ced7dae8',1,'hep::vegas(I &amp;&amp;integrand, std::vector&lt; std::size_t &gt; const &amp;iteration_calls, std::size_t bins=128, numeric_type_of&lt; I &gt; alpha=numeric_type_of&lt; I &gt;(1.5), R &amp;&amp;generator=std::mt19937())']]],
-  ['vegas_5fcallback',['vegas_callback',['../group__callbacks.html#ga79a82c0b4f488024962cb35e4caea2ff',1,'hep']]],
-  ['vegas_5fcuba_5frefinement',['vegas_cuba_refinement',['../group__global__configuration.html#ga9a24acbcf90e450280ecfaebe863b997',1,'hep::vegas_cuba_refinement()'],['../group__global__configuration.html#gaa3ccb12c5e313ac4ad6ca6f19a565045',1,'hep::vegas_cuba_refinement(bool enabled)']]],
-  ['vegas_5fdefault_5fcallback',['vegas_default_callback',['../group__callbacks.html#ga30bf41ad10f8f902300dfe9b6e8d8dc0',1,'hep']]],
-  ['vegas_5ficdf',['vegas_icdf',['../group__vegas__pdf__group.html#ga33cb49954274979969cc20e2a44ca98d',1,'hep']]],
-  ['vegas_5fiteration',['vegas_iteration',['../group__vegas__group.html#ga718a856863c67b09514117d0a71881fe',1,'hep']]],
-  ['vegas_5fpdf',['vegas_pdf',['../classhep_1_1vegas__pdf.html#a4ab3b5eff7f000326ab4ea496f65d2bf',1,'hep::vegas_pdf']]],
-  ['vegas_5fpoint',['vegas_point',['../classhep_1_1vegas__point.html#a45fee129fbeb6273bf7d5c0aed9767ee',1,'hep::vegas_point']]],
-  ['vegas_5frefine_5fpdf',['vegas_refine_pdf',['../group__vegas__pdf__group.html#ga61cf454ae1f35640c315a8f733fa6dbb',1,'hep']]],
-  ['vegas_5fresult',['vegas_result',['../classhep_1_1vegas__result.html#a1fcbd20811b51ec92e5312f0dbbd6145',1,'hep::vegas_result']]],
-  ['vegas_5fverbose_5fcallback',['vegas_verbose_callback',['../group__callbacks.html#gae35e15b4e8e6643bdd24dceef39abe48',1,'hep']]]
+  ['serialize',['serialize',['../classhep_1_1chkpt.html#a51a8f150151e0a42cbe5ff3f5cb54448',1,'hep::chkpt::serialize()'],['../classhep_1_1chkpt__with__rng.html#a2380c2c30c1520f3eecdfa6835042826',1,'hep::chkpt_with_rng::serialize()'],['../classhep_1_1distribution__parameters.html#a58962ea22eb794a23ea58a1eeb0836f0',1,'hep::distribution_parameters::serialize()'],['../classhep_1_1distribution__result.html#ae865f1dcf49712c245d9dec57cfd9b62',1,'hep::distribution_result::serialize()'],['../classhep_1_1mc__result.html#ad484ac268dc4703a0da1c2ee9e5c6413',1,'hep::mc_result::serialize()'],['../classhep_1_1multi__channel__chkpt.html#a7401b550c807c8404138858c8bf85130',1,'hep::multi_channel_chkpt::serialize()'],['../classhep_1_1multi__channel__result.html#a4e84c2c67a54f5c6b3597472f329a3aa',1,'hep::multi_channel_result::serialize()'],['../classhep_1_1plain__result.html#ac6607e54e0ee44379604a154938a4c3d',1,'hep::plain_result::serialize()'],['../classhep_1_1vegas__chkpt.html#a2e1f0c84e1df681e4e23884c99a1a3f0',1,'hep::vegas_chkpt::serialize()'],['../classhep_1_1vegas__pdf.html#aa005c792fe81dd71ec3597a387410721',1,'hep::vegas_pdf::serialize()'],['../classhep_1_1vegas__result.html#a3a70de13851961fdf63a903c3186ff4c',1,'hep::vegas_result::serialize()']]],
+  ['set_5fbin_5fleft',['set_bin_left',['../classhep_1_1vegas__pdf.html#a1c32e9dcda275ec26c9a832efebce3a5',1,'hep::vegas_pdf']]],
+  ['sum',['sum',['../classhep_1_1mc__result.html#a002163710936355ba25d453100404751',1,'hep::mc_result']]],
+  ['sum_5fof_5fsquares',['sum_of_squares',['../classhep_1_1mc__result.html#a5e6ea7f7bff00f6f7e4af158860264a2',1,'hep::mc_result']]]
 ];

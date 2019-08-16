@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['multi_5fchannel_5fmap',['multi_channel_map',['../group__integrands.html#gadd0057950f5e4375f6fdc21901ea3ca2',1,'hep']]]
+  ['callback_5fmode',['callback_mode',['../group__callbacks.html#ga8ed1920ee86c51243a6a34caccb54a57',1,'hep']]]
 ];

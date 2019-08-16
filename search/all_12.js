@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x_5fmin',['x_min',['../classhep_1_1distribution__parameters.html#ac2650fd125213ad876ce2fecafa89cb6',1,'hep::distribution_parameters']]]
+  ['y_5fmin',['y_min',['../classhep_1_1distribution__parameters.html#a842eaafe32a92b549f35b31612b41959',1,'hep::distribution_parameters']]]
 ];

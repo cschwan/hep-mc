@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['integrand_5ftype',['integrand_type',['../group__integrands.html#ga87ca6b96afb5582d22fd87d09a57da75',1,'hep']]]
+  ['function_5ftype',['function_type',['../classhep_1_1integrand.html#a6a996c76cbd91c8f46756ce8d9873bb4',1,'hep::integrand']]]
 ];

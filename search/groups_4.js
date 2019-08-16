@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['multi_20channel_20integrator',['Multi Channel Integrator',['../group__multi__channel__group.html',1,'']]]
+  ['plain_20integrator',['PLAIN Integrator',['../group__plain__group.html',1,'']]]
 ];

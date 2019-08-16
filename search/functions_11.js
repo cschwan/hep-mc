@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7emc_5fpoint',['~mc_point',['../classhep_1_1mc__point.html#a04a0c0ac85665865d17d72321e4b7833',1,'hep::mc_point']]]
+  ['y_5fmin',['y_min',['../classhep_1_1distribution__parameters.html#a842eaafe32a92b549f35b31612b41959',1,'hep::distribution_parameters']]]
 ];

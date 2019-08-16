@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['integrand_20functions',['Integrand Functions',['../group__integrands.html',1,'']]]
+  ['multi_20channel_20integrator',['Multi Channel Integrator',['../group__multi__channel__group.html',1,'']]]
 ];

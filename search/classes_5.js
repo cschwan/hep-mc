@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['weighted_5fequally',['weighted_equally',['../structhep_1_1weighted__equally.html',1,'hep']]],
-  ['weighted_5fwith_5fvariance',['weighted_with_variance',['../structhep_1_1weighted__with__variance.html',1,'hep']]]
+  ['vegas_5fchkpt',['vegas_chkpt',['../classhep_1_1vegas__chkpt.html',1,'hep']]],
+  ['vegas_5fpdf',['vegas_pdf',['../classhep_1_1vegas__pdf.html',1,'hep']]],
+  ['vegas_5fpoint',['vegas_point',['../classhep_1_1vegas__point.html',1,'hep']]],
+  ['vegas_5fresult',['vegas_result',['../classhep_1_1vegas__result.html',1,'hep']]]
 ];

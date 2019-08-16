@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['global_20configuration_20options',['Global Configuration Options',['../group__global__configuration.html',1,'']]]
+  ['integrand_20functions',['Integrand Functions',['../group__integrands.html',1,'']]]
 ];
