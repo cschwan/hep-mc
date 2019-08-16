@@ -92,7 +92,7 @@ public:
 
         bool const perform_more_iterations = rel_err_all > target_rel_err_;
 
-        if ((mode_ == callback_mode::silent) || (mode_ == callback_mode::silent_and_write_chkpt))
+        if ((mode_ == callback_mode::verbose) || (mode_ == callback_mode::verbose_and_write_chkpt))
         {
             std::cout << "iteration " << (results.size() - 1) << " finished.\n";
 
