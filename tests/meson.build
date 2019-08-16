@@ -33,9 +33,9 @@ endforeach
 
 if get_option('mpi')
     # make it a static library because `catch.cpp` contains `main`
-    libcatch_mpi = static_library('catch_mpi', 'catch_mpi.cpp', dependencies : catch_dep)
-    libcatch_mpi_dep = declare_dependency(dependencies : [ catch_dep, mpi_dep ],
-        link_with : libcatch_mpi)
+    libcatch_mpi = static_library('catch_mpi', 'catch_mpi.cpp',
+        dependencies : [ catch_dep, mpi_dep ])
+    libcatch_mpi_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch_mpi)
 
     mpi_tests = [
         'test_multi_channel',
