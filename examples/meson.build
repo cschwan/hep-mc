@@ -1,12 +1,12 @@
 examples = [
     'checkpoints',
     'checkpoints2',
-    'distributions_example',
-    'helper_example',
+    'distributions',
+    'helpers',
     'multi_channel_disabled_channels',
-    'multi_channel_example',
+    'multi_channel',
     'two_dimensional_distribution',
-    'vegas_example',
+    'vegas',
     'vegas_read_pdf',
     'vegas_write_pdf',
     'vegas_stop_after_precision',
@@ -18,15 +18,15 @@ endforeach
 
 if get_option('mpi')
     executable(
-        'mpi_vegas_example',
-        'mpi_vegas_example.cpp',
+        'mpi_vegas',
+        'mpi_vegas.cpp',
         include_directories : incdir,
         dependencies : [ hep_mc_dep, mpi_dep ]
     )
     
     executable(
-        'mpi_multi_channel_example',
-        'multi_channel_example.cpp',
+        'mpi_multi_channel',
+        'multi_channel.cpp',
         cpp_args : '-DUSE_MPI',
         dependencies : [ hep_mc_dep, mpi_dep ]
     )

@@ -28,7 +28,7 @@ Example
 =======
 
 The following example illustrates how to integrate the square-function using VEGAS:
-\include vegas_example.cpp
+\include vegas.cpp
 This program will produce the following output:
 
     computing integral of x^2 from 0 to 1 which is 0.333333
