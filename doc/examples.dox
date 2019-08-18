@@ -9,8 +9,6 @@
 \example multi_channel.cpp
 \example two_dimensional_distribution.cpp
 \example vegas.cpp
-\example vegas_read_pdf.cpp
 \example vegas_stop_after_precision.cpp
-\example vegas_write_pdf.cpp
 
 */

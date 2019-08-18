@@ -7,8 +7,6 @@ examples = [
     'multi_channel',
     'two_dimensional_distribution',
     'vegas',
-    'vegas_read_pdf',
-    'vegas_write_pdf',
     'vegas_stop_after_precision',
 ]
 
