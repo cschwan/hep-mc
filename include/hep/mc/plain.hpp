@@ -81,7 +81,7 @@ inline Checkpoint plain(
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_plain_chkpt<numeric_type_of<I>>(),
-    Callback callback = callback<Checkpoint>()
+    Callback callback = hep::callback<Checkpoint>()
 ) {
     auto generator = chkpt.generator();
 

@@ -102,7 +102,7 @@ inline Checkpoint vegas(
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
-    Callback callback = callback<Checkpoint>()
+    Callback callback = hep::callback<Checkpoint>()
 ) {
     chkpt.dimensions(integrand.dimensions());
 

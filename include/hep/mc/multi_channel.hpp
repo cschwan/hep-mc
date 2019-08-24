@@ -147,7 +147,7 @@ inline Checkpoint multi_channel(
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
     Checkpoint chkpt = make_multi_channel_chkpt<numeric_type_of<I>>(),
-    Callback callback = callback<Checkpoint>()
+    Callback callback = hep::callback<Checkpoint>()
 ) {
     chkpt.channels(integrand.channels());
 
