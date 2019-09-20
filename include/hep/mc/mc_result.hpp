@@ -147,6 +147,11 @@ public:
             << sum_of_squares_;
     }
 
+    static char const* result_name()
+    {
+        return "mc_result";
+    }
+
 private:
     std::size_t calls_;
     std::size_t non_zero_calls_;

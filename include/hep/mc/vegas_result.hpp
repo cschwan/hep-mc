@@ -109,6 +109,11 @@ public:
         }
     }
 
+    static char const* result_name()
+    {
+        return "vegas_result";
+    }
+
 private:
     vegas_pdf<T> pdf_;
     std::vector<T> adjustment_data_;

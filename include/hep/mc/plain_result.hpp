@@ -100,6 +100,11 @@ public:
         }
     }
 
+    static char const* result_name()
+    {
+        return "plain_result";
+    }
+
 private:
     std::vector<distribution_result<T>> distributions_;
 };

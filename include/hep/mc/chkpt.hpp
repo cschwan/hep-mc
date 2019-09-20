@@ -20,7 +20,8 @@
  */
 
 #include <cassert>
-#include <iosfwd>
+#include <istream>
+#include <limits>
 #include <utility>
 #include <vector>
 
@@ -45,6 +46,12 @@ public:
     /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
     explicit chkpt(std::istream& in)
     {
+        // if the first line starts with a header, ignore it
+        if (in.peek() == '#')
+        {
+            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+
         std::size_t size = 0;
         in >> size;
 
@@ -81,6 +88,10 @@ public:
     /// `out`.
     virtual void serialize(std::ostream& out) const
     {
+        // write header containing version and numeric type info
+        out << "# " << result_type::result_name() << " 1 "
+            << std::numeric_limits<typename Result::numeric_type>::max_digits10 << '\n';
+
         std::size_t const size = results_.size();
 
         out << size;

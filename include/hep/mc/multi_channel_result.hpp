@@ -112,6 +112,11 @@ public:
         }
     }
 
+    static char const* result_name()
+    {
+        return "multi_channel_result";
+    }
+
 private:
     std::vector<T> adjustment_data_;
     std::vector<T> channel_weights_;
