@@ -80,7 +80,7 @@ public:
     /// Sets the number of dimensions which is a parameter needed for the VEGAS integration
     void dimensions(std::size_t dimensions)
     {
-        if (pdf_.empty())
+        if (this->results().empty() && pdf_.empty())
         {
             pdf_.emplace_back(dimensions, bins_);
         }
