@@ -75,6 +75,8 @@ public:
 
 protected:
     T mutable weight_;
+
+private:
     std::vector<T> const& point_;
 };
 

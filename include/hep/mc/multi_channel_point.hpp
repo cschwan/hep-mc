@@ -76,7 +76,7 @@ public:
         return coordinates_;
     }
 
-protected:
+private:
     std::size_t channel_;
     std::vector<T>& coordinates_;
 };
@@ -119,9 +119,10 @@ public:
         {
             // lazy evaluation of the jacobian of `map` and `densities`
             this->weight_ = map_(
-                this->channel_,
-                this->point_,
-                this->coordinates_,
+                this->channel(),
+                this->point(),
+                // should be OK, since `coordinates` is actually non-const as forced by the c'tor
+                const_cast <std::vector<T>&> (this->coordinates()),
                 enabled_channels_,
                 densities_,
                 multi_channel_map::calculate_densities
