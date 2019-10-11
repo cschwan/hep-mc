@@ -42,7 +42,7 @@ using plain_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, plain_chkpt<T>>;
 /// Helper function to create an initial checkpoint to start the \ref plain_group.
 template <typename T, typename RandomNumberEngine = std::mt19937>
 plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(
-    RandomNumberEngine const& generator = std::mt19937()
+    RandomNumberEngine const& generator = RandomNumberEngine()
 ) {
     return plain_chkpt_with_rng<RandomNumberEngine, T>{generator};
 }
@@ -53,7 +53,7 @@ plain_chkpt_with_rng<RandomNumberEngine, T> make_plain_chkpt(std::istream& in)
 {
     if (in.peek() == std::istream::traits_type::eof())
     {
-        return make_plain_chkpt<T>();
+        return make_plain_chkpt<T, RandomNumberEngine>();
     }
 
     return plain_chkpt_with_rng<RandomNumberEngine, T>{in};

@@ -131,7 +131,7 @@ template <typename T, typename RandomNumberEngine = std::mt19937>
 vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     std::size_t bins = 128,
     T alpha = T(1.5),
-    RandomNumberEngine const& rng = std::mt19937()
+    RandomNumberEngine const& rng = RandomNumberEngine()
 ) {
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, bins, alpha};
 }
@@ -141,7 +141,7 @@ template <typename T, typename RandomNumberEngine = std::mt19937>
 vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
     vegas_pdf<T> const& pdf,
     T alpha = T(1.5),
-    RandomNumberEngine const& rng = std::mt19937()
+    RandomNumberEngine const& rng = RandomNumberEngine()
 ) {
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, pdf, alpha};
 }
@@ -154,7 +154,7 @@ vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(std::istream& in)
 {
     if (in.peek() == std::istream::traits_type::eof())
     {
-        return make_vegas_chkpt<T>();
+        return make_vegas_chkpt<T, RandomNumberEngine>();
     }
 
     return vegas_chkpt_with_rng<RandomNumberEngine, T>{in};

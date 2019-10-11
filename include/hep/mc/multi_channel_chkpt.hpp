@@ -155,7 +155,7 @@ template <typename T, typename RandomNumberEngine = std::mt19937>
 multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     T min_weight = T(),
     T beta = T(0.25),
-    RandomNumberEngine const& rng = std::mt19937()
+    RandomNumberEngine const& rng = RandomNumberEngine()
 ) {
     return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, min_weight, beta};
 }
@@ -166,7 +166,7 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(
     std::vector<T> const& channel_weights,
     T min_weight = T(),
     T beta = T(0.25),
-    RandomNumberEngine const& rng = std::mt19937()
+    RandomNumberEngine const& rng = RandomNumberEngine()
 ) {
     return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{rng, channel_weights, min_weight,
          beta};
@@ -180,7 +180,7 @@ multi_channel_chkpt_with_rng<RandomNumberEngine, T> make_multi_channel_chkpt(std
 {
     if (in.peek() == std::istream::traits_type::eof())
     {
-        return make_multi_channel_chkpt<T>();
+        return make_multi_channel_chkpt<T, RandomNumberEngine>();
     }
 
     return multi_channel_chkpt_with_rng<RandomNumberEngine, T>{in};
