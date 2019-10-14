@@ -31,4 +31,5 @@ if get_option('examples')
     subdir('examples')
 endif
 
+subdir('src')
 subdir('tests')
