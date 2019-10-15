@@ -22,6 +22,7 @@
 #include <cassert>
 #include <istream>
 #include <limits>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -83,6 +84,19 @@ public:
 
     /// Destructor.
     virtual ~chkpt() = default;
+
+    /// Resets the state of this checkpoint to the one described by `iteration`. Calling this
+    /// function with `iteration` set to zero will remove all results, calling it with `iteration`
+    /// set to the number of results will leave the checkpoint unchanged.
+    virtual void rollback(std::size_t iteration)
+    {
+        if (iteration > results_.size())
+        {
+            throw std::out_of_range("parameter `iteration` too large");
+        }
+
+        results_.erase(results_.begin() + iteration, results_.end());
+    }
 
     /// Serializes this object. This writes a textual representation of this class to the stream
     /// `out`.
@@ -149,6 +163,12 @@ public:
     RandomNumberEngine generator() const
     {
         return generators_.back();
+    }
+
+    void rollback(std::size_t iteration) override
+    {
+        Checkpoint::rollback(iteration);
+        generators_.erase(generators_.begin() + iteration, generators_.end());
     }
 
     void serialize(std::ostream& out) const override
