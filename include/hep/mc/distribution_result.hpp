@@ -97,7 +97,7 @@ inline std::vector<T> mid_points_x(distribution_result<T> const& result)
     auto const& parameters = result.parameters();
 
     std::vector<T> mid_points;
-    mid_points.reserve(parameters.bins_x());
+    mid_points.reserve(parameters.bins_x() * parameters.bins_y());
 
     for (std::size_t bin_y = 0; bin_y != parameters.bins_y(); ++bin_y)
     {
@@ -120,7 +120,7 @@ inline std::vector<T> mid_points_y(distribution_result<T> const& result)
     auto const& parameters = result.parameters();
 
     std::vector<T> mid_points;
-    mid_points.reserve(parameters.bins_y());
+    mid_points.reserve(parameters.bins_x() * parameters.bins_y());
 
     T y = parameters.y_min() + T(0.5) * parameters.bin_size_y();
 
