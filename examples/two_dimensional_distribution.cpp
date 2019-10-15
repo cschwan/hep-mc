@@ -33,27 +33,20 @@ int main()
     auto integrand = hep::make_integrand<double>(
         gauss,
         2,
-        hep::distribution_parameters<double>{100, 100, min, max, min, max, ""}
+        hep::distribution_parameters<double>{100, 100, min, max, min, max, "gauss"}
     );
 
     // now integrate and record the differential distributions
-    auto const chkpt = hep::plain(integrand, std::vector<std::size_t>(1, 10000000));
+    auto const chkpt = hep::plain(
+        integrand,
+        std::vector<std::size_t>(1, 10000000),
+        hep::make_plain_chkpt<double, std::mt19937>(),
+        hep::callback<hep::plain_chkpt<double>>(hep::callback_mode::verbose_and_write_chkpt, "dist_chkpt")
+    );
+
     auto const result = chkpt.results().back();
 
     // integral is zero
-    std::cout << "integral is I = " << result.value() << " +- " << result.error() << "\n\n";
-
-    auto const& distribution = result.distributions()[0];
-    auto const& mid_points_x = hep::mid_points_x(distribution);
-    auto const& mid_points_y = hep::mid_points_y(distribution);
-
-    std::cout.setf(std::ios_base::scientific);
-
-    // print the distribution
-    for (std::size_t i = 0; i != mid_points_x.size(); ++i)
-    {
-        std::cout << mid_points_x[i] << '\t' << mid_points_y[i] << '\t'
-            << distribution.results()[i].value() << '\t'
-            << distribution.results()[i].error() << '\n';
-    }
+    std::cout << "integral is I = " << result.value() << " +- " << result.error() << "\n\n"
+        "to view the distribution use the checkpoint viewer: `chkpt dists dist_chkpt`\n";
 }

@@ -93,6 +93,96 @@ int perform_print(
 }
 
 template <typename Chkpt>
+int perform_dists(
+    std::vector<std::string> const& arguments,
+    hep::chkpt_with_rng<hep::stream_rng, Chkpt> const& chkpt
+) {
+    auto const io_flags = std::cout.flags();
+    auto const io_precision = std::cout.precision();
+
+    for (std::size_t i = 0; i != arguments.size(); ++i)
+    {
+        if (arguments.at(i) == "-p")
+        {
+            if (i + 1 == arguments.size())
+            {
+                throw std::runtime_error("argument " + arguments.at(i) + " is missing the "
+                    "`precision` parameter");
+            }
+
+            unsigned long precision;
+
+            try
+            {
+                precision = std::stoul(arguments.at(++i));
+            }
+            catch (std::invalid_argument const& exception)
+            {
+                throw std::runtime_error("argument " + arguments.at(i) + " could not be converted "
+                    " to a number");
+            }
+
+            std::cout.precision(precision);
+        }
+        else if (arguments.at(i) == "-s")
+        {
+            std::cout.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        }
+        else
+        {
+            std::cerr << "Warning: additional argument `" + arguments.at(i) + "` ignored\n";
+        }
+    }
+
+    if (chkpt.results().empty() || chkpt.results().front().distributions().empty())
+    {
+        return 0;
+    }
+
+    std::size_t const distributions = chkpt.results().front().distributions().size();
+
+    for (std::size_t i = 0; i != distributions; ++i)
+    {
+        auto const& parameters = chkpt.results().front().distributions().at(i).parameters();
+
+        std::cout << "# " << parameters.name() << '\n';
+
+        auto const& mid_points_x = hep::mid_points_x(chkpt.results().front().distributions().at(i));
+        auto const& mid_points_y = hep::mid_points_y(chkpt.results().front().distributions().at(i));
+
+        for (std::size_t j = 0; j != mid_points_x.size(); ++j)
+        {
+            std::cout << mid_points_x.at(j);
+
+            if (parameters.bins_y() > 1)
+            {
+                std::cout << ' ' << mid_points_y.at(j);
+            }
+
+            for (auto const& result : chkpt.results())
+            {
+                auto const& mc_result = result.distributions().at(i).results().at(j);
+
+                std::cout << ' ' << mc_result.value() << ' ' << mc_result.error() << ' '
+                    << mc_result.calls();
+            }
+
+            std::cout << '\n';
+        }
+
+        if (i != (distributions - 1))
+        {
+            std::cout << '\n';
+        }
+    }
+
+    std::cout.precision(io_precision);
+    std::cout.flags(io_flags);
+
+    return 0;
+}
+
+template <typename Chkpt>
 int dispatch_operations(
     std::string const& operation,
     std::vector<std::string> const& arguments,
@@ -107,6 +197,10 @@ int dispatch_operations(
     else if (operation == "print")
     {
         return perform_print(arguments, chkpt);
+    }
+    else if (operation == "dists")
+    {
+        return perform_dists(arguments, chkpt);
     }
     else
     {
@@ -156,6 +250,9 @@ std::string operations_help_string()
         "      Uses the standard callback function to print all results of this\n"
         "      checkpoint. This command accepts the optional parameters `-p` and\n"
         "      `-s`\n"
+        "  - dists:\n"
+        "      Prints all distributions collected in the checkpoint. This command\n"
+        "      accepts the optional parameters `-p` and `-s`\n"
         "  Optional arguments:\n"
         "  - `-s`:\n"
         "      switches the output to the scientific format\n"
