@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 template <typename T>
@@ -53,13 +54,21 @@ int main()
         chkpt_from_disk
     );
 
-    std::cout << "result using five iterations from a chkpt and five addtional iterations:\n    ";
+    std::cout << "-------------------------------------------------------------------------\n"
+              << "result using five iterations from a chkpt and five additional iterations:\n    ";
+
+    auto const precision = std::cout.precision();
+    auto const fmtflags = std::cout.flags();
 
     // print the result using enough precision
     std::cout << std::scientific << std::setprecision(16)
-        << chkpt.results().back().value() << " +- " << chkpt.results().back().error() << '\n';
+        << chkpt.results().back().value() << " +- " << chkpt.results().back().error() << "\n\n";
 
-    // perform the same integration in one go; the result is the same (even numerical)
+    // reset changes to `cout`
+    std::cout.precision(precision);
+    std::cout.flags(fmtflags);
+
+    // perform the same integration in one go; the result *must* be the same numerically
     auto const result = hep::plain(
         hep::make_integrand<double>(
             function<double>,
@@ -69,7 +78,8 @@ int main()
         std::vector<std::size_t>(10, 1000)
     ).results().back();
 
-    std::cout << "result using a single integration with ten iterations:\n    ";
+    std::cout << "------------------------------------------------------\n"
+              << "result using a single integration with ten iterations:\n    ";
 
     // print the result using enough precision
     std::cout << std::scientific << std::setprecision(16)
