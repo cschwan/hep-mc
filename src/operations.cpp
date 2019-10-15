@@ -2,6 +2,7 @@
 #include "stream_rng.hpp"
 #include "make_chkpt.hpp"
 
+#include "hep/mc/callback.hpp"
 #include "hep/mc/chkpt.hpp"
 #include "hep/mc/multi_channel_chkpt.hpp"
 #include "hep/mc/multi_channel_result.hpp"
@@ -33,6 +34,65 @@ int perform_iter(
 }
 
 template <typename Chkpt>
+int perform_print(
+    std::vector<std::string> const& arguments,
+    hep::chkpt_with_rng<hep::stream_rng, Chkpt> const& chkpt
+) {
+    auto const io_flags = std::cout.flags();
+    auto const io_precision = std::cout.precision();
+
+    for (std::size_t i = 0; i != arguments.size(); ++i)
+    {
+        if (arguments.at(i) == "-p")
+        {
+            if (i + 1 == arguments.size())
+            {
+                throw std::runtime_error("argument " + arguments.at(i) + " is missing the "
+                    "`precision` parameter");
+            }
+
+            unsigned long precision;
+
+            try
+            {
+                precision = std::stoul(arguments.at(++i));
+            }
+            catch (std::invalid_argument const& exception)
+            {
+                throw std::runtime_error("argument " + arguments.at(i) + " could not be converted "
+                    " to a number");
+            }
+
+            std::cout.precision(precision);
+        }
+        else if (arguments.at(i) == "-s")
+        {
+            std::cout.setf(std::ios_base::scientific, std::ios_base::floatfield);
+        }
+        else
+        {
+            std::cerr << "Warning: additional argument `" + arguments.at(i) + "` ignored\n";
+        }
+    }
+
+    using T = typename Chkpt::result_type::numeric_type;
+
+    hep::callback<Chkpt> callback{hep::callback_mode::verbose, "", T()};
+
+    for (std::size_t i = 0; i != chkpt.results().size(); ++i)
+    {
+        auto copy = chkpt;
+        copy.rollback(i + 1);
+        callback(copy);
+    }
+
+    std::cout.precision(io_precision);
+    std::cout.flags(io_flags);
+
+    return 0;
+}
+
+template <typename Chkpt>
 int dispatch_operations(
     std::string const& operation,
     std::vector<std::string> const& arguments,
@@ -43,6 +103,10 @@ int dispatch_operations(
     if (operation == "iter")
     {
         return perform_iter(arguments, chkpt);
+    }
+    else if (operation == "print")
+    {
+        return perform_print(arguments, chkpt);
     }
     else
     {
@@ -85,8 +149,18 @@ std::string operations_help_string()
 {
     return /* 72 character limit /////////////////////////////////////////////// */
         "Usage: chkpt <command> [opt_args...] file\n"
-        "  Options:\n"
-        "  - iter: returns the number of iterations stored in this checkpoint file\n";
+        "  Commands:\n"
+        "  - iter:\n"
+        "      returns the number of iterations stored in this checkpoint file\n"
+        "  - print:\n"
+        "      Uses the standard callback function to print all results of this\n"
+        "      checkpoint. This command accepts the optional parameters `-p` and\n"
+        "      `-s`\n"
+        "  Optional arguments:\n"
+        "  - `-s`:\n"
+        "      switches the output to the scientific format\n"
+        "  - `-p <precision>`:\n"
+        "      parameter to set the precision\n";
 }
 
 }
