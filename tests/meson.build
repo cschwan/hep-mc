@@ -1,7 +1,8 @@
 catch_dep = dependency('catch2', fallback : [ 'catch2', 'catch2_dep' ])
 
 # make it a static library because `catch.cpp` contains `main`
-libcatch = static_library('catch', 'catch.cpp', dependencies : catch_dep)
+libcatch = static_library('catch', 'catch.cpp', dependencies : catch_dep,
+    implicit_include_directories : false)
 libcatch_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch)
 
 tests = [
@@ -27,14 +28,15 @@ tests = [
 ]
 
 foreach t : tests
-    exe = executable(t, t + '.cpp', dependencies : [ libcatch_dep, hep_mc_dep ])
+    exe = executable(t, t + '.cpp', dependencies : [ libcatch_dep, hep_mc_dep ],
+        implicit_include_directories : false)
     test(t, exe, timeout : 60)
 endforeach
 
 if get_option('mpi')
     # make it a static library because `catch.cpp` contains `main`
     libcatch_mpi = static_library('catch_mpi', 'catch_mpi.cpp',
-        dependencies : [ catch_dep, mpi_dep ])
+        dependencies : [ catch_dep, mpi_dep ], implicit_include_directories : false)
     libcatch_mpi_dep = declare_dependency(dependencies : catch_dep, link_with : libcatch_mpi)
 
     mpi_tests = [
@@ -50,8 +52,13 @@ if get_option('mpi')
     mpiexec = find_program('mpiexec')
 
     foreach t : mpi_tests
-        exe = executable(t + '_mpi', t + '.cpp', cpp_args : [ '-DHEP_USE_MPI' ],
-            dependencies : [ hep_mc_dep, libcatch_mpi_dep, mpi_dep ])
+        exe = executable(
+            t + '_mpi',
+            t + '.cpp',
+            cpp_args : [ '-DHEP_USE_MPI' ],
+            dependencies : [ hep_mc_dep, libcatch_mpi_dep, mpi_dep ],
+            implicit_include_directories : false
+        )
 
         test(t + '_mpi', mpiexec, args : [ '-np', '2', exe ])
     endforeach

@@ -11,7 +11,7 @@ examples = [
 ]
 
 foreach e : examples
-    exe = executable(e, e + '.cpp', dependencies : hep_mc_dep)
+    executable(e, e + '.cpp', dependencies : hep_mc_dep, implicit_include_directories : false)
 endforeach
 
 if get_option('mpi')
