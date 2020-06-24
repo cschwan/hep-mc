@@ -39,7 +39,7 @@ TEMPLATE_TEST_CASE("distribution accumulation", "", float, double /*, long doubl
     auto const results = hep::mpi_plain(
         MPI_COMM_WORLD,
 #endif
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             integrand<T>,
             2,
             hep::distribution_parameters<T>(4, 6, T(), T(1.0), T(-0.25), T(1.25), "distribution #1")

@@ -70,7 +70,7 @@ TEMPLATE_TEST_CASE("serialization", "[multi_channel_chkpt]", float, double, long
 
     // create a checkpoint using five iterations with PLAIN
     auto const chkpt1 = hep::multi_channel(
-        hep::make_multi_channel_integrand<T>(
+        hep::make_multi_channel_integrand<T, T>(
             linear_function<T>,
             1,
             map<T>,
@@ -141,7 +141,7 @@ TEMPLATE_TEST_CASE("series", "[multi_channel_chkpt]", float, double, long double
     // finally resume it with one iteration
 
     auto const chkptA = hep::multi_channel(
-        hep::make_multi_channel_integrand<T>(
+        hep::make_multi_channel_integrand<T, T>(
             linear_function<T>,
             1,
             map<T>,
@@ -153,7 +153,7 @@ TEMPLATE_TEST_CASE("series", "[multi_channel_chkpt]", float, double, long double
     );
 
     auto const tmp_chkpt1 = hep::multi_channel(
-        hep::make_multi_channel_integrand<T>(
+        hep::make_multi_channel_integrand<T, T>(
             linear_function<T>,
             1,
             map<T>,
@@ -165,7 +165,7 @@ TEMPLATE_TEST_CASE("series", "[multi_channel_chkpt]", float, double, long double
     );
 
     auto const tmp_chkpt2 = hep::multi_channel(
-        hep::make_multi_channel_integrand<T>(
+        hep::make_multi_channel_integrand<T, T>(
             linear_function<T>,
             1,
             map<T>,
@@ -178,7 +178,7 @@ TEMPLATE_TEST_CASE("series", "[multi_channel_chkpt]", float, double, long double
     );
 
     auto const chkptB = hep::multi_channel(
-        hep::make_multi_channel_integrand<T>(
+        hep::make_multi_channel_integrand<T, T>(
             linear_function<T>,
             1,
             map<T>,

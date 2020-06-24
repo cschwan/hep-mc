@@ -36,7 +36,7 @@ TEMPLATE_TEST_CASE("stop after precision", "", float, double, long double)
     auto const results = hep::mpi_plain(
         MPI_COMM_WORLD,
 #endif
-        hep::make_integrand<T>(function<T>, 2),
+        hep::make_integrand<T, T>(function<T>, 2),
         std::vector<std::size_t>(100, 10000),
         hep::make_plain_chkpt<T>(std::mt19937_64()),
 #ifndef HEP_USE_MPI

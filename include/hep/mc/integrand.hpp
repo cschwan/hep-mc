@@ -34,12 +34,15 @@ namespace hep
 
 /// Class representing a function that can be integrated using the PLAIN-like algorithms, which
 /// currently are PLAIN and VEGAS.
-template <typename T, typename F, bool distributions>
+template <typename T, typename R, typename F, bool distributions>
 class integrand
 {
 public:
     /// Numeric type of the integrand.
     using numeric_type = T;
+
+    /// Return type of the integrand.
+    using return_type = R;
 
     /// The type of the integrand function that is integrated.
     using function_type = F;
@@ -86,8 +89,8 @@ private:
 };
 
 /// Template alias for an \ref integrand with its type `F` decayed with `std::decay`.
-template <typename T, typename F, bool distributions>
-using integrand_type = integrand<T, typename std::decay<F>::type, distributions>;
+template <typename T, typename R, typename F, bool distributions>
+using integrand_type = integrand<T, R, typename std::decay<F>::type, distributions>;
 
 /// PLAIN/VEGAS integrand constructor. This function constructs an \ref integrand using the given
 /// `function` that must accept points from the \f$ d \f$-dimensional hypercube, where \f$ d \f$ is
@@ -101,10 +104,10 @@ using integrand_type = integrand<T, typename std::decay<F>::type, distributions>
 ///     return /* calculate the function value from x.point */;
 /// }
 /// \endcode
-template <typename T, typename F>
-inline integrand_type<T, F, false> make_integrand(F&& function, std::size_t dimensions)
+template <typename T, typename R, typename F>
+inline integrand_type<T, R, F, false> make_integrand(F&& function, std::size_t dimensions)
 {
-    return integrand_type<T, F, false>(
+    return integrand_type<T, R, F, false>(
         std::forward<F>(function),
         dimensions,
         std::vector<distribution_parameters<T>>()
@@ -129,13 +132,13 @@ inline integrand_type<T, F, false> make_integrand(F&& function, std::size_t dime
 ///     return f;
 /// }
 /// \endcode
-template <typename T, typename F, typename... D>
-inline integrand_type<T, F, true> make_integrand(
+template <typename T, typename R, typename F, typename... D>
+inline integrand_type<T, R, F, true> make_integrand(
     F&& function,
     std::size_t dimensions,
     D&&... parameters
 ) {
-    return integrand_type<T, F, true>(
+    return integrand_type<T, R, F, true>(
         std::forward<F>(function),
         dimensions,
         std::vector<distribution_parameters<T>>{std::forward<D>(parameters)...}
@@ -146,6 +149,11 @@ inline integrand_type<T, F, true> make_integrand(
 /// reference.
 template <typename I>
 using numeric_type_of = typename std::remove_reference<I>::type::numeric_type;
+
+/// Shortcut for accessing the result type of an integrand that is possibly a
+/// reference.
+template <typename I>
+using return_type_of = typename std::remove_reference<I>::type::return_type;
 
 /// @}
 

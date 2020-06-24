@@ -20,7 +20,7 @@ void create_chkpt(std::string const& file)
 {
     // create a checkpoint using five iterations with PLAIN and create a distribution
     auto const chkpt = hep::plain(
-        hep::make_integrand<double>(
+        hep::make_integrand<double, double>(
             function<double>,
             1,
             hep::make_dist_params<double>(10, 0.0, 1.0, "distribution #1")
@@ -45,7 +45,7 @@ int main()
 
     // resume the integration with 5 additional iterations
     auto const chkpt = hep::plain(
-        hep::make_integrand<double>(
+        hep::make_integrand<double, double>(
             function<double>,
             1,
             hep::make_dist_params<double>(10, 0.0, 1.0, "distribution #1")
@@ -70,7 +70,7 @@ int main()
 
     // perform the same integration in one go; the result *must* be the same numerically
     auto const result = hep::plain(
-        hep::make_integrand<double>(
+        hep::make_integrand<double, double>(
             function<double>,
             1,
             hep::make_dist_params<double>(10, 0.0, 1.0, "distribution #1")

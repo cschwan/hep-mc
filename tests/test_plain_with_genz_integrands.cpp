@@ -111,7 +111,7 @@ TEST_CASE("plain with genz integrands", "")
     auto integrand = genz::integrand<T>(type, params.affective(), params.unaffective());
 
     auto const result = hep::vegas(
-        hep::make_integrand<T>(integrand, dimension),
+        hep::make_integrand<T, T>(integrand, dimension),
         std::vector<std::size_t>(1, 100000)
     ).results().front();
 

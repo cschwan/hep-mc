@@ -76,7 +76,7 @@ int main(
     auto const results = hep::mpi_multi_channel(
         MPI_COMM_WORLD,
 #endif
-        hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 2),
+        hep::make_multi_channel_integrand<double, double>(function, 1, densities, 1, 2),
         std::vector<std::size_t>(10, 10000000)
     ).results();
 

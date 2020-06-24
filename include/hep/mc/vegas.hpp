@@ -49,12 +49,13 @@ namespace hep
 /// generator and with `calls` parameters each smaller than `total_calls` but their sum being equal
 /// to `total_calls`.
 template <typename I, typename R>
-inline vegas_result<numeric_type_of<I>> vegas_iteration(
+inline vegas_result<numeric_type_of<I>, return_type_of<I>> vegas_iteration(
     I&& integrand,
     std::size_t calls,
     vegas_pdf<numeric_type_of<I>> const& pdf,
     R& generator
 ) {
+    using S = return_type_of<I>;
     using T = numeric_type_of<I>;
 
     auto accumulator = make_accumulator(integrand);
@@ -62,7 +63,7 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
     std::size_t const dimensions = pdf.dimensions();
     std::size_t const bins       = pdf.bins();
 
-    std::vector<T> adjustment_data(dimensions * bins);
+    std::vector<S> adjustment_data(dimensions * bins);
     std::vector<T> random_numbers(dimensions);
     std::vector<std::size_t> bin(dimensions);
 
@@ -76,8 +77,8 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 
         vegas_point<T> const point(random_numbers, bin, pdf);
 
-        T const value = accumulator.invoke(integrand, point);
-        T const square = value * value;
+        S const value = accumulator.invoke(integrand, point);
+        S const square = value * value;
 
         // save square for each bin in order to refine the pdf later
         for (std::size_t j = 0; j != dimensions; ++j)
@@ -86,7 +87,7 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
         }
     }
 
-    return vegas_result<T>(accumulator.result(calls), pdf, adjustment_data);
+    return vegas_result<T, S>(accumulator.result(calls), pdf, adjustment_data);
 }
 
 /// Integrates `function` by performing `iteration_calls.size()` iterations of the VEGAS algorithm,
@@ -96,12 +97,12 @@ inline vegas_result<numeric_type_of<I>> vegas_iteration(
 ///
 /// This function can be used to start from an already adapted pdf, e.g. one by \ref
 /// vegas_result.pdf obtained by a previous \ref vegas call.
-template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>>,
-    typename Callback = callback<Checkpoint>>
+template <typename I, typename Checkpoint = default_vegas_chkpt<numeric_type_of<I>,
+    return_type_of<I>>, typename Callback = callback<Checkpoint>>
 inline Checkpoint vegas(
     I&& integrand,
     std::vector<std::size_t> const& iteration_calls,
-    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>>(),
+    Checkpoint chkpt = make_vegas_chkpt<numeric_type_of<I>, return_type_of<I>>(),
     Callback callback = hep::callback<Checkpoint>()
 ) {
     chkpt.dimensions(integrand.dimensions());

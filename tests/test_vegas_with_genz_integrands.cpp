@@ -111,7 +111,7 @@ TEST_CASE("vegas with genz integrands", "")
     auto integrand = genz::integrand<T>(type, params.affective(), params.unaffective());
 
     auto const results = hep::vegas(
-        hep::make_integrand<T>(integrand, dimension),
+        hep::make_integrand<T, T>(integrand, dimension),
         std::vector<std::size_t>(1, 100000)
     ).results();
     auto const result = hep::accumulate<hep::weighted_equally>(results.begin(), results.end());

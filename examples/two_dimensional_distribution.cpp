@@ -30,7 +30,7 @@ int main()
     // has two dimensions, and furthermore we want to generate a differential
     // distribution of this function using 100x100 bins in the interval
     // [-3,+3]x[-3,+3]
-    auto integrand = hep::make_integrand<double>(
+    auto integrand = hep::make_integrand<double, double>(
         gauss,
         2,
         hep::distribution_parameters<double>{100, 100, min, max, min, max, ""}

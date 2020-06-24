@@ -70,7 +70,7 @@ TEMPLATE_TEST_CASE("multi_channel integration", "", float, double, long double)
     auto const results = hep::mpi_multi_channel(
         MPI_COMM_WORLD,
 #endif
-        hep::make_multi_channel_integrand<T>(function<T>, 2, densities<T>, 2, 4),
+        hep::make_multi_channel_integrand<T, T>(function<T>, 2, densities<T>, 2, 4),
         std::vector<std::size_t>(100, 10000),
         hep::make_multi_channel_chkpt<T>(weights, T(0.01), T(0.25), std::mt19937_64()),
 #ifndef HEP_USE_MPI

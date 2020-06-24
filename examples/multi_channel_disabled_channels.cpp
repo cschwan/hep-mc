@@ -56,7 +56,7 @@ int main()
     };
 
     auto results = hep::multi_channel(
-        hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 3),
+        hep::make_multi_channel_integrand<double, double>(function, 1, densities, 1, 3),
         std::vector<std::size_t>(10, 1000000)
     ).results();
 
@@ -75,7 +75,7 @@ int main()
     std::cout << ">>> Starting new run without channel #2\n\n";
 
     hep::multi_channel(
-        hep::make_multi_channel_integrand<double>(function, 1, densities, 1, 3),
+        hep::make_multi_channel_integrand<double, double>(function, 1, densities, 1, 3),
         std::vector<std::size_t>(10, 1000000),
         hep::make_multi_channel_chkpt<double>(weights)
     ).results();

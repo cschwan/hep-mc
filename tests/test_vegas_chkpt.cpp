@@ -25,7 +25,7 @@ TEMPLATE_TEST_CASE("empty serialization", "[vegas_chkpt]", float, double, long d
 {
     using T = TestType;
 
-    auto chkpt1 = hep::make_vegas_chkpt<T>();
+    auto chkpt1 = hep::make_vegas_chkpt<T, T>();
 
     // must be called otherwise program crashes
     chkpt1.dimensions(1);
@@ -38,7 +38,7 @@ TEMPLATE_TEST_CASE("empty serialization", "[vegas_chkpt]", float, double, long d
 
     // unserialize checkpoint
     auto in = std::istringstream(stream1.str());
-    auto const chkpt2 = hep::make_vegas_chkpt<T, std::mt19937>(in);
+    auto const chkpt2 = hep::make_vegas_chkpt<T, T, std::mt19937>(in);
 
     // serialize previous checkpoint
     std::ostringstream stream2;
@@ -54,7 +54,7 @@ TEMPLATE_TEST_CASE("serialization", "[vegas_chkpt]", float, double, long double)
 
     // create a checkpoint using five iterations with PLAIN
     auto const chkpt1 = hep::vegas(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             linear_function<T>,
             1,
             hep::make_dist_params<T>(10, T(0.0), T(1.0), "distribution #1")
@@ -86,9 +86,9 @@ TEMPLATE_TEST_CASE("empty stream construction", "[vegas_chkpt]", float, double, 
     std::istringstream in;
 
     // construct using an empty stream
-    auto chkpt1 = hep::make_vegas_chkpt<T, std::mt19937>(in);
+    auto chkpt1 = hep::make_vegas_chkpt<T, T, std::mt19937>(in);
     // construct using the default values
-    auto chkpt2 = hep::make_vegas_chkpt<T>();
+    auto chkpt2 = hep::make_vegas_chkpt<T, T>();
 
     chkpt1.dimensions(1);
     chkpt2.dimensions(1);
@@ -110,7 +110,7 @@ TEMPLATE_TEST_CASE("series", "[vegas_chkpt]", float, double, long double)
     // finally resume it with one iteration
 
     auto const chkptA = hep::vegas(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             linear_function<T>,
             1,
             hep::make_dist_params<T>(10, T(0.0), T(1.0), "distribution #1")
@@ -119,7 +119,7 @@ TEMPLATE_TEST_CASE("series", "[vegas_chkpt]", float, double, long double)
     );
 
     auto const tmp_chkpt1 = hep::vegas(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             linear_function<T>,
             1,
             hep::make_dist_params<T>(10, T(0.0), T(1.0), "distribution #1")
@@ -128,7 +128,7 @@ TEMPLATE_TEST_CASE("series", "[vegas_chkpt]", float, double, long double)
     );
 
     auto const tmp_chkpt2 = hep::vegas(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             linear_function<T>,
             1,
             hep::make_dist_params<T>(10, T(0.0), T(1.0), "distribution #1")
@@ -138,7 +138,7 @@ TEMPLATE_TEST_CASE("series", "[vegas_chkpt]", float, double, long double)
     );
 
     auto const chkptB = hep::vegas(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             linear_function<T>,
             1,
             hep::make_dist_params<T>(10, T(0.0), T(1.0), "distribution #1")

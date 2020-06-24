@@ -19,7 +19,7 @@ int main()
     // vegas_verbose_callback after each iteration which in turn prints the
     // individual iterations
     auto results = hep::vegas(
-        hep::make_integrand<double>(square, 1),
+        hep::make_integrand<double, double>(square, 1),
         std::vector<std::size_t>(5, 1000)
     ).results();
 

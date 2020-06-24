@@ -73,7 +73,7 @@ TEMPLATE_TEST_CASE("non-finite 1D integrand w/o distributions", "", float, doubl
 
     // random numbers don't really matter here
     auto const results = hep::plain(
-        hep::make_integrand<T>(function_no_dist<T>, 1),
+        hep::make_integrand<T, T>(function_no_dist<T>, 1),
         std::vector<std::size_t>(5, 10000)
     ).results();
 
@@ -96,7 +96,7 @@ TEMPLATE_TEST_CASE("non-finite 1D integrand w/ distributions", "", float, double
 
     // random numbers don't really matter here
     auto const results = hep::plain(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             function<T>,
             1,
             hep::distribution_parameters<T>{2, T(), T(1.0), "distribution #1"}
@@ -131,7 +131,7 @@ TEMPLATE_TEST_CASE("non-finite 2D integrand w/ distributions", "", float, double
 
     // random numbers don't really matter here
     auto const results = hep::plain(
-        hep::make_integrand<T>(
+        hep::make_integrand<T, T>(
             function<T>,
             2,
             hep::distribution_parameters<T>{2, 2, T(), T(1.0), T(), T(1.0), "distribution #1"}

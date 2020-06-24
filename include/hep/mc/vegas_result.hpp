@@ -38,17 +38,17 @@ namespace hep
 /// @{
 
 /// The result of a single \ref vegas_iteration.
-template <typename T>
-class vegas_result : public plain_result<T>
+template <typename T, typename R>
+class vegas_result : public plain_result<R>
 {
 public:
     /// Constructor.
     vegas_result(
-        plain_result<T> const& result,
+        plain_result<R> const& result,
         vegas_pdf<T> const& pdf,
-        std::vector<T> const& adjustment_data
+        std::vector<R> const& adjustment_data
     )
-        : plain_result<T>(result)
+        : plain_result<R>(result)
         , pdf_(pdf)
         , adjustment_data_(adjustment_data)
     {
@@ -68,16 +68,16 @@ public:
     }
 
     /// Copy constructor.
-    vegas_result(vegas_result<T> const&) = default;
+    vegas_result(vegas_result<T, R> const&) = default;
 
     /// Move constructor.
-    vegas_result(vegas_result<T>&&) noexcept = default;
+    vegas_result(vegas_result<T, R>&&) noexcept = default;
 
     /// Assignment operator.
-    vegas_result& operator=(vegas_result<T> const&) = default;
+    vegas_result& operator=(vegas_result<T, R> const&) = default;
 
     /// Move assignment operator.
-    vegas_result& operator=(vegas_result<T>&&) noexcept = default;
+    vegas_result& operator=(vegas_result<T, R>&&) noexcept = default;
 
     /// Destructor.
     ~vegas_result() override = default;
@@ -89,7 +89,7 @@ public:
     }
 
     /// The data used to adjust the \ref pdf for a subsequent iteration.
-    std::vector<T> const& adjustment_data() const
+    std::vector<R> const& adjustment_data() const
     {
         return adjustment_data_;
     }
@@ -116,7 +116,7 @@ public:
 
 private:
     vegas_pdf<T> pdf_;
-    std::vector<T> adjustment_data_;
+    std::vector<R> adjustment_data_;
 };
 
 /// @}

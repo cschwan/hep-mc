@@ -36,13 +36,13 @@ TEMPLATE_TEST_CASE("stop after precision", "", float, double, long double)
     auto const results = hep::mpi_vegas(
         MPI_COMM_WORLD,
 #endif
-        hep::make_integrand<T>(function<T>, 2),
+        hep::make_integrand<T, T>(function<T>, 2),
         std::vector<std::size_t>(100, 10000),
-        hep::make_vegas_chkpt<T>(8, T(1.5), std::mt19937_64()),
+        hep::make_vegas_chkpt<T, T>(8, T(1.5), std::mt19937_64()),
 #ifndef HEP_USE_MPI
-        hep::callback<hep::vegas_chkpt<T>>{hep::callback_mode::verbose, "", T(0.001)}
+        hep::callback<hep::vegas_chkpt<T, T>>{hep::callback_mode::verbose, "", T(0.001)}
 #else
-        hep::mpi_callback<hep::vegas_chkpt<T>>{hep::callback_mode::verbose, "", T(0.001)}
+        hep::mpi_callback<hep::vegas_chkpt<T, T>>{hep::callback_mode::verbose, "", T(0.001)}
 #endif
     ).results();
 

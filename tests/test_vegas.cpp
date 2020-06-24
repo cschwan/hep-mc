@@ -36,9 +36,9 @@ TEMPLATE_TEST_CASE("vegas integration", "", float, double /*, long double*/)
     auto const results = hep::mpi_vegas(
         MPI_COMM_WORLD,
 #endif
-        hep::make_integrand<T>(function<T>, 2),
+        hep::make_integrand<T, T>(function<T>, 2),
         std::vector<std::size_t>(5, 10000),
-        hep::make_vegas_chkpt<T>(8, T(1.5), std::mt19937_64())
+        hep::make_vegas_chkpt<T, T>(8, T(1.5), std::mt19937_64())
     ).results();
 
     for (auto const& result : results)

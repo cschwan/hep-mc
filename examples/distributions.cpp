@@ -28,7 +28,7 @@ int main()
     // has a single dimension, and furthermore we want to generate a
     // differential distribution of this function using 100 bins in the interval
     // [-5,+5]
-    auto integrand = hep::make_integrand<double>(
+    auto integrand = hep::make_integrand<double, double>(
         arctan,
         1,
         hep::make_dist_params(100, x_min, x_max)

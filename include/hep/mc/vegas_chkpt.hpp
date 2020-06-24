@@ -38,8 +38,8 @@ namespace hep
 /// @{
 
 /// Checkpoints created by the \ref vegas_group.
-template <typename T>
-class vegas_chkpt : public chkpt<vegas_result<T>>
+template <typename T, typename R>
+class vegas_chkpt : public chkpt<vegas_result<T, R>>
 {
 public:
     /// Constructor. Creates an empty checkpoint with a uniform \ref vegas_pdf with the specified
@@ -60,7 +60,7 @@ public:
 
     /// Deserialization constructor. This creates a checkpoint by reading from the stream `in`.
     explicit vegas_chkpt(std::istream& in)
-        : chkpt<vegas_result<T>>{in}
+        : chkpt<vegas_result<T, R>>{in}
     {
         in >> alpha_;
 
@@ -104,7 +104,7 @@ public:
 
     void serialize(std::ostream& out) const override
     {
-        chkpt<vegas_result<T>>::serialize(out);
+        chkpt<vegas_result<T, R>>::serialize(out);
 
         out << std::scientific << std::setprecision(std::numeric_limits<T>::max_digits10 - 1)
             << '\n' << alpha_;
@@ -123,46 +123,46 @@ private:
 };
 
 /// Checkpoint with random number generators created by using the \ref plain_group.
-template <typename RandomNumberEngine, typename T>
-using vegas_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, vegas_chkpt<T>>;
+template <typename RandomNumberEngine, typename T, typename R>
+using vegas_chkpt_with_rng = chkpt_with_rng<RandomNumberEngine, vegas_chkpt<T, R>>;
 
 /// Helper function to create an initial checkpoint to start the \ref vegas_group.
-template <typename T, typename RandomNumberEngine = std::mt19937>
-vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
+template <typename T, typename R, typename RandomNumberEngine = std::mt19937>
+vegas_chkpt_with_rng<RandomNumberEngine, T, R> make_vegas_chkpt(
     std::size_t bins = 128,
     T alpha = T(1.5),
     RandomNumberEngine const& rng = RandomNumberEngine()
 ) {
-    return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, bins, alpha};
+    return vegas_chkpt_with_rng<RandomNumberEngine, T, R>{rng, bins, alpha};
 }
 
 /// Helper function to create an initial checkpoint to start the \ref vegas_group.
-template <typename T, typename RandomNumberEngine = std::mt19937>
-vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(
+template <typename T, typename R, typename RandomNumberEngine = std::mt19937>
+vegas_chkpt_with_rng<RandomNumberEngine, T, R> make_vegas_chkpt(
     vegas_pdf<T> const& pdf,
     T alpha = T(1.5),
     RandomNumberEngine const& rng = RandomNumberEngine()
 ) {
-    return vegas_chkpt_with_rng<RandomNumberEngine, T>{rng, pdf, alpha};
+    return vegas_chkpt_with_rng<RandomNumberEngine, T, R>{rng, pdf, alpha};
 }
 
 /// Helper function create a checkpoint reading from the stream `in`. Note the the numeric type `T`
 /// as well as the type of the random number generator, `RandomNumberEngine` have to explicitly
 /// stated.
-template <typename T, typename RandomNumberEngine>
-vegas_chkpt_with_rng<RandomNumberEngine, T> make_vegas_chkpt(std::istream& in)
+template <typename T, typename R, typename RandomNumberEngine>
+vegas_chkpt_with_rng<RandomNumberEngine, T, R> make_vegas_chkpt(std::istream& in)
 {
     if (in.peek() == std::istream::traits_type::eof())
     {
-        return make_vegas_chkpt<T, RandomNumberEngine>();
+        return make_vegas_chkpt<T, R, RandomNumberEngine>();
     }
 
-    return vegas_chkpt_with_rng<RandomNumberEngine, T>{in};
+    return vegas_chkpt_with_rng<RandomNumberEngine, T, R>{in};
 }
 
 /// Return type of \ref make_vegas_chkpt with default arguments.
-template <typename T>
-using default_vegas_chkpt = decltype (make_vegas_chkpt<T>());
+template <typename T, typename R>
+using default_vegas_chkpt = decltype (make_vegas_chkpt<T, R>());
 
 /// @}
 

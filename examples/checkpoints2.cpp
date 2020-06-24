@@ -34,7 +34,7 @@ int main()
 
     // resume the integration with 5 additional iterations
     auto const chkpt = hep::plain(
-        hep::make_integrand<double>(
+        hep::make_integrand<double, double>(
             function<double>,
             1,
             hep::make_dist_params<double>(10, 0.0, 1.0, "distribution #1")

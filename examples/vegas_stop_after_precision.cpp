@@ -16,11 +16,11 @@ int main()
 
     // perform 100 iterations with 1000 calls each _at maximum_
     auto results = hep::vegas(
-        hep::make_integrand<double>(square, 1),
+        hep::make_integrand<double, double>(square, 1),
         std::vector<std::size_t>(100, 1000),
-        hep::make_vegas_chkpt<double>(),
+        hep::make_vegas_chkpt<double, double>(),
         // stop if error is better than 1% (=0.01)
-        hep::callback<hep::vegas_chkpt<double>>(hep::callback_mode::verbose, "", 0.01)
+        hep::callback<hep::vegas_chkpt<double, double>>(hep::callback_mode::verbose, "", 0.01)
     );
 
     return 0;
